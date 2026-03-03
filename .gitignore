@@ -1,0 +1,69 @@
+# Machine-local session data
+debug/
+file-history/
+history.jsonl
+projects/
+cache/
+paste-cache/
+backups/
+shell-snapshots/
+ide/
+plans/
+agent-memory/
+homunculus/
+todos/
+teams/
+tasks/
+sessions/
+daily/
+daily-memory-logs/
+daily-memory.md
+image-cache/
+downloads/
+
+# Telemetry & usage (machine-local)
+telemetry/
+usage-data/
+stats-cache.json
+
+# OS & temp
+.DS_Store
+*.backup.*
+__pycache__/
+*.pyc
+*.tmp
+
+# Stats & tracking
+statsig/
+.omc*
+.session-stats.json
+
+# Plugins (marketplace & cache are auto-downloaded)
+plugins/marketplaces/
+plugins/cache/
+plugins/.usage-cache.json
+plugins/claude-hud/.usage-cache.json
+
+# Memory - daily logs are machine-local
+memory/daily/
+memory/archive/
+
+# MCP config (machine-specific)
+.mcp.json
+mcp-needs-auth-cache.json
+
+# Memory search index (machine-local)
+memory-search/
+memory_logs/
+
+# Git internals
+.git/
+
+# Settings local override (machine-specific)
+settings.local.json
+
+# Hooks with secrets (machine-specific)
+hooks/telegram-notify.sh
+
+# Nested .claude (project-level)
+.claude/
