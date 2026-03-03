@@ -26,6 +26,9 @@ telemetry/
 usage-data/
 stats-cache.json
 
+# Node modules (anywhere)
+**/node_modules/
+
 # OS & temp
 .DS_Store
 *.backup.*
