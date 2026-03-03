@@ -1,0 +1,51 @@
+# Machine-local session data
+debug/
+file-history/
+history.jsonl
+projects/
+cache/
+paste-cache/
+backups/
+shell-snapshots/
+ide/
+plans/
+agent-memory/
+homunculus/
+todos/
+teams/
+tasks/
+sessions/
+daily/
+
+# Telemetry & usage (machine-local)
+telemetry/
+usage-data/
+stats-cache.json
+
+# OS & temp
+.DS_Store
+*.backup.*
+__pycache__/
+*.pyc
+*.tmp
+
+# Stats & tracking
+statsig/
+.omc*
+.session-stats.json
+
+# Plugins (marketplace & cache are auto-downloaded)
+plugins/marketplaces/
+plugins/cache/
+plugins/.usage-cache.json
+plugins/claude-hud/.usage-cache.json
+
+# Memory - daily logs are machine-local
+memory/daily/
+memory/archive/
+
+# Git internals
+.git/
+
+# Settings local override (machine-specific)
+settings.local.json

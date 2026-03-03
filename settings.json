@@ -1,0 +1,124 @@
+{
+  "env": {
+    "enable_tool_search": "true",
+    "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1"
+  },
+  "permissions": {
+    "allow": [
+      "Bash(*)",
+      "mcp__plugin_github_github__*",
+      "WebSearch",
+      "WebFetch(domain:github.com)",
+      "WebFetch(domain:java.testcontainers.org)",
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "Skill(*)",
+      "WebFetch(domain:help.router-for.me)",
+      "mcp__cli-proxy-api__ask_gemini",
+      "mcp__cli-proxy-api__ask_codex",
+      "mcp__cli-proxy-api__list_proxy_models",
+      "WebFetch(domain:www.voxfor.com)",
+      "mcp__ide__getDiagnostics"
+    ]
+  },
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/Users/sukeunpark/.claude/plugins/cache/everything-claude-code/everything-claude-code/1.4.1/skills/continuous-learning-v2/hooks/observe.sh pre"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/Users/sukeunpark/.claude/plugins/cache/everything-claude-code/everything-claude-code/1.4.1/skills/continuous-learning-v2/hooks/observe.sh post"
+          },
+          {
+            "type": "command",
+            "command": "python3 \"$HOME/.claude/hooks/memory-post-tool.py\"",
+            "timeout": 3
+          },
+          {
+            "type": "command",
+            "command": "python3 \"$HOME/.claude/hooks/memory-conversation-summarizer.py\"",
+            "timeout": 2
+          }
+        ]
+      }
+    ],
+    "SessionStart": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"$HOME/.claude/hooks/memory-session-start.sh\"",
+            "timeout": 10,
+            "statusMessage": "Loading memory context..."
+          }
+        ]
+      }
+    ],
+    "PreCompact": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo 'IMPORTANT: Context compaction is about to occur. Before proceeding, save any important unsaved context (decisions, bugs, patterns, progress) to the daily log at memory/daily/'$(date +%Y-%m-%d)'.md using the Edit or Write tool. Format: ### HH:MM - [Topic] with bullet summaries. Use [PROMOTE] tag for items worthy of MEMORY.md. Skip if daily log is already up to date.'",
+            "timeout": 10,
+            "statusMessage": "Preparing for compaction..."
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "DAILY_LOG=\"$HOME/.claude/projects/-Users-sukeunpark-IdeaProjects/memory/daily/$(date +%Y-%m-%d).md\"; if [ -f \"$DAILY_LOG\" ] && [ $(( $(date +%s) - $(stat -f %m \"$DAILY_LOG\" 2>/dev/null || echo 0) )) -lt 300 ]; then echo 'Daily log recently updated. OK to stop.'; else echo 'Reminder: Consider saving session context to daily log before stopping.'; fi",
+            "timeout": 5
+          }
+        ]
+      }
+    ],
+    "SessionEnd": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"$HOME/.claude/hooks/memory-session-end.sh\"",
+            "timeout": 15,
+            "async": true
+          }
+        ]
+      }
+    ]
+  },
+  "statusLine": {
+    "type": "command",
+    "command": "node /Users/sukeunpark/.claude/plugins/cache/claude-hud/claude-hud/0.0.7/dist/index.js"
+  },
+  "enabledPlugins": {
+    "context7@claude-plugins-official": true,
+    "claude-hud@claude-hud": true,
+    "github@claude-plugins-official": true,
+    "frontend-design@claude-plugins-official": true,
+    "supabase@claude-plugins-official": false,
+    "ralph-loop@claude-plugins-official": true,
+    "explanatory-output-style@claude-plugins-official": true,
+    "everything-claude-code@everything-claude-code": true,
+    "playwright@claude-plugins-official": true,
+    "superpowers@claude-plugins-official": true
+  }
+}
