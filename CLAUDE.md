@@ -92,21 +92,57 @@
 
 ---
 
-## 4. Skill Automation Chains
+## 4. Feature Design (FD) System
 
-### Feature 구현 플로우
+설계 결정을 마크다운 파일로 영속화하여 과거 결정이 축적되고, 새 에이전트의 계획 품질이 향상되는 시스템.
+
+### FD 라이프사이클
 ```
-/plan → 승인 → /springboot-tdd → 구현 → 검증 체인 → /update-pr → /merge-check
+Planned → Design → Open → In Progress → Pending Verification → Complete
+                                                              → Deferred / Closed
 ```
 
-### 버그 수정 플로우
+### FD 슬래시 명령어
+| 명령어 | 기능 |
+|--------|------|
+| `/fd-new` | 아이디어에서 새 FD 파일 생성, 인덱스에 등록 |
+| `/fd-status` | 전체 FD 상태 대시보드 |
+| `/fd-explore` | 세션 부트스트랩: 프로젝트 컨텍스트 + 활성 FD 로드 |
+| `/fd-deep` | 4개 Opus 에이전트 병렬 다관점 설계 탐색 |
+| `/fd-verify` | 구현 검수 + 검증 계획 실행 |
+| `/fd-close` | FD 아카이빙, 인덱스/변경로그 업데이트 |
+
+### FD 규칙
+- **FD 파일 위치**: `docs/features/FD-{NNN}.md` (프로젝트별)
+- **인덱스**: `docs/features/FEATURE_INDEX.md`
+- **아카이브**: `docs/features/archive/`
+- **커밋 prefix**: `FD-{NNN}: {description}`
+- **인라인 피드백**: `%% 코멘트` 형태로 FD 파일에 직접 기록
+- Plan-First(§1)와 통합: EnterPlanMode 결과를 FD 파일로 영속화
+
+### FD 통합 워크플로우
 ```
-탐색 (explore + debugger 병렬) → 원인 보고 → /springboot-tdd (실패 재현) → 수정 → 검증 체인
+Feature: /fd-new → /fd-explore → /fd-deep(복잡시) → 구현 → /fd-verify → /fd-close
+Bug:     탐색 → /fd-new(원인 기록) → 수정 → /fd-verify → /fd-close
 ```
 
 ---
 
-## 5. Communication & Output
+## 5. Skill Automation Chains
+
+### Feature 구현 플로우
+```
+/fd-new → /fd-explore → 설계 → /springboot-tdd → 구현 → /fd-verify → /update-pr → /merge-check → /fd-close
+```
+
+### 버그 수정 플로우
+```
+탐색 (explore + debugger 병렬) → 원인 보고 → /fd-new(원인 기록) → /springboot-tdd (실패 재현) → 수정 → /fd-verify
+```
+
+---
+
+## 6. Communication & Output
 
 - **한국어 우선**: 사용자와의 대화는 한국어로 진행
 - **코드/기술 용어**: 영어 원문 유지 (번역하지 않음)
@@ -115,7 +151,7 @@
 
 ---
 
-## 6. Model Routing & Agent Catalog (CRITICAL — 메인/서브 에이전트 공통)
+## 7. Model Routing & Agent Catalog (CRITICAL — 메인/서브 에이전트 공통)
 
 > 이 섹션은 메인 에이전트와 모든 서브 에이전트에서 동일하게 적용된다.
 
