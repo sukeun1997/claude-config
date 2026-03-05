@@ -20,6 +20,7 @@
       "mcp__ide__getDiagnostics"
     ]
   },
+  "model": "sonnet",
   "hooks": {
     "PreToolUse": [
       {

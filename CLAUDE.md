@@ -170,7 +170,27 @@ Task 호출 시 `model` 파라미터를 아래 기준으로 설정:
 아래 경로는 에이전트가 직접 Write/Edit 가능 (Task 위임 불필요):
 - `~/.claude/**`, `.claude/**`, `CLAUDE.md`, `AGENTS.md`
 
-소스코드 수정은 가급적 executor/deep-executor 에이전트에 위임.
+### Agent Delegation Rules (CRITICAL — 비용 절감)
+
+메인 세션(Opus)이 직접 툴을 호출하는 대신, 반드시 에이전트에 위임한다.
+
+| 작업 유형 | 직접 툴 사용 금지 | 위임 에이전트 |
+|-----------|-------------------|--------------|
+| 파일 탐색 (3개 이상) | Glob/Grep/Read | `Explore` |
+| 코드 구현/수정 | Write/Edit | `executor` |
+| 코드 리뷰 | 직접 분석 | `code-reviewer` + `quality-reviewer` |
+| 디버깅 | 직접 탐색 | `debugger` |
+| 빌드 오류 수정 | 직접 수정 | `build-fixer` |
+| 아키텍처 설계 / 기술 결정 | 직접 판단 | `architect` |
+| 복잡한 플래닝 (멀티파일 구현) | 직접 계획 | `planner` |
+| 복잡한 자율 작업 (멀티스텝) | 직접 실행 | `deep-executor` |
+
+> 각 에이전트의 모델(haiku/sonnet/opus) 상세는 `rules/common/agents.md` 참조.
+
+**예외 (직접 툴 사용 허용):**
+- 단일 파일 1-2회 읽기 (파악용)
+- `~/.claude/**`, `.claude/**` 설정 파일 수정
+- git 명령어 (add/commit/push)
 
 ### Agent Catalog
 
