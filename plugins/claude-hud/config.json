@@ -1,9 +1,18 @@
 {
+  "lineLayout": "expanded",
+  "showSeparators": false,
   "display": {
     "showTools": true,
-    "showAgents": true,
+    "showAgents": false,
     "showTodos": true,
     "showDuration": true,
-    "showConfigCounts": true
+    "showConfigCounts": true,
+    "showUsage": true
+  },
+  "gitStatus": {
+    "enabled": true,
+    "showDirty": true,
+    "showAheadBehind": false,
+    "showFileStats": false
   }
 }
