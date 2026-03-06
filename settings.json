@@ -20,7 +20,6 @@
       "mcp__ide__getDiagnostics"
     ]
   },
-  "model": "sonnet",
   "hooks": {
     "PreToolUse": [
       {
@@ -73,7 +72,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "echo 'IMPORTANT: Context compaction is about to occur. Before proceeding, save any important unsaved context (decisions, bugs, patterns, progress) to the daily log at memory/daily/'$(date +%Y-%m-%d)'.md using the Edit or Write tool. Format: ### HH:MM - [Topic] with bullet summaries. Use [PROMOTE] tag for items worthy of MEMORY.md. Skip if daily log is already up to date.'",
+            "command": "echo 'IMPORTANT: Context compaction is about to occur. Before proceeding, do BOTH:\n1. DAILY LOG: Save important context to memory/daily/'$(date +%Y-%m-%d)'.md (format: ### HH:MM - [Topic] with bullet summaries. Use [PROMOTE] tag for MEMORY.md candidates).\n2. HANDOFF.md: Write .claude/HANDOFF.md in the current project directory with: current work status, incomplete items, next session starting point, key decisions made. Skip if no meaningful work this session.'",
             "timeout": 10,
             "statusMessage": "Preparing for compaction..."
           }
@@ -104,6 +103,18 @@
           }
         ]
       }
+    ],
+    "UserPromptSubmit": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"$HOME/.claude/hooks/pre-clear-handoff.sh\"",
+            "timeout": 5
+          }
+        ]
+      }
     ]
   },
   "statusLine": {
@@ -120,6 +131,7 @@
     "explanatory-output-style@claude-plugins-official": true,
     "everything-claude-code@everything-claude-code": true,
     "playwright@claude-plugins-official": true,
-    "superpowers@claude-plugins-official": true
+    "superpowers@claude-plugins-official": true,
+    "Notion@claude-plugins-official": true
   }
 }

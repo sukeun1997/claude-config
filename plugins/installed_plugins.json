@@ -100,6 +100,16 @@
         "lastUpdated": "2026-02-26T01:05:24.671Z",
         "gitCommitSha": "e4a2375cb705ca5800f0833528ce36a3faf9017a"
       }
+    ],
+    "Notion@claude-plugins-official": [
+      {
+        "scope": "user",
+        "installPath": "/Users/sukeunpark/.claude/plugins/cache/claude-plugins-official/Notion/0.1.0",
+        "version": "0.1.0",
+        "installedAt": "2026-03-05T04:29:49.514Z",
+        "lastUpdated": "2026-03-05T04:29:49.514Z",
+        "gitCommitSha": "9847f2aa1a15f25df35ed1fb7b4557dbb60cd651"
+      }
     ]
   }
 }
