@@ -178,6 +178,14 @@ Task 호출 시 `model` 파라미터를 아래 기준으로 설정:
 | **sonnet** | 표준 구현, 리뷰, 디버깅 | 코드 작성/수정, 대부분의 작업 |
 | **opus** | 아키텍처, 심층 분석, 플래닝 | 깊은 추론, 복잡한 의사결정 |
 
+### Routing Verification Policy
+
+- 기본 검증 기준은 **행동 기반**이다: 작업 분류, 위임 여부, 병렬화 패턴, 결과 품질을 우선 확인한다.
+- 내부 `selected_model` 또는 정확한 `reasoning_effort` 추적은 **예외적 audit 작업**으로만 수행한다.
+- 매 요청마다 내부 모델값을 추적하지 않는다. 동작 이상, 품질 저하, 사용자 명시 요청이 있을 때만 조사한다.
+- 내부 추적이 필요하면 `~/.codex/sessions/*.jsonl`의 `session_meta`, `agent_role`, `token_count`, `reasoning_output_tokens`를 우선 확인한다.
+- 단, 로컬 로그에는 정확한 모델 slug 또는 effort 값이 항상 남는다고 가정하지 않는다. 내부 모델 추적은 best-effort로 취급한다.
+
 ### Direct Write Permissions
 
 아래 경로는 에이전트가 직접 Write/Edit 가능 (Task 위임 불필요):
