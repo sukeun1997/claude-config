@@ -1,6 +1,6 @@
 ---
 name: research-to-notion
-description: "Deep research a topic via WebSearch/WebFetch, auto-detect topic type, collect visual assets (diagrams, architecture, infographics), create structured plan with inline images, then write to Notion via Anthropic MCP (primary) or CDP MCP (fallback). Use when user says 'research and write to notion', 'analyze and create notion page', '분석해서 노션에 정리', URL + '정리해줘/분석해줘'."
+description: "주제를 심층 리서치하여 Notion 페이지로 생성. AI/일반 기술/제품/트렌드/비교 분석에 적합. 업무 기술(Spring, Kafka 등)은 master-guide 스킬로 안내. Use when user says 'research and write to notion', '분석해서 노션에 정리', URL + '정리해줘/분석해줘'."
 ---
 
 # Research to Notion v3 — 리서치 → 주제분석 → 시각자료 수집 → Notion 페이지 생성
@@ -52,6 +52,16 @@ Phase 4: Verification
 
 ## Phase 0: Topic Analysis
 
+### 업무 기술 분기 (Phase 0 첫 단계)
+
+1. 입력 주제가 `~/.claude/skills/master-guide/references/tech-keywords.md`의 키워드와 매칭되는지 확인
+2. 매칭되면 → 사용자에게 분기 질문:
+   > "이 주제는 업무 기술입니다. 어떻게 진행할까요?
+   > 1. `/master-guide {기술명}` — 심층 학습 가이드 (개념+이론+실무+트러블슈팅)
+   > 2. 일반 리서치 — 현재 스킬로 계속"
+3. 사용자가 1 선택 → master-guide 스킬로 전환 (이 스킬 종료)
+4. 사용자가 2 선택 또는 키워드 미매칭 → 기존 로직 그대로 진행
+
 ### 주제 유형 분류
 
 입력된 주제/URL을 분석하여 6가지 유형 중 하나로 판별:
@@ -67,88 +77,7 @@ Phase 4: Verification
 
 ### 유형별 필수 섹션 템플릿
 
-#### 기술/프레임워크
-```yaml
-필수:
-  - 개요 및 정의
-  - 핵심 개념 / 작동 원리
-  - 아키텍처 / 구성요소           # 다이어그램 필수
-  - 기존 기술과의 비교             # 비교표 필수
-  - 관련 기술 생태계               # 연관 기술 맵
-  - 산업별 응용 사례
-  - 최신 동향 (현재 연도)          # 최근 3개월 뉴스
-  - 시장 규모 / 전망               # 통계 수치
-  - 도입 전략 / 과제
-  - 참고 자료
-선택:
-  - 주요 플레이어 비교
-  - 한국 기업 동향
-  - 오픈소스 / 프레임워크 목록
-```
-
-#### 제품/서비스
-```yaml
-필수:
-  - 개요 (무엇인가)
-  - 핵심 기능
-  - 아키텍처 / 기술 스택           # 다이어그램 필수
-  - 경쟁 제품 비교                 # 비교표 필수
-  - 가격 / 플랜
-  - 장단점
-  - 사용 사례 / 후기
-  - 최신 업데이트
-  - 참고 자료
-```
-
-#### 개념/방법론
-```yaml
-필수:
-  - 정의 및 배경
-  - 핵심 원칙
-  - 프로세스 / 워크플로우           # 플로우 다이어그램 필수
-  - 기존 방법론과의 비교
-  - 적용 사례
-  - 도입 단계 / 성숙도 모델
-  - 도구 / 프레임워크
-  - 참고 자료
-```
-
-#### 이슈/트렌드
-```yaml
-필수:
-  - 배경 및 맥락
-  - 핵심 내용 요약
-  - 주요 플레이어 / 이해관계자
-  - 글로벌 동향
-  - 한국 동향
-  - 산업 영향
-  - 향후 전망
-  - 참고 자료
-```
-
-#### 비교/분석
-```yaml
-필수:
-  - 각 대상 개요
-  - 핵심 차이점 비교표              # 대형 비교표 필수
-  - 아키텍처 비교                   # 각각의 아키텍처 다이어그램
-  - 성능 / 벤치마크
-  - 생태계 / 커뮤니티
-  - 사용 시나리오별 추천
-  - 결론 및 선택 가이드
-  - 참고 자료
-```
-
-#### 튜토리얼/가이드
-```yaml
-필수:
-  - 개요 (왜 이걸 배우는가)
-  - 사전 요구사항
-  - 단계별 가이드                   # 코드 블록 + 스크린샷
-  - 주의사항 / 트러블슈팅
-  - 다음 단계 / 심화 학습
-  - 참고 자료
-```
+`references/topic-templates.md` 참조. 6가지 유형별 필수/선택 섹션이 정의되어 있다.
 
 ### 검색 키워드 자동 생성
 
@@ -275,6 +204,13 @@ WebSearch("{topic} architecture diagram infographic")
 → 발견된 기사에서 WebFetch로 img src 추출
 → 섹션별 매핑
 ```
+
+### 이미지 폴백 정책
+
+- 핫링크 차단 감지: 이미지 URL이 403/404 반환 가능성 인지
+- 대체 소스 우선: ByteByteGo, AWS docs, 공식 문서 블로그
+- 최종 폴백: 이미지 없는 섹션은 텍스트 설명으로 대체 (무리하게 넣지 않음)
+- 이미지 정책: **best-effort** — 이미지 없어도 페이지 생성 중단하지 않음
 
 ---
 
@@ -446,6 +382,9 @@ mcp__notion-cdp__read_notion_page(page_id="페이지ID")
 - [ ] 이미지 임베드가 존재하는가 (`![` 패턴 확인)
 - [ ] 표가 네이티브 table로 변환되었는가
 - [ ] 참고 자료 링크가 유효한가
+- [ ] 빈 섹션 없는지 확인 (제목만 있고 내용 없는 경우)
+- [ ] 비교표/데이터 테이블이 네이티브 table로 렌더링되는지
+- [ ] 이미지 블록에 실제 URL이 있는지 (빈 ![](url) 방지)
 
 ### 오류 시 수정
 
