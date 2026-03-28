@@ -32,6 +32,11 @@ Phase 4: Verification
    ↓ (notion-fetch로 전체 확인)
 Phase 5: Registry Update
    (notion-registry.md 기록)
+
+Update Mode (/master-guide update <기술명>):
+Phase 0: Registry 조회 → Phase 1: 최신 리서치 → Phase 2: 영향 분석
+→ Phase 3: 서브페이지 교체 → Phase 4: 버전 히스토리 → Phase 5: DB 업데이트
+→ Phase 6: Registry 갱신
 ```
 
 ---
@@ -216,6 +221,8 @@ notion-create-pages(
 ```
 
 생성 순서: Quick Start → 프로덕션 체크리스트 → 실전 패턴 → 트러블슈팅 → 스케일링 → 버전 히스토리
+
+→ **서브페이지 ID 6개를 메모리에 보관** (Phase 4 검증 + Update 모드에서 사용)
 
 ### CDP 폴백 경로
 
