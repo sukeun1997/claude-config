@@ -80,7 +80,7 @@
 
 ### 작업 판단 플로우
 1. **단순 작업** (단일 파일, 100줄 이하) → 직접 실행
-2. **버그 수정** → `systematic-debugging` 스킬 invoke → 재현 확인 → 원인 격리 → 최소 수정 → `verification-before-completion`으로 검증. 재현 없이 수정 코드 작성 금지
+2. **버그 수정** → `superpowers:systematic-debugging` 스킬 invoke → 재현 확인 → 원인 격리 → 최소 수정 → `superpowers:verification-before-completion`으로 검증. 재현 없이 수정 코드 작성 금지
 3. **설계 결정 필요** → 인터뷰 먼저
 4. **구현 작업** (2개+ 파일) → Plan-First
 5. **기타** → 적절한 에이전트에 위임
@@ -220,23 +220,23 @@ Agent 호출 시 `model` 파라미터 필수 지정.
 | 트리거 | 스킬 |
 |--------|------|
 | `.kt` 파일 작성/수정 | `kotlin-patterns` |
-| `.swift` 파일 작성/수정 | `swiftui-patterns` |
-| JPA Entity / Repository 변경 | `jpa-patterns` |
+| `.swift` 파일 작성/수정 | `everything-claude-code:swiftui-patterns` |
+| JPA Entity / Repository 변경 | `everything-claude-code:jpa-patterns` |
 | `@Cacheable`, Redis 설정 변경 | `redis-cache-patterns` |
-| SQL 마이그레이션 / 스키마 변경 | `postgres-patterns` + `database-migrations` |
-| Security 설정, 인증/인가 코드 | `springboot-security` + `security-review` |
+| SQL 마이그레이션 / 스키마 변경 | `everything-claude-code:postgres-patterns` + `everything-claude-code:database-migrations` |
+| Security 설정, 인증/인가 코드 | `everything-claude-code:springboot-security` + `everything-claude-code:security-review` |
 
 ### 워크플로우 기반
 | 트리거 | 스킬 |
 |--------|------|
 | 새 기능 구현 시작 | `feature` (brainstorming → plans → execution 2-gate 래퍼) |
 | 기술 뉴스/동향 요청 | `daily-briefing` (quick/deep 모드) |
-| 테스트 코드 작성 | `springboot-tdd` (백엔드) / `swift-protocol-di-testing` (iOS) |
-| PR 전 최종 검증 | `springboot-verification` (백엔드) / `verification-before-completion` |
-| 버그 수정/디버깅 시작 | `systematic-debugging` (증거 기반 진단 후 debugger 에이전트) |
-| 버그 수정 코드 작성 완료 | `verification-before-completion` (수정 결과 실행 확인) |
+| 테스트 코드 작성 | `everything-claude-code:springboot-tdd` (백엔드) / `everything-claude-code:swift-protocol-di-testing` (iOS) |
+| PR 전 최종 검증 | `everything-claude-code:springboot-verification` (백엔드) / `superpowers:verification-before-completion` |
+| 버그 수정/디버깅 시작 | `superpowers:systematic-debugging` (증거 기반 진단 후 debugger 에이전트) |
+| 버그 수정 코드 작성 완료 | `superpowers:verification-before-completion` (수정 결과 실행 확인) |
 | 빌드 실패 | `build-fixer` 에이전트 (스킬 아닌 에이전트) |
-| LLM API 비용/쿼터 관련 | `cost-aware-llm-pipeline` |
+| LLM API 비용/쿼터 관련 | `everything-claude-code:cost-aware-llm-pipeline` |
 | 아키텍처 다이어그램 요청 | `arch-diagram` |
 | 업무 기술 + "가이드/학습/마스터/정리" | `master-guide` (심층 학습 가이드) |
 | 업무 기술 + "업데이트" | `master-guide` (update 모드) |
