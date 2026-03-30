@@ -4,10 +4,10 @@
     "oh-my-claudecode@omc": [
       {
         "scope": "user",
-        "installPath": "/Users/sukeun/.claude/plugins/cache/omc/oh-my-claudecode/4.6.0",
-        "version": "4.6.0",
+        "installPath": "/Users/sukeun/.claude/plugins/cache/omc/oh-my-claudecode/4.9.3",
+        "version": "4.9.3",
         "installedAt": "2026-02-08T08:03:21.971Z",
-        "lastUpdated": "2026-03-03T12:09:30.691Z",
+        "lastUpdated": "2026-03-29T00:33:34.912Z",
         "gitCommitSha": "b85759e5c6888cd9df62222af87b8b0375913460"
       }
     ],
@@ -34,40 +34,30 @@
     "context7@claude-plugins-official": [
       {
         "scope": "user",
-        "installPath": "/Users/sukeun/.claude/plugins/cache/claude-plugins-official/context7/55b58ec6e564",
-        "version": "55b58ec6e564",
+        "installPath": "/Users/sukeun/.claude/plugins/cache/claude-plugins-official/context7/c2f05ef8fd78",
+        "version": "c2f05ef8fd78",
         "installedAt": "2026-02-15T05:56:47.698Z",
-        "lastUpdated": "2026-02-25T11:34:57.368Z",
+        "lastUpdated": "2026-03-29T11:11:39.678Z",
         "gitCommitSha": "2cd88e7947b7382e045666abee790c7f55f669f3"
       }
     ],
     "playwright@claude-plugins-official": [
       {
         "scope": "user",
-        "installPath": "/Users/sukeun/.claude/plugins/cache/claude-plugins-official/playwright/55b58ec6e564",
-        "version": "55b58ec6e564",
-        "installedAt": "2026-02-18T05:57:04.144Z",
-        "lastUpdated": "2026-02-25T11:34:57.368Z",
-        "gitCommitSha": "261ce4fba4f2c314c490302158909a32e5889c88"
-      }
-    ],
-    "Notion@claude-plugins-official": [
-      {
-        "scope": "user",
-        "installPath": "/Users/sukeun/.claude/plugins/cache/claude-plugins-official/Notion/0.1.0",
-        "version": "0.1.0",
-        "installedAt": "2026-02-21T12:40:05.562Z",
-        "lastUpdated": "2026-02-21T12:40:05.562Z",
-        "gitCommitSha": "9847f2aa1a15f25df35ed1fb7b4557dbb60cd651"
+        "installPath": "/Users/sukeun/.claude/plugins/cache/claude-plugins-official/playwright/c2f05ef8fd78",
+        "version": "c2f05ef8fd78",
+        "installedAt": "2026-03-21T04:45:32.245Z",
+        "lastUpdated": "2026-03-29T11:11:39.677Z",
+        "gitCommitSha": "61c0597779bd2d670dcd4fbbf37c66aa19eb2ce6"
       }
     ],
     "explanatory-output-style@claude-plugins-official": [
       {
         "scope": "user",
-        "installPath": "/Users/sukeun/.claude/plugins/cache/claude-plugins-official/explanatory-output-style/55b58ec6e564",
-        "version": "55b58ec6e564",
+        "installPath": "/Users/sukeun/.claude/plugins/cache/claude-plugins-official/explanatory-output-style/1.0.0",
+        "version": "1.0.0",
         "installedAt": "2026-02-25T11:28:52.133Z",
-        "lastUpdated": "2026-02-25T11:28:52.133Z",
+        "lastUpdated": "2026-03-29T06:09:53.359Z",
         "gitCommitSha": "55b58ec6e5649104f926ba7558b567dc8d33c5ff"
       }
     ],
@@ -94,20 +84,20 @@
     "learning-output-style@claude-plugins-official": [
       {
         "scope": "user",
-        "installPath": "/Users/sukeun/.claude/plugins/cache/claude-plugins-official/learning-output-style/55b58ec6e564",
-        "version": "55b58ec6e564",
+        "installPath": "/Users/sukeun/.claude/plugins/cache/claude-plugins-official/learning-output-style/1.0.0",
+        "version": "1.0.0",
         "installedAt": "2026-02-26T11:01:25.273Z",
-        "lastUpdated": "2026-02-26T11:01:25.273Z",
+        "lastUpdated": "2026-03-29T06:09:53.360Z",
         "gitCommitSha": "55b58ec6e5649104f926ba7558b567dc8d33c5ff"
       }
     ],
     "superpowers@claude-plugins-official": [
       {
         "scope": "user",
-        "installPath": "/Users/sukeun/.claude/plugins/cache/claude-plugins-official/superpowers/4.3.1",
-        "version": "4.3.1",
+        "installPath": "/Users/sukeun/.claude/plugins/cache/claude-plugins-official/superpowers/5.0.6",
+        "version": "5.0.6",
         "installedAt": "2026-02-26T11:01:25.262Z",
-        "lastUpdated": "2026-02-26T11:01:25.262Z",
+        "lastUpdated": "2026-03-25T18:15:42.931Z",
         "gitCommitSha": "e4a2375cb705ca5800f0833528ce36a3faf9017a"
       }
     ],
@@ -119,6 +109,56 @@
         "installedAt": "2026-03-02T07:33:38.430Z",
         "lastUpdated": "2026-03-02T07:33:38.430Z",
         "gitCommitSha": "55b58ec6e5649104f926ba7558b567dc8d33c5ff"
+      }
+    ],
+    "github@claude-plugins-official": [
+      {
+        "scope": "user",
+        "installPath": "/Users/sukeun/.claude/plugins/cache/claude-plugins-official/github/c2f05ef8fd78",
+        "version": "c2f05ef8fd78",
+        "installedAt": "2026-03-04T00:35:47.814Z",
+        "lastUpdated": "2026-03-29T11:11:39.678Z",
+        "gitCommitSha": "55b58ec6e5649104f926ba7558b567dc8d33c5ff"
+      }
+    ],
+    "frontend-design@claude-plugins-official": [
+      {
+        "scope": "user",
+        "installPath": "/Users/sukeun/.claude/plugins/cache/claude-plugins-official/frontend-design/c2f05ef8fd78",
+        "version": "c2f05ef8fd78",
+        "installedAt": "2026-03-04T00:35:47.833Z",
+        "lastUpdated": "2026-03-29T11:11:39.681Z",
+        "gitCommitSha": "55b58ec6e5649104f926ba7558b567dc8d33c5ff"
+      }
+    ],
+    "ralph-loop@claude-plugins-official": [
+      {
+        "scope": "user",
+        "installPath": "/Users/sukeun/.claude/plugins/cache/claude-plugins-official/ralph-loop/1.0.0",
+        "version": "1.0.0",
+        "installedAt": "2026-03-04T00:35:47.870Z",
+        "lastUpdated": "2026-03-29T06:09:53.361Z",
+        "gitCommitSha": "55b58ec6e5649104f926ba7558b567dc8d33c5ff"
+      }
+    ],
+    "notion@claude-plugins-official": [
+      {
+        "scope": "user",
+        "installPath": "/Users/sukeun/.claude/plugins/cache/claude-plugins-official/notion/0.1.0",
+        "version": "0.1.0",
+        "installedAt": "2026-03-21T04:46:06.327Z",
+        "lastUpdated": "2026-03-21T04:46:06.327Z",
+        "gitCommitSha": "9847f2aa1a15f25df35ed1fb7b4557dbb60cd651"
+      }
+    ],
+    "telegram@claude-plugins-official": [
+      {
+        "scope": "user",
+        "installPath": "/Users/sukeun/.claude/plugins/cache/claude-plugins-official/telegram/0.0.4",
+        "version": "0.0.4",
+        "installedAt": "2026-03-22T03:28:38.967Z",
+        "lastUpdated": "2026-03-24T06:10:02.759Z",
+        "gitCommitSha": "61c0597779bd2d670dcd4fbbf37c66aa19eb2ce6"
       }
     ]
   }

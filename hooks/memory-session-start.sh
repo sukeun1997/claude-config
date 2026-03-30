@@ -59,6 +59,14 @@ ${NEXT}
   fi
 fi
 
+# --- Fresh start flag check (/new command) ---
+FRESH_START_FLAG="$MEM_DIR/sessions/.fresh-start"
+IS_FRESH_START=false
+if [ -f "$FRESH_START_FLAG" ]; then
+  IS_FRESH_START=true
+  rm -f "$FRESH_START_FLAG"
+fi
+
 # --- /clear detection: warn if previous session left daily log empty ---
 SESSION_MARKER="$MEM_DIR/sessions/.last-session-ts"
 if [ -f "$SESSION_MARKER" ]; then
@@ -67,6 +75,31 @@ if [ -f "$SESSION_MARKER" ]; then
   ELAPSED=$(( NOW_TS - MARKER_TS ))
   # If last session was within 4 hours → likely a /clear, not a fresh start
   if [ "$ELAPSED" -lt 14400 ]; then
+    # --- Session Digest: load previous conversation summary ---
+    if [ "$IS_FRESH_START" = false ]; then
+      LAST_JSONL_MARKER="$MEM_DIR/sessions/.last-session-jsonl"
+      if [ -f "$LAST_JSONL_MARKER" ]; then
+        LAST_JSONL=$(cat "$LAST_JSONL_MARKER" 2>/dev/null)
+        if [ -n "$LAST_JSONL" ] && [ -f "$LAST_JSONL" ]; then
+          # Defense-in-depth: reduce digest if active context is rich
+          DIGEST_MAX=80
+          if [ "$CONTEXT_LOADED" = true ]; then
+            CONTEXT_LINES=$(line_count "$CONTEXT_FILE")
+            if [ "$CONTEXT_LINES" -gt 10 ]; then
+              DIGEST_MAX=40
+            fi
+          fi
+          DIGEST=$(python3 "$HOME/.claude/hooks/session-digest.py" "$LAST_JSONL" --max-lines "$DIGEST_MAX" 2>/dev/null || true)
+          if [ -n "$DIGEST" ] && [ "$(echo "$DIGEST" | wc -l | tr -d ' ')" -gt 3 ]; then
+            CONTEXT="## 이전 대화 요약 (자동 생성)
+${DIGEST}
+
+${CONTEXT}"
+          fi
+        fi
+        rm -f "$LAST_JSONL_MARKER"
+      fi
+    fi
     # Check if daily log has real content (not just header)
     LOG_CONTENT_LINES=0
     if [ -f "$TODAY_LOG_FILE" ]; then

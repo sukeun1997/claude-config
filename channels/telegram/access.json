@@ -1,0 +1,9 @@
+{
+  "dmPolicy": "allowlist",
+  "allowFrom": [
+    "8502212707"
+  ],
+  "groups": {},
+  "pending": {},
+  "mentionPatterns": []
+}

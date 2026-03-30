@@ -26,8 +26,8 @@ description: "End-to-end security review → fix → verify → commit pipeline.
 
 ```
 Phase 1: Review (병렬)
-  ├─ code-reviewer (Sonnet) — 코드 품질, 버그, 안티패턴
-  └─ security-reviewer (Sonnet) — OWASP Top 10, 인젝션, 인증, 비밀값
+  ├─ code-reviewer (Opus) — 코드 품질, 버그, 안티패턴
+  └─ security-reviewer (Opus) — OWASP Top 10, 인젝션, 인증, 비밀값
 
 Phase 2: Evaluate (receiving-code-review 원칙)
   → CRITICAL/HIGH 필터링
@@ -55,16 +55,16 @@ Phase 5: Commit + Deploy (선택)
 ## Phase 1: Review — 병렬 리뷰 디스패치
 
 ```
-Task(code-reviewer, model=sonnet):
+Task(code-reviewer, model=opus):
   "프로젝트 {path} 코드 리뷰. 심각도별 분류 (CRITICAL/HIGH/MEDIUM/LOW).
    각 항목: 파일:라인, 설명, 수정 제안."
 
-Task(security-reviewer, model=sonnet):
+Task(security-reviewer, model=opus):
   "프로젝트 {path} 보안 리뷰. OWASP Top 10 기준.
    각 항목: 파일:라인, 취약점 유형, 심각도, 수정 제안."
 ```
 
-두 에이전트는 **반드시 병렬** 실행. 3-Tier 기준 Sonnet 사용.
+두 에이전트는 **반드시 병렬** 실행. §3 기준 Opus 사용 (직접 호출, aggregator 미사용).
 
 ## Phase 2: Evaluate — 비판적 평가 (receiving-code-review)
 

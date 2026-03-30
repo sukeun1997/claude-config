@@ -6,7 +6,7 @@
 - 토큰 예산 부족으로 작업을 일찍 마무리하지 않음 — 끝까지 진행
 
 ## Profile & Persona
-- 세션 시작 시 `memory/topics/user-profile.md`, `memory/topics/agent-persona.md` 참조 (자동 로드)
+- 세션 시작 시 `memory/topics/user-profile.md` 참조 (필요 시 Read)
 
 ---
 
@@ -88,7 +88,7 @@
 ### Agent Delegation Table
 | 작업 유형 | 에이전트 |
 |-----------|---------|
-| 파일 탐색 (3개+) | `Explore` |
+| 파일 탐색 (3개+) | `explore` |
 | 코드 구현/수정 | `executor` |
 | 복잡한 자율 작업 | `deep-executor` |
 | 디버깅 | `debugger` |
@@ -103,15 +103,15 @@
 
 ---
 
-## 3. Model Routing (MANDATORY)
+## 3. Model Routing
 
 Agent 호출 시 `model` 파라미터 필수 지정.
 
 | 티어 | 에이전트 |
 |------|---------|
-| **haiku** | `Explore`, `writer`, `style-reviewer`, `verifier`, `document-specialist`, `git-master` |
-| **sonnet** | `executor`, `debugger`, `code-reviewer`, `build-fixer`, `test-engineer`, `designer`, `qa-tester` |
-| **opus** | `architect`, `planner`, `analyst`, `critic`, `deep-executor`, `quality-reviewer`, `security-reviewer` |
+| **haiku** | `explore`, `writer`, `style-reviewer` |
+| **sonnet** | `executor`, `debugger`, `build-fixer`, `test-engineer`, `designer`, `qa-tester`, `verifier`, `document-specialist`, `git-master`, `information-architect`, `api-reviewer`, `performance-reviewer`, `product-analyst`, `product-manager`, `scientist`, `ux-researcher`, `vision` |
+| **opus** | `architect`, `planner`, `analyst`, `critic`, `deep-executor`, `quality-reviewer`, `security-reviewer`, `code-reviewer` |
 
 미등록 에이전트: 판단/설계→opus, 실행/구현→sonnet, 검색/수집→haiku
 
@@ -127,7 +127,7 @@ Agent 호출 시 `model` 파라미터 필수 지정.
 |------|----------|---------|
 | Security/인증/인가, DB 스키마, 아키텍처 변경 | **전체** (자동) | `code-reviewer` + `security-reviewer` + `quality-reviewer` + `architect` |
 | `/review` 명시 호출 | **전체** | 위와 동일 |
-| 그 외 일반 수정 | **기본** (자동) | `code-reviewer` (sonnet) |
+| 그 외 일반 수정 | **기본** (자동) | `code-reviewer` |
 | `--quick` | **최소** | `code-reviewer`만 |
 
 > 고지 예시: "기본 리뷰를 실행합니다. 전체로 변경하시려면 알려주세요."
@@ -195,7 +195,7 @@ Agent 호출 시 `model` 파라미터 필수 지정.
 | 순차 필수 | 파일 쓰기→읽기, 빌드→테스트, git add→commit→push |
 
 ### 팀 아키텍처 패턴
-새 워크플로우/스킬 설계 시 참조. 상세: `memory/topics/team-patterns.md`
+새 워크플로우/스킬 설계 시 참조:
 
 | 패턴 | 적합 상황 | 현재 사용처 |
 |------|----------|------------|

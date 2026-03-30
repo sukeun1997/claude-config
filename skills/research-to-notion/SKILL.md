@@ -46,6 +46,11 @@ Phase 3: Write to Notion
 Phase 4: Verification
   → notion-fetch로 렌더링 확인
   → 이미지 임베드 존재 여부 체크
+
+Phase 5: Opus Content Review
+  → architect 에이전트(opus)로 내용 검증
+  → 사실 정확성, 논리 흐름, 깊이, 누락 체크
+  → 주요 이슈 발견 시 자동 수정 반영
 ```
 
 ---
@@ -404,6 +409,45 @@ mcp__notion-cdp__write_to_notion_page(page_id="ID", markdown="수정된 내용")
 
 ---
 
+## Phase 5: Opus Content Review
+
+Phase 4 검증 완료 후, **architect 에이전트(opus)**로 내용 품질을 검증한다.
+
+### 실행 방법
+
+```
+Agent(
+  subagent_type="architect",
+  model="opus",
+  prompt="아래 Notion 페이지의 내용을 검토해줘. 페이지 ID: {페이지ID}
+
+검토 기준:
+1. 사실 정확성: 잘못된 정보, 과장, 오해의 소지
+2. 논리 흐름: 섹션 간 연결, 빠진 핵심 개념
+3. 깊이와 실용성: 읽고 나서 실제로 적용할 수 있는 수준인지
+4. 중복/불필요: 반복되거나 불필요한 내용
+5. 누락: 다뤄야 하지만 빠진 중요 주제
+
+코드를 수정하지 말고 리뷰 결과만 반환해줘. 한국어로 작성."
+)
+```
+
+### 리뷰 결과 처리
+
+1. 리뷰 결과를 사용자에게 **요약 테이블**로 제시 (심각도/항목/문제/수정안)
+2. 사용자가 "진행" 시 → `notion-update-page`로 주요 이슈 자동 수정
+3. 사용자가 "스킵" 시 → 수정 없이 종료
+
+### 자동 수정 기준
+
+| 심각도 | 처리 |
+|--------|------|
+| 심각 (사실 오류) | 반드시 수정 |
+| 중간 (부정확/누락) | 수정 권장, 사용자 확인 후 |
+| 경미 (표기/수치) | 일괄 수정 |
+
+---
+
 ## Prerequisites
 
 **Anthropic MCP (우선):**
@@ -430,6 +474,7 @@ Phase 1: → WebSearch 5회 + WebFetch 8개 소스 (이미지 병렬 추출)
 Phase 2: → 12섹션 플랜 + 이미지 매핑 테이블 → 사용자 승인
 Phase 3: → Anthropic MCP로 Notion "AI" 하위에 페이지 생성
 Phase 4: → notion-fetch로 렌더링 확인 완료
+Phase 5: → Opus 내용 검증 → 이슈 수정 반영
 ```
 
 ### URL 기반 분석
@@ -443,6 +488,7 @@ Phase 1: → 원본 기사 + 관련 소스 리서치 + 이미지 수집
 Phase 2: → 8섹션 플랜 (배경, 핵심 내용, 글로벌/한국 동향, 전망...)
 Phase 3: → Notion 페이지 생성
 Phase 4: → 검증
+Phase 5: → Opus 내용 검증 → 이슈 수정 반영
 ```
 
 ### 비교 분석
@@ -456,12 +502,14 @@ Phase 1: → 각 프레임워크별 검색 + 비교 검색 (병렬)
 Phase 2: → 대형 비교표 중심 플랜
 Phase 3: → Notion 페이지 생성 (비교표는 네이티브 table)
 Phase 4: → 검증
+Phase 5: → Opus 내용 검증 → 이슈 수정 반영
 ```
 
 ---
 
 ## Changelog
 
+- **v4** (2026-03-29): Phase 5 Opus Content Review 단계 추가
 - **v3** (2026-02-28): 주제 유형 자동 분류, 이미지 병렬 수집, Anthropic MCP 듀얼 경로, 인라인 이미지 배치
 - **v2** (2026-02-18): CDP MCP 기반, TypeScript 레거시 제거
 - **v1** (초기): TypeScript CDP 직접 사용

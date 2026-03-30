@@ -60,13 +60,19 @@ METRICS_FILE="$METRICS_DIR/sessions.jsonl"
 DATE_STR=$(today)
 PROJECT=$(detect_project)
 
-# Read stable session ID (matches edit-tracker)
-SESSION_ID_FILE="$MEM_DIR/sessions/.current-session-id"
-if [ -f "$SESSION_ID_FILE" ]; then
-  SESSION_ID=$(cat "$SESSION_ID_FILE" 2>/dev/null || echo "unknown")
+# Session ID: prefer $1 (captured inline before async, race-safe) over file read
+if [ -n "${1:-}" ] && [ "$1" != "unknown" ]; then
+  SESSION_ID="$1"
 else
-  SESSION_ID="fallback-${PPID:-unknown}"
+  SESSION_ID_FILE="$MEM_DIR/sessions/.current-session-id"
+  if [ -f "$SESSION_ID_FILE" ]; then
+    SESSION_ID=$(cat "$SESSION_ID_FILE" 2>/dev/null || echo "unknown")
+  else
+    SESSION_ID="fallback-${PPID:-unknown}"
+  fi
 fi
+# Session start timestamp: prefer $2 (captured inline, race-safe)
+CAPTURED_START_TS="${2:-0}"
 TRACK_FILE_PATH="/tmp/claude-edit-tracker-${SESSION_ID}"
 
 # Collect metrics from edit-tracker
@@ -96,9 +102,9 @@ if [ -f "$TODAY_LOG" ]; then
   LOG_LINES=$(grep -cvE '^\s*$|^# Daily Log:' "$TODAY_LOG" 2>/dev/null) || LOG_LINES=0
 fi
 
-# Write JSONL metric — skip zero-data sessions (noise from short/plugin sessions)
-# Filter: duration >= 2min OR actual edits. LOG_LINES excluded from filter (cumulative, not session-specific)
-if [ "$DURATION_MIN" -ge 2 ] || [ "$TOTAL_EDITS" -gt 0 ]; then
+# Write JSONL metric — skip noise sessions (short + no edits + no log)
+# Filter: duration >= 5min AND (edits OR log content). Pure Q&A sessions excluded
+if [ "$DURATION_MIN" -ge 5 ] && { [ "$TOTAL_EDITS" -gt 0 ] || [ "${LOG_LINES:-0}" -gt 0 ]; }; then
   echo "{\"date\":\"${DATE_STR}\",\"project\":\"${PROJECT}\",\"duration_min\":${DURATION_MIN},\"total_edits\":${TOTAL_EDITS},\"unique_files\":${UNIQUE_FILES},\"friction_files\":${FRICTION_COUNT},\"log_lines\":${LOG_LINES:-0}}" >> "$METRICS_FILE"
 fi
 
@@ -158,7 +164,23 @@ if [ -d "$MGMT_REPO/.git" ]; then
   ) &>/dev/null || true
 fi
 
-# Clean up session marker to prevent false /clear detection on next fresh start
-rm -f "$MEM_DIR/sessions/.last-session-ts" 2>/dev/null || true
+# ── Save current session JSONL path for next session's digest ──
+PROJ_JSONL_DIR=$(find_project_jsonl_dir)
+if [ -n "$PROJ_JSONL_DIR" ]; then
+  # Most recently modified JSONL = current session (actively being written)
+  CURRENT_JSONL=$(ls -t "$PROJ_JSONL_DIR"/*.jsonl 2>/dev/null | head -1)
+  if [ -n "$CURRENT_JSONL" ] && [ -f "$CURRENT_JSONL" ]; then
+    echo "$CURRENT_JSONL" > "$MEM_DIR/sessions/.last-session-jsonl"
+  fi
+fi
+
+# Clean up session marker — only if it still belongs to our session (race-safe)
+SESSION_MARKER="$MEM_DIR/sessions/.last-session-ts"
+if [ -f "$SESSION_MARKER" ]; then
+  CURRENT_TS=$(cat "$SESSION_MARKER" 2>/dev/null || echo "0")
+  if [ "$CURRENT_TS" = "$CAPTURED_START_TS" ] || [ "$CAPTURED_START_TS" = "0" ]; then
+    rm -f "$SESSION_MARKER" 2>/dev/null || true
+  fi
+fi
 
 exit 0
