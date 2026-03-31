@@ -36,11 +36,26 @@
             "type": "command",
             "command": "\"$HOME/.claude/hooks/memory-session-start.sh\"",
             "timeout": 10
+          },
+          {
+            "type": "command",
+            "command": "bash \"$HOME/.claude/hooks/memory-promote-analyzer.sh\"",
+            "timeout": 5
           }
         ]
       }
     ],
     "PostToolUse": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"$HOME/.claude/hooks/memory-post-tool.py\"",
+            "timeout": 3
+          }
+        ]
+      },
       {
         "matcher": "Edit|Write",
         "hooks": [
@@ -51,7 +66,23 @@
           {
             "type": "command",
             "command": "\"$HOME/.claude/hooks/edit-tracker.sh\"",
-            "timeout": 5
+            "timeout": 2
+          },
+          {
+            "type": "command",
+            "command": "\"$HOME/.claude/hooks/governance-guard.sh\"",
+            "if": "Write(*) || Edit(*)",
+            "timeout": 3
+          }
+        ]
+      },
+      {
+        "matcher": "Skill",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"$HOME/.claude/hooks/skill-usage-tracker.sh\"",
+            "timeout": 2
           }
         ]
       }
@@ -86,6 +117,11 @@
             "type": "command",
             "command": "\"$HOME/.claude/hooks/memory-stop-guard.sh\"",
             "timeout": 10
+          },
+          {
+            "type": "command",
+            "command": "bash \"$HOME/.claude/hooks/memory-active-context.sh\" update 2>/dev/null || true",
+            "timeout": 5
           }
         ]
       }
@@ -98,6 +134,23 @@
             "command": "SID=$(cat \"$HOME/.claude/memory/sessions/.current-session-id\" 2>/dev/null || echo unknown); STS=$(cat \"$HOME/.claude/memory/sessions/.last-session-ts\" 2>/dev/null || echo 0); \"$HOME/.claude/hooks/memory-session-end.sh\" \"$SID\" \"$STS\"",
             "timeout": 15,
             "async": true
+          },
+          {
+            "type": "command",
+            "command": "bash \"$HOME/.claude/hooks/observer-runner.sh\"",
+            "timeout": 30,
+            "async": true
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"$HOME/.claude/hooks/pre-clear-handoff.sh\"",
+            "timeout": 5
           }
         ]
       }
