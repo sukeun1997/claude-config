@@ -1,15 +1,24 @@
 # Memory Persistence System
 
-3계층 메모리 구조로 compaction 이후에도 핵심 컨텍스트를 보존한다.
+4계층 메모리 + 브랜치별 Active Context로 compaction 이후에도 핵심 컨텍스트를 보존한다.
 **원칙: "파일이 진실의 원천 — 모델은 디스크에 쓴 것만 기억한다"**
 
-## 3-Layer Architecture
+## 4-Layer Architecture (branch-based Active Context 통합)
 
-| Layer | 파일 | 로딩 방식 | 용도 |
-|-------|------|-----------|------|
-| Hot | `memory/daily/YYYY-MM-DD.md` | SessionStart 자동 주입 (오늘+어제) | 당일 작업 로그 |
-| Always | `memory/MEMORY.md` | 시스템 프롬프트 상시 로드 | 핵심 장기 기억 (150줄 소프트 리밋) |
-| Cold | `memory/topics/*.md` | 온디맨드 (필요시 Read) | 도메인별 상세 지식 |
+| Layer | 파일 | 로딩 방식 | 용도 | 수명 |
+|-------|------|-----------|------|------|
+| **Active** | `memory/active/{branch-slug}.md` | SessionStart 자동 주입 (브랜치별) | 현재 작업 상태 (20줄 이하) | 브랜치 머지/삭제 시 archive 이동 |
+| **Hot** | `memory/daily/YYYY-MM-DD.md` | SessionStart 자동 주입 (오늘 마지막 20줄) | 당일 작업 로그 | 14일 후 archive/{YYYY-MM}/ 이동 |
+| **Always** | `memory/MEMORY.md` | 시스템 프롬프트 상시 로드 | 핵심 장기 기억 (150줄 소프트 리밋) | 영구 (수동 관리) |
+| **Cold** | `memory/topics/*.md` | 온디맨드 (필요시 Read) | 도메인별 상세 지식 | 영구 |
+
+## Active Context (브랜치별 작업 맥락)
+
+- `memory-active-context.sh init`: feature 브랜치 진입 시 skeleton 자동 생성
+- `memory-active-context.sh update`: Stop 훅에서 자동 갱신
+- main/master/develop 브랜치는 건너뜀
+- 구조: Why / Progress / Next / Open Questions
+- 머지/삭제된 브랜치의 active context는 SessionEnd에서 archive/ 이동
 
 ## Daily Log 작성 시점
 

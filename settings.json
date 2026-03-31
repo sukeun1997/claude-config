@@ -1,8 +1,10 @@
 {
   "env": {
     "enable_tool_search": "true",
-    "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1"
+    "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1",
+    "CLAUDE_CODE_SUBPROCESS_ENV_SCRUB": "1"
   },
+  "includeCoAuthoredBy": false,
   "permissions": {
     "allow": [
       "Bash(*)",
@@ -12,11 +14,9 @@
       "WebFetch(domain:java.testcontainers.org)",
       "WebFetch(domain:raw.githubusercontent.com)",
       "Skill(*)",
-      "WebFetch(domain:help.router-for.me)",
       "mcp__cli-proxy-api__ask_gemini",
       "mcp__cli-proxy-api__ask_codex",
       "mcp__cli-proxy-api__list_proxy_models",
-      "WebFetch(domain:www.voxfor.com)",
       "mcp__ide__getDiagnostics"
     ]
   },
@@ -47,7 +47,20 @@
           },
           {
             "type": "command",
-            "command": "python3 \"$HOME/.claude/hooks/memory-conversation-summarizer.py\"",
+            "command": "\"$HOME/.claude/hooks/edit-tracker.sh\"",
+            "if": "Write(*) || Edit(*)",
+            "timeout": 2
+          },
+          {
+            "type": "command",
+            "command": "\"$HOME/.claude/hooks/governance-guard.sh\"",
+            "if": "Write(*) || Edit(*)",
+            "timeout": 3
+          },
+          {
+            "type": "command",
+            "command": "\"$HOME/.claude/hooks/skill-usage-tracker.sh\"",
+            "if": "Skill(*)",
             "timeout": 2
           }
         ]
@@ -62,6 +75,12 @@
             "command": "\"$HOME/.claude/hooks/memory-session-start.sh\"",
             "timeout": 10,
             "statusMessage": "Loading memory context..."
+          },
+          {
+            "type": "command",
+            "command": "bash \"$HOME/.claude/hooks/memory-promote-analyzer.sh\"",
+            "timeout": 5,
+            "statusMessage": "Promoting memory items..."
           }
         ]
       }
@@ -72,7 +91,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "echo 'IMPORTANT: Context compaction is about to occur. Before proceeding, do BOTH:\n1. DAILY LOG: Save important context to memory/daily/'$(date +%Y-%m-%d)'.md (format: ### HH:MM - [Topic] with bullet summaries. Use [PROMOTE] tag for MEMORY.md candidates).\n2. HANDOFF.md: Write .claude/HANDOFF.md in the current project directory with: current work status, incomplete items, next session starting point, key decisions made. Skip if no meaningful work this session.'",
+            "command": "echo 'IMPORTANT: Context compaction is about to occur. Before proceeding, do BOTH:\n1. DAILY LOG: Save important context to memory/daily/'$(date +%Y-%m-%d)'.md (format: ### HH:MM - [Topic] with bullet summaries. Use [PROMOTE] tag for MEMORY.md candidates).\n2. HANDOFF.md: Write .claude/HANDOFF.md using this EXACT structure:\n---\n## Status: [IN_PROGRESS | BLOCKED | REVIEW_NEEDED]\n## Current Task\n- 무엇을 하고 있었는가 (1-2줄)\n## Completed\n- [ ] 이번 세션에서 완료한 항목\n## Remaining\n- [ ] 미완료 항목\n## Key Decisions\n- 결정사항 + 이유 (최대 3개)\n## Resume Point\n- 다음 세션에서 첫 번째로 할 일 (1줄)\n## Files Modified\n- 변경된 파일 경로 목록\n---\nSkip if no meaningful work this session.'",
             "timeout": 10,
             "statusMessage": "Preparing for compaction..."
           }
@@ -85,7 +104,12 @@
         "hooks": [
           {
             "type": "command",
-            "command": "DAILY_LOG=\"$HOME/.claude/projects/-Users-sukeunpark-IdeaProjects/memory/daily/$(date +%Y-%m-%d).md\"; if [ -f \"$DAILY_LOG\" ] && [ $(( $(date +%s) - $(stat -f %m \"$DAILY_LOG\" 2>/dev/null || echo 0) )) -lt 300 ]; then echo 'Daily log recently updated. OK to stop.'; else echo 'Reminder: Consider saving session context to daily log before stopping.'; fi",
+            "command": "PROJECT_ID=$(echo \"$CLAUDE_PROJECT_DIR\" | sed 's|/|-|g'); MEM_DIR=\"$HOME/.claude/projects/${PROJECT_ID}/memory\"; DAILY_LOG=\"$MEM_DIR/daily/$(date +%Y-%m-%d).md\"; CAPTURES=\"$MEM_DIR/daily/.captures-$(date +%Y-%m-%d).jsonl\"; HAS_CAPTURES=false; [ -f \"$CAPTURES\" ] && [ $(wc -l < \"$CAPTURES\" | tr -d ' ') -gt 0 ] && HAS_CAPTURES=true; if [ \"$HAS_CAPTURES\" = true ]; then echo \"IMPORTANT: This session has unsaved work. Before finishing, you MUST save a summary to the daily log.\nUse the Write tool to APPEND to: $DAILY_LOG\nFormat: ### $(date +%H:%M) - [Topic]\n- Key decisions and why\n- What was implemented/changed\n- Unresolved issues\nUse [PROMOTE] tag for items worth keeping in MEMORY.md.\nDo NOT skip this step — /clear will lose conversation context.\"; else echo 'No significant tool usage detected. OK to stop.'; fi",
+            "timeout": 5
+          },
+          {
+            "type": "command",
+            "command": "bash \"$HOME/.claude/hooks/memory-active-context.sh\" update 2>/dev/null || true",
             "timeout": 5
           }
         ]
@@ -99,6 +123,12 @@
             "type": "command",
             "command": "\"$HOME/.claude/hooks/memory-session-end.sh\"",
             "timeout": 15,
+            "async": true
+          },
+          {
+            "type": "command",
+            "command": "bash \"$HOME/.claude/hooks/observer-runner.sh\"",
+            "timeout": 30,
             "async": true
           }
         ]
@@ -119,19 +149,29 @@
   },
   "statusLine": {
     "type": "command",
-    "command": "node /Users/sukeunpark/.claude/plugins/cache/claude-hud/claude-hud/0.0.7/dist/index.js"
+    "command": "bash -c '\"/Users/sukeunpark/.bun/bin/bun\" \"$(ls -td ~/.claude/plugins/cache/claude-hud/claude-hud/*/ 2>/dev/null | head -1)src/index.ts\"'"
   },
   "enabledPlugins": {
     "context7@claude-plugins-official": true,
     "claude-hud@claude-hud": true,
     "github@claude-plugins-official": true,
-    "frontend-design@claude-plugins-official": true,
+    "frontend-design@claude-plugins-official": false,
     "supabase@claude-plugins-official": false,
-    "ralph-loop@claude-plugins-official": true,
+    "ralph-loop@claude-plugins-official": false,
     "explanatory-output-style@claude-plugins-official": true,
     "everything-claude-code@everything-claude-code": true,
-    "playwright@claude-plugins-official": true,
+    "playwright@claude-plugins-official": false,
     "superpowers@claude-plugins-official": true,
-    "Notion@claude-plugins-official": true
-  }
+    "sentry@claude-plugins-official": true,
+    "codex@openai-codex": true
+  },
+  "extraKnownMarketplaces": {
+    "openai-codex": {
+      "source": {
+        "source": "github",
+        "repo": "openai/codex-plugin-cc"
+      }
+    }
+  },
+  "skipDangerousModePermissionPrompt": true
 }

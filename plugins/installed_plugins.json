@@ -4,10 +4,10 @@
     "context7@claude-plugins-official": [
       {
         "scope": "user",
-        "installPath": "/Users/sukeunpark/.claude/plugins/cache/claude-plugins-official/context7/205b6e0b3036",
-        "version": "205b6e0b3036",
+        "installPath": "/Users/sukeunpark/.claude/plugins/cache/claude-plugins-official/context7/d7399d3bbb83",
+        "version": "d7399d3bbb83",
         "installedAt": "2026-02-09T01:12:23.918Z",
-        "lastUpdated": "2026-03-04T02:11:05.214Z",
+        "lastUpdated": "2026-03-25T07:23:16.216Z",
         "gitCommitSha": "2cd88e7947b7382e045666abee790c7f55f669f3"
       }
     ],
@@ -24,50 +24,50 @@
     "github@claude-plugins-official": [
       {
         "scope": "user",
-        "installPath": "/Users/sukeunpark/.claude/plugins/cache/claude-plugins-official/github/205b6e0b3036",
-        "version": "205b6e0b3036",
+        "installPath": "/Users/sukeunpark/.claude/plugins/cache/claude-plugins-official/github/d7399d3bbb83",
+        "version": "d7399d3bbb83",
         "installedAt": "2026-02-10T04:01:50.383Z",
-        "lastUpdated": "2026-03-04T02:11:05.215Z",
+        "lastUpdated": "2026-03-25T07:23:16.217Z",
         "gitCommitSha": "2cd88e7947b7382e045666abee790c7f55f669f3"
       }
     ],
     "frontend-design@claude-plugins-official": [
       {
         "scope": "user",
-        "installPath": "/Users/sukeunpark/.claude/plugins/cache/claude-plugins-official/frontend-design/205b6e0b3036",
-        "version": "205b6e0b3036",
+        "installPath": "/Users/sukeunpark/.claude/plugins/cache/claude-plugins-official/frontend-design/d7399d3bbb83",
+        "version": "d7399d3bbb83",
         "installedAt": "2026-02-20T01:25:34.550Z",
-        "lastUpdated": "2026-03-04T02:11:05.217Z",
+        "lastUpdated": "2026-03-25T07:23:16.215Z",
         "gitCommitSha": "8deab8460a9d4df5a01315ef722a5ca6b061c074"
       }
     ],
     "supabase@claude-plugins-official": [
       {
         "scope": "user",
-        "installPath": "/Users/sukeunpark/.claude/plugins/cache/claude-plugins-official/supabase/205b6e0b3036",
-        "version": "205b6e0b3036",
+        "installPath": "/Users/sukeunpark/.claude/plugins/cache/claude-plugins-official/supabase/d7399d3bbb83",
+        "version": "d7399d3bbb83",
         "installedAt": "2026-02-20T01:25:53.785Z",
-        "lastUpdated": "2026-03-04T02:11:05.215Z",
+        "lastUpdated": "2026-03-25T07:23:16.216Z",
         "gitCommitSha": "8deab8460a9d4df5a01315ef722a5ca6b061c074"
       }
     ],
     "ralph-loop@claude-plugins-official": [
       {
         "scope": "user",
-        "installPath": "/Users/sukeunpark/.claude/plugins/cache/claude-plugins-official/ralph-loop/205b6e0b3036",
-        "version": "205b6e0b3036",
+        "installPath": "/Users/sukeunpark/.claude/plugins/cache/claude-plugins-official/ralph-loop/1.0.0",
+        "version": "1.0.0",
         "installedAt": "2026-02-20T01:26:32.324Z",
-        "lastUpdated": "2026-03-04T02:11:05.228Z",
+        "lastUpdated": "2026-03-30T01:18:12.721Z",
         "gitCommitSha": "8deab8460a9d4df5a01315ef722a5ca6b061c074"
       }
     ],
     "explanatory-output-style@claude-plugins-official": [
       {
         "scope": "user",
-        "installPath": "/Users/sukeunpark/.claude/plugins/cache/claude-plugins-official/explanatory-output-style/205b6e0b3036",
-        "version": "205b6e0b3036",
+        "installPath": "/Users/sukeunpark/.claude/plugins/cache/claude-plugins-official/explanatory-output-style/1.0.0",
+        "version": "1.0.0",
         "installedAt": "2026-02-20T01:26:45.872Z",
-        "lastUpdated": "2026-03-04T02:11:05.218Z",
+        "lastUpdated": "2026-03-30T01:18:12.719Z",
         "gitCommitSha": "8deab8460a9d4df5a01315ef722a5ca6b061c074"
       }
     ],
@@ -84,31 +84,41 @@
     "playwright@claude-plugins-official": [
       {
         "scope": "user",
-        "installPath": "/Users/sukeunpark/.claude/plugins/cache/claude-plugins-official/playwright/205b6e0b3036",
-        "version": "205b6e0b3036",
+        "installPath": "/Users/sukeunpark/.claude/plugins/cache/claude-plugins-official/playwright/d7399d3bbb83",
+        "version": "d7399d3bbb83",
         "installedAt": "2026-02-24T01:59:11.033Z",
-        "lastUpdated": "2026-03-04T02:11:05.215Z",
+        "lastUpdated": "2026-03-25T07:23:16.215Z",
         "gitCommitSha": "aa296ec81e8ccb49c9784f167c2c0aa625a86cec"
       }
     ],
     "superpowers@claude-plugins-official": [
       {
         "scope": "user",
-        "installPath": "/Users/sukeunpark/.claude/plugins/cache/claude-plugins-official/superpowers/4.3.1",
-        "version": "4.3.1",
+        "installPath": "/Users/sukeunpark/.claude/plugins/cache/claude-plugins-official/superpowers/5.0.6",
+        "version": "5.0.6",
         "installedAt": "2026-02-26T01:05:24.671Z",
-        "lastUpdated": "2026-02-26T01:05:24.671Z",
+        "lastUpdated": "2026-03-26T01:09:02.514Z",
         "gitCommitSha": "e4a2375cb705ca5800f0833528ce36a3faf9017a"
       }
     ],
-    "Notion@claude-plugins-official": [
+    "sentry@claude-plugins-official": [
       {
         "scope": "user",
-        "installPath": "/Users/sukeunpark/.claude/plugins/cache/claude-plugins-official/Notion/0.1.0",
-        "version": "0.1.0",
-        "installedAt": "2026-03-05T04:29:49.514Z",
-        "lastUpdated": "2026-03-05T04:29:49.514Z",
-        "gitCommitSha": "9847f2aa1a15f25df35ed1fb7b4557dbb60cd651"
+        "installPath": "/Users/sukeunpark/.claude/plugins/cache/claude-plugins-official/sentry/1.0.0",
+        "version": "1.0.0",
+        "installedAt": "2026-03-25T07:51:45.212Z",
+        "lastUpdated": "2026-03-25T07:51:45.212Z",
+        "gitCommitSha": "871db4ad41048f0ef205df837648f623ba2536e6"
+      }
+    ],
+    "codex@openai-codex": [
+      {
+        "scope": "user",
+        "installPath": "/Users/sukeunpark/.claude/plugins/cache/openai-codex/codex/1.0.0",
+        "version": "1.0.0",
+        "installedAt": "2026-03-31T00:51:40.896Z",
+        "lastUpdated": "2026-03-31T00:51:40.896Z",
+        "gitCommitSha": "f4d65d9641fadc7632afecd5735daf8e16060c98"
       }
     ]
   }

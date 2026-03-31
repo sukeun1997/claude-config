@@ -13,13 +13,14 @@
 - **리뷰 스킬**: `/springboot-verification` (Spring Boot 전용 검증 루프)
 
 ### Approach Constraints (CRITICAL — 1위 마찰 원인 대응)
-- **build 파일 보호**: 명시적 요청 없이 build.gradle.kts 수정 금지. 데몬 재시작, 환경변수, 런타임 설정 등 비침투적 해결 우선
+- **frozen 파일 보호**: `.claude/frozen.yml`에 등록된 파일은 명시적 요청 없이 수정 금지. 수정 필요 시 사용자에게 frozen 상태 알리고 승인 후 진행. `/freeze` 스킬로 관리
 - **테스트 우회 금지**: 실패 테스트 수정 시 @Ignore, skip, 비활성화 절대 금지. 실제로 통과시킬 것
 - **질문 먼저, 파일 나중**: 추천/분석/설명 요청 시 텍스트로 먼저 답변. 확인 후에만 파일 생성/편집
 - **빠른 실행**: 탐색 최소화. 2-3회 도구 호출 후 진전 없으면 현재까지 파악한 내용 공유
 - **macOS GUI PATH**: IntelliJ 등 GUI 앱은 셸 PATH 미상속. launchctl setenv, /etc/paths.d 우선 확인
 - **로컬 파일 제외**: .gitignore 대신 .git/info/exclude 사용
 - **디버깅 수렴**: 동일 이슈에 3회 다른 접근 실패 시 → 시도 내역 요약 후 사용자에게 방향 확인
+- **삽질 자동 감지**: edit-tracker가 동일 파일 3회+ 편집 시 경고. 5회+ 시 failure-log 기록 강력 권장 (Stop 훅에서 자동 제안)
 
 ---
 
@@ -59,6 +60,7 @@
 - 단일 파일 내 5줄 이하 수정
 - 오타 수정, 변수명 변경 등 명확한 단순 작업
 - 사용자가 명시적으로 "바로 해줘" 요청
+- FD 워크플로우 진행 시 한 세션에서 여러 단계 허용 (예: /fd-new → /fd-explore → /fd-deep 연속 진행). 단, 각 단계 완료를 명시적으로 확인 후 다음 단계로 진행
 
 ---
 
@@ -88,8 +90,9 @@
 ### 검증 체인
 1. **빌드 검증** (순차): 프로젝트 빌드 명령 (기본: `./gradlew build` + ktlint skip) → 실패 시 build-fixer 자동 투입
 2. **코드 품질** (병렬): code-reviewer + security-reviewer + quality-reviewer
-3. **테스트** (순차): 변경 모듈만 테스트 → 실패 시 수정 → 커버리지 80% 미달 시 test-code-generator 보완
-4. **결과 보고**: CRITICAL/HIGH 이슈 요약 → 사용자에게 보고
+3. **테스트** (순차): 변경 모듈만 테스트 → 실패 시 수정 → 커버리지 80% 미달 시 test-engineer 보완
+4. **bootRun 검증** (순차): `bootRun --spring.profiles.active=local` 실행 → "Started" 로그 확인 후 종료 (Docker 필요)
+5. **결과 보고**: CRITICAL/HIGH 이슈 요약 → 사용자에게 보고
 
 ### 프로젝트별 검증 스킬
 | 프로젝트 타입 | 사용 스킬 |
@@ -105,62 +108,84 @@
 
 ---
 
-## 4. Feature Design (FD) System
+## 4. Skill Automation Chains
 
-설계 결정을 마크다운 파일로 영속화하여 과거 결정이 축적되고, 새 에이전트의 계획 품질이 향상되는 시스템.
+작업 컨텍스트에 따른 스킬 자동 선택은 `rules/common/skill-routing.md` 참조.
 
-### FD 라이프사이클
-```
-Planned → Design → Open → In Progress → Pending Verification → Complete
-                                                              → Deferred / Closed
-```
+### 스킬 체이닝 규칙
+- `/bs` 완료 후 **2개 이상 파일 수정이 예상되면** 자동으로 `/plan` 실행 (사용자가 "바로 해줘" 하지 않는 한)
+- `/bs`만으로 충분한 경우 (단일 파일, 명확한 작업): `/plan` 생략 가능
 
-### FD 슬래시 명령어
-| 명령어 | 기능 |
-|--------|------|
-| `/fd-new` | 아이디어에서 새 FD 파일 생성, 인덱스에 등록 |
-| `/fd-status` | 전체 FD 상태 대시보드 |
-| `/fd-explore` | 세션 부트스트랩: 프로젝트 컨텍스트 + 활성 FD 로드 |
-| `/fd-deep` | 4개 Opus 에이전트 병렬 다관점 설계 탐색 |
-| `/fd-verify` | 구현 검수 + 검증 계획 실행 |
-| `/fd-close` | FD 아카이빙, 인덱스/변경로그 업데이트 |
+### 핵심 플로우 요약
+- **Feature**: `/bs` → `/plan` → `/springboot-tdd` → 구현 → `/simplify` → `/springboot-verification` → `/update-pr`
+- **Bug**: `debugger` → `/springboot-tdd` (실패 재현) → 수정 → `/springboot-verification`
 
-### FD 규칙
-- **FD 파일 위치**: `docs/features/FD-{NNN}.md` (프로젝트별)
-- **인덱스**: `docs/features/FEATURE_INDEX.md`
-- **아카이브**: `docs/features/archive/`
-- **커밋 prefix**: `FD-{NNN}: {description}`
-- **인라인 피드백**: `%% 코멘트` 형태로 FD 파일에 직접 기록
-- Plan-First(§1)와 통합: EnterPlanMode 결과를 FD 파일로 영속화
-
-### FD 통합 워크플로우
-```
-Feature: /fd-new → /fd-explore → /fd-deep(복잡시) → 구현 → /fd-verify → /fd-close
-Bug:     탐색 → /fd-new(원인 기록) → 수정 → /fd-verify → /fd-close
-```
+> FD(Feature Design) 시스템을 사용하려면 `/fd-new`로 시작. 상세 규칙은 `rules/common/fd-system.md` 참조.
 
 ---
 
-## 5. Skill Automation Chains
-
-### Feature 구현 플로우
-```
-/fd-new → /fd-explore → 설계 → /springboot-tdd → 구현 → /fd-verify → /update-pr → /merge-check → /fd-close
-```
-
-### 버그 수정 플로우
-```
-탐색 (explore + debugger 병렬) → 원인 보고 → /fd-new(원인 기록) → /springboot-tdd (실패 재현) → 수정 → /fd-verify
-```
-
----
-
-## 6. Communication & Output
+## 5. Communication & Output
 
 - **한국어 우선**: 사용자와의 대화는 한국어로 진행
 - **코드/기술 용어**: 영어 원문 유지 (번역하지 않음)
 - **Insight 제공**: 구현 전후 교육적 설명 포함 (explanatory mode)
 - **진행 상황**: TaskCreate/TaskUpdate로 추적, 단계 완료마다 보고
+
+### Daily Log 자동 작성 (CRITICAL — /clear 시 컨텍스트 보존)
+
+Stop 훅이 미저장 작업을 감지하면 daily log 작성을 지시한다. **반드시 따를 것.**
+
+- **파일**: `memory/daily/YYYY-MM-DD.md` (Write 도구로 append)
+- **트리거**: Stop 훅에서 "IMPORTANT: This session has unsaved work" 메시지가 올 때
+- **포맷**:
+  ```
+  ### HH:MM - [토픽 한 줄]
+  - 핵심 의사결정 + 이유
+  - 구현/변경 내용
+  - 미해결 사항
+  - [PROMOTE] 장기 보존 필요 항목 (선택)
+  ```
+- **생략 조건**: Stop 훅이 "OK to stop"이면 생략 가능
+- **금지**: 파일 경로 나열, gradlew 명령어, 빌드 로그 복사
+
+---
+
+## 6. Context Cost Optimization (CRITICAL — 비용 절감)
+
+### MCP/외부 서비스 호출 → 서브에이전트 위임 (필수)
+
+Notion, Slack, Atlassian 등 **MCP 서버 호출은 반드시 서브에이전트에 위임**한다.
+MCP 응답(페이지 내용, 검색 결과 등)이 메인 컨텍스트에 쌓이면 이후 모든 메시지의 cache_read 비용이 누적 증가한다.
+
+```
+# 잘못된 패턴 (메인에서 직접 MCP 호출)
+메인 → notion-fetch → 결과 10K tokens가 컨텍스트에 쌓임 → 이후 50개 메시지마다 10K 재전송
+
+# 올바른 패턴 (서브에이전트에 위임)
+메인 → Agent(sonnet) "Notion에서 X 페이지 읽어서 Y 섹션 요약해줘" → 요약 500 tokens만 메인에 반환
+```
+
+| MCP 작업 | 위임 방식 |
+|----------|-----------|
+| Notion 읽기/검색 | `Agent(sonnet)` — 읽고 요약/핵심만 반환 |
+| Notion 쓰기/업데이트 | `Agent(sonnet)` — 내용 전달 후 결과만 반환 |
+| Slack 읽기 | `Agent(haiku)` — 채널/스레드 요약 반환 |
+| Atlassian 조회 | `Agent(sonnet)` — JIRA/Confluence 요약 반환 |
+
+**예외**: 사용자가 "직접 Notion 열어봐" 등 명시적으로 메인에서 호출 요청한 경우
+
+### 짧은 연속 질문 배칭
+
+사용자가 1-2줄 짧은 질문을 연속으로 하면, 매번 전체 컨텍스트를 재전송한다.
+가능하면 **여러 질문을 모아서 한 번에 답변**하도록 유도한다.
+
+- 짧은 후속 질문이 3회 연속 → "추가 질문이 더 있으시면 모아서 한 번에 답변드릴까요?" 제안
+- 분석/비교 요청이 여러 항목 → 한 번에 테이블로 정리
+
+### 컨텍스트 경고
+
+긴 세션에서 컨텍스트 비용 급증이 감지되면 `/clear` 후 핸드오프를 권장한다.
+(자동 모니터링은 `context-cost-monitor.sh` 훅이 담당)
 
 ---
 
@@ -181,10 +206,7 @@ Task 호출 시 `model` 파라미터를 아래 기준으로 설정:
 ### Routing Verification Policy
 
 - 기본 검증 기준은 **행동 기반**이다: 작업 분류, 위임 여부, 병렬화 패턴, 결과 품질을 우선 확인한다.
-- 내부 `selected_model` 또는 정확한 `reasoning_effort` 추적은 **예외적 audit 작업**으로만 수행한다.
 - 매 요청마다 내부 모델값을 추적하지 않는다. 동작 이상, 품질 저하, 사용자 명시 요청이 있을 때만 조사한다.
-- 내부 추적이 필요하면 `~/.codex/sessions/*.jsonl`의 `session_meta`, `agent_role`, `token_count`, `reasoning_output_tokens`를 우선 확인한다.
-- 단, 로컬 로그에는 정확한 모델 slug 또는 effort 값이 항상 남는다고 가정하지 않는다. 내부 모델 추적은 best-effort로 취급한다.
 
 ### Direct Write Permissions
 
@@ -195,21 +217,22 @@ Task 호출 시 `model` 파라미터를 아래 기준으로 설정:
 
 메인 세션(Opus)이 직접 툴을 호출하는 대신, 반드시 에이전트에 위임한다.
 
-| 작업 유형 | 직접 툴 사용 금지 | 위임 에이전트 |
-|-----------|-------------------|--------------|
-| 파일 탐색 (3개 이상) | Glob/Grep/Read | `Explore` |
-| 코드 구현/수정 | Write/Edit | `executor` |
-| 코드 리뷰 | 직접 분석 | `code-reviewer` + `quality-reviewer` |
-| 디버깅 | 직접 탐색 | `debugger` |
-| 빌드 오류 수정 | 직접 수정 | `build-fixer` |
-| 아키텍처 설계 / 기술 결정 | 직접 판단 | `architect` |
-| 복잡한 플래닝 (멀티파일 구현) | 직접 계획 | `planner` |
-| 복잡한 자율 작업 (멀티스텝) | 직접 실행 | `deep-executor` |
+| 작업 유형 | 위임 에이전트 |
+|-----------|--------------|
+| 파일 탐색 (3개 이상) | `Explore` |
+| 대규모 코드 구현 (멀티파일) | `executor` 또는 `deep-executor` |
+| 코드 리뷰 | Expert Pool — `rules/common/agents.md` 참조 |
+| 디버깅 | `debugger` |
+| 빌드 오류 수정 | `build-fixer` |
+| 아키텍처 설계 | `architect` |
+| 복잡한 플래닝 | `planner` |
+| **MCP 호출 (Notion/Slack/Atlassian)** | `Agent(sonnet)` — §7 참조 |
 
 > 각 에이전트의 모델(haiku/sonnet/opus) 상세는 `rules/common/agents.md` 참조.
 
-**예외 (직접 툴 사용 허용):**
-- 단일 파일 1-2회 읽기 (파악용)
+**직접 툴 사용 허용:**
+- 단일 파일 수정 (1-2개 파일, 소규모 변경)
+- 파일 1-3회 읽기 (파악용)
 - `~/.claude/**`, `.claude/**` 설정 파일 수정
 - git 명령어 (add/commit/push)
 

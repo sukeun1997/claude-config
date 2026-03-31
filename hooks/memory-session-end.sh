@@ -50,6 +50,21 @@ if [ "$ARCHIVED" -gt 0 ]; then
   echo "Archived $ARCHIVED daily log(s) older than 14 days."
 fi
 
+# Clean up active context for merged/deleted branches
+ACTIVE_DIR="$MEM_DIR/active"
+if [ -d "$ACTIVE_DIR" ]; then
+  for f in "$ACTIVE_DIR"/*.md; do
+    [ -f "$f" ] || continue
+    SLUG=$(basename "$f" .md)
+    BRANCH_NAME=$(echo "$SLUG" | sed 's|--|/|g')
+    # If branch no longer exists locally, archive the active context
+    if ! git show-ref --verify --quiet "refs/heads/$BRANCH_NAME" 2>/dev/null; then
+      mkdir -p "$ARCHIVE_DIR"
+      mv "$f" "$ARCHIVE_DIR/" 2>/dev/null || true
+    fi
+  done
+fi
+
 # Clean up summarizer state files older than 2 hours
 find "$DAILY_DIR" -name ".summarizer-state-*.json" -mmin +120 -delete 2>/dev/null || true
 

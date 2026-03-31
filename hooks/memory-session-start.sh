@@ -12,6 +12,16 @@ ensure_dirs "$MEM_DIR"
 TODAY=$(today)
 YESTERDAY=$(yesterday)
 
+# --- Flush previous session's pending captures (runs on /clear too) ---
+# 1. Flush tool capture JSONL → daily log summary
+if command -v python3 &>/dev/null && [ -f "$HOME/.claude/hooks/memory-post-tool.py" ]; then
+  CLAUDE_PROJECT_DIR="${CLAUDE_PROJECT_DIR:-$PWD}" \
+    python3 "$HOME/.claude/hooks/memory-post-tool.py" flush 2>/dev/null || true
+fi
+
+# 2. Clean up stale state files
+find "$MEM_DIR/daily" -name ".summarizer-state-*.json" -delete 2>/dev/null || true
+
 CONTEXT=""
 
 # --- Session metadata (CWD, git branch) ---
@@ -26,25 +36,76 @@ fi
 CONTEXT+="
 "
 
-# --- Load today's daily log (max 100 lines = ~2000 tokens) ---
+# --- Load HANDOFF.md if exists (작업 맥락 복원) ---
+HANDOFF_FILE="${PWD}/.claude/HANDOFF.md"
+if [ -f "$HANDOFF_FILE" ] && [ -s "$HANDOFF_FILE" ]; then
+  CONTEXT+="# Active Work Context (from last /clear)
+$(safe_read_limited "$HANDOFF_FILE" 50)
+
+"
+fi
+
+# --- Git branch context (자동) ---
+if [ -n "${BRANCH:-}" ] && command -v git &>/dev/null; then
+  # Detect base branch: prefer develop (git-flow), then main, then master
+  BASE_BRANCH=""
+  for candidate in develop main master; do
+    if git show-ref --verify --quiet "refs/heads/$candidate" 2>/dev/null || \
+       git show-ref --verify --quiet "refs/remotes/origin/$candidate" 2>/dev/null; then
+      BASE_BRANCH="$candidate"
+      break
+    fi
+  done
+  BASE_BRANCH="${BASE_BRANCH:-main}"
+  AHEAD_COUNT=$(git rev-list --count "${BASE_BRANCH}..HEAD" 2>/dev/null || echo "0")
+  if [ "$AHEAD_COUNT" -gt 0 ]; then
+    CONTEXT+="# Branch Context (${BRANCH}, ${AHEAD_COUNT} commits ahead of ${BASE_BRANCH})
+"
+    CONTEXT+="Recent commits:
+$(git log --oneline -5 "${BASE_BRANCH}..HEAD" 2>/dev/null || echo "(none)")
+
+"
+    CHANGED=$(git diff --stat "${BASE_BRANCH}..HEAD" 2>/dev/null | tail -1)
+    if [ -n "$CHANGED" ]; then
+      CONTEXT+="Changes: ${CHANGED}
+"
+    fi
+    CONTEXT+="
+"
+  fi
+fi
+
+# --- Auto-create active context for feature branches ---
+if [ -f "$HOME/.claude/hooks/memory-active-context.sh" ]; then
+  CLAUDE_PROJECT_DIR="${CLAUDE_PROJECT_DIR:-$PWD}" \
+    bash "$HOME/.claude/hooks/memory-active-context.sh" init 2>/dev/null || true
+fi
+
+# --- Load active context file for current branch ---
+if [ -n "${BRANCH:-}" ]; then
+  SLUG=$(branch_slug "$BRANCH")
+  ACTIVE_FILE="$MEM_DIR/active/${SLUG}.md"
+  if [ -f "$ACTIVE_FILE" ] && [ -s "$ACTIVE_FILE" ]; then
+    CONTEXT+="# Active Work Context (branch-specific)
+$(safe_read_limited "$ACTIVE_FILE" 40)
+
+"
+  fi
+fi
+
+# --- Load today's daily log (max 20 lines = ~400 tokens) ---
 TODAY_LOG="$MEM_DIR/daily/${TODAY}.md"
 if [ -f "$TODAY_LOG" ] && [ -s "$TODAY_LOG" ]; then
-  CONTEXT+="# Daily Log: ${TODAY}
-$(safe_read_limited "$TODAY_LOG" 100)
+  CONTEXT+="# Daily Log: ${TODAY} (last 20 lines, use Read tool for full log)
+$(tail -20 "$TODAY_LOG")
 
 "
 fi
 
-# --- Load yesterday's daily log (max 50 lines = ~1000 tokens) ---
+# --- Yesterday's log: skipped for context savings (read manually if needed) ---
 YESTERDAY_LOG="$MEM_DIR/daily/${YESTERDAY}.md"
-if [ -f "$YESTERDAY_LOG" ] && [ -s "$YESTERDAY_LOG" ]; then
-  CONTEXT+="# Daily Log: ${YESTERDAY} (yesterday)
-$(safe_read_limited "$YESTERDAY_LOG" 50)
 
-"
-fi
-
-# --- [PROMOTE] auto-detection from yesterday's log ---
+# --- [PROMOTE] auto-detection from yesterday's log (lightweight check, no content load) ---
 if [ -f "$YESTERDAY_LOG" ]; then
   PROMOTE_COUNT=$(grep -c '^\- \[PROMOTE\]' "$YESTERDAY_LOG" 2>/dev/null || echo "0")
   if [ "$PROMOTE_COUNT" -gt 0 ]; then
@@ -98,8 +159,16 @@ if [ -n "$CONTEXT" ]; then
 fi
 
 # Output context (plain text — Claude Code captures stdout)
+# Opus Architect directive: limit SessionStart output to ~2000 chars to prevent token explosion
 if [ -n "$CONTEXT" ]; then
-  echo "$CONTEXT"
+  BYTE_COUNT=${#CONTEXT}
+  if [ "$BYTE_COUNT" -gt 2000 ]; then
+    echo "${CONTEXT:0:1900}"
+    echo ""
+    echo "(... SessionStart output truncated: ${BYTE_COUNT} → 2000 chars. Use Read tool for full context.)"
+  else
+    echo "$CONTEXT"
+  fi
 fi
 
 exit 0

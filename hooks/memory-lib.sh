@@ -34,7 +34,16 @@ year_month() {
 # Ensure all memory subdirectories exist
 ensure_dirs() {
   local mem_dir="$1"
-  mkdir -p "$mem_dir/daily" "$mem_dir/topics" "$mem_dir/archive"
+  mkdir -p "$mem_dir/daily" "$mem_dir/topics" "$mem_dir/archive" "$mem_dir/active"
+}
+
+# Convert git branch name to safe filename slug (feature/core-947 → feature--core-947)
+branch_slug() {
+  local branch="${1:-}"
+  if [ -z "$branch" ]; then
+    branch=$(git rev-parse --abbrev-ref HEAD 2>/dev/null || echo "")
+  fi
+  echo "$branch" | sed 's|/|--|g' | sed 's|[^a-zA-Z0-9._-]||g'
 }
 
 # Safe file read — returns empty string if file doesn't exist

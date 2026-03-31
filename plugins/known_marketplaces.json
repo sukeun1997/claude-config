@@ -5,7 +5,7 @@
       "repo": "anthropics/claude-plugins-official"
     },
     "installLocation": "/Users/sukeunpark/.claude/plugins/marketplaces/claude-plugins-official",
-    "lastUpdated": "2026-03-06T01:27:49.506Z"
+    "lastUpdated": "2026-03-31T00:54:01.037Z"
   },
   "thedotmack": {
     "source": {
@@ -37,7 +37,7 @@
       "url": "https://github.com/Yeachan-Heo/oh-my-claudecode.git"
     },
     "installLocation": "/Users/sukeunpark/.claude/plugins/marketplaces/omc",
-    "lastUpdated": "2026-02-27T09:26:43.047Z",
+    "lastUpdated": "2026-03-31T01:23:43.973Z",
     "autoUpdate": true
   },
   "everything-claude-code": {
@@ -47,5 +47,13 @@
     },
     "installLocation": "/Users/sukeunpark/.claude/plugins/marketplaces/everything-claude-code",
     "lastUpdated": "2026-02-20T01:31:10.815Z"
+  },
+  "openai-codex": {
+    "source": {
+      "source": "github",
+      "repo": "openai/codex-plugin-cc"
+    },
+    "installLocation": "/Users/sukeunpark/.claude/plugins/marketplaces/openai-codex",
+    "lastUpdated": "2026-03-31T00:51:31.744Z"
   }
 }
