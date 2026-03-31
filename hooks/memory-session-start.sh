@@ -12,6 +12,12 @@ ensure_dirs "$MEM_DIR"
 TODAY=$(today)
 YESTERDAY=$(yesterday)
 
+# --- Generate stable session ID for edit-tracker and other hooks ---
+SESSION_ID_DIR="$HOME/.claude/memory/sessions"
+mkdir -p "$SESSION_ID_DIR"
+SESSION_ID="$(date +%Y%m%d-%H%M%S)-$$"
+echo "$SESSION_ID" > "$SESSION_ID_DIR/.current-session-id"
+
 # --- Flush previous session's pending captures (runs on /clear too) ---
 # 1. Flush tool capture JSONL → daily log summary
 if command -v python3 &>/dev/null && [ -f "$HOME/.claude/hooks/memory-post-tool.py" ]; then
