@@ -37,14 +37,15 @@ MONTH_FILE="$USAGE_DIR/$(date +%Y-%m).jsonl"
 PROJECT_DIR="${CLAUDE_PROJECT_DIR:-$(pwd)}"
 PROJECT_NAME=$(basename "$PROJECT_DIR")
 
-# JSONL 한 줄 추가
+# JSONL 한 줄 추가 (env vars로 전달하여 shell injection 방지)
+SKILL_NAME="$SKILL_NAME" PROJECT_NAME="$PROJECT_NAME" PROJECT_DIR="$PROJECT_DIR" \
 python3 -c "
-import json, datetime
+import json, datetime, os
 record = {
     'timestamp': datetime.datetime.now().isoformat(),
-    'skill': '$SKILL_NAME',
-    'project': '$PROJECT_NAME',
-    'project_dir': '$PROJECT_DIR'
+    'skill': os.environ.get('SKILL_NAME', ''),
+    'project': os.environ.get('PROJECT_NAME', ''),
+    'project_dir': os.environ.get('PROJECT_DIR', '')
 }
 print(json.dumps(record))
 " >> "$MONTH_FILE" 2>/dev/null || true

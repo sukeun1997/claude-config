@@ -68,10 +68,15 @@ year_month() {
   date +%Y-%m
 }
 
+# Sanitize branch name to filesystem-safe slug
+branch_slug() {
+  echo "$1" | sed 's|/|--|g' | sed 's|[^a-zA-Z0-9._-]||g'
+}
+
 # Ensure all memory subdirectories exist
 ensure_dirs() {
   local mem_dir="$1"
-  mkdir -p "$mem_dir/daily" "$mem_dir/topics" "$mem_dir/archive" "$mem_dir/sessions"
+  mkdir -p "$mem_dir/daily" "$mem_dir/topics" "$mem_dir/archive" "$mem_dir/sessions" "$mem_dir/active"
 }
 
 # Get active context filename for current project

@@ -35,9 +35,20 @@ echo "DAILY_LOG_PATH=${DAILY_LOG}"
 echo "CURRENT_TIME=${NOW}"
 echo "Compaction marker written to ${DAILY_LOG}"
 
-# --- Active context: format template for immediate update ---
-CONTEXT_FILENAME=$(active_context_filename)
-CONTEXT_FILE="$MEM_DIR/sessions/${CONTEXT_FILENAME}"
+# --- Active context: check branch-based first, then project-based ---
+CONTEXT_FILE=""
+if command -v git &>/dev/null && git rev-parse --is-inside-work-tree &>/dev/null 2>&1; then
+  _BRANCH=$(git rev-parse --abbrev-ref HEAD 2>/dev/null || echo "")
+  if [ -n "$_BRANCH" ] && [ "$_BRANCH" != "HEAD" ] && [ "$_BRANCH" != "main" ] && [ "$_BRANCH" != "master" ] && [ "$_BRANCH" != "develop" ]; then
+    _SLUG=$(branch_slug "$_BRANCH")
+    _BRANCH_FILE="$MEM_DIR/active/${_SLUG}.md"
+    [ -f "$_BRANCH_FILE" ] && CONTEXT_FILE="$_BRANCH_FILE"
+  fi
+fi
+if [ -z "$CONTEXT_FILE" ]; then
+  CONTEXT_FILENAME=$(active_context_filename)
+  CONTEXT_FILE="$MEM_DIR/sessions/${CONTEXT_FILENAME}"
+fi
 
 echo ""
 echo "⚠️ Compaction 임박 — active context를 지금 즉시 갱신하세요."

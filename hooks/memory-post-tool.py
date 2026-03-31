@@ -69,9 +69,7 @@ MAX_DAILY_CAPTURES = 200
 # ---------------------------------------------------------------------------
 
 def get_memory_dir() -> Path:
-    cwd = os.environ.get("CLAUDE_PROJECT_DIR", os.getcwd())
-    project_id = cwd.replace("/", "-")
-    return Path.home() / ".claude" / "projects" / project_id / "memory"
+    return Path.home() / ".claude" / "memory"
 
 
 def get_capture_file(mem_dir: Path) -> Path:

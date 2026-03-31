@@ -1,6 +1,8 @@
 #!/bin/bash
 # pre-clear-handoff.sh — /clear 인터셉트 → HANDOFF.md 자동 저장
 
+source "$HOME/.claude/hooks/memory-lib.sh" 2>/dev/null || true
+
 INPUT=$(cat)
 PROMPT=$(echo "$INPUT" | python3 -c "
 import json, sys
@@ -35,7 +37,7 @@ ACTIVE_HINT=""
 if command -v git &>/dev/null && git rev-parse --is-inside-work-tree &>/dev/null 2>&1; then
   CURR_BRANCH=$(git rev-parse --abbrev-ref HEAD 2>/dev/null || echo "")
   if [ -n "$CURR_BRANCH" ]; then
-    SLUG=$(echo "$CURR_BRANCH" | sed 's|/|--|g' | sed 's|[^a-zA-Z0-9._-]||g')
+    SLUG=$(branch_slug "$CURR_BRANCH" 2>/dev/null || echo "$CURR_BRANCH" | sed 's|/|--|g' | sed 's|[^a-zA-Z0-9._-]||g')
     ACTIVE_HINT="
 2. memory/active/${SLUG}.md (현재 브랜치 작업 컨텍스트):
    ## Why — 왜 이 작업을 하는지

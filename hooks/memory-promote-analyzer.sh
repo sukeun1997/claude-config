@@ -7,7 +7,7 @@ set -euo pipefail
 source "$HOME/.claude/hooks/memory-lib.sh"
 
 # Resolve project memory directory
-MEM_DIR=$(get_memory_dir "${CLAUDE_PROJECT_DIR:-$PWD}")
+MEM_DIR=$(get_memory_dir)
 DAILY_DIR="$MEM_DIR/daily"
 MEMORY_FILE="$MEM_DIR/MEMORY.md"
 
