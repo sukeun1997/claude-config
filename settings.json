@@ -12,10 +12,15 @@
       "Read(credentials.json)",
       "Bash(cat .env*)",
       "Bash(cat *.pem)",
-      "Bash(cat *.key)"
+      "Bash(cat *.key)",
+      "Bash(cat credentials.json)",
+      "Bash(cat .credentials.json)"
     ],
     "allow": [
       "Bash(*)",
+      "Edit(*)",
+      "Write(*)",
+      "Read(*)",
       "WebFetch(*)",
       "WebSearch",
       "Skill(*)",
@@ -129,6 +134,12 @@
     "SessionEnd": [
       {
         "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"$HOME/.claude/hooks/memory-post-tool.py\" flush 2>/dev/null || true",
+            "timeout": 5,
+            "async": true
+          },
           {
             "type": "command",
             "command": "SID=$(cat \"$HOME/.claude/memory/sessions/.current-session-id\" 2>/dev/null || echo unknown); STS=$(cat \"$HOME/.claude/memory/sessions/.last-session-ts\" 2>/dev/null || echo 0); \"$HOME/.claude/hooks/memory-session-end.sh\" \"$SID\" \"$STS\"",

@@ -62,6 +62,11 @@ memory_logs/
 # Git internals
 .git/
 
+# Credentials & secrets
+.credentials.json
+channels/
+settings.json.bak
+
 # Settings local override (machine-specific)
 settings.local.json
 

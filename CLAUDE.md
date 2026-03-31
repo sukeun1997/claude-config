@@ -41,11 +41,11 @@
 
 ### 메모리
 - compaction 후 / 이전 작업 이어갈 때 → memory_search 먼저
-- 4계층: Active(`sessions/`) → Hot(`daily/`) → Always(`MEMORY.md`) → Cold(`topics/`)
+- 4계층: Active(`active/` + `sessions/`) → Hot(`daily/`) → Always(`MEMORY.md`) → Cold(`topics/`)
 - `[PROMOTE]` 태그 → MEMORY.md 승격, 상세는 topics/로
 
 ### Active Context (세션 연속성 핵심)
-**경로**: `~/.claude/memory/sessions/{project}-context.md`
+**경로**: 피처 브랜치 → `~/.claude/memory/active/{branch-slug}.md`, 그 외 → `~/.claude/memory/sessions/{project}-context.md`
 **포맷**: frontmatter(project, updated) + Goal / Status / Next / Key Decisions / Handoff
 **규칙**:
 - subtask 완료 시 → Status 갱신 + Next 업데이트 (Write로 전체 교체)
@@ -110,7 +110,7 @@ Agent 호출 시 `model` 파라미터 필수 지정.
 | 티어 | 에이전트 |
 |------|---------|
 | **haiku** | `explore`, `writer`, `style-reviewer` |
-| **sonnet** | `executor`, `debugger`, `build-fixer`, `test-engineer`, `designer`, `qa-tester`, `verifier`, `document-specialist`, `git-master`, `information-architect`, `api-reviewer`, `performance-reviewer`, `product-analyst`, `product-manager`, `scientist`, `ux-researcher`, `vision` |
+| **sonnet** | `executor`, `debugger`, `build-fixer`, `test-engineer`, `test-code-generator`, `designer`, `qa-tester`, `verifier`, `document-specialist`, `git-master`, `information-architect`, `api-reviewer`, `performance-reviewer`, `product-analyst`, `product-manager`, `scientist`, `ux-researcher`, `vision`, `dependency-expert`, `researcher` |
 | **opus** | `architect`, `planner`, `analyst`, `critic`, `deep-executor`, `quality-reviewer`, `security-reviewer`, `code-reviewer` |
 
 미등록 에이전트: 판단/설계→opus, 실행/구현→sonnet, 검색/수집→haiku

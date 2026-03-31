@@ -72,6 +72,39 @@ def get_memory_dir() -> Path:
     return Path.home() / ".claude" / "memory"
 
 
+def detect_project() -> str:
+    """Detect project name from CWD, mirroring memory-lib.sh detect_project()."""
+    cwd = os.environ.get("CLAUDE_PROJECT_DIR", os.getcwd())
+    # Check for .claude-project file walking up
+    check_dir = Path(cwd)
+    while check_dir != check_dir.parent:
+        proj_file = check_dir / ".claude-project"
+        if proj_file.exists():
+            return proj_file.read_text().strip().split("\n")[0].strip()
+        check_dir = check_dir.parent
+    # Fallback: path-based mapping
+    cwd_lower = cwd.lower()
+    mapping = {
+        "maple": "maple", "todo-app": "haru", "building-manager": "building",
+        "lendit": "lendit", "ktx_reservation": "ktx", "my-game": "game",
+        "news": "news",
+    }
+    for key, name in mapping.items():
+        if key in cwd_lower:
+            return name
+    if "/.claude" in cwd:
+        return "global"
+    return "global"
+
+
+def daily_log_filename(date_str: str) -> str:
+    """Return project-aware daily log filename."""
+    project = detect_project()
+    if project == "global":
+        return f"{date_str}.md"
+    return f"{date_str}-{project}.md"
+
+
 def get_capture_file(mem_dir: Path) -> Path:
     today = datetime.now().strftime("%Y-%m-%d")
     daily_dir = mem_dir / "daily"
@@ -290,7 +323,7 @@ def cmd_flush():
     mem_dir = get_memory_dir()
     today = datetime.now().strftime("%Y-%m-%d")
     capture_file = mem_dir / "daily" / f".captures-{today}.jsonl"
-    daily_log = mem_dir / "daily" / f"{today}.md"
+    daily_log = mem_dir / "daily" / daily_log_filename(today)
 
     if not capture_file.exists():
         return

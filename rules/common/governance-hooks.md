@@ -26,13 +26,12 @@ rules:
 
 ## Hook 우선순위
 
-PostToolUse Hook 실행 순서:
-1. `continuous-learning` (관찰/학습)
-2. `memory-post-tool.py` (메모리 기록)
-3. `memory-conversation-summarizer.py` (대화 요약)
-4. `context-cost-monitor.sh` (비용 모니터링)
-5. **`governance-guard.sh`** (변경 감시 — 경고 출력)
-6. **`skill-usage-tracker.sh`** (스킬 사용 추적)
+PostToolUse Hook 실행 순서 (settings.json 기준):
+1. `memory-post-tool.py` (메모리 기록 — matcher: `*`)
+2. `prisma-auto-generate.mjs` (Prisma schema 감지 — matcher: `Edit|Write`)
+3. `edit-tracker.sh` (삽질 감지 — matcher: `Edit|Write`)
+4. **`governance-guard.sh`** (변경 감시 — matcher: `Edit|Write`)
+5. **`skill-usage-tracker.sh`** (스킬 사용 추적 — matcher: `Skill`)
 
 ## 원칙
 

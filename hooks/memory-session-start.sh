@@ -27,6 +27,7 @@ fi
 CONTEXT=""
 
 # --- Active Context Recovery Chain (branch-based first, then project-based fallback) ---
+CONTEXT_FILENAME=$(active_context_filename)
 CONTEXT_FILE=""
 if command -v git &>/dev/null && git rev-parse --is-inside-work-tree &>/dev/null 2>&1; then
   _BRANCH=$(git rev-parse --abbrev-ref HEAD 2>/dev/null || echo "")
@@ -37,7 +38,6 @@ if command -v git &>/dev/null && git rev-parse --is-inside-work-tree &>/dev/null
   fi
 fi
 if [ -z "$CONTEXT_FILE" ]; then
-  CONTEXT_FILENAME=$(active_context_filename)
   CONTEXT_FILE="$MEM_DIR/sessions/${CONTEXT_FILENAME}"
 fi
 CONTEXT_LOADED=false
