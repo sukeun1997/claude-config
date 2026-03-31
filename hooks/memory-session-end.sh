@@ -102,9 +102,9 @@ if [ -f "$TODAY_LOG" ]; then
   LOG_LINES=$(grep -cvE '^\s*$|^# Daily Log:' "$TODAY_LOG" 2>/dev/null) || LOG_LINES=0
 fi
 
-# Write JSONL metric — skip noise sessions (short + no edits + no log)
-# Filter: duration >= 5min AND (edits OR log content). Pure Q&A sessions excluded
-if [ "$DURATION_MIN" -ge 5 ] && { [ "$TOTAL_EDITS" -gt 0 ] || [ "${LOG_LINES:-0}" -gt 0 ]; }; then
+# Write JSONL metric — skip noise sessions
+# Filter: (duration >= 5min AND (edits OR log)) OR (edits > 0 regardless of duration)
+if { [ "$DURATION_MIN" -ge 5 ] && { [ "$TOTAL_EDITS" -gt 0 ] || [ "${LOG_LINES:-0}" -gt 0 ]; }; } || [ "$TOTAL_EDITS" -gt 0 ]; then
   echo "{\"date\":\"${DATE_STR}\",\"project\":\"${PROJECT}\",\"duration_min\":${DURATION_MIN},\"total_edits\":${TOTAL_EDITS},\"unique_files\":${UNIQUE_FILES},\"friction_files\":${FRICTION_COUNT},\"log_lines\":${LOG_LINES:-0}}" >> "$METRICS_FILE"
 fi
 

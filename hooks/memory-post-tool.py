@@ -158,7 +158,7 @@ def check_dedup(dedup_file: Path, key: str) -> bool:
 # Bash classification
 # ---------------------------------------------------------------------------
 
-def classify_bash(command: str) -> str | None:
+def classify_bash(command: str) -> "str | None":
     """Classify Bash command. Returns category or None to skip."""
     cmd = command.strip()
 
@@ -307,9 +307,20 @@ def cmd_capture():
     else:
         return
 
+    line = json.dumps(entry, ensure_ascii=False) + "\n"
+
     try:
         with open(capture_file, "a") as f:
-            f.write(json.dumps(entry, ensure_ascii=False) + "\n")
+            f.write(line)
+    except OSError:
+        pass
+
+    # Dual-write to observations.jsonl for observer-runner → instinct pipeline
+    obs_file = Path.home() / ".claude" / "homunculus" / "observations.jsonl"
+    try:
+        obs_file.parent.mkdir(parents=True, exist_ok=True)
+        with open(obs_file, "a") as f:
+            f.write(line)
     except OSError:
         pass
 
