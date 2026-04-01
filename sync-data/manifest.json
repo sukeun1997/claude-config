@@ -1,0 +1,13 @@
+{
+  "hostname": "sugeun-ui-MacBookPro.local",
+  "timestamp": "2026-04-01T21:38:17.759099",
+  "files": [
+    "failure-log.md",
+    "metrics/sessions.jsonl",
+    "metrics/agent-usage-2026-04.jsonl",
+    "instincts/tool-Write.md",
+    "instincts/tool-Bash.md",
+    "instincts/tool-Edit.md",
+    "homunculus/observations.jsonl"
+  ]
+}
