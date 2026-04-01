@@ -45,24 +45,15 @@
 - `[PROMOTE]` 태그 → MEMORY.md 승격, 상세는 topics/로
 
 ### Active Context (세션 연속성 핵심)
-**경로**: 피처 브랜치 → `~/.claude/memory/active/{branch-slug}.md`, 그 외 → `~/.claude/memory/sessions/{project}-context.md`
-**포맷**: frontmatter(project, updated) + Goal / Status / Next / Key Decisions / Handoff
-**규칙**:
-- subtask 완료 시 → Status 갱신 + Next 업데이트 (Write로 전체 교체)
-- `/clear` 전 → 반드시 갱신 (daily log보다 우선)
-- PreCompact 경고 수신 → 즉시 갱신
-- 20줄 이하 유지 (Handoff 포함)
-- 작업 완전 종료(더 이상 이어갈 것 없음) → 파일 삭제
-- Handoff 섹션: 바뀐 것 / 안 된 것 / 다음 파일 / 남은 위험 (Stop hook이 검사)
+- subtask 완료 시 Status 갱신, `/clear`·PreCompact 시 즉시 갱신
+- 20줄 이하 유지, 완전 종료 시 파일 삭제
+- Handoff 필수: 바뀐 것 / 안 된 것 / 다음 파일 / 남은 위험
+- 경로·포맷·자동화 상세 → `rules/common/memory.md`
 
 ### Daily Log
-**경로**: `~/.claude/memory/daily/YYYY-MM-DD-{project}.md`
-**작성 시점**: 세션 종료 전 1회 배치 기록
-**포맷**: `### HH:MM - 작업 제목` → 요약 + 주요 변경 + `[PROMOTE]`
-**규칙**:
-- 메인 세션이 직접 수행 (위임 금지)
+- 세션 종료 전 1회 배치 기록, 메인 세션이 직접 수행 (위임 금지)
 - `/clear` 전: active context 갱신 → daily log 작성 (이 순서)
-- 세션 종료 전 비어있으면 Stop 훅이 경고
+- 경로·포맷·작성 시점 상세 → `rules/common/memory.md`
 
 ---
 
@@ -85,21 +76,7 @@
 4. **구현 작업** (2개+ 파일) → Plan-First
 5. **기타** → 적절한 에이전트에 위임
 
-### Agent Delegation Table
-| 작업 유형 | 에이전트 |
-|-----------|---------|
-| 파일 탐색 (3개+) | `explore` |
-| 코드 구현/수정 | `executor` |
-| 복잡한 자율 작업 | `deep-executor` |
-| 디버깅 | `debugger` |
-| 빌드 오류 | `build-fixer` |
-| 아키텍처/기술 결정 | `architect` |
-| 플래닝 (멀티파일) | `planner` |
-| 코드 리뷰 | §4 리뷰 정책 참조 |
-
-### 서브에이전트 실패 처리
-- 결과가 불완전/에러 → 1회 재시도 (프롬프트 보강) → 실패 시 사용자에게 에스컬레이션
-- "작업 완료"만 반환하고 구체적 결과물 없음 → 실패로 간주, 재시도 또는 직접 수행
+에이전트 선택·실패 처리·검증 루프 → `rules/common/agents.md` 참조
 
 ---
 
@@ -110,7 +87,7 @@ Agent 호출 시 `model` 파라미터 필수 지정.
 | 티어 | 에이전트 |
 |------|---------|
 | **haiku** | `explore`, `writer`, `style-reviewer` |
-| **sonnet** | `executor`, `debugger`, `build-fixer`, `test-engineer`, `test-code-generator`, `designer`, `qa-tester`, `verifier`, `document-specialist`, `git-master`, `information-architect`, `api-reviewer`, `performance-reviewer`, `product-analyst`, `product-manager`, `scientist`, `ux-researcher`, `vision`, `dependency-expert`, `researcher` |
+| **sonnet** | `executor`, `debugger`, `build-fixer`, `test-engineer`, `designer`, `qa-tester`, `verifier`, `document-specialist`, `git-master`, `information-architect`, `api-reviewer`, `performance-reviewer`, `product-analyst`, `product-manager`, `scientist`, `ux-researcher`, `vision` |
 | **opus** | `architect`, `planner`, `analyst`, `critic`, `deep-executor`, `quality-reviewer`, `security-reviewer`, `code-reviewer` |
 
 미등록 에이전트: 판단/설계→opus, 실행/구현→sonnet, 검색/수집→haiku
