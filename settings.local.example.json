@@ -1,0 +1,21 @@
+{
+  "_comment": "Machine-specific overrides. Copy to settings.local.json and customize.",
+  "enabledPlugins": {
+    "sentry@claude-plugins-official": true,
+    "codex@openai-codex": true,
+    "figma@claude-plugins-official": true
+  },
+  "extraKnownMarketplaces": {
+    "openai-codex": {
+      "source": {
+        "source": "github",
+        "repo": "openai/codex-plugin-cc"
+      }
+    }
+  },
+  "includeCoAuthoredBy": false,
+  "statusLine": {
+    "type": "command",
+    "command": "bash -c '\"/Users/sukeunpark/.bun/bin/bun\" \"$(ls -td ~/.claude/plugins/cache/claude-hud/claude-hud/*/ 2>/dev/null | head -1)src/index.ts\"'"
+  }
+}
