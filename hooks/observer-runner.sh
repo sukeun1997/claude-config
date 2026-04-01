@@ -69,23 +69,35 @@ for pattern, count in patterns.most_common(20):
         print(f'{pattern}\t{count}')
 " > "$PATTERNS_FILE" 2>/dev/null || true
 
+# Concurrency lock (mkdir-based, macOS compatible)
+LOCK_DIR="$HOMUNCULUS_DIR/.observer-runner.lock"
+mkdir "$LOCK_DIR" 2>/dev/null || exit 0
+trap "rmdir '$LOCK_DIR' 2>/dev/null; rm -f '$PATTERNS_FILE'" EXIT
+
 # Update instinct confidence OR create new instincts from patterns
 while IFS=$'\t' read -r pattern count; do
   category="${pattern%%:*}"
   name="${pattern#*:}"
 
-  # Find matching instinct
+  # Skip empty names
+  [ -z "$name" ] && continue
+
+  # Find matching instinct (fixed-string match on name field only)
   MATCHED=false
   for instinct_file in "$INSTINCTS_DIR"/*.md; do
     [ -f "$instinct_file" ] || continue
-    if grep -qi "$name" "$instinct_file" 2>/dev/null; then
+    if grep -Fqi "name: ${category}-" "$instinct_file" 2>/dev/null && \
+       grep -Fqi "$name" "$instinct_file" 2>/dev/null; then
       MATCHED=true
-      # Bump confidence by 0.05 (cap at 0.95)
-      current=$(grep -oP 'confidence:\s*\K[0-9.]+' "$instinct_file" 2>/dev/null || echo "0.5")
+      # Bump confidence by 0.05 (cap at 0.95) — macOS-compatible sed extraction
+      current=$(sed -n 's/^confidence: *\([0-9.]*\).*/\1/p' "$instinct_file" 2>/dev/null | head -1)
+      current="${current:-0.5}"
       new_conf=$(python3 -c "print(min(0.95, $current + 0.05))" 2>/dev/null || echo "$current")
       if [ "$new_conf" != "$current" ]; then
-        sed -i '' "s/confidence: $current/confidence: $new_conf/" "$instinct_file" 2>/dev/null || \
-        sed -i "s/confidence: $current/confidence: $new_conf/" "$instinct_file" 2>/dev/null || true
+        # Anchor to line start to prevent partial matches (0.5 vs 0.55)
+        escaped_current=$(echo "$current" | sed 's/\./\\./g')
+        sed -i '' "s/^confidence: ${escaped_current}$/confidence: ${new_conf}/" "$instinct_file" 2>/dev/null || \
+        sed -i "s/^confidence: ${escaped_current}$/confidence: ${new_conf}/" "$instinct_file" 2>/dev/null || true
       fi
       break
     fi
@@ -105,6 +117,7 @@ while IFS=$'\t' read -r pattern count; do
       esac
       # Initial confidence scales with observation count (0.3-0.6)
       INIT_CONF=$(python3 -c "print(min(0.6, 0.3 + ($count - 5) * 0.02))" 2>/dev/null || echo "0.4")
+      # Frontmatter trigger/action fields for instinct-evolve.sh compatibility
       cat > "$INSTINCT_FILE" << INSTEOF
 ---
 name: ${category}-${SAFE_NAME}
@@ -114,6 +127,8 @@ confidence: ${INIT_CONF}
 source: observer-runner.sh
 observed_count: ${count}
 created: $(date +%Y-%m-%d)
+trigger: "When working on tasks involving ${name}"
+action: "Prefer ${name} for ${category} operations based on observed usage pattern"
 ---
 
 ## Pattern
@@ -121,8 +136,6 @@ created: $(date +%Y-%m-%d)
 - **Category**: ${category}
 - **Name**: ${name}
 - **Frequency**: ${count} observations
-- **Trigger**: When working on tasks involving ${name}
-- **Action**: Prefer ${name} for ${category} operations based on observed usage pattern
 INSTEOF
     fi
   fi
