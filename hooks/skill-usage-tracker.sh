@@ -18,7 +18,7 @@ import sys, json
 try:
     data = json.load(sys.stdin)
     # skill_name 또는 name 필드에서 추출
-    name = data.get('skill_name', data.get('name', data.get('skillName', '')))
+    name = data.get('skill', data.get('skill_name', data.get('name', data.get('skillName', ''))))
     print(name)
 except:
     print('')
