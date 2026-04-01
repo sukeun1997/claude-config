@@ -40,16 +40,16 @@ fi
 if [ -z "$CONTEXT_FILE" ]; then
   CONTEXT_FILE="$MEM_DIR/sessions/${CONTEXT_FILENAME}"
 fi
-CONTEXT_LOADED=false
+CONTEXT_LOADED="false"
 
 if [ -f "$CONTEXT_FILE" ] && [ -s "$CONTEXT_FILE" ]; then
   if is_context_fresh "$CONTEXT_FILE" 24; then
     # Priority 1: Fresh active context (<24h) — full load
     CONTEXT+="# Active Context (Resume — 이전 작업 이어서 진행하세요)
-$(safe_read_limited "$CONTEXT_FILE" 30)
+$(safe_read_context "$CONTEXT_FILE")
 
 "
-    CONTEXT_LOADED=true
+    CONTEXT_LOADED="fresh"
   else
     # Priority 2: Stale active context (>24h) — Goal+Handoff+Next only
     GOAL=$(sed -n '/^## Goal$/,/^## /{ /^## Goal$/d; /^## /d; p; }' "$CONTEXT_FILE" | head -3)
@@ -66,7 +66,7 @@ ${NEXT}
 
 "
     fi
-    CONTEXT_LOADED=true
+    CONTEXT_LOADED="stale"
   fi
 fi
 
@@ -93,11 +93,11 @@ if [ -f "$SESSION_MARKER" ]; then
         LAST_JSONL=$(cat "$LAST_JSONL_MARKER" 2>/dev/null)
         if [ -n "$LAST_JSONL" ] && [ -f "$LAST_JSONL" ]; then
           # Defense-in-depth: reduce digest if active context is rich
-          DIGEST_MAX=80
-          if [ "$CONTEXT_LOADED" = true ]; then
+          DIGEST_MAX=50
+          if [ "$CONTEXT_LOADED" = "fresh" ]; then
             CONTEXT_LINES=$(line_count "$CONTEXT_FILE")
             if [ "$CONTEXT_LINES" -gt 10 ]; then
-              DIGEST_MAX=40
+              DIGEST_MAX=25
             fi
           fi
           DIGEST=$(python3 "$HOME/.claude/hooks/session-digest.py" "$LAST_JSONL" --max-lines "$DIGEST_MAX" 2>/dev/null || true)
@@ -119,7 +119,7 @@ ${CONTEXT}"
       LOG_CONTENT_LINES="${LOG_CONTENT_LINES:-0}"
     fi
     if [ "$LOG_CONTENT_LINES" -lt 2 ]; then
-      if [ "$CONTEXT_LOADED" = true ]; then
+      if [ "$CONTEXT_LOADED" != "false" ]; then
         # Active context exists but daily log is empty
         CONTEXT+="⚠️ /clear 감지: daily log가 비어있습니다. 이전 세션 작업 내용을 daily log에 기록해주세요.
 경로: ${TODAY_LOG_FILE}
@@ -182,20 +182,21 @@ fi
 CONTEXT+="
 "
 
-# --- Load today's project daily log (max 100 lines) ---
+# --- Load today's project daily log (max 50 lines) ---
 if [ -f "$TODAY_LOG_FILE" ] && [ -s "$TODAY_LOG_FILE" ]; then
   CONTEXT+="# Daily Log: ${TODAY} [${PROJECT}]
-$(safe_read_limited "$TODAY_LOG_FILE" 100)
+$(safe_read_limited "$TODAY_LOG_FILE" 50)
 
 "
 fi
 
-# --- Load yesterday's project daily log (max 50 lines) ---
+# --- Load yesterday's project daily log (budget-aware, max 20 lines) ---
 YESTERDAY_FILENAME=$(daily_log_filename "$YESTERDAY")
 YESTERDAY_LOG="$MEM_DIR/daily/${YESTERDAY_FILENAME}"
-if [ -f "$YESTERDAY_LOG" ] && [ -s "$YESTERDAY_LOG" ]; then
+CURRENT_LINES=$(echo "$CONTEXT" | wc -l | tr -d ' ')
+if [ "$CURRENT_LINES" -lt 150 ] && [ -f "$YESTERDAY_LOG" ] && [ -s "$YESTERDAY_LOG" ]; then
   CONTEXT+="# Daily Log: ${YESTERDAY} [${PROJECT}] (yesterday)
-$(safe_read_limited "$YESTERDAY_LOG" 50)
+$(safe_read_limited "$YESTERDAY_LOG" 20)
 
 "
 fi

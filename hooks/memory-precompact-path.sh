@@ -30,10 +30,10 @@ cat >> "$DAILY_LOG" << EOF
 - 이 시점까지의 작업 내용이 있다면 세션 재개 후 daily log 업데이트 필요
 EOF
 
-# Output path for any downstream agent hooks
-echo "DAILY_LOG_PATH=${DAILY_LOG}"
-echo "CURRENT_TIME=${NOW}"
-echo "Compaction marker written to ${DAILY_LOG}"
+# Output path for debugging (stderr — not injected into model context)
+echo "DAILY_LOG_PATH=${DAILY_LOG}" >&2
+echo "CURRENT_TIME=${NOW}" >&2
+echo "Compaction marker written to ${DAILY_LOG}" >&2
 
 # --- Active context: check branch-based first, then project-based ---
 CONTEXT_FILE=""
@@ -53,6 +53,15 @@ fi
 echo ""
 echo "⚠️ Compaction 임박 — active context를 지금 즉시 갱신하세요."
 echo "경로: $CONTEXT_FILE"
+
+# Re-inject active context content for compaction survival
+# Compaction summarizes current messages — this content will be included in the summary
+if [ -f "$CONTEXT_FILE" ] && [ -s "$CONTEXT_FILE" ]; then
+  echo ""
+  echo "--- Active Context (re-injected for compaction survival) ---"
+  safe_read_context "$CONTEXT_FILE"
+  echo "--- end ---"
+fi
 
 if [ -f "$CONTEXT_FILE" ] && is_context_fresh "$CONTEXT_FILE" 1; then
   echo "STATUS: active context 존재 (fresh). 현재 작업 상태로 갱신해주세요."

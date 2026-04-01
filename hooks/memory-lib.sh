@@ -129,6 +129,43 @@ load_gemini_key() {
   fi
 }
 
+# Extract key sections from active context file (20-line budget)
+# Preserves Why/Goal + Progress summary + Next + Handoff/Key Decisions
+# Unlike head/tail, this captures both top and bottom sections
+safe_read_context() {
+  local file="$1"
+  if [ ! -f "$file" ] || [ ! -s "$file" ]; then echo ""; return; fi
+
+  local output=""
+  # Title line
+  local title
+  title=$(head -1 "$file")
+  output+="${title}
+"
+
+  # Extract sections with per-section line limits
+  local section_found=false
+  for section_spec in "Why:3" "Goal:3" "Progress:3" "Status:3" "Next:5" "Key Decisions:3" "Handoff:5" "Open Questions:2"; do
+    local section="${section_spec%%:*}"
+    local limit="${section_spec##*:}"
+    local content
+    content=$(sed -n "/^## ${section}$/,/^## /{/^## ${section}$/d;/^## /d;p;}" "$file" | sed '/^$/d' | head -"$limit")
+    if [ -n "$content" ]; then
+      output+="## ${section}
+${content}
+"
+      section_found=true
+    fi
+  done
+
+  if [ "$section_found" = true ]; then
+    echo "$output"
+  else
+    # Fallback: no recognized sections, use head
+    head -20 "$file"
+  fi
+}
+
 # Read file with line limit (tail: keep most recent entries)
 # Daily logs append chronologically, so tail gives the latest context
 safe_read_limited() {
