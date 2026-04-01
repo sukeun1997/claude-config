@@ -69,9 +69,40 @@ MAX_DAILY_CAPTURES = 200
 # ---------------------------------------------------------------------------
 
 def get_memory_dir() -> Path:
+    return Path.home() / ".claude" / "memory"
+
+
+def detect_project() -> str:
+    """Detect project name from CWD, mirroring memory-lib.sh detect_project()."""
     cwd = os.environ.get("CLAUDE_PROJECT_DIR", os.getcwd())
-    project_id = cwd.replace("/", "-")
-    return Path.home() / ".claude" / "projects" / project_id / "memory"
+    # Check for .claude-project file walking up
+    check_dir = Path(cwd)
+    while check_dir != check_dir.parent:
+        proj_file = check_dir / ".claude-project"
+        if proj_file.exists():
+            return proj_file.read_text().strip().split("\n")[0].strip()
+        check_dir = check_dir.parent
+    # Fallback: path-based mapping
+    cwd_lower = cwd.lower()
+    mapping = {
+        "maple": "maple", "todo-app": "haru", "building-manager": "building",
+        "lendit": "lendit", "ktx_reservation": "ktx", "my-game": "game",
+        "news": "news",
+    }
+    for key, name in mapping.items():
+        if key in cwd_lower:
+            return name
+    if "/.claude" in cwd:
+        return "global"
+    return "global"
+
+
+def daily_log_filename(date_str: str) -> str:
+    """Return project-aware daily log filename."""
+    project = detect_project()
+    if project == "global":
+        return f"{date_str}.md"
+    return f"{date_str}-{project}.md"
 
 
 def get_capture_file(mem_dir: Path) -> Path:
@@ -127,7 +158,7 @@ def check_dedup(dedup_file: Path, key: str) -> bool:
 # Bash classification
 # ---------------------------------------------------------------------------
 
-def classify_bash(command: str) -> str | None:
+def classify_bash(command: str) -> "str | None":
     """Classify Bash command. Returns category or None to skip."""
     cmd = command.strip()
 
@@ -276,9 +307,20 @@ def cmd_capture():
     else:
         return
 
+    line = json.dumps(entry, ensure_ascii=False) + "\n"
+
     try:
         with open(capture_file, "a") as f:
-            f.write(json.dumps(entry, ensure_ascii=False) + "\n")
+            f.write(line)
+    except OSError:
+        pass
+
+    # Dual-write to observations.jsonl for observer-runner → instinct pipeline
+    obs_file = Path.home() / ".claude" / "homunculus" / "observations.jsonl"
+    try:
+        obs_file.parent.mkdir(parents=True, exist_ok=True)
+        with open(obs_file, "a") as f:
+            f.write(line)
     except OSError:
         pass
 
@@ -292,7 +334,7 @@ def cmd_flush():
     mem_dir = get_memory_dir()
     today = datetime.now().strftime("%Y-%m-%d")
     capture_file = mem_dir / "daily" / f".captures-{today}.jsonl"
-    daily_log = mem_dir / "daily" / f"{today}.md"
+    daily_log = mem_dir / "daily" / daily_log_filename(today)
 
     if not capture_file.exists():
         return

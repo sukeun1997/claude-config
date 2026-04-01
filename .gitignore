@@ -16,11 +16,18 @@ teams/
 tasks/
 sessions/
 daily/
+daily-memory-logs/
+daily-memory.md
+image-cache/
+downloads/
 
 # Telemetry & usage (machine-local)
 telemetry/
 usage-data/
 stats-cache.json
+
+# Node modules (anywhere)
+**/node_modules/
 
 # OS & temp
 .DS_Store
@@ -28,8 +35,6 @@ stats-cache.json
 __pycache__/
 *.pyc
 *.tmp
-mcp-needs-auth-cache.json
-session-env/
 
 # Stats & tracking
 statsig/
@@ -41,17 +46,32 @@ plugins/marketplaces/
 plugins/cache/
 plugins/.usage-cache.json
 plugins/claude-hud/.usage-cache.json
-plugins/install-counts-cache.json
-plugins/installed_plugins.json
-plugins/known_marketplaces.json
-plugins/blocklist.json
 
 # Memory - daily logs are machine-local
 memory/daily/
 memory/archive/
 
+# MCP config (machine-specific)
+.mcp.json
+mcp-needs-auth-cache.json
+
+# Memory search index (machine-local)
+memory-search/
+memory_logs/
+
 # Git internals
 .git/
 
+# Credentials & secrets
+.credentials.json
+channels/
+settings.json.bak
+
 # Settings local override (machine-specific)
 settings.local.json
+
+# Hooks with secrets (machine-specific)
+hooks/telegram-notify.sh
+
+# Nested .claude (project-level)
+.claude/

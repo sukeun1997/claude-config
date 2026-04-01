@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{PROJECT_NAME}} — Architecture</title>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+<style>
+:root {
+  --bg: #06090f;
+  --surface: #0c1220;
+  --surface2: #131d2e;
+  --surface3: #1a2740;
+  --border: #1c2b3f;
+  --border-light: #253650;
+  --text: #e2e8f0;
+  --text-dim: #94a3b8;
+  --text-muted: #64748b;
+  --blue: #60a5fa;
+  --blue-bright: #93c5fd;
+  --green: #4ade80;
+  --purple: #c084fc;
+  --orange: #fb923c;
+  --cyan: #22d3ee;
+  --pink: #f472b6;
+  --red: #f87171;
+  --yellow: #fbbf24;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+body::before{content:'';position:fixed;inset:0;z-index:0;background-image:radial-gradient(rgba(96,165,250,0.04) 1px,transparent 1px);background-size:24px 24px;pointer-events:none}
+
+/* ── Header ── */
+.header{position:relative;z-index:1;padding:36px 48px 24px;background:linear-gradient(180deg,var(--surface) 0%,var(--bg) 100%);border-bottom:1px solid var(--border)}
+.header h1{font-size:28px;font-weight:800;letter-spacing:-0.5px;background:linear-gradient(135deg,var(--blue-bright),var(--purple));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.header .sub{color:var(--text-muted);font-size:13px;margin-top:6px}
+.badges{display:flex;gap:6px;margin-top:14px;flex-wrap:wrap}
+.badge{font-size:10px;padding:4px 10px;border-radius:20px;font-weight:600;letter-spacing:0.3px;backdrop-filter:blur(8px)}
+.badge-blue{background:rgba(96,165,250,0.1);color:var(--blue);border:1px solid rgba(96,165,250,0.2)}
+.badge-green{background:rgba(74,222,128,0.08);color:var(--green);border:1px solid rgba(74,222,128,0.15)}
+.badge-purple{background:rgba(192,132,252,0.08);color:var(--purple);border:1px solid rgba(192,132,252,0.15)}
+.legend-bar{display:flex;gap:16px;margin-top:16px;padding-top:14px;border-top:1px solid var(--border);flex-wrap:wrap}
+.legend-item{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--text-muted)}
+.legend-dot{width:8px;height:8px;border-radius:50%}
+
+/* ── Tabs ── */
+.tabs{position:relative;z-index:1;display:flex;background:var(--surface);border-bottom:1px solid var(--border);padding:0 48px;overflow-x:auto}
+.tab{padding:14px 22px;font-size:13px;font-weight:500;color:var(--text-muted);cursor:pointer;border:none;background:none;border-bottom:2px solid transparent;transition:all .2s;white-space:nowrap;font-family:inherit;position:relative}
+.tab:hover{color:var(--text-dim)}
+.tab.active{color:var(--blue);border-bottom-color:var(--blue)}
+.tab.active::after{content:'';position:absolute;bottom:-1px;left:20%;right:20%;height:2px;background:var(--blue);filter:blur(4px)}
+
+/* ── Content ── */
+.content{position:relative;z-index:1;padding:36px 48px 48px;max-width:1440px;margin:0 auto}
+.panel{display:none;animation:fadeIn .25s ease}
+.panel.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+.panel-title{font-size:20px;font-weight:700;margin-bottom:6px}
+.panel-desc{font-size:13px;color:var(--text-muted);margin-bottom:32px;line-height:1.6;max-width:700px}
+
+/* ── Layer ── */
+.layer{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:28px;position:relative;backdrop-filter:blur(12px)}
+.layer::before{content:'';position:absolute;inset:-1px;border-radius:16px;padding:1px;-webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);-webkit-mask-composite:xor;mask-composite:exclude;pointer-events:none}
+.layer-blue::before{background:linear-gradient(135deg,transparent 40%,rgba(96,165,250,0.15) 100%)}
+.layer-green::before{background:linear-gradient(135deg,transparent 40%,rgba(74,222,128,0.15) 100%)}
+.layer-purple::before{background:linear-gradient(135deg,transparent 40%,rgba(192,132,252,0.15) 100%)}
+.layer-orange::before{background:linear-gradient(135deg,transparent 40%,rgba(251,146,60,0.15) 100%)}
+.layer-cyan::before{background:linear-gradient(135deg,transparent 40%,rgba(34,211,238,0.15) 100%)}
+.layer-label{position:absolute;top:-11px;left:24px;padding:0 12px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;background:var(--surface)}
+.lbl-blue{color:var(--blue)}.lbl-green{color:var(--green)}.lbl-purple{color:var(--purple)}.lbl-orange{color:var(--orange)}.lbl-cyan{color:var(--cyan)}.lbl-pink{color:var(--pink)}.lbl-red{color:var(--red)}
+
+/* ── Node ── */
+.nodes{display:flex;gap:12px;flex-wrap:wrap}
+.node{display:flex;align-items:center;gap:12px;padding:14px 18px;background:var(--surface2);border:1px solid var(--border-light);border-radius:12px;min-width:165px;transition:all .2s;cursor:default}
+.node:hover{border-color:rgba(96,165,250,0.35);box-shadow:0 4px 24px rgba(96,165,250,0.06);transform:translateY(-1px)}
+.node-icon{width:36px;height:36px;flex-shrink:0;border-radius:8px}
+.node-icon-sm{width:28px;height:28px}
+.node-info{display:flex;flex-direction:column}
+.node-name{font-size:13px;font-weight:600;line-height:1.3}
+.node-desc{font-size:11px;color:var(--text-muted);line-height:1.3;margin-top:2px}
+
+/* ── Connector ── */
+.connector{display:flex;flex-direction:column;align-items:center;padding:6px 0}
+.connector svg{display:block}
+.connector-label{font-size:10px;color:var(--text-muted);padding:4px 14px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;margin:2px 0;backdrop-filter:blur(8px);font-weight:500;letter-spacing:0.3px}
+.hconnector{display:flex;align-items:center;padding:0 6px}
+.hconnector svg{display:block}
+
+/* ── Grid ── */
+.split{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+
+/* ── Module ── */
+.module-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(155px,1fr));gap:10px}
+.module{display:flex;align-items:center;gap:10px;padding:11px 14px;background:rgba(192,132,252,0.04);border:1px solid rgba(192,132,252,0.1);border-radius:10px;transition:all .15s}
+.module:hover{background:rgba(192,132,252,0.08);border-color:rgba(192,132,252,0.25);transform:translateY(-1px)}
+.module-icon{font-size:18px;flex-shrink:0;width:24px;text-align:center}
+.module-name{font-size:12px;font-weight:600;line-height:1.2}
+.module-desc{font-size:10px;color:var(--text-muted);line-height:1.2}
+
+/* ── External ── */
+.ext-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:10px}
+.ext{display:flex;flex-direction:column;align-items:center;text-align:center;gap:8px;padding:16px 10px;background:var(--surface2);border:1px solid var(--border-light);border-radius:12px;transition:all .2s}
+.ext:hover{border-color:rgba(34,211,238,0.3);transform:translateY(-1px)}
+.ext-icon{width:32px;height:32px}
+.ext-name{font-size:12px;font-weight:600}
+.ext-desc{font-size:10px;color:var(--text-muted)}
+.ext-tag{font-size:9px;padding:3px 9px;border-radius:10px;background:rgba(34,211,238,0.08);color:var(--cyan);border:1px solid rgba(34,211,238,0.15);font-weight:500;font-family:'SF Mono','Fira Code',monospace}
+
+/* ── Spring Banner (adapt for your framework) ── */
+.fw-banner{display:flex;align-items:center;gap:14px;margin-bottom:18px;padding-bottom:16px;border-bottom:1px solid var(--border)}
+.fw-banner img{width:32px;height:32px}
+.fw-banner .title{font-size:15px;font-weight:700}
+.fw-banner .stack{font-size:11px;color:var(--text-muted);margin-top:4px;display:flex;gap:4px;flex-wrap:wrap}
+.stack-badge{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:6px;background:rgba(74,222,128,0.06);border:1px solid rgba(74,222,128,0.12);color:var(--green);font-size:10px;font-weight:500}
+.stack-badge img{width:12px;height:12px}
+
+/* ── Connections ── */
+.connections-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:10px;margin-top:24px}
+.conn-item{display:flex;align-items:flex-start;gap:10px;padding:14px 16px;background:var(--surface2);border:1px solid var(--border);border-radius:10px}
+.conn-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-top:5px}
+.conn-text{font-size:12px;line-height:1.6}
+.conn-text strong{color:var(--text)}
+.conn-text span{color:var(--text-muted)}
+
+/* ── Mermaid ── */
+.mermaid-wrap{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:28px;overflow-x:auto;margin-bottom:20px}
+.mermaid-wrap .mermaid{display:flex;justify-content:center}
+
+/* ── Infra ── */
+.infra-card{display:flex;align-items:center;gap:16px;padding:18px 22px;background:var(--surface2);border:1px solid var(--border-light);border-radius:12px;transition:all .15s}
+.infra-card:hover{border-color:rgba(74,222,128,0.25);transform:translateY(-1px)}
+.infra-icon{width:40px;height:40px;flex-shrink:0}
+.infra-stats{display:flex;gap:6px;margin-top:6px;flex-wrap:wrap}
+.infra-stat{font-size:10px;padding:3px 9px;border-radius:6px;background:rgba(100,116,139,0.12);color:var(--text-muted);font-weight:500;font-family:'SF Mono','Fira Code',monospace}
+
+/* ── Note ── */
+.note{background:rgba(96,165,250,0.04);border:1px solid rgba(96,165,250,0.12);border-radius:12px;padding:16px 20px;margin-top:24px;font-size:12px;color:var(--text-dim);line-height:1.7}
+.note strong{color:var(--blue)}
+
+/* ── ER Table ── */
+.er-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px}
+.er-table{background:var(--surface2);border:1px solid var(--border-light);border-radius:12px;overflow:hidden;transition:all .2s}
+.er-table:hover{box-shadow:0 4px 20px rgba(0,0,0,0.2)}
+.er-table-header{display:flex;align-items:center;gap:8px;padding:12px 16px;font-size:13px;font-weight:700;border-bottom:1px solid var(--border)}
+.er-table-header img{width:18px;height:18px}
+.er-row{display:flex;justify-content:space-between;align-items:center;padding:5px 16px;font-size:11px;border-bottom:1px solid rgba(28,43,63,0.5)}
+.er-row:last-child{border-bottom:none}
+.er-row:hover{background:rgba(96,165,250,0.03)}
+.er-col{color:var(--text);font-weight:500}
+.er-type{color:var(--text-muted);font-family:'SF Mono','Fira Code',monospace;font-size:10px}
+.er-badge{font-size:9px;padding:2px 7px;border-radius:4px;font-weight:700}
+.er-pk{background:rgba(251,191,36,0.12);color:var(--yellow)}
+.er-fk{background:rgba(96,165,250,0.12);color:var(--blue)}
+.er-relations{margin-top:20px;display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:8px}
+.er-rel{display:flex;align-items:center;gap:8px;padding:9px 16px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;font-size:12px}
+.er-rel-arrow{color:var(--blue);font-weight:700;font-family:'SF Mono','Fira Code',monospace}
+
+/* ── Footer ── */
+.footer{position:relative;z-index:1;padding:28px 48px;border-top:1px solid var(--border);color:var(--text-muted);font-size:12px;text-align:center;background:var(--surface)}
+.footer a{color:var(--blue);text-decoration:none}
+
+@media(max-width:768px){
+  .header,.content,.tabs,.footer{padding-left:16px;padding-right:16px}
+  .split{grid-template-columns:1fr}
+  .nodes{flex-direction:column}
+}
+</style>
+</head>
+<body>
+
+<!--
+  ╔═══════════════════════════════════════════════════╗
+  ║  TEMPLATE USAGE                                   ║
+  ║  1. Replace {{PROJECT_NAME}} with project name    ║
+  ║  2. Replace {{TECH_STACK}} with stack description ║
+  ║  3. Fill each tab with project-specific content   ║
+  ║  4. Adapt color legend to your layer structure    ║
+  ║  5. Add/remove tabs as needed                     ║
+  ╚═══════════════════════════════════════════════════╝
+-->
+
+<div class="header">
+  <h1>{{PROJECT_NAME}} Architecture</h1>
+  <div class="sub">{{TECH_STACK}}</div>
+  <div class="legend-bar">
+    <div class="legend-item"><div class="legend-dot" style="background:var(--blue)"></div>Client</div>
+    <div class="legend-item"><div class="legend-dot" style="background:var(--green)"></div>Edge / Infra</div>
+    <div class="legend-item"><div class="legend-dot" style="background:var(--purple)"></div>Backend</div>
+    <div class="legend-item"><div class="legend-dot" style="background:var(--orange)"></div>Data</div>
+    <div class="legend-item"><div class="legend-dot" style="background:var(--cyan)"></div>External</div>
+  </div>
+</div>
+
+<div class="tabs">
+  <button class="tab active" onclick="showPanel('overview')">System Overview</button>
+  <button class="tab" onclick="showPanel('runtime')">Runtime Flow</button>
+  <button class="tab" onclick="showPanel('data')">Data Model</button>
+  <button class="tab" onclick="showPanel('infra')">Infrastructure</button>
+  <button class="tab" onclick="showPanel('ai')">Pipeline</button>
+</div>
+
+<div class="content">
+
+<!-- TAB: System Overview -->
+<div id="overview" class="panel active">
+  <div class="panel-title">System Overview</div>
+  <div class="panel-desc">Description of this perspective.</div>
+  <!-- Add layers with nodes here -->
+</div>
+
+<!-- TAB: Runtime Flow -->
+<div id="runtime" class="panel">
+  <div class="panel-title">Runtime Flow</div>
+  <div class="panel-desc">Sequence diagrams for key operations.</div>
+  <div class="mermaid-wrap"><pre class="mermaid">
+sequenceDiagram
+  actor User
+  participant API as API Server
+  participant DB as Database
+  User->>API: Request
+  API->>DB: Query
+  DB-->>API: Result
+  API-->>User: Response
+  </pre></div>
+</div>
+
+<!-- TAB: Data Model -->
+<div id="data" class="panel">
+  <div class="panel-title">Data Model</div>
+  <div class="panel-desc">Entity relationships and schema.</div>
+  <div class="er-grid">
+    <!-- Add er-table cards here -->
+  </div>
+</div>
+
+<!-- TAB: Infrastructure -->
+<div id="infra" class="panel">
+  <div class="panel-title">Infrastructure</div>
+  <div class="panel-desc">Deployment and container configuration.</div>
+  <!-- Add infra-card elements here -->
+</div>
+
+<!-- TAB: Pipeline -->
+<div id="ai" class="panel">
+  <div class="panel-title">Pipeline</div>
+  <div class="panel-desc">Data or processing pipeline flow.</div>
+  <!-- Add layer + node elements here -->
+</div>
+
+</div>
+
+<div class="footer">Generated by Claude Code</div>
+
+<svg width="0" height="0" style="position:absolute"><defs>
+  <linearGradient id="grad-blue" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="var(--border-light)"/><stop offset="100%" stop-color="var(--blue)"/></linearGradient>
+  <linearGradient id="grad-green" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="var(--border-light)"/><stop offset="100%" stop-color="var(--green)"/></linearGradient>
+</defs></svg>
+
+<script>
+mermaid.initialize({
+  startOnLoad:true,theme:'dark',
+  themeVariables:{
+    primaryColor:'#1f6feb',primaryTextColor:'#e2e8f0',primaryBorderColor:'#3b82f6',
+    lineColor:'#475569',secondaryColor:'#0c1220',tertiaryColor:'#06090f',
+    fontFamily:'-apple-system,BlinkMacSystemFont,system-ui,sans-serif',fontSize:'13px',
+    actorBkg:'#1e3a5f',actorTextColor:'#e2e8f0',actorLineColor:'#475569',
+    signalColor:'#e2e8f0',signalTextColor:'#e2e8f0',
+    labelBoxBkgColor:'#0c1220',labelBoxBorderColor:'#1c2b3f',
+    loopTextColor:'#c084fc',activationBorderColor:'#3b82f6',activationBkgColor:'#131d2e',
+    noteBkgColor:'#131d2e',noteTextColor:'#e2e8f0',noteBorderColor:'#1c2b3f',
+  },
+  sequence:{diagramMarginX:20,diagramMarginY:15,actorMargin:50,width:160,height:45,messageMargin:35,mirrorActors:false,useMaxWidth:true},
+});
+function showPanel(id){
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  event.target.classList.add('active');
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,38 @@
+{
+  "building": {
+    "name": "건물관리",
+    "project_dir": "/Users/sukeun/building-manger",
+    "memory_dir": "/Users/sukeun/.claude/projects/-Users-sukeun-building-manger/memory",
+    "notion_pages": {
+      "main": "31052c2d-4a63-80b2-bbf7-fca73e9cc403",
+      "log": "31652c2d-4a63-817e-911f-c708fb88ef4f",
+      "reference": "31652c2d-4a63-819c-84ed-eda776de516e"
+    },
+    "update_sections": ["progress", "log"],
+    "aliases": ["building-manger", "building-manager", "건물관리"]
+  },
+  "maple": {
+    "name": "v273 MS (하자서버)",
+    "project_dir": "/Users/sukeun/IdeaProjects/관리",
+    "memory_dir": "/Users/sukeun/.claude/projects/-Users-sukeun-IdeaProjects---/memory",
+    "notion_pages": {
+      "main": "31652c2d-4a63-8014-bd6f-cd195ea3ba2b",
+      "log": "31652c2d-4a63-818c-84c4-fb098b4710ce"
+    },
+    "update_sections": ["progress", "log"],
+    "aliases": ["관리", "maple", "하자서버", "메이플"]
+  },
+  "haru": {
+    "name": "TODO APP Haru",
+    "project_dir": "/Users/sukeun/IdeaProjects/todo-app",
+    "memory_dir": "/Users/sukeun/.claude/projects/-Users-sukeun-IdeaProjects-todo-app/memory",
+    "notion_pages": {
+      "main": "30f52c2d-4a63-8040-9303-e481cbc9e597",
+      "log": "31652c2d-4a63-81b8-b4cb-d0db0b512a50",
+      "reference": "31652c2d-4a63-81cc-b8d1-c5985d50219e",
+      "archive": "31652c2d-4a63-813c-8a2e-c26e11cf9aaf"
+    },
+    "update_sections": ["progress", "log"],
+    "aliases": ["haru", "todo", "하루"]
+  }
+}
