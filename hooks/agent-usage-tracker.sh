@@ -13,7 +13,7 @@ TOOL_NAME="${TOOL_NAME:-}"
 TOOL_INPUT="${TOOL_INPUT:-}"
 
 # subagent_type과 model, description 추출
-read -r AGENT_TYPE AGENT_MODEL AGENT_DESC <<< "$(echo "$TOOL_INPUT" | python3 -c "
+IFS=$'\t' read -r AGENT_TYPE AGENT_MODEL AGENT_DESC <<< "$(echo "$TOOL_INPUT" | python3 -c "
 import sys, json
 try:
     data = json.load(sys.stdin)
