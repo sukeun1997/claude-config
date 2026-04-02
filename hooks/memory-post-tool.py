@@ -30,12 +30,12 @@ from pathlib import Path
 # Configuration
 # ---------------------------------------------------------------------------
 
-CAPTURE_TOOLS = {"Write", "Edit", "Bash", "Task"}
+CAPTURE_TOOLS = {"Write", "Edit", "Bash", "Task", "Skill"}
 
 SKIP_TOOLS = {
     "Read", "Grep", "Glob", "ToolSearch",
     "TaskCreate", "TaskUpdate", "TaskList", "TaskGet", "TaskOutput", "TaskStop",
-    "AskUserQuestion", "EnterPlanMode", "ExitPlanMode", "NotebookEdit", "Skill",
+    "AskUserQuestion", "EnterPlanMode", "ExitPlanMode", "NotebookEdit",
     "SendMessage", "ListMcpResourcesTool", "ReadMcpResourceTool",
     "EnterWorktree", "WebFetch", "WebSearch",
 }
@@ -267,7 +267,12 @@ def cmd_capture():
             pass
 
     now = datetime.now()
-    entry = {"ts": now.strftime("%H:%M:%S"), "tool": tool}
+    entry = {
+        "ts": now.strftime("%H:%M:%S"),
+        "date": now.strftime("%Y-%m-%d"),
+        "tool": tool,
+        "project": detect_project(),
+    }
 
     # --- Write / Edit ---
     if tool in ("Write", "Edit"):
@@ -293,6 +298,13 @@ def cmd_capture():
         summary = extract_bash_summary(command, tool_output, category)
         entry.update(summary)
         if check_dedup(dedup_file, f"Bash:{category}:{command[:80]}"):
+            return
+
+    # --- Skill ---
+    elif tool == "Skill":
+        skill_name = tool_input.get("skill", "unknown")
+        entry["skill"] = skill_name
+        if check_dedup(dedup_file, f"Skill:{skill_name}"):
             return
 
     # --- Task (agent) ---
