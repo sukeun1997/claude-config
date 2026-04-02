@@ -1,13 +1,5 @@
 {
-  "hostname": "sugeun-ui-MacBookPro.local",
-  "timestamp": "2026-04-01T21:38:17.759099",
-  "files": [
-    "failure-log.md",
-    "metrics/sessions.jsonl",
-    "metrics/agent-usage-2026-04.jsonl",
-    "instincts/tool-Write.md",
-    "instincts/tool-Bash.md",
-    "instincts/tool-Edit.md",
-    "homunculus/observations.jsonl"
-  ]
+  "hostname": "Sukeun",
+  "timestamp": "2026-04-02T09:16:20",
+  "files": ["daily/2026-04-01.md", "daily/2026-04-02.md", "failure-log.md", "homunculus/observations.jsonl", "instincts/tool-Bash.md", "instincts/tool-Edit.md", "instincts/tool-Write.md", "metrics/agent-usage-2026-04.jsonl", "metrics/sessions.jsonl"]
 }
