@@ -35,107 +35,78 @@ fi
 PATTERNS_FILE=$(mktemp)
 trap "rm -f '$PATTERNS_FILE'" EXIT
 
-# Parse new observations for frequent tool patterns
+# Extract patterns from new observations using analyzer
+ANALYZER="$HOME/.claude/hooks/observer-analyzer.py"
+if [ ! -f "$ANALYZER" ]; then
+  echo "observer-analyzer.py not found" >&2
+  exit 1
+fi
+
 tail -n +"$((CURSOR + 1))" "$OBS_FILE" | \
-  python3 -c "
-import sys, json
-from collections import Counter
-
-patterns = Counter()
-for line in sys.stdin:
-    line = line.strip()
-    if not line:
-        continue
-    try:
-        obs = json.loads(line)
-        tool = obs.get('tool', '')
-        # Track tool usage patterns
-        if tool in ('Bash', 'Edit', 'Write', 'Read', 'Grep', 'Glob'):
-            patterns[f'tool:{tool}'] += 1
-        # Track skill usage
-        if tool == 'Skill':
-            skill = obs.get('args', {}).get('skill', 'unknown')
-            patterns[f'skill:{skill}'] += 1
-        # Track agent delegation
-        if tool == 'Agent':
-            agent_type = obs.get('args', {}).get('subagent_type', 'general')
-            patterns[f'agent:{agent_type}'] += 1
-    except (json.JSONDecodeError, KeyError):
-        continue
-
-# Output patterns with count >= 3
-for pattern, count in patterns.most_common(20):
-    if count >= 3:
-        print(f'{pattern}\t{count}')
-" > "$PATTERNS_FILE" 2>/dev/null || true
+  python3 "$ANALYZER" > "$PATTERNS_FILE" 2>/dev/null || true
 
 # Concurrency lock (mkdir-based, macOS compatible)
 LOCK_DIR="$HOMUNCULUS_DIR/.observer-runner.lock"
 mkdir "$LOCK_DIR" 2>/dev/null || exit 0
 trap "rmdir '$LOCK_DIR' 2>/dev/null; rm -f '$PATTERNS_FILE'" EXIT
 
-# Update instinct confidence OR create new instincts from patterns
-while IFS=$'\t' read -r pattern count; do
-  category="${pattern%%:*}"
-  name="${pattern#*:}"
+# Update instinct confidence OR create new instincts from analyzer output
+# TSV format: type\tname\tcount\tdomain\tdescription\ttrigger\taction\tproject
+while IFS=$'\t' read -r ptype pname pcount pdomain pdesc ptrigger paction pproject; do
+  # Skip empty lines
+  [ -z "$pname" ] && continue
 
-  # Skip empty names
-  [ -z "$name" ] && continue
+  # Skip low-count patterns
+  [ "$pcount" -lt 2 ] 2>/dev/null && continue
 
-  # Find matching instinct (fixed-string match on name field only)
+  # Find matching instinct by name
   MATCHED=false
   for instinct_file in "$INSTINCTS_DIR"/*.md; do
     [ -f "$instinct_file" ] || continue
-    if grep -Fqi "name: ${category}-" "$instinct_file" 2>/dev/null && \
-       grep -Fqi "$name" "$instinct_file" 2>/dev/null; then
+    if grep -Fq "name: $pname" "$instinct_file" 2>/dev/null; then
       MATCHED=true
-      # Bump confidence by 0.05 (cap at 0.95) — macOS-compatible sed extraction
+      # Bump confidence by 0.05 (cap at 0.95)
       current=$(sed -n 's/^confidence: *\([0-9.]*\).*/\1/p' "$instinct_file" 2>/dev/null | head -1)
       current="${current:-0.5}"
-      new_conf=$(python3 -c "print(min(0.95, $current + 0.05))" 2>/dev/null || echo "$current")
+      new_conf=$(python3 -c "print(round(min(0.95, $current + 0.05), 2))" 2>/dev/null || echo "$current")
       if [ "$new_conf" != "$current" ]; then
-        # Anchor to line start to prevent partial matches (0.5 vs 0.55)
         escaped_current=$(echo "$current" | sed 's/\./\\./g')
         sed -i '' "s/^confidence: ${escaped_current}$/confidence: ${new_conf}/" "$instinct_file" 2>/dev/null || \
         sed -i "s/^confidence: ${escaped_current}$/confidence: ${new_conf}/" "$instinct_file" 2>/dev/null || true
       fi
+      # Update observed_count
+      sed -i '' "s/^observed_count: .*/observed_count: ${pcount}/" "$instinct_file" 2>/dev/null || \
+      sed -i "s/^observed_count: .*/observed_count: ${pcount}/" "$instinct_file" 2>/dev/null || true
       break
     fi
   done
 
-  # Create new instinct if no match and count >= 5 (higher bar for auto-creation)
-  if [ "$MATCHED" = false ] && [ "$count" -ge 5 ]; then
-    SAFE_NAME=$(echo "$name" | sed 's/[^a-zA-Z0-9_-]/_/g' | head -c 50)
-    INSTINCT_FILE="$INSTINCTS_DIR/${category}-${SAFE_NAME}.md"
+  # Create new instinct if no match and count >= 3
+  if [ "$MATCHED" = false ] && [ "$pcount" -ge 3 ] 2>/dev/null; then
+    SAFE_NAME=$(echo "$pname" | sed 's/[^a-zA-Z0-9_-]/_/g' | head -c 60)
+    INSTINCT_FILE="$INSTINCTS_DIR/${SAFE_NAME}.md"
     if [ ! -f "$INSTINCT_FILE" ]; then
-      # Map category to domain
-      case "$category" in
-        tool) DOMAIN="workflow" ;;
-        skill) DOMAIN="skill-routing" ;;
-        agent) DOMAIN="delegation" ;;
-        *) DOMAIN="general" ;;
-      esac
-      # Initial confidence scales with observation count (0.3-0.6)
-      INIT_CONF=$(python3 -c "print(min(0.6, 0.3 + ($count - 5) * 0.02))" 2>/dev/null || echo "0.4")
-      # Frontmatter trigger/action fields for instinct-evolve.sh compatibility
+      # Initial confidence: 0.3 base + 0.02 per count above 3, cap at 0.55
+      INIT_CONF=$(python3 -c "print(round(min(0.55, 0.3 + ($pcount - 3) * 0.02), 2))" 2>/dev/null || echo "0.35")
       cat > "$INSTINCT_FILE" << INSTEOF
 ---
-name: ${category}-${SAFE_NAME}
-description: Auto-observed pattern — ${name} used ${count} times
-domain: "${DOMAIN}"
+name: ${pname}
+description: "${pdesc}"
+domain: "${pdomain}"
 confidence: ${INIT_CONF}
-source: observer-runner.sh
-observed_count: ${count}
+source: observer-analyzer.py
+observed_count: ${pcount}
 created: $(date +%Y-%m-%d)
-trigger: "When working on tasks involving ${name}"
-action: "Prefer ${name} for ${category} operations based on observed usage pattern"
+trigger: "${ptrigger}"
+action: "${paction}"
+projects: "${pproject}"
 ---
 
 ## Pattern
-
-- **Category**: ${category}
-- **Name**: ${name}
-- **Frequency**: ${count} observations
+- **Type**: ${ptype}
+- **Name**: ${pname}
+- **Count**: ${pcount}
+- **Projects**: ${pproject}
 INSTEOF
     fi
   fi
