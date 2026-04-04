@@ -34,20 +34,20 @@
     "context7@claude-plugins-official": [
       {
         "scope": "user",
-        "installPath": "/Users/sukeun/.claude/plugins/cache/claude-plugins-official/context7/3d0ade405178",
-        "version": "3d0ade405178",
+        "installPath": "/Users/sukeun/.claude/plugins/cache/claude-plugins-official/context7/63eb0458ba08",
+        "version": "63eb0458ba08",
         "installedAt": "2026-02-15T05:56:47.698Z",
-        "lastUpdated": "2026-04-02T13:08:11.872Z",
+        "lastUpdated": "2026-04-04T06:52:44.058Z",
         "gitCommitSha": "2cd88e7947b7382e045666abee790c7f55f669f3"
       }
     ],
     "playwright@claude-plugins-official": [
       {
         "scope": "user",
-        "installPath": "/Users/sukeun/.claude/plugins/cache/claude-plugins-official/playwright/3d0ade405178",
-        "version": "3d0ade405178",
+        "installPath": "/Users/sukeun/.claude/plugins/cache/claude-plugins-official/playwright/63eb0458ba08",
+        "version": "63eb0458ba08",
         "installedAt": "2026-03-21T04:45:32.245Z",
-        "lastUpdated": "2026-04-02T13:08:11.872Z",
+        "lastUpdated": "2026-04-04T06:52:44.059Z",
         "gitCommitSha": "61c0597779bd2d670dcd4fbbf37c66aa19eb2ce6"
       }
     ],
@@ -114,20 +114,20 @@
     "github@claude-plugins-official": [
       {
         "scope": "user",
-        "installPath": "/Users/sukeun/.claude/plugins/cache/claude-plugins-official/github/3d0ade405178",
-        "version": "3d0ade405178",
+        "installPath": "/Users/sukeun/.claude/plugins/cache/claude-plugins-official/github/63eb0458ba08",
+        "version": "63eb0458ba08",
         "installedAt": "2026-03-04T00:35:47.814Z",
-        "lastUpdated": "2026-04-02T13:08:11.871Z",
+        "lastUpdated": "2026-04-04T06:52:44.058Z",
         "gitCommitSha": "55b58ec6e5649104f926ba7558b567dc8d33c5ff"
       }
     ],
     "frontend-design@claude-plugins-official": [
       {
         "scope": "user",
-        "installPath": "/Users/sukeun/.claude/plugins/cache/claude-plugins-official/frontend-design/3d0ade405178",
-        "version": "3d0ade405178",
+        "installPath": "/Users/sukeun/.claude/plugins/cache/claude-plugins-official/frontend-design/63eb0458ba08",
+        "version": "63eb0458ba08",
         "installedAt": "2026-03-04T00:35:47.833Z",
-        "lastUpdated": "2026-04-02T13:08:11.874Z",
+        "lastUpdated": "2026-04-04T06:52:44.061Z",
         "gitCommitSha": "55b58ec6e5649104f926ba7558b567dc8d33c5ff"
       }
     ],

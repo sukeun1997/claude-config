@@ -10,11 +10,10 @@
 
 1. 대상 FD 파일을 읽어 `Files to Modify`와 `Verification` 체크리스트를 확인한다.
 
-2. **자동 검증 체인** (CLAUDE.md §3 검증 플로우 따름):
+2. **자동 검증 체인** (Opus verifier 서브에이전트에 위임):
    - 현재 변경사항 커밋: `FD-{NUMBER}: {title} — verification checkpoint`
-   - 빌드 검증
-   - 코드 리뷰 (code-reviewer + security-reviewer 병렬)
-   - 테스트 실행 (변경 모듈)
+   - Agent(verifier, model=opus)에 위임: 빌드 검증 + 테스트 실행 (변경 모듈)
+   - 코드 리뷰 (code-reviewer + security-reviewer 병렬) — verifier와 별도
 
 3. **FD 자체 검증**:
    - FD의 `Implementation Plan`과 실제 구현 비교

@@ -106,40 +106,43 @@ Task(executor, model=sonnet):
 - **파일 범위**: 할당된 파일만 수정
 - **충돌 방지**: executor 간 같은 파일 수정 금지 (Phase 2에서 배분)
 
-## Phase 4: Verify — 증거 기반 검증 (verification-before-completion)
+## Phase 4: Verify — Opus verifier 서브에이전트에 위임
 
-### 4-1. 빌드 검증
-```bash
-# 프로젝트별 빌드 명령 실행
-tsc --noEmit          # TypeScript
-./gradlew build       # Kotlin/Java
-pnpm build            # Frontend
+메인 세션이 직접 빌드/테스트를 실행하지 않는다. 별도 Opus verifier에 위임하여 객관적으로 검증.
+
 ```
-**exit 0이 아니면 Phase 3으로 돌아가 수정.**
+Agent(verifier, model=opus):
+  "Phase 3에서 보안 이슈 수정이 완료되었습니다.
+   변경 파일: {수정된 파일 목록}
+   수정 내용: {CRITICAL N건, HIGH N건 반영}
 
-### 4-2. 테스트 검증
-```bash
-# 전체 테스트 실행
-pnpm test             # Node.js
-./gradlew test        # Kotlin/Java
-```
+   아래 항목을 증거 기반으로 검증하세요:
 
-### 4-3. 새 실패 vs 기존 실패 구분
-```
-IF 테스트 실패 있음:
-  1. git stash (우리 변경 임시 제거)
-  2. 동일 테스트 실행
-  3. git stash pop
-  4. 비교: 새 실패 = 우리 변경 때문, 기존 실패 = 무관
+   1. 빌드 검증: 프로젝트 빌드 명령 실행 (exit 0 필수)
+   2. 테스트 검증: 전체 테스트 실행
+   3. 새 실패 vs 기존 실패 구분:
+      - git stash → 동일 테스트 → git stash pop → 비교
+      - 새 실패 > 0 → FAIL
+   4. diff 검증: executor 보고와 실제 변경 일치 여부
 
-  새 실패 > 0 → Phase 3 재실행
-  기존 실패만 → 진행 가능 (기존 실패 목록 기록)
+   FAIL 시 구체적 실패 원인과 파일:라인을 보고하세요.
+
+   응답 형식:
+   - **결과**: SUCCESS | PARTIAL | FAILED
+   - **변경 파일**: [파일 경로 목록]
+   - **핵심 내용**: 1-3줄 요약
+   - **미해결 사항**: 완료하지 못한 부분 (없으면 '없음')"
 ```
 
-### 4-4. Iron Law
+### 결과 처리
+- **SUCCESS** → Phase 5 진행
+- **FAILED** → Phase 3으로 돌아가 수정 (최대 1회 재시도)
+- **PARTIAL** → 미해결 사항을 사용자에게 보고 후 판단
+
+### Iron Law
 ```
 ❌ "should pass", "looks correct", "빌드 성공한 것 같습니다"
-✅ "tsc exit 0, 테스트 34/34 pass" (실제 출력 인용)
+✅ "gradlew test exit 0, 테스트 34/34 pass" (verifier 실제 출력 인용)
 ```
 
 ## Phase 5: Commit + Deploy
