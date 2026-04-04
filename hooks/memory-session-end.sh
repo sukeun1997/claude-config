@@ -95,11 +95,12 @@ if [ -f "$SESSION_MARKER" ]; then
 fi
 
 # Daily log content lines (proxy for productivity)
+# Exclude: blank lines, header, [Auto] hook output, Compaction Checkpoint
 TODAY_FILENAME=$(daily_log_filename "$DATE_STR")
 TODAY_LOG="$DAILY_DIR/${TODAY_FILENAME}"
 LOG_LINES=0
 if [ -f "$TODAY_LOG" ]; then
-  LOG_LINES=$(grep -cvE '^\s*$|^# Daily Log:' "$TODAY_LOG" 2>/dev/null) || LOG_LINES=0
+  LOG_LINES=$(grep -cvE '^\s*$|^# Daily Log:|^\#\#\# .* - \[Auto\]|^\- \*\*Files\*\*|^\- \*\*Build\*\*|^\- \*\*Test\*\*|^\- \*\*Git\*\*|Compaction Checkpoint|컴팩션|자동 컴팩션|세션 재개 후' "$TODAY_LOG" 2>/dev/null) || LOG_LINES=0
 fi
 
 # Write JSONL metric — skip noise sessions
@@ -130,6 +131,16 @@ if [ -f "$TRACK_FILE" ]; then
   fi
   rm -f "$TRACK_FILE"
 fi
+
+# ── Clean up empty daily logs (header-only files) ──
+for log_file in "$DAILY_DIR"/*.md; do
+  [ -f "$log_file" ] || continue
+  # Count non-empty, non-header lines
+  real_lines=$(grep -cvE '^\s*$|^# Daily Log:' "$log_file" 2>/dev/null) || real_lines=0
+  if [ "$real_lines" -eq 0 ]; then
+    rm -f "$log_file"
+  fi
+done
 
 # ── Sync metrics + daily logs to git repo (for remote agent access) ──
 MGMT_REPO="$HOME/IdeaProjects/관리"

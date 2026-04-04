@@ -10,6 +10,18 @@
 | 기술명 | 페이지 ID | 버전 | 생성일 | 최종 업데이트 |
 |--------|----------|------|--------|-------------|
 | LGTM Observability Stack | 33152c2d-4a63-81c2-b0a8-fef03c64f9dd | Prometheus 2.x / Loki 3.4.2 / Tempo 2.7.1 | 2026-03-28 | 2026-03-28 |
+| Claude Code Internals | 33552c2d-4a63-8106-a56e-e53179f45434 | CLI Agent (Opus 4.6) | 2026-04-01 | 2026-04-01 |
+
+## Subpages (Claude Code Internals)
+| 서브페이지 | 페이지 ID |
+|-----------|----------|
+| Quick Start | 33552c2d-4a63-81a7-973d-e3051af61aaf |
+| 프로덕션 체크리스트 | 33552c2d-4a63-812b-9fa6-e4074048b34d |
+| 실전 패턴 & 안티패턴 | 33552c2d-4a63-8173-824d-e564f3669a2c |
+| 트러블슈팅 | 33552c2d-4a63-8120-a1ae-d26208766ee5 |
+| 스케일링 가이드 | 33552c2d-4a63-813d-b58c-d5f17eea593a |
+| 버전 히스토리 | 33552c2d-4a63-812c-8a68-eb158852f269 |
+| 하네스 성숙도 분석 | 33552c2d-4a63-81a7-a490-edc8f6175437 |
 
 ## Subpages (LGTM Observability Stack)
 | 서브페이지 | 페이지 ID |

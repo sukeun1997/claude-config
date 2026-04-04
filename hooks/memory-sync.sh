@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 # memory-sync.sh — 회사↔집 메모리 데이터 동기화
+# DEPRECATED: /harness-sync 스킬로 대체됨 (claude-config 레포 경유)
+# 이 스크립트는 관리 레포 의존 — 회사에서 사용 불가
 #
 # 사용법:
 #   memory-sync.sh push   — 로컬 데이터를 관리 레포에 복사 + push
@@ -43,6 +45,17 @@ sync_push() {
   # Skill usage
   if [ -d "$CLAUDE_DIR/memory/skill-usage" ]; then
     cp "$CLAUDE_DIR/memory/skill-usage"/*.jsonl "$SYNC_DIR/skill-usage/" 2>/dev/null || true
+  fi
+
+  # Agent usage (월별 JSONL)
+  for f in "$CLAUDE_DIR/memory/metrics"/agent-usage-*.jsonl; do
+    [ -f "$f" ] && cp "$f" "$SYNC_DIR/metrics/"
+  done
+
+  # Instincts (L5 자기 진화 데이터)
+  if [ -d "$CLAUDE_DIR/homunculus/instincts" ]; then
+    mkdir -p "$SYNC_DIR/homunculus/instincts"
+    cp -r "$CLAUDE_DIR/homunculus/instincts"/* "$SYNC_DIR/homunculus/instincts/" 2>/dev/null || true
   fi
 
   # Recent daily logs (7일)
@@ -109,6 +122,22 @@ sync_pull() {
       comm -13 <(sort "$LOCAL_F") <(sort "$f") >> "$LOCAL_F" 2>/dev/null || true
       MERGED=$((MERGED + 1))
     done
+  fi
+
+  # Merge agent-usage JSONL
+  for f in "$SYNC_DIR/metrics"/agent-usage-*.jsonl; do
+    [ -f "$f" ] || continue
+    LOCAL_F="$CLAUDE_DIR/memory/metrics/$(basename "$f")"
+    touch "$LOCAL_F"
+    comm -13 <(sort "$LOCAL_F") <(sort "$f") >> "$LOCAL_F" 2>/dev/null || true
+    MERGED=$((MERGED + 1))
+  done
+
+  # Merge instincts (newer file wins)
+  if [ -d "$SYNC_DIR/homunculus/instincts" ]; then
+    mkdir -p "$CLAUDE_DIR/homunculus/instincts"
+    cp -rn "$SYNC_DIR/homunculus/instincts"/* "$CLAUDE_DIR/homunculus/instincts/" 2>/dev/null || true
+    MERGED=$((MERGED + 1))
   fi
 
   echo "PULL: ${MERGED}개 파일 머지 완료"

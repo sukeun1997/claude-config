@@ -11,41 +11,31 @@ TOOL_NAME="${TOOL_NAME:-}"
 [ "$TOOL_NAME" != "Agent" ] && exit 0
 
 TOOL_INPUT="${TOOL_INPUT:-}"
-
-# subagent_type과 model, description 추출
-IFS=$'\t' read -r AGENT_TYPE AGENT_MODEL AGENT_DESC <<< "$(echo "$TOOL_INPUT" | python3 -c "
-import sys, json
-try:
-    data = json.load(sys.stdin)
-    agent_type = data.get('subagent_type', 'general-purpose') or 'general-purpose'
-    model = data.get('model', '') or ''
-    # description은 prompt 앞 80자 요약
-    prompt = data.get('prompt', '') or ''
-    desc = prompt[:80].replace('\n', ' ').strip()
-    print(agent_type, model, desc, sep='\t')
-except:
-    print('general-purpose\t\t', end='')
-" 2>/dev/null)"
-
-# 저장 디렉토리
 METRICS_DIR="$HOME/.claude/memory/metrics"
 mkdir -p "$METRICS_DIR"
 
-# 월별 JSONL 파일
 MONTH_FILE="$METRICS_DIR/agent-usage-$(date +%Y-%m).jsonl"
 
-# JSONL 한 줄 추가 (env vars로 전달하여 shell injection 방지)
-AGENT_TYPE="$AGENT_TYPE" AGENT_MODEL="$AGENT_MODEL" AGENT_DESC="$AGENT_DESC" \
-python3 -c "
-import json, datetime, os
+# Python 단일 블록으로 파싱+기록 (bash read의 IFS 문제 회피)
+echo "$TOOL_INPUT" | python3 -c "
+import sys, json, datetime, pathlib
+
+month_file = '$MONTH_FILE'
+try:
+    data = json.load(sys.stdin)
+except:
+    data = {}
+
 record = {
     'date': datetime.date.today().isoformat(),
     'time': datetime.datetime.now().strftime('%H:%M'),
-    'agent': os.environ.get('AGENT_TYPE', 'general-purpose'),
-    'model': os.environ.get('AGENT_MODEL', ''),
-    'description': os.environ.get('AGENT_DESC', '')
+    'agent': data.get('subagent_type', 'general-purpose') or 'general-purpose',
+    'model': data.get('model', '') or '',
+    'description': (data.get('description', '') or data.get('prompt', '') or '')[:80].replace('\n', ' ').strip()
 }
-print(json.dumps(record, ensure_ascii=False))
-" >> "$MONTH_FILE" 2>/dev/null || true
+
+with open(month_file, 'a') as f:
+    f.write(json.dumps(record, ensure_ascii=False) + '\n')
+" 2>/dev/null || true
 
 exit 0

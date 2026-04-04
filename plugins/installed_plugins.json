@@ -4,10 +4,10 @@
     "oh-my-claudecode@omc": [
       {
         "scope": "user",
-        "installPath": "/Users/sukeun/.claude/plugins/cache/omc/oh-my-claudecode/4.9.3",
-        "version": "4.9.3",
+        "installPath": "/Users/sukeun/.claude/plugins/cache/omc/oh-my-claudecode/4.10.1",
+        "version": "4.10.1",
         "installedAt": "2026-02-08T08:03:21.971Z",
-        "lastUpdated": "2026-03-29T00:33:34.912Z",
+        "lastUpdated": "2026-04-03T03:17:59.500Z",
         "gitCommitSha": "b85759e5c6888cd9df62222af87b8b0375913460"
       }
     ],
@@ -34,20 +34,20 @@
     "context7@claude-plugins-official": [
       {
         "scope": "user",
-        "installPath": "/Users/sukeun/.claude/plugins/cache/claude-plugins-official/context7/c2f05ef8fd78",
-        "version": "c2f05ef8fd78",
+        "installPath": "/Users/sukeun/.claude/plugins/cache/claude-plugins-official/context7/3d0ade405178",
+        "version": "3d0ade405178",
         "installedAt": "2026-02-15T05:56:47.698Z",
-        "lastUpdated": "2026-03-29T11:11:39.678Z",
+        "lastUpdated": "2026-04-02T13:08:11.872Z",
         "gitCommitSha": "2cd88e7947b7382e045666abee790c7f55f669f3"
       }
     ],
     "playwright@claude-plugins-official": [
       {
         "scope": "user",
-        "installPath": "/Users/sukeun/.claude/plugins/cache/claude-plugins-official/playwright/c2f05ef8fd78",
-        "version": "c2f05ef8fd78",
+        "installPath": "/Users/sukeun/.claude/plugins/cache/claude-plugins-official/playwright/3d0ade405178",
+        "version": "3d0ade405178",
         "installedAt": "2026-03-21T04:45:32.245Z",
-        "lastUpdated": "2026-03-29T11:11:39.677Z",
+        "lastUpdated": "2026-04-02T13:08:11.872Z",
         "gitCommitSha": "61c0597779bd2d670dcd4fbbf37c66aa19eb2ce6"
       }
     ],
@@ -94,10 +94,10 @@
     "superpowers@claude-plugins-official": [
       {
         "scope": "user",
-        "installPath": "/Users/sukeun/.claude/plugins/cache/claude-plugins-official/superpowers/5.0.6",
-        "version": "5.0.6",
+        "installPath": "/Users/sukeun/.claude/plugins/cache/claude-plugins-official/superpowers/5.0.7",
+        "version": "5.0.7",
         "installedAt": "2026-02-26T11:01:25.262Z",
-        "lastUpdated": "2026-03-25T18:15:42.931Z",
+        "lastUpdated": "2026-03-31T20:54:58.670Z",
         "gitCommitSha": "e4a2375cb705ca5800f0833528ce36a3faf9017a"
       }
     ],
@@ -114,20 +114,20 @@
     "github@claude-plugins-official": [
       {
         "scope": "user",
-        "installPath": "/Users/sukeun/.claude/plugins/cache/claude-plugins-official/github/c2f05ef8fd78",
-        "version": "c2f05ef8fd78",
+        "installPath": "/Users/sukeun/.claude/plugins/cache/claude-plugins-official/github/3d0ade405178",
+        "version": "3d0ade405178",
         "installedAt": "2026-03-04T00:35:47.814Z",
-        "lastUpdated": "2026-03-29T11:11:39.678Z",
+        "lastUpdated": "2026-04-02T13:08:11.871Z",
         "gitCommitSha": "55b58ec6e5649104f926ba7558b567dc8d33c5ff"
       }
     ],
     "frontend-design@claude-plugins-official": [
       {
         "scope": "user",
-        "installPath": "/Users/sukeun/.claude/plugins/cache/claude-plugins-official/frontend-design/c2f05ef8fd78",
-        "version": "c2f05ef8fd78",
+        "installPath": "/Users/sukeun/.claude/plugins/cache/claude-plugins-official/frontend-design/3d0ade405178",
+        "version": "3d0ade405178",
         "installedAt": "2026-03-04T00:35:47.833Z",
-        "lastUpdated": "2026-03-29T11:11:39.681Z",
+        "lastUpdated": "2026-04-02T13:08:11.874Z",
         "gitCommitSha": "55b58ec6e5649104f926ba7558b567dc8d33c5ff"
       }
     ],
