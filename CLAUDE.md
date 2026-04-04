@@ -87,8 +87,8 @@ Agent 호출 시 `model` 파라미터 필수 지정.
 | 티어 | 에이전트 |
 |------|---------|
 | **haiku** | `explore`, `writer`, `style-reviewer` |
-| **sonnet** | `executor`, `debugger`, `build-fixer`, `test-engineer`, `designer`, `qa-tester`, `verifier`, `document-specialist`, `git-master`, `information-architect`, `api-reviewer`, `performance-reviewer`, `product-analyst`, `product-manager`, `scientist`, `ux-researcher`, `vision` |
-| **opus** | `architect`, `planner`, `analyst`, `critic`, `deep-executor`, `quality-reviewer`, `security-reviewer`, `code-reviewer` |
+| **sonnet** | `executor`, `debugger`, `build-fixer`, `test-engineer`, `designer`, `qa-tester`, `document-specialist`, `git-master`, `information-architect`, `api-reviewer`, `performance-reviewer`, `product-analyst`, `product-manager`, `scientist`, `ux-researcher`, `vision` |
+| **opus** | `architect`, `planner`, `analyst`, `critic`, `deep-executor`, `quality-reviewer`, `security-reviewer`, `code-reviewer`, `verifier` |
 
 미등록 에이전트: 판단/설계→opus, 실행/구현→sonnet, 검색/수집→haiku
 
@@ -242,8 +242,11 @@ Agent 호출 시 `model` 파라미터 필수 지정.
 ## 운영
 - 테스트 실패 방치 금지: 즉시 수정 또는 이슈 등록
 - **삽질 감지 시 자동 기록**: 같은 파일 3회+ 수정, 접근법 변경, 예상과 다른 결과 반복 → 원인 파악 후 `memory/topics/failure-log.md`에 1줄 추가 (날짜/증상/원인 계층/해법)
+- **반복 작업 자동화 감지**: 세션 내 유사 작업(같은 구조 파일 생성, 같은 유형 수정 등) 3회+ 반복 인식 시 → daily log에 `[AUTOMATE]` 태그로 기록. /review-week 축 2에서 분석
 - Notion: MCP 우선
 - 노션 작업일지: 메인 페이지에 일일 로그 금지, 작업 일지 페이지에 기록
 - **하네스 진화 검토**: 모델 업그레이드 시 기존 규칙이 아직 필요한지 재검토. 모든 규칙은 "모델이 못하는 것"에 대한 가정
-- **규칙 수명 관리**: /review-week 시 `memory/metrics/sessions.jsonl` 기반으로 friction 추이 분석. friction이 0인 규칙이 4주 이상 지속되면 은퇴 후보로 표시
+- **Eval 기반 하네스 진화**: /review-week 시 아래 2가지를 분석
+  - friction 추이: sessions.jsonl 기반 마찰 빈도. friction=0 규칙 4주 지속 시 은퇴 후보
+  - 이상 갭 분석: `memory/metrics/harness-kpi.md` 정의 KPI 대비 현재 달성률. 미달 KPI에 대해 원인 가설 + 개선 제안 생성
 - **Self-Absorb 루프**: Stop 훅이 삽질 감지 시 원인 분류 + 개선 제안 요청 → 다음 세션에서 제안 리뷰

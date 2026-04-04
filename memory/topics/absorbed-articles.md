@@ -26,3 +26,10 @@ type: reference
 - **적용**: 1건 (guideline 1)
 - **스킵**: 3건 (이미 적용 3: CLAUDE.md 규칙 파일, 계층적 병합, 프로필 선택)
 - **핵심 인사이트**: CLAUDE.md에 간결성 규칙으로 출력 토큰 ~63% 절감 가능하나, "답 먼저" 규칙은 transformer 자기회귀 구조와 충돌 가능. 대규모 에이전트 루프에서 누적 절감 효과가 크지만, learning mode와 공존하려면 서브에이전트 파이프라인에만 한정 적용이 적절
+
+### 2026-04-04: The Most Important Ideas in AI Right Now (April 2026)
+- **URL**: https://danielmiessler.com/blog/the-most-important-ideas-in-ai
+- **유형**: opinion/analysis
+- **적용**: 4건 (guideline 3, memory 1)
+- **스킵**: 0건
+- **핵심 인사이트**: Intent-First(이상 상태 정의 없이는 도구가 무의미), Eval 기반 현재-이상 갭 측정으로 자율 최적화, 반복 스캐폴딩의 자동화 감지로 고가치 작업에 집중
