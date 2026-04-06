@@ -1,12 +1,12 @@
 {
-  "lineLayout": "expanded",
+  "lineLayout": "compact",
   "showSeparators": false,
   "pathLevels": 1,
   "display": {
     "showModel": true,
     "showContextBar": true,
     "showTools": false,
-    "showAgents": true,
+    "showAgents": false,
     "showTodos": true,
     "showUsage": true,
     "usageBarEnabled": true,
@@ -17,7 +17,7 @@
   },
   "gitStatus": {
     "enabled": true,
-    "showDirty": true,
+    "showDirty": false,
     "showAheadBehind": false,
     "showFileStats": false
   }

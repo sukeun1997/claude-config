@@ -4,15 +4,15 @@
       "source": "github",
       "repo": "anthropics/claude-plugins-official"
     },
-    "installLocation": "/Users/sukeun/.claude/plugins/marketplaces/claude-plugins-official",
-    "lastUpdated": "2026-04-04T12:49:48.256Z"
+    "installLocation": "/Users/sukeunpark/.claude/plugins/marketplaces/claude-plugins-official",
+    "lastUpdated": "2026-04-06T02:00:15.303Z"
   },
   "omc": {
     "source": {
       "source": "git",
       "url": "https://github.com/Yeachan-Heo/oh-my-claudecode.git"
     },
-    "installLocation": "/Users/sukeun/.claude/plugins/marketplaces/omc",
+    "installLocation": "/Users/sukeunpark/.claude/plugins/marketplaces/omc",
     "lastUpdated": "2026-04-04T12:49:11.794Z",
     "autoUpdate": true
   },
@@ -21,7 +21,7 @@
       "source": "github",
       "repo": "team-attention/plugins-for-claude-natives"
     },
-    "installLocation": "/Users/sukeun/.claude/plugins/marketplaces/team-attention-plugins",
+    "installLocation": "/Users/sukeunpark/.claude/plugins/marketplaces/team-attention-plugins",
     "lastUpdated": "2026-02-09T13:27:39.384Z"
   },
   "everything-claude-code": {
@@ -29,15 +29,17 @@
       "source": "git",
       "url": "https://github.com/affaan-m/everything-claude-code.git"
     },
-    "installLocation": "/Users/sukeun/.claude/plugins/marketplaces/everything-claude-code",
-    "lastUpdated": "2026-02-26T11:00:06.205Z"
+    "installLocation": "/Users/sukeunpark/.claude/plugins/marketplaces/everything-claude-code",
+    "lastUpdated": "2026-04-06T02:14:31.574Z",
+    "autoUpdate": true
   },
   "claude-hud": {
     "source": {
       "source": "github",
       "repo": "jarrodwatts/claude-hud"
     },
-    "installLocation": "/Users/sukeun/.claude/plugins/marketplaces/claude-hud",
-    "lastUpdated": "2026-02-26T11:00:07.492Z"
+    "installLocation": "/Users/sukeunpark/.claude/plugins/marketplaces/claude-hud",
+    "lastUpdated": "2026-04-06T02:22:48.934Z",
+    "autoUpdate": true
   }
 }
