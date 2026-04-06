@@ -27,6 +27,14 @@ type: reference
 - **스킵**: 3건 (이미 적용 3: CLAUDE.md 규칙 파일, 계층적 병합, 프로필 선택)
 - **핵심 인사이트**: CLAUDE.md에 간결성 규칙으로 출력 토큰 ~63% 절감 가능하나, "답 먼저" 규칙은 transformer 자기회귀 구조와 충돌 가능. 대규모 에이전트 루프에서 누적 절감 효과가 크지만, learning mode와 공존하려면 서브에이전트 파이프라인에만 한정 적용이 적절
 
+### 2026-04-06: Context Mode - Claude Code의 컨텍스트 소비를 98% 줄이는 MCP 서버
+- **URL**: https://news.hada.io/topic?id=27108
+- **유형**: engineering-blog + case-study
+- **적용**: 2건 (guideline 2: MCP 출력 최소화 + MCP 도구 감사)
+- **스킵**: 1건 (architecture: Context Mode MCP 서버 도입 — deferred loading + 서브에이전트 격리로 대체 가능)
+- **보류**: 1건 (guideline: 프롬프트 캐시 안정성 — rules/common 수준으로 강등, 측정 메트릭 부재)
+- **핵심 인사이트**: MCP 출력은 컨텍스트의 숨은 팽창 원인. 호출 시 범위 한정 + 주기적 도구 감사로 제어. 프로세스 격리는 서브에이전트 위임으로 대체 가능. GitHub/Context7 이중 등록 31개 중복 발견
+
 ### 2026-04-04: The Most Important Ideas in AI Right Now (April 2026)
 - **URL**: https://danielmiessler.com/blog/the-most-important-ideas-in-ai
 - **유형**: opinion/analysis
