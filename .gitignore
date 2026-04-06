@@ -41,11 +41,17 @@ statsig/
 .omc*
 .session-stats.json
 
-# Plugins (marketplace & cache are auto-downloaded)
+# Plugins (auto-generated, contain absolute paths)
 plugins/marketplaces/
 plugins/cache/
+plugins/installed_plugins.json
+plugins/known_marketplaces.json
+plugins/install-counts-cache.json
+plugins/blocklist.json
 plugins/.usage-cache.json
 plugins/claude-hud/.usage-cache.json
+plugins/claude-hud/config-cache/
+plugins/claude-hud/transcript-cache/
 
 # Memory - daily logs are machine-local
 memory/daily/
@@ -73,6 +79,12 @@ settings.local.json
 
 # Hooks with secrets (machine-specific)
 hooks/telegram-notify.sh
+
+# Session & runtime (machine-local)
+session-env/
+bash-commands.log
+cost-tracker.log
+metrics/
 
 # Nested .claude (project-level)
 .claude/
