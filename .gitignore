@@ -41,11 +41,15 @@ statsig/
 .omc*
 .session-stats.json
 
-# Plugins (marketplace & cache are auto-downloaded)
+# Plugins (machine-specific paths & auto-downloaded)
 plugins/marketplaces/
 plugins/cache/
 plugins/.usage-cache.json
 plugins/claude-hud/.usage-cache.json
+plugins/installed_plugins.json
+plugins/known_marketplaces.json
+plugins/install-counts-cache.json
+plugins/blocklist.json
 
 # Memory - daily logs are machine-local
 memory/daily/
