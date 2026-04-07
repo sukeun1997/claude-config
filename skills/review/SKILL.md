@@ -195,11 +195,16 @@ Agent(code-reviewer, model=opus):
    최대 10건, 심각도 순 우선."
 ```
 
-## Phase 2: Evaluate — 비판적 평가
+## Phase 2: Evaluate — Opus 독립 평가
 
-review-aggregator 반환 결과를 메인 세션에서 평가 후 사용자에게 제시.
+review-aggregator 반환 결과를 **별도 Opus critic 서브에이전트**에 위임하여 평가. 메인 세션이 직접 평가하면 이미 컨텍스트를 아는 상태에서 동의 편향이 발생하므로, 독립 에이전트가 원본 코드와 리뷰 결과만으로 판단한다.
 
-### 평가 기준 (receiving-code-review 원칙 내장)
+### 평가 에이전트 (Agent, model: opus, subagent_type: critic)
+프롬프트에 포함:
+- review-aggregator 전체 결과
+- 변경된 파일 경로 목록
+
+평가 기준:
 1. **기술 검증**: 해당 코드를 직접 읽고 실제 이슈인지 확인
 2. **YAGNI 체크**: 사용 안 되는 코드의 "개선" 제안 제외
 3. **false positive 제거**: 프레임워크가 이미 처리하는 경우, 내부 전용 API 등
