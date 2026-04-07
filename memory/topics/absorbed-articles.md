@@ -35,6 +35,21 @@ type: reference
 - **보류**: 1건 (guideline: 프롬프트 캐시 안정성 — rules/common 수준으로 강등, 측정 메트릭 부재)
 - **핵심 인사이트**: MCP 출력은 컨텍스트의 숨은 팽창 원인. 호출 시 범위 한정 + 주기적 도구 감사로 제어. 프로세스 격리는 서브에이전트 위임으로 대체 가능. GitHub/Context7 이중 등록 31개 중복 발견
 
+### 2026-04-06: Devil's Advocate skill — adversarial challenge at every step
+- **URL**: https://reddit.com/r/ClaudeCode/comments/1scxd53/
+- **유형**: showcase + discussion
+- **적용**: 2건 (guideline 1: Pre-implementation Plan Challenge, memory 1: 기록)
+- **스킵**: 2건 (already_applied: post-impl review §4, santa-loop / conflict: 별도 LLM judging — 단일 제공사 환경)
+- **핵심 인사이트**: 동의 편향은 post-impl 리뷰로는 불충분. planner의 plan에 대한 confirmation bias를 pre-implementation critic으로 견제. 별도 서브에이전트에 adversarial 역할 명시 + 원본 데이터 재분석(steelmanning)이 핵심
+
+### 2026-04-06: 71.5x token reduction by compiling raw folder into knowledge graph
+- **URL**: https://reddit.com/r/ClaudeCode/comments/1sdaakg/
+- **유형**: showcase + discussion
+- **적용**: 1건 (memory 1: 기록)
+- **스킵**: 1건 (architecture: graphify 도구 도입 — 4계층 메모리 + Explore 위임으로 대체)
+- **보류**: 2건 (guideline: Stale Map Refresh — 훅 구현 없이 규칙만으로 실행 보장 불가, Frontmatter Navigation 강화 — topic 5개로 ROI 부족)
+- **핵심 인사이트**: pre-compiled knowledge vs re-reading files 접근법은 커뮤니티에서 양면 평가. "just read the code bro" 의견이 높은 공감. 현재 4계층 메모리가 지식 그래프와 동등 역할 수행 중. 장기 브랜치에서 구조 파일 stale 방어가 실제 gap
+
 ### 2026-04-04: The Most Important Ideas in AI Right Now (April 2026)
 - **URL**: https://danielmiessler.com/blog/the-most-important-ideas-in-ai
 - **유형**: opinion/analysis
