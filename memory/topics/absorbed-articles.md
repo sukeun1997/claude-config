@@ -35,6 +35,13 @@ type: reference
 - **보류**: 1건 (guideline: 프롬프트 캐시 안정성 — rules/common 수준으로 강등, 측정 메트릭 부재)
 - **핵심 인사이트**: MCP 출력은 컨텍스트의 숨은 팽창 원인. 호출 시 범위 한정 + 주기적 도구 감사로 제어. 프로세스 격리는 서브에이전트 위임으로 대체 가능. GitHub/Context7 이중 등록 31개 중복 발견
 
+### 2026-04-07: Claude Code 2월 업데이트 이후 품질 저하 분석
+- **URL**: https://github.com/anthropics/claude-code/issues/42796
+- **유형**: case-study + opinion
+- **적용**: 4건 (setting 1: cleanupPeriodDays 365, guideline 1: Stop Phrase 금지 목록, hook 1: tool-tracker Read 카운트 수집, skill 1: review-week Convention Drift 체크)
+- **스킵**: 4건 (already_applied: effortLevel high, 조기 중단 금지, edit-tracker 삽질 감지 / 보류: Hook 기반 Stop Phrase 자동 감지 — API 제약)
+- **핵심 인사이트**: Thinking 깊이 감소·Read:Edit 비율·Stop phrase 빈도·Convention drift는 품질 저하 조기 경보 지표. 이 지표를 자동 수집하여 /review-week에서 추세 분석하면 모델 변경에 의한 점진적 품질 저하를 감지 가능
+
 ### 2026-04-06: Devil's Advocate skill — adversarial challenge at every step
 - **URL**: https://reddit.com/r/ClaudeCode/comments/1scxd53/
 - **유형**: showcase + discussion

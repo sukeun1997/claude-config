@@ -74,15 +74,20 @@ fi
 # Session start timestamp: prefer $2 (captured inline, race-safe)
 CAPTURED_START_TS="${2:-0}"
 TRACK_FILE_PATH="/tmp/claude-edit-tracker-${SESSION_ID}"
+READ_TRACK_FILE="/tmp/claude-read-tracker-${SESSION_ID}"
 
-# Collect metrics from edit-tracker
+# Collect metrics from tool-tracker
 TOTAL_EDITS=0
 FRICTION_COUNT=0
 UNIQUE_FILES=0
+TOTAL_READS=0
 if [ -f "$TRACK_FILE_PATH" ]; then
   TOTAL_EDITS=$(wc -l < "$TRACK_FILE_PATH" | tr -d ' ')
   UNIQUE_FILES=$(sort -u "$TRACK_FILE_PATH" | wc -l | tr -d ' ')
   FRICTION_COUNT=$(sort "$TRACK_FILE_PATH" | uniq -c | awk '$1 >= 3' | wc -l | tr -d ' ')
+fi
+if [ -f "$READ_TRACK_FILE" ]; then
+  TOTAL_READS=$(wc -l < "$READ_TRACK_FILE" | tr -d ' ')
 fi
 
 # Session duration estimate (from session marker)
@@ -106,7 +111,7 @@ fi
 # Write JSONL metric — skip noise sessions
 # Filter: (duration >= 5min AND (edits OR log)) OR (edits > 0 regardless of duration)
 if { [ "$DURATION_MIN" -ge 5 ] && { [ "$TOTAL_EDITS" -gt 0 ] || [ "${LOG_LINES:-0}" -gt 0 ]; }; } || [ "$TOTAL_EDITS" -gt 0 ]; then
-  echo "{\"date\":\"${DATE_STR}\",\"project\":\"${PROJECT}\",\"duration_min\":${DURATION_MIN},\"total_edits\":${TOTAL_EDITS},\"unique_files\":${UNIQUE_FILES},\"friction_files\":${FRICTION_COUNT},\"log_lines\":${LOG_LINES:-0}}" >> "$METRICS_FILE"
+  echo "{\"date\":\"${DATE_STR}\",\"project\":\"${PROJECT}\",\"duration_min\":${DURATION_MIN},\"total_edits\":${TOTAL_EDITS},\"total_reads\":${TOTAL_READS},\"unique_files\":${UNIQUE_FILES},\"friction_files\":${FRICTION_COUNT},\"log_lines\":${LOG_LINES:-0}}" >> "$METRICS_FILE"
 fi
 
 # ── Friction pattern detection ──

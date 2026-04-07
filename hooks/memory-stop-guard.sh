@@ -58,7 +58,7 @@ EOF
 fi
 
 # ── Self-absorb: friction 감지 시 개선 제안 요청 ──
-# Read stable session ID (matches edit-tracker)
+# Read stable session ID (matches tool-tracker)
 _SID_FILE="$MEM_DIR/sessions/.current-session-id"
 if [ -f "$_SID_FILE" ]; then
   _SID=$(cat "$_SID_FILE" 2>/dev/null || echo "unknown")

@@ -70,7 +70,7 @@
           },
           {
             "type": "command",
-            "command": "\"$HOME/.claude/hooks/edit-tracker.sh\"",
+            "command": "\"$HOME/.claude/hooks/tool-tracker.sh\"",
             "timeout": 2
           },
           {
