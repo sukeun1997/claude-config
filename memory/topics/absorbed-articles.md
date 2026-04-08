@@ -35,6 +35,14 @@ type: reference
 - **보류**: 1건 (guideline: 프롬프트 캐시 안정성 — rules/common 수준으로 강등, 측정 메트릭 부재)
 - **핵심 인사이트**: MCP 출력은 컨텍스트의 숨은 팽창 원인. 호출 시 범위 한정 + 주기적 도구 감사로 제어. 프로세스 격리는 서브에이전트 위임으로 대체 가능. GitHub/Context7 이중 등록 31개 중복 발견
 
+### 2026-04-08: 코드 에이전트 오케스트라 — 멀티 에이전트 코딩 가이드
+- **URL**: https://addyosmani.com/blog/code-agent-orchestra/
+- **유형**: engineering-blog + tutorial
+- **적용**: 2건 (guideline 2: 에이전트 교착 3회 종료, AGENTS.md 작성 주체 제한)
+- **스킵**: 14건 (already_applied: 서브에이전트/팀/모델라우팅/워크트리/플랜승인/훅/검증분리 등)
+- **보류**: 1건 (architecture: Ralph Loop 야간 실행 — FD 설계 선행 필요)
+- **핵심 인사이트**: 현재 하네스가 Addy Osmani의 멀티에이전트 패턴 대부분을 이미 커버. 에이전트 교착 자동 종료와 AGENTS.md 인간 작성 원칙만 gap. "모호한 스펙은 수십 개 병렬 에이전트에 오류를 증폭시킨다"
+
 ### 2026-04-07: Claude Code 2월 업데이트 이후 품질 저하 분석
 - **URL**: https://github.com/anthropics/claude-code/issues/42796
 - **유형**: case-study + opinion
