@@ -121,19 +121,51 @@ Notion 업데이트 완료:
 
 ## Procedure
 
+### Phase 1: 메인 세션 — 콘텐츠 준비 (Notion I/O 없음)
+
 1. Read `~/.claude/skills/notion-update/projects.json` to find the project config
 2. If alias not found, list available projects and ask user to choose
 3. Read the project's daily log (`memory/daily/YYYY-MM-DD.md`)
 4. Run `git log --oneline -10` in the project directory
-5. `notion-fetch` 작업 일지(log) 페이지 → 오늘 날짜 하위페이지 존재 여부 확인
-6. **날짜 페이지가 없으면** → `notion-create-pages`로 생성 (parent: log 페이지)
+5. 수집한 정보로 **마크다운 콘텐츠를 미리 작성**:
+   - 작업일지 인라인 섹션 (마크다운 문자열)
+   - 하위페이지용 콘텐츠 (필요 시)
+   - 메인 페이지 상태 변경 사항 (old_str → new_str 쌍)
+
+### Phase 2: 서브에이전트 — Notion I/O 전담
+
+**서브에이전트에 위임** (general-purpose, model=sonnet):
+
+```
+프롬프트에 포함할 정보:
+- projects.json의 page ID들 (search 호출 생략)
+- Phase 1에서 준비한 마크다운 콘텐츠
+- 작업일지 기록 지침 (아래 섹션)
+- 구체적 Notion MCP 호출 순서
+```
+
+서브에이전트 작업:
+1. `notion-fetch` log 페이지 (page ID 직접 사용) → 오늘 날짜 하위페이지 존재 여부 확인
+2. **날짜 페이지가 없으면** → `notion-create-pages`로 생성 (parent: log page ID)
    - 제목: `YYYY-MM-DD (요일)`
    - 내용: 요약 callout
-7. **작업별 분류**:
+3. **작업별 분류**:
    - 하위페이지 기준 충족 → `notion-create-pages`로 하위페이지 생성 (parent: 날짜 페이지)
    - 미충족 → 날짜 페이지에 `insert_content_after`로 인라인 섹션 추가
-8. 메인 페이지 `notion-fetch` → 상태 테이블 변경사항 확인 → `replace_content_range`로 업데이트
-9. Report summary of changes
+4. 메인 페이지 업데이트 필요 시: `notion-fetch` main page ID → `replace_content_range`로 업데이트
+5. 결과 보고: 생성/수정한 페이지 목록 + 성공/실패
+
+### Phase 3: 메인 세션 — 결과 보고
+
+서브에이전트 결과를 사용자에게 요약 보고.
+
+### 토큰 절약 핵심
+
+| 기법 | 절약량 | 설명 |
+|------|--------|------|
+| 서브에이전트 위임 | ~10K tokens | Notion 페이지 원시 데이터가 메인 컨텍스트에 안 들어옴 |
+| Page ID 직접 사용 | ~2K tokens/회 | search 호출 + 응답 생략 |
+| 콘텐츠 사전 준비 | ~3K tokens | 서브에이전트가 판단할 필요 없이 준비된 마크다운만 전달 |
 
 ## Important Rules
 

@@ -30,7 +30,7 @@
 - **조기 중단 금지**: 토큰 예산 부족으로 작업을 일찍 마무리하지 않음 — compaction이 자동 처리하므로 끝까지 진행. 한계 접근 시 진행 상태를 메모리에 저장
   - 금지 표현: "should I continue?", "good stopping point", "continue in a new session", "not caused by my changes", "known limitation". 이러한 자가 중단/책임 회피 표현 대신 작업을 계속 진행하거나, 실제 블로커가 있으면 구체적으로 보고
 - **MCP 출력 최소화**: MCP 도구 호출 시 필요한 필드/범위를 한정하여 요청. 목록 조회는 limit 파라미터 사용, 결과에서 필요한 속성만 추출하여 후속 작업에 전달. 원시 JSON 전체를 컨텍스트에 유지하지 않음
-- **Notion 대형 페이지 위임**: Notion 페이지가 길 것으로 예상될 때(테이블 5개+, 상세 문서), fetch+update를 서브에이전트에 위임하여 전체 페이지 내용이 메인 컨텍스트를 오염시키지 않게 함. 메인에서는 삽입할 콘텐츠만 준비하고 에이전트에 "이 old_str을 찾아서 new_str로 교체" 형태로 위임
+- **Notion I/O 서브에이전트 위임**: Notion MCP 호출(fetch/update/create)은 서브에이전트에 위임. 메인에서는 마크다운 콘텐츠만 준비하고, page ID(`projects.json` 캐시)와 함께 전달. search 대신 캐시된 ID 직접 사용. 단순 append 1건은 메인에서 직접 가능
 - **에이전트 결과 크기 제한**: Explore/코드 트레이스 에이전트에 "report in under 3000 characters" 지시. 핵심(파일 경로 + 호출 체인 + 1줄 요약)만 요청하고, 상세는 필요 시 직접 Read
 
 ### 프롬프팅 톤 (4.6 최적화)
