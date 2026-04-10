@@ -65,3 +65,11 @@
 
 ### Promoted 2026-04-06
 - settings base+local 분리 시 hooks 보호 패턴: frozen-keys + integrity guard
+
+### Promoted 2026-04-10
+- 하네스 4.5 유지 (Opus critic 검증: 오케스트레이션 4.7, 자기진화 4.2). 5.0 갭: evolved skill 미발동 + friction 은퇴 0건
+- absorb 주 2회 제한 (화/금 배치). 적용률 41%→70% 목표. Phase 0 사전 필터링 추가
+- Active Context Hygiene: SessionStart에서 stale(3일+변경0)/비대(7일+) context 자동 경고
+
+### Promoted 2026-04-10
+- absorb 주 2회 배치 + Phase 0 사전 필터링 패턴

@@ -36,7 +36,8 @@ else
   # Track edits (Edit|Write)
   touch "$EDIT_FILE"
 
-  COUNT=$(grep -cxF "$FILE_PATH" "$EDIT_FILE" 2>/dev/null || echo "0")
+  # Bug fix: grep -c exits 1 when count=0, causing || echo "0" to append extra "0"
+  COUNT=$(grep -cxF "$FILE_PATH" "$EDIT_FILE" 2>/dev/null) || COUNT=0
   echo "$FILE_PATH" >> "$EDIT_FILE"
 
   NEW_COUNT=$((COUNT + 1))

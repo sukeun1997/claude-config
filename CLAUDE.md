@@ -227,8 +227,9 @@ Agent 호출 시 `model` 파라미터 필수 지정.
 | 업무 기술 + "업데이트" | `master-guide` (update 모드) |
 | 일반 주제 + "노션에 정리/분석" | `research-to-notion` (일반 리서치) |
 | 업무 기술 + "노션에 정리" (단순 리서치 의도) | 사용자에게 분기 질문 |
-| URL 분석 + 설정 적용 요청 | `absorb` |
+| URL 분석 + 설정 적용 요청 | `absorb` (주 2회 배치 — 화/금 권장, 초과 시 북마크) |
 | Sentry URL 또는 이슈 ID 제공 시 | `sentry-debug` |
+| plan/spec 저장, "docs에 저장", "옵시디언" | `docs-save` |
 
 > 프로젝트별 추가 라우팅은 각 프로젝트 CLAUDE.md에서 정의
 

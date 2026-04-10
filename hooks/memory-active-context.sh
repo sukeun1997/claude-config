@@ -48,13 +48,14 @@ case "$CMD" in
 
     # Gather git context for initial population
     AHEAD_COUNT=$(git rev-list --count "${BASE_BRANCH}..HEAD" 2>/dev/null || echo "0")
-    RECENT_COMMITS=$(git log --oneline -10 "${BASE_BRANCH}..HEAD" 2>/dev/null || echo "(no commits yet)")
-    CHANGED_FILES=$(git diff --name-only "${BASE_BRANCH}..HEAD" 2>/dev/null | head -20 || echo "(none)")
+    RECENT_COMMITS=$(git log --oneline -5 "${BASE_BRANCH}..HEAD" 2>/dev/null || echo "(no commits yet)")
     DIFF_STAT=$(git diff --stat "${BASE_BRANCH}..HEAD" 2>/dev/null | tail -1 || echo "")
 
-    # Extract purpose from branch name (feature/core-1065 → CORE-1065)
+    # Extract purpose from first commit message (more meaningful than branch slug)
     TICKET=$(echo "$BRANCH" | grep -oE '[A-Z]+-[0-9]+' || echo "")
+    FIRST_COMMIT_MSG=$(git log --format=%s -1 "${BASE_BRANCH}..HEAD" 2>/dev/null || echo "")
     BRANCH_DESC=$(echo "$BRANCH" | sed 's|^[a-z]*/||' | sed 's|[-_]| |g')
+    PURPOSE="${FIRST_COMMIT_MSG:-${BRANCH_DESC}}"
 
     cat > "$ACTIVE_FILE" << EOF
 # Active Context: ${BRANCH}
@@ -62,22 +63,17 @@ case "$CMD" in
 ## Why
 ${TICKET:+- Ticket: ${TICKET}}
 - Branch: \`${BRANCH}\` (${AHEAD_COUNT} commits ahead of ${BASE_BRANCH})
-- Purpose: ${BRANCH_DESC}
+- Purpose: ${PURPOSE}
 
 ## Progress
 ${RECENT_COMMITS}
-
-### Changed Files
-\`\`\`
-${CHANGED_FILES}
-\`\`\`
 ${DIFF_STAT:+Stats: ${DIFF_STAT}}
 
 ## Next
-- (auto-generated — update with current next steps)
+- (수동 갱신 필요 — 다음 작업 단계를 기록하세요)
 
 ## Open Questions
-- (none yet)
+- (수동 갱신 필요)
 
 ---
 *Auto-generated on $(date +%Y-%m-%d\ %H:%M). Update manually or via \`/clear\`.*
@@ -92,8 +88,7 @@ EOF
     fi
 
     AHEAD_COUNT=$(git rev-list --count "${BASE_BRANCH}..HEAD" 2>/dev/null || echo "0")
-    RECENT_COMMITS=$(git log --oneline -10 "${BASE_BRANCH}..HEAD" 2>/dev/null || echo "(no commits yet)")
-    CHANGED_FILES=$(git diff --name-only "${BASE_BRANCH}..HEAD" 2>/dev/null | head -20 || echo "(none)")
+    RECENT_COMMITS=$(git log --oneline -5 "${BASE_BRANCH}..HEAD" 2>/dev/null || echo "(no commits yet)")
     DIFF_STAT=$(git diff --stat "${BASE_BRANCH}..HEAD" 2>/dev/null | tail -1 || echo "")
 
     # Read existing file, preserve Why/Next/Open Questions sections, update Progress
@@ -112,11 +107,6 @@ ${WHY_SECTION}
 
 ## Progress
 ${RECENT_COMMITS}
-
-### Changed Files
-\`\`\`
-${CHANGED_FILES}
-\`\`\`
 ${DIFF_STAT:+Stats: ${DIFF_STAT}}
 
 ## Next
