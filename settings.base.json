@@ -41,11 +41,6 @@
             "type": "command",
             "command": "\"$HOME/.claude/hooks/memory-session-start.sh\"",
             "timeout": 10
-          },
-          {
-            "type": "command",
-            "command": "bash \"$HOME/.claude/hooks/memory-promote-analyzer.sh\"",
-            "timeout": 5
           }
         ]
       }
@@ -70,24 +65,9 @@
           },
           {
             "type": "command",
-            "command": "\"$HOME/.claude/hooks/tool-tracker.sh\"",
-            "timeout": 2
-          },
-          {
-            "type": "command",
             "command": "\"$HOME/.claude/hooks/governance-guard.sh\"",
             "if": "Write(*) || Edit(*)",
             "timeout": 3
-          }
-        ]
-      },
-      {
-        "matcher": "Skill",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "\"$HOME/.claude/hooks/skill-usage-tracker.sh\"",
-            "timeout": 2
           }
         ]
       }

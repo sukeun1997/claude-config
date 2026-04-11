@@ -87,5 +87,3 @@ systematic-debugging Phase 1 (Root Cause Investigation)을 자동 수행한다.
    - 소규모 (≤2파일): compileKotlin만
    - 중규모 (3-5파일): 빌드 + 변경 모듈 테스트
    - 대규모 (6+파일): 빌드 + 테스트 + code-reviewer
-
-$ARGUMENTS
