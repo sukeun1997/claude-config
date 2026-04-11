@@ -41,11 +41,6 @@
             "type": "command",
             "command": "\"$HOME/.claude/hooks/memory-session-start.sh\"",
             "timeout": 10
-          },
-          {
-            "type": "command",
-            "command": "bash \"$HOME/.claude/hooks/memory-promote-analyzer.sh\"",
-            "timeout": 5
           }
         ]
       }
@@ -70,24 +65,9 @@
           },
           {
             "type": "command",
-            "command": "\"$HOME/.claude/hooks/edit-tracker.sh\"",
-            "timeout": 2
-          },
-          {
-            "type": "command",
             "command": "\"$HOME/.claude/hooks/governance-guard.sh\"",
             "if": "Write(*) || Edit(*)",
             "timeout": 3
-          }
-        ]
-      },
-      {
-        "matcher": "Skill",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "\"$HOME/.claude/hooks/skill-usage-tracker.sh\"",
-            "timeout": 2
           }
         ]
       }
@@ -160,6 +140,11 @@
         "hooks": [
           {
             "type": "command",
+            "command": "\"$HOME/.claude/hooks/settings-integrity-guard.sh\"",
+            "timeout": 3
+          },
+          {
+            "type": "command",
             "command": "\"$HOME/.claude/hooks/pre-clear-handoff.sh\"",
             "timeout": 5
           }
@@ -169,7 +154,7 @@
   },
   "statusLine": {
     "type": "command",
-    "command": "bash -c '\"/opt/homebrew/bin/node\" \"$(ls -td ~/.claude/plugins/cache/claude-hud/claude-hud/*/ 2>/dev/null | head -1)dist/index.js\"'"
+    "command": "bash -c 'plugin_dir=$(ls -d \"${CLAUDE_CONFIG_DIR:-$HOME/.claude}\"/plugins/cache/claude-hud/claude-hud/*/ 2>/dev/null | awk -F/ '\"'\"'{ print $(NF-1) \"\\t\" $(0) }'\"'\"' | sort -t. -k1,1n -k2,2n -k3,3n -k4,4n | tail -1 | cut -f2-); runtime=$(command -v bun 2>/dev/null || command -v node 2>/dev/null); exec \"$runtime\" \"${plugin_dir}dist/index.js\"'"
   },
   "enabledPlugins": {
     "context7@claude-plugins-official": true,

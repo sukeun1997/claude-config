@@ -19,16 +19,22 @@ if [ ! -f "$LOCAL" ]; then
 fi
 
 # Deep merge: local overrides base (local wins on conflicts)
+# Frozen keys: hooks, permissions — always use base values (local cannot override)
 python3 -c "
 import json, sys
 
-def deep_merge(base, override):
+FROZEN_KEYS = {'hooks', 'permissions'}
+
+def deep_merge(base, override, depth=0):
     result = base.copy()
     for k, v in override.items():
         if k.startswith('_'):
             continue
+        if depth == 0 and k in FROZEN_KEYS:
+            print(f'  [frozen] {k} — base value preserved', file=sys.stderr)
+            continue
         if k in result and isinstance(result[k], dict) and isinstance(v, dict):
-            result[k] = deep_merge(result[k], v)
+            result[k] = deep_merge(result[k], v, depth + 1)
         else:
             result[k] = v
     return result
@@ -39,6 +45,13 @@ with open('$LOCAL') as f:
     local = json.load(f)
 
 merged = deep_merge(base, local)
+
+# Validate: hooks must exist with at least 3 event types
+hooks = merged.get('hooks', {})
+if not isinstance(hooks, dict) or len(hooks) < 3:
+    print(f'ERROR: hooks section invalid ({len(hooks) if isinstance(hooks, dict) else \"missing\"}) — aborting merge', file=sys.stderr)
+    sys.exit(1)
+
 with open('$OUT', 'w') as f:
     json.dump(merged, f, indent=2, ensure_ascii=False)
     f.write('\n')

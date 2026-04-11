@@ -30,10 +30,11 @@ from pathlib import Path
 # Configuration
 # ---------------------------------------------------------------------------
 
-CAPTURE_TOOLS = {"Write", "Edit", "Bash", "Task", "Skill"}
+CAPTURE_TOOLS = {"Write", "Edit", "Bash", "Task", "Skill", "Agent"}
 
+# Read is handled specially (tracked but not captured to JSONL)
 SKIP_TOOLS = {
-    "Read", "Grep", "Glob", "ToolSearch",
+    "Grep", "Glob", "ToolSearch",
     "TaskCreate", "TaskUpdate", "TaskList", "TaskGet", "TaskOutput", "TaskStop",
     "AskUserQuestion", "EnterPlanMode", "ExitPlanMode", "NotebookEdit",
     "SendMessage", "ListMcpResourcesTool", "ReadMcpResourceTool",
@@ -62,6 +63,72 @@ BASH_SKIP_PATTERNS = [
 
 DEDUP_WINDOW_SEC = 60
 MAX_DAILY_CAPTURES = 200
+
+
+# ---------------------------------------------------------------------------
+# Session tracking helpers (absorbed from tool-tracker.sh + agent/skill-usage)
+# ---------------------------------------------------------------------------
+
+def get_session_id() -> str:
+    sid_file = Path.home() / ".claude" / "memory" / "sessions" / ".current-session-id"
+    try:
+        return sid_file.read_text().strip()
+    except OSError:
+        return f"fallback-{os.getpid()}"
+
+
+def track_file_access(tool: str, file_path: str):
+    """Track Edit/Write/Read file access for friction detection + metrics.
+    Replaces tool-tracker.sh — no grep bugs, pure Python."""
+    sid = get_session_id()
+
+    if tool == "Read":
+        tracker = Path(f"/tmp/claude-read-tracker-{sid}")
+        try:
+            with open(tracker, "a") as f:
+                f.write(file_path + "\n")
+        except OSError:
+            pass
+        return  # Read: track only, no friction warning
+
+    # Edit/Write
+    tracker = Path(f"/tmp/claude-edit-tracker-{sid}")
+    # Count existing occurrences BEFORE appending
+    count = 0
+    try:
+        if tracker.exists():
+            count = sum(1 for line in tracker.read_text().splitlines() if line == file_path)
+    except OSError:
+        pass
+
+    try:
+        with open(tracker, "a") as f:
+            f.write(file_path + "\n")
+    except OSError:
+        pass
+
+    new_count = count + 1
+    if new_count == 3:
+        print(f"같은 파일을 3회 수정했습니다: {file_path} — 삽질 패턴일 수 있습니다. 접근법을 재검토하고, 원인을 memory/topics/failure-log.md에 기록하세요.")
+    elif new_count == 5:
+        print(f"같은 파일을 5회 수정했습니다: {file_path} — 접근법 변경을 강력히 권장합니다. failure-log.md 기록 필수.")
+
+
+def track_monthly_usage(category: str, record: dict):
+    """Write to monthly JSONL (agent-usage or skill-usage). Replaces standalone trackers."""
+    metrics_dir = Path.home() / ".claude" / "memory"
+    if category == "agent":
+        metrics_dir = metrics_dir / "metrics"
+    else:
+        metrics_dir = metrics_dir / "skill-usage"
+    metrics_dir.mkdir(parents=True, exist_ok=True)
+
+    month_file = metrics_dir / f"{category}-usage-{datetime.now().strftime('%Y-%m')}.jsonl"
+    try:
+        with open(month_file, "a") as f:
+            f.write(json.dumps(record, ensure_ascii=False) + "\n")
+    except OSError:
+        pass
 
 
 # ---------------------------------------------------------------------------
@@ -237,6 +304,19 @@ def cmd_capture():
 
     tool = data.get("tool_name", data.get("tool", ""))
 
+    # Read: track for metrics but don't capture to JSONL
+    if tool == "Read":
+        tool_input = data.get("tool_input", data.get("input", {}))
+        if isinstance(tool_input, str):
+            try:
+                tool_input = json.loads(tool_input)
+            except (json.JSONDecodeError, TypeError):
+                tool_input = {}
+        fp = tool_input.get("file_path", "")
+        if fp:
+            track_file_access("Read", fp)
+        return
+
     if tool in SKIP_TOOLS or tool not in CAPTURE_TOOLS:
         return
 
@@ -279,6 +359,8 @@ def cmd_capture():
         fp = tool_input.get("file_path", tool_input.get("path", ""))
         if not fp:
             return
+        # Track for friction detection (replaces tool-tracker.sh)
+        track_file_access(tool, fp)
         short = shorten_path(fp)
         if check_dedup(dedup_file, f"{tool}:{short}"):
             return
@@ -306,8 +388,33 @@ def cmd_capture():
         entry["skill"] = skill_name
         if check_dedup(dedup_file, f"Skill:{skill_name}"):
             return
+        # Monthly skill usage tracking (replaces skill-usage-tracker.sh)
+        track_monthly_usage("skill", {
+            "timestamp": datetime.now().isoformat(),
+            "skill": skill_name,
+            "project": detect_project(),
+        })
 
-    # --- Task (agent) ---
+    # --- Agent ---
+    elif tool == "Agent":
+        agent_type = tool_input.get("subagent_type", "general-purpose") or "general-purpose"
+        model = tool_input.get("model", "") or ""
+        description = tool_input.get("description", "")
+        entry["agent"] = agent_type
+        entry["model"] = model
+        entry["description"] = description[:100]
+        if check_dedup(dedup_file, f"Agent:{agent_type}:{description[:40]}"):
+            return
+        # Monthly agent usage tracking (replaces agent-usage-tracker.sh)
+        track_monthly_usage("agent", {
+            "date": datetime.now().strftime("%Y-%m-%d"),
+            "time": datetime.now().strftime("%H:%M"),
+            "agent": agent_type,
+            "model": model,
+            "description": description[:80].replace("\n", " ").strip(),
+        })
+
+    # --- Task (legacy) ---
     elif tool == "Task":
         agent_type = tool_input.get("subagent_type", tool_input.get("type", "unknown"))
         description = tool_input.get("description", "")
@@ -429,10 +536,22 @@ def cmd_flush():
     if tests:
         lines.append(f"- **Test**: {test_success} ok, {test_fail} fail" if test_fail else f"- **Test**: {test_success} ok")
 
-    # Git: only commits (skip add, push is implicit)
+    # Git: commits with recent commit messages for context
     commit_ops = [g for g in git_ops if "commit" in g]
     if commit_ops:
         lines.append(f"- **Git**: {len(commit_ops)} commit(s)")
+        # Fetch recent commit messages for meaningful daily log entries
+        try:
+            import subprocess
+            result = subprocess.run(
+                ["git", "log", "--oneline", f"-{len(commit_ops)}"],
+                capture_output=True, text=True, timeout=3
+            )
+            if result.returncode == 0 and result.stdout.strip():
+                for cline in result.stdout.strip().split("\n")[:3]:
+                    lines.append(f"  - {cline.strip()}")
+        except Exception:
+            pass
 
     # Agents: compact
     if agents:

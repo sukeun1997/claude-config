@@ -27,11 +27,9 @@ rules:
 ## Hook 우선순위
 
 PostToolUse Hook 실행 순서 (settings.json 기준):
-1. `memory-post-tool.py` (메모리 기록 — matcher: `*`)
+1. `memory-post-tool.py` (메모리 기록 + 파일 추적 + 삽질 감지 + Agent/Skill 사용 기록 — matcher: `*`)
 2. `prisma-auto-generate.mjs` (Prisma schema 감지 — matcher: `Edit|Write`)
-3. `edit-tracker.sh` (삽질 감지 — matcher: `Edit|Write`)
-4. **`governance-guard.sh`** (변경 감시 — matcher: `Edit|Write`)
-5. **`skill-usage-tracker.sh`** (스킬 사용 추적 — matcher: `Skill`)
+3. **`governance-guard.sh`** (변경 감시 — matcher: `Edit|Write`)
 
 ## 원칙
 
@@ -39,3 +37,8 @@ PostToolUse Hook 실행 순서 (settings.json 기준):
 - **행동을 추천한다**: 관련 slash command나 확인사항을 안내
 - **프로젝트별 독립**: 각 프로젝트가 자체 governance.yml을 가질 수 있음
 - **점진적 확장**: 규칙은 실제 실수 사례에서 추출하여 추가
+
+## 훅 출력 설계 원칙
+
+- **결정적 출력**: 훅이 시스템 프롬프트에 주입하는 텍스트는 동일 입력 시 동일 출력을 보장. 타임스탬프, 랜덤 값 등 비결정적 요소는 사이드이펙트(파일 기록)로 처리하고 프롬프트 주입에는 포함하지 않음 — 프롬프트 캐시 hit rate 향상
+- **출력 크기 제한**: 훅 출력이 시스템 프롬프트에 주입되는 경우 간결하게 유지. 상세 내용은 파일에 기록하고 경로만 안내

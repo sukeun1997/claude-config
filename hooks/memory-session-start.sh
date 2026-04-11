@@ -9,6 +9,29 @@ source "$HOME/.claude/hooks/memory-lib.sh"
 MEM_DIR=$(get_memory_dir)
 ensure_dirs "$MEM_DIR"
 
+# --- Hook Health Check (장애 24h 내 탐지) ---
+_HEALTH_WARNINGS=""
+for _hk in memory-post-tool.py memory-session-end.sh memory-stop-guard.sh governance-guard.sh; do
+  _hpath="$HOME/.claude/hooks/$_hk"
+  [ ! -f "$_hpath" ] && _HEALTH_WARNINGS+="MISSING: $_hk\n"
+done
+_HK_EVENTS=$(python3 -c "import json; print(len(json.load(open('$HOME/.claude/settings.json')).get('hooks',{})))" 2>/dev/null || echo "0")
+[ "$_HK_EVENTS" -lt 5 ] && _HEALTH_WARNINGS+="HOOKS_INCOMPLETE: settings.json에 ${_HK_EVENTS}개 이벤트만 등록\n"
+# Check if last session had captures (skip on first session of the day)
+_LAST_MARKER="$MEM_DIR/sessions/.last-session-ts"
+if [ -f "$_LAST_MARKER" ]; then
+  _CAP_TODAY="$MEM_DIR/daily/.captures-$(today).jsonl"
+  _CAP_YEST="$MEM_DIR/daily/.captures-$(yesterday).jsonl"
+  if [ ! -f "$_CAP_TODAY" ] && [ ! -f "$_CAP_YEST" ]; then
+    _HEALTH_WARNINGS+="NO_RECENT_CAPTURES: 최근 세션에서 도구 캡처 없음 — memory-post-tool.py 확인 필요\n"
+  fi
+fi
+if [ -n "$_HEALTH_WARNINGS" ]; then
+  CONTEXT+="⚠️ HOOK HEALTH CHECK:
+$(echo -e "$_HEALTH_WARNINGS")
+"
+fi
+
 TODAY=$(today)
 YESTERDAY=$(yesterday)
 PROJECT=$(detect_project)
@@ -25,6 +48,45 @@ if [ ! -f "$TODAY_LOG_FILE" ]; then
 fi
 
 CONTEXT=""
+
+# --- Active Context Hygiene (stale/empty detection) ---
+ACTIVE_DIR="$MEM_DIR/active"
+ARCHIVE_DIR="$MEM_DIR/archive/active"
+if [ -d "$ACTIVE_DIR" ]; then
+  HYGIENE_WARNINGS=""
+  for ac_file in "$ACTIVE_DIR"/*.md; do
+    [ -f "$ac_file" ] || continue
+    ac_basename=$(basename "$ac_file")
+    # Skip non-branch contexts (e.g., date-based like 20260406.md)
+    # Check: empty Changed Files (no real changes)
+    changed_count=$(grep -cE '^[a-zA-Z]' <(sed -n '/^### Changed Files$/,/^```$/{ /^```$/d; /^### Changed Files$/d; p; }' "$ac_file") 2>/dev/null || echo "0")
+    changed_count=$(echo "$changed_count" | tr -d '[:space:]')
+    changed_count="${changed_count:-0}"
+    # Check: last modified > 3 days ago
+    if [ "$(uname)" = "Darwin" ]; then
+      file_mtime=$(stat -f %m "$ac_file" 2>/dev/null || echo "0")
+    else
+      file_mtime=$(stat -c %Y "$ac_file" 2>/dev/null || echo "0")
+    fi
+    now_ts=$(date +%s)
+    age_days=$(( (now_ts - file_mtime) / 86400 ))
+    if [ "$changed_count" -eq 0 ] && [ "$age_days" -ge 3 ]; then
+      HYGIENE_WARNINGS+="- ${ac_basename}: 변경 0개 + ${age_days}일 미갱신 (삭제 권장)\n"
+    elif [ "$age_days" -ge 7 ]; then
+      HYGIENE_WARNINGS+="- ${ac_basename}: ${age_days}일 미갱신 (archive 이동 권장)\n"
+    fi
+  done
+  # Count active contexts
+  ac_total=$(find "$ACTIVE_DIR" -name "*.md" -type f 2>/dev/null | wc -l | tr -d ' ')
+  if [ "$ac_total" -gt 5 ]; then
+    HYGIENE_WARNINGS+="- Active context ${ac_total}개 (권장: 3개 이하). 완료된 브랜치 정리 필요\n"
+  fi
+  if [ -n "$HYGIENE_WARNINGS" ]; then
+    CONTEXT+="⚠️ Active Context Hygiene:
+$(echo -e "$HYGIENE_WARNINGS")
+"
+  fi
+fi
 
 # --- Active Context Recovery Chain (branch-based first, then project-based fallback) ---
 CONTEXT_FILENAME=$(active_context_filename)
@@ -287,6 +349,31 @@ $(cat "$SUGGESTIONS")
 
 위 제안을 검토하고 적용 여부를 결정하세요. 적용 완료 후 파일을 삭제합니다.
 
+"
+fi
+
+# --- Auto-promote [PROMOTE] items from daily logs ---
+# (absorbed from memory-promote-analyzer.sh)
+if [ -d "$MEM_DIR/daily" ] && [ -f "$MEM_DIR/MEMORY.md" ]; then
+  _PROMOTED=0
+  for _dfile in "$MEM_DIR/daily"/*.md; do
+    [ -f "$_dfile" ] || continue
+    while IFS= read -r _line; do
+      _content=""
+      if [[ "$_line" =~ ^-\ \[PROMOTE\]\ (.+)$ ]]; then _content="${BASH_REMATCH[1]}"
+      elif [[ "$_line" =~ ^\[PROMOTE\]\ (.+)$ ]]; then _content="${BASH_REMATCH[1]}"
+      else continue; fi
+      grep -qF "$_content" "$MEM_DIR/MEMORY.md" 2>/dev/null && continue
+      if [ "$_PROMOTED" -eq 0 ]; then
+        echo "" >> "$MEM_DIR/MEMORY.md"
+        echo "### Promoted $(today)" >> "$MEM_DIR/MEMORY.md"
+      fi
+      echo "- $_content" >> "$MEM_DIR/MEMORY.md"
+      _PROMOTED=$((_PROMOTED + 1))
+    done < "$_dfile"
+    [ "$_PROMOTED" -gt 0 ] && sed -i '' 's/\[PROMOTE\]/[PROMOTED]/g' "$_dfile" 2>/dev/null || true
+  done
+  [ "$_PROMOTED" -gt 0 ] && CONTEXT+="${_PROMOTED} item(s) auto-promoted to MEMORY.md.
 "
 fi
 

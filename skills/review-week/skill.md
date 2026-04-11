@@ -92,6 +92,7 @@ memory_search("설정 구성 변경 디버깅 구현", top_k=10)
 - [ ] 모델 선택 — Opus가 필요하지 않은 곳에 Opus를 쓰지 않았는지
 - [ ] CLAUDE.md 무게 — 시스템 프롬프트가 과도하지 않은지
 - [ ] 자동화 가능한 반복 작업이 있는지
+- [ ] Convention Drift — 최근 커밋 diff에서 CLAUDE.md §5 위반 샘플링 (축약 변수명, 하드코딩, 50줄+ 함수, Read:Edit 비율 하락 추세)
 
 **출력 형식:**
 

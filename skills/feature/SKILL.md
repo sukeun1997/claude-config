@@ -51,7 +51,7 @@ brainstorming 스킬이 인터뷰 → 접근법 제안 → 설계안 → 스펙 
 
 brainstorming 완료 후 사용자에게 확인:
 
-> "설계 완료. 스펙: `{spec_path}`. 플랜 작성으로 넘어갈까요?"
+> "설계 완료. 스펙: `{spec_path}`. 플랜 작성으로 넘어갈까요? (docs에 저장하려면 `/docs-save`)"
 
 - 사용자 OK → Phase 2 진행
 - 사용자 피드백 → brainstorming 내에서 수정 후 다시 Gate 1
@@ -65,7 +65,7 @@ brainstorming 완료 후 사용자에게 확인:
 
 플랜 완료 후 사용자에게 확인:
 
-> "플랜 완료. `{plan_path}`. 구현 시작할까요? (1: Subagent-Driven / 2: Inline)"
+> "플랜 완료. `{plan_path}`. 구현 시작할까요? (1: Subagent-Driven / 2: Inline) — docs 저장: `/docs-save`"
 
 - 사용자 OK → Phase 3 진행
 - 사용자 피드백 → 플랜 수정 후 다시 Gate 2
