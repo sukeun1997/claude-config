@@ -92,3 +92,4 @@ metrics/
 
 # Playwright MCP logs (machine-local)
 .playwright-mcp/
+.omx/
