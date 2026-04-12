@@ -29,3 +29,4 @@
 {"date":"2026-04-12","project":"global","duration_min":0,"total_edits":1,"total_reads":0,"unique_files":1,"friction_files":0,"log_lines":0}
 {"date":"2026-04-12","project":"global","duration_min":0,"total_edits":1,"total_reads":0,"unique_files":1,"friction_files":0,"log_lines":1}
 {"date":"2026-04-12","project":"global","duration_min":1,"total_edits":1,"total_reads":2,"unique_files":1,"friction_files":0,"log_lines":1}
+{"date":"2026-04-12","project":"building","duration_min":0,"total_edits":5,"total_reads":7,"unique_files":4,"friction_files":0,"log_lines":13}

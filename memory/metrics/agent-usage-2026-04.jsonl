@@ -57,3 +57,8 @@
 {"date": "2026-04-12", "time": "18:25", "agent": "Explore", "model": "haiku", "description": "Cash shop packet flow analysis"}
 {"date": "2026-04-12", "time": "18:29", "agent": "analyst", "model": "opus", "description": "Phase 0: 매물장 구현 인터뷰"}
 {"date": "2026-04-12", "time": "18:37", "agent": "Explore", "model": "haiku", "description": "Explore current docs & memory setup"}
+{"date": "2026-04-12", "time": "18:43", "agent": "deep-executor", "model": "opus", "description": "Phase 1: 매물장 종합 리뷰"}
+{"date": "2026-04-12", "time": "18:44", "agent": "critic", "model": "opus", "description": "Phase 2: critic 평가 + false positive 필터"}
+{"date": "2026-04-12", "time": "18:48", "agent": "executor", "model": "sonnet", "description": "Group A: Server Routes 수정"}
+{"date": "2026-04-12", "time": "18:48", "agent": "executor", "model": "sonnet", "description": "Group B: Frontend + Types 수정"}
+{"date": "2026-04-12", "time": "18:48", "agent": "performance-reviewer", "model": "sonnet", "description": "매물장 성능 최적화 분석"}
