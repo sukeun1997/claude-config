@@ -21,7 +21,18 @@ if ! command -v git &>/dev/null || ! git rev-parse --is-inside-work-tree &>/dev/
 fi
 
 BRANCH=$(git rev-parse --abbrev-ref HEAD 2>/dev/null || echo "")
-if [ -z "$BRANCH" ] || [ "$BRANCH" = "HEAD" ] || [ "$BRANCH" = "develop" ] || [ "$BRANCH" = "main" ] || [ "$BRANCH" = "master" ]; then
+if [ -z "$BRANCH" ] || [ "$BRANCH" = "HEAD" ]; then
+  exit 0
+fi
+
+# Skip main/develop/master except for allowlisted projects
+PROJECT_ROOT=$(git rev-parse --show-toplevel 2>/dev/null || echo "")
+ALLOW_MAIN_ACTIVE=false
+case "$PROJECT_ROOT" in
+  *"391"*|*"팬시"*) ALLOW_MAIN_ACTIVE=true ;;
+esac
+
+if [ "$ALLOW_MAIN_ACTIVE" = false ] && { [ "$BRANCH" = "develop" ] || [ "$BRANCH" = "main" ] || [ "$BRANCH" = "master" ]; }; then
   exit 0
 fi
 

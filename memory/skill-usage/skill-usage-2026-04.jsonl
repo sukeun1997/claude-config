@@ -5,3 +5,7 @@
 {"timestamp": "2026-04-10T14:50:10.172983", "skill": "bs", "project": "global"}
 {"timestamp": "2026-04-10T14:50:24.278077", "skill": "superpowers:brainstorming", "project": "global"}
 {"timestamp": "2026-04-10T15:54:21.561366", "skill": "superpowers:brainstorming", "project": "global"}
+{"timestamp": "2026-04-12T15:26:10.945291", "skill": "superpowers:brainstorming", "project": "building"}
+{"timestamp": "2026-04-12T16:31:17.845641", "skill": "superpowers:writing-plans", "project": "building"}
+{"timestamp": "2026-04-12T17:04:56.839843", "skill": "superpowers:subagent-driven-development", "project": "building"}
+{"timestamp": "2026-04-12T18:22:14.199304", "skill": "review", "project": "building"}

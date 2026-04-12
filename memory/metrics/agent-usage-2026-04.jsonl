@@ -22,3 +22,37 @@
 {"date": "2026-04-10", "time": "16:29", "agent": "Explore", "model": "haiku", "description": "CMS related models/tables search"}
 {"date": "2026-04-10", "time": "16:51", "agent": "Explore", "model": "haiku", "description": "banking-loan CMS EB12 result code analysis"}
 {"date": "2026-04-10", "time": "16:52", "agent": "Explore", "model": "haiku", "description": "banking-loan CMS change flow and CORE-1041"}
+{"date": "2026-04-12", "time": "15:27", "agent": "Explore", "model": "haiku", "description": "매물장 관련 코드 탐색"}
+{"date": "2026-04-12", "time": "15:33", "agent": "Explore", "model": "haiku", "description": "Auction/옥션 패킷 코드 탐색"}
+{"date": "2026-04-12", "time": "16:02", "agent": "architect", "model": "opus", "description": "KPI 데이터 수집 검증"}
+{"date": "2026-04-12", "time": "16:03", "agent": "architect", "model": "opus", "description": "하네스 개선점 Opus 분석"}
+{"date": "2026-04-12", "time": "16:03", "agent": "Explore", "model": "haiku", "description": "Search Kms391 for CodyPreset"}
+{"date": "2026-04-12", "time": "16:14", "agent": "Explore", "model": "haiku", "description": "경로 하드코딩 원인 조사"}
+{"date": "2026-04-12", "time": "16:19", "agent": "Explore", "model": "haiku", "description": "Search Kms391 PacketHelper preset"}
+{"date": "2026-04-12", "time": "16:19", "agent": "Explore", "model": "haiku", "description": "Find CWvsContext CodyPreset Kms391"}
+{"date": "2026-04-12", "time": "16:32", "agent": "Explore", "model": "haiku", "description": "매물장 구현 관련 코드 탐색"}
+{"date": "2026-04-12", "time": "16:35", "agent": "architect", "model": "opus", "description": "회사 환경 pull 안전성 검증"}
+{"date": "2026-04-12", "time": "17:07", "agent": "general-purpose", "model": "sonnet", "description": "Implement Task 1: DB Schema"}
+{"date": "2026-04-12", "time": "17:09", "agent": "general-purpose", "model": "sonnet", "description": "Implement Task 2: Types"}
+{"date": "2026-04-12", "time": "17:11", "agent": "general-purpose", "model": "sonnet", "description": "Implement Task 3: Service"}
+{"date": "2026-04-12", "time": "17:11", "agent": "Explore", "model": "haiku", "description": "코디프리셋 관련 코드 탐색"}
+{"date": "2026-04-12", "time": "17:12", "agent": "general-purpose", "model": "sonnet", "description": "Implement Task 4: IPC handlers"}
+{"date": "2026-04-12", "time": "17:12", "agent": "general-purpose", "model": "sonnet", "description": "Implement Task 5: Web API + routeMap"}
+{"date": "2026-04-12", "time": "17:12", "agent": "general-purpose", "model": "sonnet", "description": "Implement Task 6: Public API slug"}
+{"date": "2026-04-12", "time": "17:13", "agent": "Explore", "model": "haiku", "description": "Cash shop code exploration"}
+{"date": "2026-04-12", "time": "17:13", "agent": "general-purpose", "model": "sonnet", "description": "Implement Task 7: Zustand Store"}
+{"date": "2026-04-12", "time": "17:14", "agent": "general-purpose", "model": "sonnet", "description": "Implement Task 9: EditableCell"}
+{"date": "2026-04-12", "time": "17:14", "agent": "general-purpose", "model": "sonnet", "description": "Implement Task 8: BuildingTreeModal"}
+{"date": "2026-04-12", "time": "17:16", "agent": "general-purpose", "model": "sonnet", "description": "Implement Task 10: ListingEditTable"}
+{"date": "2026-04-12", "time": "17:16", "agent": "general-purpose", "model": "sonnet", "description": "Implement Task 11: VacantListingManage"}
+{"date": "2026-04-12", "time": "17:18", "agent": "general-purpose", "model": "sonnet", "description": "Implement Task 14: UpdateLog + CSS"}
+{"date": "2026-04-12", "time": "17:18", "agent": "general-purpose", "model": "sonnet", "description": "Implement Task 12: Routing + Sidebar"}
+{"date": "2026-04-12", "time": "17:19", "agent": "general-purpose", "model": "sonnet", "description": "Implement Task 13: VacantListing slug"}
+{"date": "2026-04-12", "time": "17:20", "agent": "general-purpose", "model": "sonnet", "description": "Implement Task 15: Migration script"}
+{"date": "2026-04-12", "time": "17:29", "agent": "Explore", "model": "haiku", "description": "Compare addCharacterInfo 391 vs Kms391"}
+{"date": "2026-04-12", "time": "17:38", "agent": "Explore", "model": "sonnet", "description": "Deep diff addCharacterInfo 391 vs Kms391"}
+{"date": "2026-04-12", "time": "18:04", "agent": "code-reviewer", "model": "opus", "description": "Code review for vacant-listing"}
+{"date": "2026-04-12", "time": "18:08", "agent": "general-purpose", "model": "sonnet", "description": "Fix XSS + N+1 + API validation"}
+{"date": "2026-04-12", "time": "18:23", "agent": "architect", "model": "opus", "description": "자동 harness-sync 설계 검증"}
+{"date": "2026-04-12", "time": "18:25", "agent": "Explore", "model": "haiku", "description": "Cash shop packet flow analysis"}
+{"date": "2026-04-12", "time": "18:29", "agent": "analyst", "model": "opus", "description": "Phase 0: 매물장 구현 인터뷰"}

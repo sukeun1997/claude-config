@@ -24,9 +24,9 @@ detect_project() {
   done
   # 폴백: 경로 기반 매핑
   case "$cwd" in
-    */maple*) echo "maple" ;;
+    */maple*|*391*) echo "maple" ;;
     */todo-app*) echo "haru" ;;
-    */building-manager*) echo "building" ;;
+    */building-mang*) echo "building" ;;
     */lendit*) echo "lendit" ;;
     */ktx_reservation*) echo "ktx" ;;
     */my-game*) echo "game" ;;

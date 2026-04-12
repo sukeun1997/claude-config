@@ -1,0 +1,740 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Claude Code Internals — Architecture Diagram</title>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg-0: #06090f; --bg-1: #0c1220; --bg-2: #131d2e;
+  --border: #1c2b3f; --border-light: #253650;
+  --text: #e2e8f0; --text-dim: #94a3b8; --text-muted: #64748b;
+  --blue: #60a5fa; --green: #4ade80; --purple: #c084fc;
+  --orange: #fb923c; --cyan: #22d3ee; --pink: #f472b6;
+  --red: #f87171; --yellow: #fbbf24;
+  --font-sans: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', system-ui, sans-serif;
+  --font-mono: 'SF Mono', 'Fira Code', monospace;
+}
+body { font-family: var(--font-sans); background: var(--bg-0); color: var(--text); min-height: 100vh; overflow-x: hidden; }
+body::before { content: ''; position: fixed; inset: 0; background-image: radial-gradient(circle, var(--border) 1px, transparent 1px); background-size: 24px 24px; opacity: 0.3; pointer-events: none; z-index: 0; }
+.container { position: relative; z-index: 1; max-width: 1400px; margin: 0 auto; padding: 32px 24px; }
+
+/* Header */
+.header { text-align: center; margin-bottom: 32px; }
+.header h1 { font-size: 2.4rem; font-weight: 700; background: linear-gradient(135deg, var(--blue), var(--purple), var(--pink)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; margin-bottom: 8px; }
+.header .subtitle { color: var(--text-dim); font-size: 1rem; }
+
+/* Tabs */
+.tab-bar { display: flex; gap: 4px; border-bottom: 1px solid var(--border); margin-bottom: 24px; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+.tab-btn { background: none; border: none; color: var(--text-muted); font-family: var(--font-sans); font-size: 0.9rem; font-weight: 500; padding: 12px 20px; cursor: pointer; white-space: nowrap; border-bottom: 2px solid transparent; transition: all 0.2s ease; }
+.tab-btn:hover { color: var(--text-dim); background: rgba(255,255,255,0.03); }
+.tab-btn.active { color: var(--blue); border-bottom-color: var(--blue); }
+.tab-content { display: none; animation: fadeIn 0.3s ease; }
+.tab-content.active { display: block; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+/* Cards */
+.card { background: var(--bg-1); border: 1px solid var(--border); border-radius: 12px; padding: 24px; margin-bottom: 20px; transition: transform 0.2s ease, box-shadow 0.2s ease; }
+.card:hover { transform: translateY(-1px); box-shadow: 0 4px 24px rgba(0,0,0,0.3); }
+.card-title { font-size: 1.1rem; font-weight: 600; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
+.badge { display: inline-flex; align-items: center; gap: 4px; font-size: 0.7rem; font-weight: 600; padding: 3px 8px; border-radius: 6px; text-transform: uppercase; letter-spacing: 0.5px; }
+
+/* Layers */
+.layer-stack { display: flex; flex-direction: column; gap: 12px; }
+.layer { border-radius: 12px; padding: 20px; border: 1px solid; }
+.layer-label { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+.layer-nodes { display: flex; flex-wrap: wrap; gap: 10px; }
+.node { background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 10px 16px; font-size: 0.82rem; font-weight: 500; display: flex; align-items: center; gap: 6px; transition: transform 0.15s ease, box-shadow 0.15s ease; cursor: default; }
+.node:hover { transform: translateY(-1px); box-shadow: 0 2px 12px rgba(0,0,0,0.4); }
+.node img { width: 16px; height: 16px; }
+.node .ei { font-size: 14px; line-height: 1; }
+
+.layer--blue { background: rgba(96,165,250,0.06); border-color: rgba(96,165,250,0.25); }
+.layer--blue .layer-label { color: var(--blue); }
+.layer--blue .node { border-color: rgba(96,165,250,0.2); }
+
+.layer--purple { background: rgba(192,132,252,0.06); border-color: rgba(192,132,252,0.25); }
+.layer--purple .layer-label { color: var(--purple); }
+.layer--purple .node { border-color: rgba(192,132,252,0.2); }
+
+.layer--red { background: rgba(248,113,113,0.06); border-color: rgba(248,113,113,0.25); }
+.layer--red .layer-label { color: var(--red); }
+.layer--red .node { border-color: rgba(248,113,113,0.2); }
+
+.layer--green { background: rgba(74,222,128,0.06); border-color: rgba(74,222,128,0.25); }
+.layer--green .layer-label { color: var(--green); }
+.layer--green .node { border-color: rgba(74,222,128,0.2); }
+
+.layer--cyan { background: rgba(34,211,238,0.06); border-color: rgba(34,211,238,0.25); }
+.layer--cyan .layer-label { color: var(--cyan); }
+.layer--cyan .node { border-color: rgba(34,211,238,0.2); }
+
+.layer--orange { background: rgba(251,146,60,0.06); border-color: rgba(251,146,60,0.25); }
+.layer--orange .layer-label { color: var(--orange); }
+.layer--orange .node { border-color: rgba(251,146,60,0.2); }
+
+.layer--pink { background: rgba(244,114,182,0.06); border-color: rgba(244,114,182,0.25); }
+.layer--pink .layer-label { color: var(--pink); }
+.layer--pink .node { border-color: rgba(244,114,182,0.2); }
+
+.arrow-connector { display: flex; justify-content: center; padding: 4px 0; }
+.loop-indicator { display: flex; align-items: center; justify-content: center; gap: 8px; padding: 8px 16px; margin: 8px auto; width: fit-content; background: rgba(192,132,252,0.08); border: 1px dashed rgba(192,132,252,0.3); border-radius: 8px; color: var(--purple); font-size: 0.78rem; font-weight: 500; }
+
+/* Mermaid */
+.mermaid-wrapper { background: var(--bg-1); border: 1px solid var(--border); border-radius: 12px; padding: 32px; overflow-x: auto; }
+.mermaid-wrapper .mermaid { display: flex; justify-content: center; }
+
+/* Data Model */
+.model-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 16px; }
+.model-card { background: var(--bg-1); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease; }
+.model-card:hover { transform: translateY(-1px); box-shadow: 0 4px 24px rgba(0,0,0,0.3); }
+.model-card-header { padding: 14px 20px; font-weight: 600; font-size: 0.95rem; display: flex; align-items: center; gap: 8px; }
+.model-card-body { padding: 0 20px 16px; }
+.model-field { display: flex; align-items: baseline; padding: 6px 0; border-bottom: 1px solid rgba(255,255,255,0.04); font-size: 0.82rem; }
+.model-field:last-child { border-bottom: none; }
+.field-name { font-family: var(--font-mono); font-weight: 500; min-width: 140px; flex-shrink: 0; }
+.field-type { color: var(--text-dim); font-family: var(--font-mono); font-size: 0.78rem; }
+
+.model-card--purple .model-card-header { background: rgba(192,132,252,0.1); color: var(--purple); border-bottom: 1px solid rgba(192,132,252,0.15); }
+.model-card--purple .field-name { color: var(--purple); }
+.model-card--blue .model-card-header { background: rgba(96,165,250,0.1); color: var(--blue); border-bottom: 1px solid rgba(96,165,250,0.15); }
+.model-card--blue .field-name { color: var(--blue); }
+.model-card--orange .model-card-header { background: rgba(251,146,60,0.1); color: var(--orange); border-bottom: 1px solid rgba(251,146,60,0.15); }
+.model-card--orange .field-name { color: var(--orange); }
+.model-card--green .model-card-header { background: rgba(74,222,128,0.1); color: var(--green); border-bottom: 1px solid rgba(74,222,128,0.15); }
+.model-card--green .field-name { color: var(--green); }
+.model-card--red .model-card-header { background: rgba(248,113,113,0.1); color: var(--red); border-bottom: 1px solid rgba(248,113,113,0.15); }
+.model-card--red .field-name { color: var(--red); }
+.model-card--cyan .model-card-header { background: rgba(34,211,238,0.1); color: var(--cyan); border-bottom: 1px solid rgba(34,211,238,0.15); }
+.model-card--cyan .field-name { color: var(--cyan); }
+
+/* Infrastructure */
+.infra-diagram { display: grid; grid-template-columns: 1fr 1.5fr 1fr; gap: 16px; align-items: start; }
+@media (max-width: 900px) { .infra-diagram { grid-template-columns: 1fr; } }
+.infra-section-title { font-size: 0.8rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; display: flex; align-items: center; gap: 6px; }
+.infra-items { display: flex; flex-direction: column; gap: 8px; }
+.infra-item { background: rgba(0,0,0,0.2); border: 1px solid var(--border); border-radius: 8px; padding: 12px 16px; font-size: 0.85rem; display: flex; align-items: center; gap: 8px; transition: transform 0.15s ease; }
+.infra-item:hover { transform: translateY(-1px); }
+.infra-callout { background: rgba(251,191,36,0.08); border: 1px solid rgba(251,191,36,0.25); border-radius: 10px; padding: 16px 24px; text-align: center; color: var(--yellow); font-weight: 500; font-size: 0.9rem; margin-top: 20px; }
+
+/* Pipeline */
+.pipeline-flow { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; justify-content: center; margin-bottom: 24px; }
+.pipeline-step { background: var(--bg-2); border: 1px solid var(--border); border-radius: 10px; padding: 14px 18px; text-align: center; min-width: 120px; transition: transform 0.15s ease, box-shadow 0.15s ease; cursor: default; }
+.pipeline-step:hover { transform: translateY(-2px); box-shadow: 0 4px 16px rgba(0,0,0,0.3); }
+.pipeline-step-name { font-weight: 600; font-size: 0.85rem; margin-bottom: 4px; }
+.pipeline-step-desc { font-size: 0.72rem; color: var(--text-dim); line-height: 1.3; }
+.pipeline-arrow { color: var(--text-muted); font-size: 1.2rem; flex-shrink: 0; }
+
+.pipeline-step--purple { border-color: rgba(192,132,252,0.3); }
+.pipeline-step--purple .pipeline-step-name { color: var(--purple); }
+.pipeline-step--green { border-color: rgba(74,222,128,0.3); }
+.pipeline-step--green .pipeline-step-name { color: var(--green); }
+.pipeline-step--red { border-color: rgba(248,113,113,0.3); }
+.pipeline-step--red .pipeline-step-name { color: var(--red); }
+.pipeline-step--blue { border-color: rgba(96,165,250,0.3); }
+.pipeline-step--blue .pipeline-step-name { color: var(--blue); }
+.pipeline-step--orange { border-color: rgba(251,146,60,0.3); }
+.pipeline-step--orange .pipeline-step-name { color: var(--orange); }
+.pipeline-step--cyan { border-color: rgba(34,211,238,0.3); }
+.pipeline-step--cyan .pipeline-step-name { color: var(--cyan); }
+.pipeline-step--pink { border-color: rgba(244,114,182,0.3); }
+.pipeline-step--pink .pipeline-step-name { color: var(--pink); }
+.pipeline-step--yellow { border-color: rgba(251,191,36,0.3); }
+.pipeline-step--yellow .pipeline-step-name { color: var(--yellow); }
+
+/* Hook detail */
+.hook-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 14px; margin-bottom: 28px; }
+.hook-card { background: var(--bg-1); border: 1px solid var(--border); border-radius: 10px; padding: 16px 20px; transition: transform 0.15s ease, box-shadow 0.15s ease; }
+.hook-card:hover { transform: translateY(-1px); box-shadow: 0 4px 16px rgba(0,0,0,0.3); }
+.hook-card-title { font-weight: 600; font-size: 0.9rem; margin-bottom: 6px; }
+.hook-card-when { font-size: 0.78rem; color: var(--text-dim); margin-bottom: 8px; }
+.hook-card-examples { list-style: none; padding: 0; }
+.hook-card-examples li { font-size: 0.78rem; color: var(--text-muted); padding: 2px 0; display: flex; align-items: center; gap: 6px; }
+
+/* Harness */
+.harness-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; }
+.harness-item { background: var(--bg-2); border: 1px solid var(--border); border-radius: 10px; padding: 20px 16px; text-align: center; transition: transform 0.15s ease, box-shadow 0.15s ease; }
+.harness-item:hover { transform: translateY(-1px); box-shadow: 0 4px 16px rgba(0,0,0,0.3); }
+.harness-icon { font-size: 1.8rem; margin-bottom: 8px; }
+.harness-name { font-weight: 600; font-size: 0.9rem; margin-bottom: 4px; }
+.harness-desc { font-size: 0.72rem; color: var(--text-dim); line-height: 1.3; }
+
+/* Section titles */
+.section-title { font-size: 1.15rem; font-weight: 600; margin-bottom: 16px; padding-bottom: 8px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 8px; }
+
+/* Responsive */
+@media (max-width: 768px) {
+  .header h1 { font-size: 1.8rem; }
+  .container { padding: 16px 12px; }
+  .layer-nodes { gap: 6px; }
+  .node { padding: 8px 12px; font-size: 0.78rem; }
+  .model-grid { grid-template-columns: 1fr; }
+  .tab-btn { padding: 10px 14px; font-size: 0.82rem; }
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- HEADER -->
+  <div class="header">
+    <h1>Claude Code Internals</h1>
+    <div class="subtitle">Terminal-based AI Coding Agent &mdash; Architecture Reference</div>
+  </div>
+
+  <!-- TAB BAR -->
+  <div class="tab-bar">
+    <button class="tab-btn active" data-tab="overview">System Overview</button>
+    <button class="tab-btn" data-tab="runtime">Runtime Flow</button>
+    <button class="tab-btn" data-tab="datamodel">Data Model</button>
+    <button class="tab-btn" data-tab="infra">Infrastructure</button>
+    <button class="tab-btn" data-tab="pipeline">Pipeline</button>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- TAB 1: SYSTEM OVERVIEW                                        -->
+  <!-- ============================================================ -->
+  <div class="tab-content active" id="tab-overview">
+    <div class="layer-stack">
+
+      <!-- USER LAYER -->
+      <div class="layer layer--blue">
+        <div class="layer-label"><span>&#9632;</span> User Layer <span class="badge" style="background:rgba(96,165,250,0.15);color:var(--blue);">Input</span></div>
+        <div class="layer-nodes">
+          <div class="node"><span class="ei">&#128187;</span> Terminal Input</div>
+          <div class="node"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/react/react-original.svg" alt="React"> Interactive REPL (React/Ink)</div>
+          <div class="node"><span class="ei">&#9000;</span> Non-interactive (--print / stdin)</div>
+        </div>
+      </div>
+
+      <div class="arrow-connector"><svg width="40" height="28" viewBox="0 0 40 28"><path d="M20 2 L20 20 M14 15 L20 22 L26 15" stroke="#60a5fa" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+
+      <!-- CONTEXT ASSEMBLY -->
+      <div class="layer layer--purple">
+        <div class="layer-label"><span>&#9632;</span> Context Assembly <span class="badge" style="background:rgba(192,132,252,0.15);color:var(--purple);">Step 2</span></div>
+        <div class="layer-nodes">
+          <div class="node"><span class="ei">&#128268;</span> System Context (git status, commits)</div>
+          <div class="node"><span class="ei">&#128196;</span> User Context (CLAUDE.md hierarchy)</div>
+          <div class="node"><span class="ei">&#128279;</span> managed &rarr; user &rarr; project &rarr; local</div>
+          <div class="node"><span class="ei">&#9889;</span> Memoization Cache (lodash/memoize)</div>
+        </div>
+      </div>
+
+      <div class="arrow-connector"><svg width="40" height="28" viewBox="0 0 40 28"><path d="M20 2 L20 20 M14 15 L20 22 L26 15" stroke="#c084fc" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+
+      <!-- CORE ENGINE -->
+      <div class="layer layer--pink">
+        <div class="layer-label"><span>&#9632;</span> Core Engine <span class="badge" style="background:rgba(244,114,182,0.15);color:var(--pink);">Steps 3 &amp; 6</span></div>
+        <div class="layer-nodes">
+          <div class="node"><span class="ei">&#128260;</span> Agentic Loop Controller</div>
+          <div class="node"><span class="ei">&#9881;</span> Query Engine (query.ts)</div>
+          <div class="node"><span class="ei">&#128200;</span> Token Budget Manager</div>
+          <div class="node"><span class="ei">&#128230;</span> Compaction Engine</div>
+          <div class="node"><span class="ei">&#127919;</span> Streaming Renderer</div>
+        </div>
+      </div>
+
+      <div class="loop-indicator">&#128260; Agentic Loop: Model may invoke multiple tools before emitting final text</div>
+
+      <div class="arrow-connector"><svg width="40" height="28" viewBox="0 0 40 28"><path d="M20 2 L20 20 M14 15 L20 22 L26 15" stroke="#f472b6" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+
+      <!-- PERMISSION GATE -->
+      <div class="layer layer--red">
+        <div class="layer-label"><span>&#9632;</span> Permission Gate <span class="badge" style="background:rgba(248,113,113,0.15);color:var(--red);">Step 4</span></div>
+        <div class="layer-nodes">
+          <div class="node"><span class="ei">&#128274;</span> Permission Mode Evaluator</div>
+          <div class="node"><span class="ei">&#128220;</span> 6 Modes: default / acceptEdits / plan / bypass / dontAsk / auto</div>
+          <div class="node"><span class="ei">&#9989;</span> Allow/Deny Rule Engine</div>
+          <div class="node"><span class="ei">&#128679;</span> Bash Compound Checker</div>
+          <div class="node"><span class="ei">&#128721;</span> Safety Checks (built-in blocks)</div>
+        </div>
+      </div>
+
+      <div class="arrow-connector"><svg width="40" height="28" viewBox="0 0 40 28"><path d="M20 2 L20 20 M14 15 L20 22 L26 15" stroke="#f87171" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+
+      <!-- TOOL EXECUTION -->
+      <div class="layer layer--green">
+        <div class="layer-label"><span>&#9632;</span> Tool Execution <span class="badge" style="background:rgba(74,222,128,0.15);color:var(--green);">Step 5</span></div>
+        <div class="layer-nodes">
+          <div class="node"><span class="ei">&#128193;</span> File Ops (Read / Edit / Write / Glob)</div>
+          <div class="node"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/bash/bash-original.svg" alt="Bash"> Shell (Bash)</div>
+          <div class="node"><span class="ei">&#128270;</span> Search (Grep / LS)</div>
+          <div class="node"><span class="ei">&#127760;</span> Web (Fetch / Search)</div>
+          <div class="node"><span class="ei">&#129302;</span> Agent (Task / Sub-agents)</div>
+          <div class="node"><span class="ei">&#128212;</span> Notebook (NotebookEdit)</div>
+          <div class="node"><span class="ei">&#128268;</span> MCP Bridge</div>
+        </div>
+      </div>
+
+      <div class="arrow-connector"><svg width="40" height="28" viewBox="0 0 40 28"><path d="M20 2 L20 20 M14 15 L20 22 L26 15" stroke="#4ade80" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+
+      <!-- EXTERNAL SERVICES -->
+      <div class="layer layer--cyan">
+        <div class="layer-label"><span>&#9632;</span> External Services <span class="badge" style="background:rgba(34,211,238,0.15);color:var(--cyan);">I/O Boundary</span></div>
+        <div class="layer-nodes">
+          <div class="node"><span class="ei">&#9729;</span> Anthropic API (HTTPS)</div>
+          <div class="node"><span class="ei">&#128268;</span> MCP Servers (stdio / http / sse)</div>
+          <div class="node"><span class="ei">&#128190;</span> File System</div>
+          <div class="node"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/git/git-original.svg" alt="Git"> Git</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- TAB 2: RUNTIME FLOW                                           -->
+  <!-- ============================================================ -->
+  <div class="tab-content" id="tab-runtime">
+    <div class="card">
+      <div class="card-title"><span class="ei">&#128260;</span> Agentic Loop &mdash; Runtime Sequence</div>
+      <p style="color:var(--text-dim);font-size:0.85rem;margin-bottom:20px;">A typical user request showing the multi-tool loop before final response.</p>
+    </div>
+
+    <div class="mermaid-wrapper">
+      <pre class="mermaid">
+sequenceDiagram
+    participant U as User
+    participant T as Terminal UI<br/>(React/Ink)
+    participant C as Context<br/>Assembly
+    participant A as Anthropic API
+    participant P as Permission<br/>Gate
+    participant TL as Tool<br/>Executor
+    participant FS as File System /<br/>External
+
+    U->>T: Enter message
+    T->>C: Append to conversation
+    C->>C: Build system prompt<br/>(git status, CLAUDE.md)
+    C->>A: Send conversation + tools
+
+    rect rgba(192,132,252,0.08)
+        Note over A,FS: Agentic Loop (repeats until final text)
+        A->>T: tool_use: Read file
+        T->>P: Check permission (Read)
+        P-->>T: Auto-approve (read-only)
+        T->>TL: Execute Read
+        TL->>FS: Read file contents
+        FS-->>TL: File data
+        TL-->>T: tool_result
+        T->>A: Append tool_result
+
+        A->>T: tool_use: Edit file
+        T->>P: Check permission (Edit)
+        P-->>T: Evaluate mode + rules
+        P-->>U: Prompt for approval
+        U-->>P: Approve
+        P-->>T: Allowed
+        T->>TL: Execute Edit
+        TL->>FS: Write changes
+        FS-->>TL: Success
+        TL-->>T: tool_result
+        T->>A: Append tool_result
+    end
+
+    A->>T: Final text response
+    T->>U: Render in terminal
+      </pre>
+    </div>
+
+    <div class="card" style="margin-top:20px;">
+      <div class="card-title"><span class="ei">&#128161;</span> Key Behaviors</div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:12px;">
+        <div style="background:var(--bg-2);border-radius:8px;padding:14px;">
+          <div style="font-weight:600;font-size:0.85rem;color:var(--purple);margin-bottom:4px;">Multi-Tool Turns</div>
+          <div style="font-size:0.8rem;color:var(--text-dim);">Model can invoke multiple tools in sequence before emitting a final text response. Each tool result is appended and sent back.</div>
+        </div>
+        <div style="background:var(--bg-2);border-radius:8px;padding:14px;">
+          <div style="font-weight:600;font-size:0.85rem;color:var(--red);margin-bottom:4px;">Permission Before Execution</div>
+          <div style="font-size:0.8rem;color:var(--text-dim);">Allow/deny rules are evaluated BEFORE mode check. Bash compound commands are decomposed and each sub-command checked independently.</div>
+        </div>
+        <div style="background:var(--bg-2);border-radius:8px;padding:14px;">
+          <div style="font-weight:600;font-size:0.85rem;color:var(--cyan);margin-bottom:4px;">Streaming</div>
+          <div style="font-size:0.8rem;color:var(--text-dim);">query.ts streams tokens to the terminal in real-time. Oversized tool results (>100K chars) are stored in temporary files.</div>
+        </div>
+        <div style="background:var(--bg-2);border-radius:8px;padding:14px;">
+          <div style="font-weight:600;font-size:0.85rem;color:var(--orange);margin-bottom:4px;">Compaction</div>
+          <div style="font-size:0.8rem;color:var(--text-dim);">When context window fills, oldest messages are summarized. Full transcript is always preserved on disk for --resume.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- TAB 3: DATA MODEL                                             -->
+  <!-- ============================================================ -->
+  <div class="tab-content" id="tab-datamodel">
+    <div class="model-grid">
+
+      <!-- Conversation -->
+      <div class="model-card model-card--purple">
+        <div class="model-card-header"><span class="ei">&#128172;</span> Conversation</div>
+        <div class="model-card-body">
+          <div class="model-field"><span class="field-name">sessionId</span><span class="field-type">string (UUID)</span></div>
+          <div class="model-field"><span class="field-name">messages[]</span><span class="field-type">Message[]</span></div>
+          <div class="model-field"><span class="field-name">compactedSummary</span><span class="field-type">string | null</span></div>
+          <div class="model-field"><span class="field-name">timestamp</span><span class="field-type">ISO 8601</span></div>
+          <div class="model-field"><span class="field-name">storage</span><span class="field-type">~/.claude/ JSON</span></div>
+          <div class="model-field"><span class="field-name">resume</span><span class="field-type">--resume flag</span></div>
+        </div>
+      </div>
+
+      <!-- CLAUDE.md Hierarchy -->
+      <div class="model-card model-card--blue">
+        <div class="model-card-header"><span class="ei">&#128196;</span> CLAUDE.md Hierarchy</div>
+        <div class="model-card-body">
+          <div class="model-field"><span class="field-name">managed</span><span class="field-type">Anthropic (built-in)</span></div>
+          <div class="model-field"><span class="field-name">user</span><span class="field-type">~/.claude/CLAUDE.md</span></div>
+          <div class="model-field"><span class="field-name">project</span><span class="field-type">.claude/CLAUDE.md</span></div>
+          <div class="model-field"><span class="field-name">local</span><span class="field-type">.claude/settings.local.json</span></div>
+          <div class="model-field"><span class="field-name">loading</span><span class="field-type">getUserContext()</span></div>
+          <div class="model-field"><span class="field-name">memoized</span><span class="field-type">per conversation</span></div>
+        </div>
+      </div>
+
+      <!-- Memory System -->
+      <div class="model-card model-card--orange">
+        <div class="model-card-header"><span class="ei">&#129504;</span> Memory System (4-Layer)</div>
+        <div class="model-card-body">
+          <div class="model-field"><span class="field-name">Active</span><span class="field-type">active/{branch}.md</span></div>
+          <div class="model-field"><span class="field-name">Hot / Daily</span><span class="field-type">daily/YYYY-MM-DD.md</span></div>
+          <div class="model-field"><span class="field-name">Always</span><span class="field-type">MEMORY.md (150-line cap)</span></div>
+          <div class="model-field"><span class="field-name">Cold / Topics</span><span class="field-type">topics/*.md (on-demand)</span></div>
+          <div class="model-field"><span class="field-name">promotion</span><span class="field-type">[PROMOTE] tag flow</span></div>
+          <div class="model-field"><span class="field-name">archive</span><span class="field-type">14d auto-archive</span></div>
+        </div>
+      </div>
+
+      <!-- Agent Memory -->
+      <div class="model-card model-card--green">
+        <div class="model-card-header"><span class="ei">&#129302;</span> Agent Memory</div>
+        <div class="model-card-body">
+          <div class="model-field"><span class="field-name">user-scope</span><span class="field-type">~/.claude/agent-memory/</span></div>
+          <div class="model-field"><span class="field-name">project-scope</span><span class="field-type">.claude/agent-memory/</span></div>
+          <div class="model-field"><span class="field-name">local-scope</span><span class="field-type">local agent-memory/</span></div>
+          <div class="model-field"><span class="field-name">inheritance</span><span class="field-type">none (zero auto-inherit)</span></div>
+          <div class="model-field"><span class="field-name">result cap</span><span class="field-type">100,000 chars max</span></div>
+        </div>
+      </div>
+
+      <!-- Permission Rules -->
+      <div class="model-card model-card--red">
+        <div class="model-card-header"><span class="ei">&#128274;</span> Permission Rules</div>
+        <div class="model-card-body">
+          <div class="model-field"><span class="field-name">toolName</span><span class="field-type">string (glob pattern)</span></div>
+          <div class="model-field"><span class="field-name">ruleContent</span><span class="field-type">string (command pattern)</span></div>
+          <div class="model-field"><span class="field-name">behavior</span><span class="field-type">allow | deny | ask</span></div>
+          <div class="model-field"><span class="field-name">scope</span><span class="field-type">user | project | local</span></div>
+          <div class="model-field"><span class="field-name">source</span><span class="field-type">session | cliArg | file</span></div>
+          <div class="model-field"><span class="field-name">evaluation</span><span class="field-type">rules BEFORE mode</span></div>
+        </div>
+      </div>
+
+      <!-- MCP Config -->
+      <div class="model-card model-card--cyan">
+        <div class="model-card-header"><span class="ei">&#128268;</span> MCP Configuration</div>
+        <div class="model-card-body">
+          <div class="model-field"><span class="field-name">name</span><span class="field-type">string</span></div>
+          <div class="model-field"><span class="field-name">transport</span><span class="field-type">stdio | http | sse</span></div>
+          <div class="model-field"><span class="field-name">project scope</span><span class="field-type">.mcp.json</span></div>
+          <div class="model-field"><span class="field-name">user scope</span><span class="field-type">~/.claude.json</span></div>
+          <div class="model-field"><span class="field-name">local scope</span><span class="field-type">local config</span></div>
+          <div class="model-field"><span class="field-name">env vars</span><span class="field-type">$VAR expansion</span></div>
+          <div class="model-field"><span class="field-name">naming</span><span class="field-type">mcp__server__tool</span></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- TAB 4: INFRASTRUCTURE                                         -->
+  <!-- ============================================================ -->
+  <div class="tab-content" id="tab-infra">
+    <div class="infra-diagram">
+
+      <!-- Left: Local Resources -->
+      <div>
+        <div class="infra-section-title" style="color:var(--green);"><span class="ei">&#128190;</span> Local Resources</div>
+        <div class="infra-items">
+          <div class="infra-item" style="border-color:rgba(74,222,128,0.2);">
+            <span class="ei">&#128193;</span>
+            <div><div style="font-weight:600;font-size:0.85rem;">File System</div><div style="font-size:0.72rem;color:var(--text-dim);">Direct read/write access</div></div>
+          </div>
+          <div class="infra-item" style="border-color:rgba(74,222,128,0.2);">
+            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/git/git-original.svg" style="width:18px;height:18px;">
+            <div><div style="font-weight:600;font-size:0.85rem;">Git Repository</div><div style="font-size:0.72rem;color:var(--text-dim);">Status, diff, log, commits</div></div>
+          </div>
+          <div class="infra-item" style="border-color:rgba(74,222,128,0.2);">
+            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/bash/bash-original.svg" style="width:18px;height:18px;">
+            <div><div style="font-weight:600;font-size:0.85rem;">Shell Environment</div><div style="font-size:0.72rem;color:var(--text-dim);">Persistent Bash sessions</div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Center: Terminal Process -->
+      <div>
+        <div class="infra-section-title" style="color:var(--purple);text-align:center;justify-content:center;"><span class="ei">&#9881;</span> Terminal Process</div>
+        <div class="card" style="border-color:rgba(192,132,252,0.3);background:rgba(192,132,252,0.04);">
+          <div style="text-align:center;margin-bottom:16px;">
+            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/nodejs/nodejs-original.svg" style="width:40px;height:40px;">
+            <div style="font-weight:700;font-size:1.1rem;margin-top:8px;color:var(--purple);">Node.js Process</div>
+            <div style="font-size:0.78rem;color:var(--text-dim);">Everything runs locally in this process</div>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+            <div style="background:rgba(0,0,0,0.2);border-radius:6px;padding:10px;text-align:center;font-size:0.8rem;">
+              <div style="color:var(--pink);font-weight:600;">Agentic Loop</div>
+              <div style="color:var(--text-dim);font-size:0.72rem;">Core controller</div>
+            </div>
+            <div style="background:rgba(0,0,0,0.2);border-radius:6px;padding:10px;text-align:center;font-size:0.8rem;">
+              <div style="color:var(--blue);font-weight:600;">React/Ink UI</div>
+              <div style="color:var(--text-dim);font-size:0.72rem;">Terminal rendering</div>
+            </div>
+            <div style="background:rgba(0,0,0,0.2);border-radius:6px;padding:10px;text-align:center;font-size:0.8rem;">
+              <div style="color:var(--red);font-weight:600;">Permission Gate</div>
+              <div style="color:var(--text-dim);font-size:0.72rem;">Rule evaluation</div>
+            </div>
+            <div style="background:rgba(0,0,0,0.2);border-radius:6px;padding:10px;text-align:center;font-size:0.8rem;">
+              <div style="color:var(--green);font-weight:600;">Tool Handlers</div>
+              <div style="color:var(--text-dim);font-size:0.72rem;">7 categories</div>
+            </div>
+          </div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px;">
+          <div class="infra-item" style="border-color:rgba(251,146,60,0.2);">
+            <span class="ei">&#128196;</span>
+            <div><div style="font-weight:600;font-size:0.82rem;color:var(--orange);">settings.json</div><div style="font-size:0.7rem;color:var(--text-dim);">Permissions, hooks, prefs</div></div>
+          </div>
+          <div class="infra-item" style="border-color:rgba(251,146,60,0.2);">
+            <span class="ei">&#128196;</span>
+            <div><div style="font-weight:600;font-size:0.82rem;color:var(--orange);">.mcp.json</div><div style="font-size:0.7rem;color:var(--text-dim);">MCP server configs</div></div>
+          </div>
+          <div class="infra-item" style="border-color:rgba(251,146,60,0.2);">
+            <span class="ei">&#128196;</span>
+            <div><div style="font-weight:600;font-size:0.82rem;color:var(--orange);">CLAUDE.md</div><div style="font-size:0.7rem;color:var(--text-dim);">4-level hierarchy</div></div>
+          </div>
+          <div class="infra-item" style="border-color:rgba(251,146,60,0.2);">
+            <span class="ei">&#128196;</span>
+            <div><div style="font-weight:600;font-size:0.82rem;color:var(--orange);">Conversations</div><div style="font-size:0.7rem;color:var(--text-dim);">JSON transcripts</div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right: Network -->
+      <div>
+        <div class="infra-section-title" style="color:var(--cyan);"><span class="ei">&#127760;</span> Network Connections</div>
+        <div class="infra-items">
+          <div class="infra-item" style="border-color:rgba(34,211,238,0.2);">
+            <span class="ei">&#9729;</span>
+            <div><div style="font-weight:600;font-size:0.85rem;">Anthropic API</div><div style="font-size:0.72rem;color:var(--text-dim);">HTTPS / streaming</div></div>
+          </div>
+          <div class="infra-item" style="border-color:rgba(34,211,238,0.2);">
+            <span class="ei">&#128268;</span>
+            <div><div style="font-weight:600;font-size:0.85rem;">MCP: stdio</div><div style="font-size:0.72rem;color:var(--text-dim);">Local subprocess</div></div>
+          </div>
+          <div class="infra-item" style="border-color:rgba(34,211,238,0.2);">
+            <span class="ei">&#127760;</span>
+            <div><div style="font-weight:600;font-size:0.85rem;">MCP: HTTP</div><div style="font-size:0.72rem;color:var(--text-dim);">Remote server</div></div>
+          </div>
+          <div class="infra-item" style="border-color:rgba(34,211,238,0.2);">
+            <span class="ei">&#128225;</span>
+            <div><div style="font-weight:600;font-size:0.85rem;">MCP: SSE</div><div style="font-size:0.72rem;color:var(--text-dim);">Server-sent events</div></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="infra-callout">&#128274; No remote execution server &mdash; files, shell, and credentials never leave your machine. All tool execution happens in the local Node.js process.</div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- TAB 5: PIPELINE                                               -->
+  <!-- ============================================================ -->
+  <div class="tab-content" id="tab-pipeline">
+
+    <div class="section-title" style="color:var(--purple);"><span class="ei">&#128260;</span> Hook Lifecycle Pipeline</div>
+
+    <div class="pipeline-flow">
+      <div class="pipeline-step pipeline-step--blue"><div class="pipeline-step-name">SessionStart</div><div class="pipeline-step-desc">Load memory,<br>inject daily logs</div></div>
+      <div class="pipeline-arrow">&rarr;</div>
+      <div class="pipeline-step pipeline-step--purple"><div class="pipeline-step-name">User Input</div><div class="pipeline-step-desc">Message appended<br>to conversation</div></div>
+      <div class="pipeline-arrow">&rarr;</div>
+      <div class="pipeline-step pipeline-step--red"><div class="pipeline-step-name">PreToolUse</div><div class="pipeline-step-desc">Guard checks,<br>skill routing</div></div>
+      <div class="pipeline-arrow">&rarr;</div>
+      <div class="pipeline-step pipeline-step--green"><div class="pipeline-step-name">Tool Execution</div><div class="pipeline-step-desc">Run approved<br>tool call</div></div>
+      <div class="pipeline-arrow">&rarr;</div>
+      <div class="pipeline-step pipeline-step--orange"><div class="pipeline-step-name">PostToolUse</div><div class="pipeline-step-desc">Track changes,<br>governance</div></div>
+      <div class="pipeline-arrow">&rarr;</div>
+      <div class="pipeline-step pipeline-step--pink"><div class="pipeline-step-name">Loop</div><div class="pipeline-step-desc">Model decides:<br>more tools or text</div></div>
+    </div>
+
+    <div class="pipeline-flow" style="margin-top:4px;">
+      <div class="pipeline-step pipeline-step--yellow"><div class="pipeline-step-name">PreCompact</div><div class="pipeline-step-desc">Flush context<br>before compaction</div></div>
+      <div class="pipeline-arrow">&rarr;</div>
+      <div class="pipeline-step pipeline-step--purple"><div class="pipeline-step-name">Compaction</div><div class="pipeline-step-desc">Summarize oldest<br>messages</div></div>
+      <div class="pipeline-arrow">&rarr;</div>
+      <div class="pipeline-step pipeline-step--red"><div class="pipeline-step-name">Stop</div><div class="pipeline-step-desc">Session summary,<br>active context</div></div>
+      <div class="pipeline-arrow">&rarr;</div>
+      <div class="pipeline-step pipeline-step--cyan"><div class="pipeline-step-name">SessionEnd</div><div class="pipeline-step-desc">Archive old logs,<br>cleanup</div></div>
+    </div>
+
+    <!-- Hook Detail Cards -->
+    <div class="section-title" style="color:var(--green);margin-top:32px;"><span class="ei">&#9881;</span> Hook Events Detail</div>
+
+    <div class="hook-grid">
+      <div class="hook-card" style="border-color:rgba(96,165,250,0.2);">
+        <div class="hook-card-title" style="color:var(--blue);">SessionStart</div>
+        <div class="hook-card-when">Fires: When a new session begins</div>
+        <ul class="hook-card-examples">
+          <li><span style="color:var(--blue);">&#8226;</span> Inject today + yesterday daily logs</li>
+          <li><span style="color:var(--blue);">&#8226;</span> Load active context for current branch</li>
+          <li><span style="color:var(--blue);">&#8226;</span> Check MEMORY.md line count</li>
+        </ul>
+      </div>
+      <div class="hook-card" style="border-color:rgba(248,113,113,0.2);">
+        <div class="hook-card-title" style="color:var(--red);">PreToolUse</div>
+        <div class="hook-card-when">Fires: Before each tool execution</div>
+        <ul class="hook-card-examples">
+          <li><span style="color:var(--red);">&#8226;</span> frozen.yml file protection</li>
+          <li><span style="color:var(--red);">&#8226;</span> Plan mode routing reminder</li>
+          <li><span style="color:var(--red);">&#8226;</span> Skill auto-routing checks</li>
+        </ul>
+      </div>
+      <div class="hook-card" style="border-color:rgba(251,146,60,0.2);">
+        <div class="hook-card-title" style="color:var(--orange);">PostToolUse</div>
+        <div class="hook-card-when">Fires: After each tool execution</div>
+        <ul class="hook-card-examples">
+          <li><span style="color:var(--orange);">&#8226;</span> memory-post-tool.py (memory recording)</li>
+          <li><span style="color:var(--orange);">&#8226;</span> edit-tracker.sh (struggle detection)</li>
+          <li><span style="color:var(--orange);">&#8226;</span> governance-guard.sh (change surveillance)</li>
+          <li><span style="color:var(--orange);">&#8226;</span> skill-usage-tracker.sh</li>
+        </ul>
+      </div>
+      <div class="hook-card" style="border-color:rgba(251,191,36,0.2);">
+        <div class="hook-card-title" style="color:var(--yellow);">PreCompact</div>
+        <div class="hook-card-when">Fires: Before context compaction</div>
+        <ul class="hook-card-examples">
+          <li><span style="color:var(--yellow);">&#8226;</span> Flush critical context to daily log</li>
+          <li><span style="color:var(--yellow);">&#8226;</span> Update active context file</li>
+          <li><span style="color:var(--yellow);">&#8226;</span> Preserve key decisions</li>
+        </ul>
+      </div>
+      <div class="hook-card" style="border-color:rgba(248,113,113,0.2);">
+        <div class="hook-card-title" style="color:var(--red);">Stop</div>
+        <div class="hook-card-when">Fires: When session is ending</div>
+        <ul class="hook-card-examples">
+          <li><span style="color:var(--red);">&#8226;</span> Update active context (handoff)</li>
+          <li><span style="color:var(--red);">&#8226;</span> Detect struggles, suggest self-absorb</li>
+          <li><span style="color:var(--red);">&#8226;</span> Warn if daily log is empty</li>
+        </ul>
+      </div>
+      <div class="hook-card" style="border-color:rgba(34,211,238,0.2);">
+        <div class="hook-card-title" style="color:var(--cyan);">SessionEnd</div>
+        <div class="hook-card-when">Fires: After session closes</div>
+        <ul class="hook-card-examples">
+          <li><span style="color:var(--cyan);">&#8226;</span> Archive daily logs older than 14 days</li>
+          <li><span style="color:var(--cyan);">&#8226;</span> Move merged branch active contexts</li>
+          <li><span style="color:var(--cyan);">&#8226;</span> Cleanup temporary files</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Harness Architecture -->
+    <div class="section-title" style="color:var(--pink);margin-top:16px;"><span class="ei">&#127919;</span> Harness Architecture</div>
+    <p style="color:var(--text-dim);font-size:0.85rem;margin-bottom:16px;">The five pillars that make Claude Code extensible and self-improving.</p>
+
+    <div class="harness-grid">
+      <div class="harness-item" style="border-color:rgba(96,165,250,0.25);">
+        <div class="harness-icon">&#128196;</div>
+        <div class="harness-name" style="color:var(--blue);">CLAUDE.md</div>
+        <div class="harness-desc">Layered rules &amp; constraints. 4-level hierarchy with override semantics.</div>
+      </div>
+      <div class="harness-item" style="border-color:rgba(248,113,113,0.25);">
+        <div class="harness-icon">&#9881;</div>
+        <div class="harness-name" style="color:var(--red);">Hooks</div>
+        <div class="harness-desc">Lifecycle automation. Pre/Post tool use, session events, compaction.</div>
+      </div>
+      <div class="harness-item" style="border-color:rgba(192,132,252,0.25);">
+        <div class="harness-icon">&#9889;</div>
+        <div class="harness-name" style="color:var(--purple);">Skills</div>
+        <div class="harness-desc">Reusable workflows. Auto-routed by context, invoked via Skill tool.</div>
+      </div>
+      <div class="harness-item" style="border-color:rgba(74,222,128,0.25);">
+        <div class="harness-icon">&#129302;</div>
+        <div class="harness-name" style="color:var(--green);">Agents</div>
+        <div class="harness-desc">Delegation &amp; orchestration. Isolated sub-agents with role-specific models.</div>
+      </div>
+      <div class="harness-item" style="border-color:rgba(34,211,238,0.25);">
+        <div class="harness-icon">&#128268;</div>
+        <div class="harness-name" style="color:var(--cyan);">MCP</div>
+        <div class="harness-desc">External extension. stdio/http/sse transports. Tool &amp; resource protocol.</div>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+<script>
+// Tab switching
+document.querySelectorAll('.tab-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
+    if (btn.dataset.tab === 'runtime') renderMermaid();
+  });
+});
+
+// Mermaid (lazy init)
+let mermaidRendered = false;
+function renderMermaid() {
+  if (mermaidRendered) return;
+  mermaid.initialize({
+    startOnLoad: false,
+    theme: 'dark',
+    themeVariables: {
+      darkMode: true,
+      primaryColor: '#1c2b3f',
+      primaryTextColor: '#e2e8f0',
+      primaryBorderColor: '#253650',
+      lineColor: '#60a5fa',
+      secondaryColor: '#131d2e',
+      tertiaryColor: '#0c1220',
+      noteBkgColor: '#131d2e',
+      noteTextColor: '#94a3b8',
+      noteBorderColor: '#253650',
+      actorBkg: '#131d2e',
+      actorBorder: '#60a5fa',
+      actorTextColor: '#e2e8f0',
+      actorLineColor: '#253650',
+      signalColor: '#e2e8f0',
+      signalTextColor: '#e2e8f0',
+      labelBoxBkgColor: '#131d2e',
+      labelBoxBorderColor: '#253650',
+      labelTextColor: '#e2e8f0',
+      loopTextColor: '#c084fc',
+      activationBorderColor: '#60a5fa',
+      activationBkgColor: '#1c2b3f',
+      sequenceNumberColor: '#06090f',
+      sectionBkgColor: '#0c1220',
+      altSectionBkgColor: '#131d2e',
+    },
+    sequence: {
+      diagramMarginX: 20, diagramMarginY: 20, actorMargin: 60,
+      width: 180, height: 50, boxMargin: 6, boxTextMargin: 5,
+      noteMargin: 10, messageMargin: 40, mirrorActors: true,
+      useMaxWidth: true, wrap: true, wrapPadding: 10,
+    },
+    fontFamily: "-apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', system-ui, sans-serif",
+    fontSize: 13,
+  });
+  mermaid.run({ querySelector: '.mermaid' });
+  mermaidRendered = true;
+}
+</script>
+</body>
+</html>

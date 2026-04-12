@@ -152,7 +152,7 @@ def detect_project() -> str:
     # Fallback: path-based mapping
     cwd_lower = cwd.lower()
     mapping = {
-        "maple": "maple", "todo-app": "haru", "building-manager": "building",
+        "maple": "maple", "391": "maple", "todo-app": "haru", "building-mang": "building",
         "lendit": "lendit", "ktx_reservation": "ktx", "my-game": "game",
         "news": "news",
     }

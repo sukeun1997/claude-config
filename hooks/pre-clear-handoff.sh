@@ -18,6 +18,9 @@ if ! echo "$PROMPT" | grep -qE '^\s*/clear\s*$'; then
   exit 0
 fi
 
+# /clear 시 captures flush (논리적 세션 종료이므로 daily log에 기록)
+python3 "$HOME/.claude/hooks/memory-post-tool.py" flush 2>/dev/null || true
+
 # /clear 시 context-cost-monitor 카운터 리셋
 rm -f "$HOME/.claude/cache"/msg-count-*.txt 2>/dev/null
 

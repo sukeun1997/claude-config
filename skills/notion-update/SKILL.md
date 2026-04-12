@@ -25,11 +25,18 @@ user_invocable: true
 
 `~/.claude/skills/notion-update/projects.json`에서 프로젝트 설정을 읽습니다.
 
+**경로 규칙:**
+- `project_dir`은 `~`로 시작 (머신 간 이식성 보장)
+- `memory_dir`은 JSON에 없음 — `project_dir`에서 자동 생성:
+  1. `~`를 `$HOME`으로 확장
+  2. 확장된 절대경로에서 `/` → `-`로 치환
+  3. `~/.claude/projects/{치환된경로}/memory`
+
 ```json
 {
   "<alias>": {
     "name": "프로젝트 표시명",
-    "memory_dir": "메모리 디렉토리 경로",
+    "project_dir": "~/path/to/project",
     "notion_pages": {
       "main": "메인 페이지 ID (대시보드)",
       "log": "작업 일지 페이지 ID (날짜별 하위페이지 허브)",

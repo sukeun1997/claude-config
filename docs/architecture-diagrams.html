@@ -1,0 +1,1306 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Claude Code Harness Architecture</title>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+<style>
+:root {
+  --bg-deep: #06090f;
+  --bg-mid: #0c1220;
+  --bg-surface: #131d2e;
+  --border: #1c2b3f;
+  --border-light: #253650;
+  --text: #e2e8f0;
+  --text-dim: #94a3b8;
+  --text-muted: #64748b;
+  --blue: #60a5fa;
+  --green: #4ade80;
+  --purple: #c084fc;
+  --orange: #fb923c;
+  --cyan: #22d3ee;
+  --pink: #f472b6;
+  --red: #f87171;
+  --yellow: #fbbf24;
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', system-ui, sans-serif;
+  background: var(--bg-deep);
+  color: var(--text);
+  min-height: 100vh;
+  background-image: radial-gradient(circle, #1c2b3f 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+.header {
+  text-align: center;
+  padding: 40px 20px 20px;
+}
+
+.header h1 {
+  font-size: 2rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, var(--blue), var(--purple), var(--pink));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.header .subtitle {
+  color: var(--text-dim);
+  font-size: 0.95rem;
+  margin-top: 8px;
+}
+
+.header .badge {
+  display: inline-block;
+  margin-top: 12px;
+  padding: 4px 14px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  background: rgba(96,165,250,0.12);
+  color: var(--blue);
+  border: 1px solid rgba(96,165,250,0.2);
+}
+
+/* Tabs */
+.tabs {
+  display: flex;
+  justify-content: center;
+  gap: 4px;
+  padding: 0 20px;
+  margin: 20px auto;
+  max-width: 900px;
+  flex-wrap: wrap;
+}
+
+.tab {
+  padding: 10px 20px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--bg-mid);
+  color: var(--text-dim);
+  cursor: pointer;
+  font-size: 0.85rem;
+  font-weight: 500;
+  transition: all 0.2s;
+  position: relative;
+}
+
+.tab:hover { color: var(--text); border-color: var(--border-light); }
+
+.tab.active {
+  color: var(--blue);
+  border-color: var(--blue);
+  background: rgba(96,165,250,0.08);
+}
+
+.tab.active::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 30%;
+  right: 30%;
+  height: 3px;
+  background: var(--blue);
+  border-radius: 2px;
+  filter: blur(4px);
+}
+
+/* Content */
+.content { max-width: 1200px; margin: 0 auto; padding: 20px; }
+
+.panel { display: none; animation: fadeIn 0.25s ease; }
+.panel.active { display: block; }
+
+@keyframes fadeIn { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:translateY(0); } }
+
+/* Layer */
+.layer {
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 20px;
+  margin-bottom: 16px;
+  position: relative;
+  backdrop-filter: blur(12px);
+}
+
+.layer::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: 17px;
+  padding: 1px;
+  pointer-events: none;
+}
+
+.layer-blue::before { background: linear-gradient(135deg, rgba(96,165,250,0.3), transparent 60%); -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0); mask-composite: exclude; -webkit-mask-composite: xor; }
+.layer-green::before { background: linear-gradient(135deg, rgba(74,222,128,0.3), transparent 60%); -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0); mask-composite: exclude; -webkit-mask-composite: xor; }
+.layer-purple::before { background: linear-gradient(135deg, rgba(192,132,252,0.3), transparent 60%); -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0); mask-composite: exclude; -webkit-mask-composite: xor; }
+.layer-orange::before { background: linear-gradient(135deg, rgba(251,146,60,0.3), transparent 60%); -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0); mask-composite: exclude; -webkit-mask-composite: xor; }
+.layer-cyan::before { background: linear-gradient(135deg, rgba(34,211,238,0.3), transparent 60%); -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0); mask-composite: exclude; -webkit-mask-composite: xor; }
+.layer-pink::before { background: linear-gradient(135deg, rgba(244,114,182,0.3), transparent 60%); -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0); mask-composite: exclude; -webkit-mask-composite: xor; }
+.layer-yellow::before { background: linear-gradient(135deg, rgba(251,191,36,0.3), transparent 60%); -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0); mask-composite: exclude; -webkit-mask-composite: xor; }
+
+.layer-label {
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.lbl-blue { color: var(--blue); }
+.lbl-green { color: var(--green); }
+.lbl-purple { color: var(--purple); }
+.lbl-orange { color: var(--orange); }
+.lbl-cyan { color: var(--cyan); }
+.lbl-pink { color: var(--pink); }
+.lbl-yellow { color: var(--yellow); }
+.lbl-red { color: var(--red); }
+
+.nodes {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 10px;
+}
+
+.node {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  background: rgba(255,255,255,0.02);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  transition: all 0.15s;
+}
+
+.node:hover { transform: translateY(-1px); border-color: var(--border-light); }
+
+.node-icon {
+  width: 28px;
+  height: 28px;
+  flex-shrink: 0;
+  border-radius: 6px;
+}
+
+.node-emoji {
+  font-size: 1.4rem;
+  flex-shrink: 0;
+  width: 28px;
+  text-align: center;
+}
+
+.node-name { font-size: 0.85rem; font-weight: 600; }
+.node-desc { font-size: 0.72rem; color: var(--text-muted); margin-top: 2px; }
+
+/* Connector */
+.connector {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  margin: 4px 0;
+}
+
+.connector-label {
+  font-size: 0.65rem;
+  color: var(--text-muted);
+  letter-spacing: 0.5px;
+  padding: 2px 8px;
+  background: var(--bg-mid);
+  border-radius: 4px;
+}
+
+/* Hook cards */
+.hook-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 14px;
+}
+
+.hook-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 16px;
+  transition: all 0.15s;
+}
+
+.hook-card:hover { border-color: var(--border-light); transform: translateY(-1px); }
+
+.hook-event {
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.hook-event .dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.hook-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 6px 10px;
+  margin: 4px 0;
+  background: rgba(255,255,255,0.02);
+  border-radius: 8px;
+  border-left: 2px solid var(--border);
+  font-size: 0.8rem;
+}
+
+.hook-item .file { font-family: 'SF Mono', 'Fira Code', monospace; font-size: 0.75rem; color: var(--cyan); }
+.hook-item .desc { color: var(--text-dim); font-size: 0.72rem; margin-top: 2px; }
+
+.hook-item.async { border-left-color: var(--orange); }
+.hook-item.sync { border-left-color: var(--green); }
+.hook-item.blocking { border-left-color: var(--red); }
+
+/* Memory tiers */
+.tier-row {
+  display: grid;
+  grid-template-columns: 120px 1fr;
+  gap: 16px;
+  align-items: start;
+  margin-bottom: 16px;
+}
+
+.tier-badge {
+  padding: 8px 14px;
+  border-radius: 10px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-align: center;
+  letter-spacing: 0.5px;
+}
+
+.tier-files {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.tier-file {
+  padding: 6px 12px;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-size: 0.78rem;
+  font-family: 'SF Mono', 'Fira Code', monospace;
+}
+
+/* Pipeline flow */
+.pipeline {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  overflow-x: auto;
+  padding: 20px 0;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.pipe-node {
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 14px 18px;
+  min-width: 140px;
+  text-align: center;
+  transition: all 0.15s;
+}
+
+.pipe-node:hover { transform: translateY(-2px); }
+
+.pipe-node .pipe-title { font-size: 0.8rem; font-weight: 600; }
+.pipe-node .pipe-desc { font-size: 0.7rem; color: var(--text-muted); margin-top: 4px; }
+.pipe-node .pipe-file { font-size: 0.65rem; color: var(--cyan); font-family: 'SF Mono', monospace; margin-top: 6px; }
+
+.pipe-arrow {
+  color: var(--text-muted);
+  font-size: 1.2rem;
+  padding: 0 6px;
+  flex-shrink: 0;
+}
+
+/* Routing table */
+.route-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-size: 0.82rem;
+}
+
+.route-table th {
+  text-align: left;
+  padding: 10px 14px;
+  color: var(--text-dim);
+  font-weight: 600;
+  font-size: 0.72rem;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  border-bottom: 1px solid var(--border);
+}
+
+.route-table td {
+  padding: 10px 14px;
+  border-bottom: 1px solid rgba(28,43,63,0.5);
+  vertical-align: top;
+}
+
+.route-table tr:hover td { background: rgba(255,255,255,0.02); }
+
+.tag {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 0.7rem;
+  font-family: 'SF Mono', monospace;
+  font-weight: 500;
+}
+
+.tag-blue { background: rgba(96,165,250,0.12); color: var(--blue); }
+.tag-green { background: rgba(74,222,128,0.12); color: var(--green); }
+.tag-purple { background: rgba(192,132,252,0.12); color: var(--purple); }
+.tag-orange { background: rgba(251,146,60,0.12); color: var(--orange); }
+.tag-pink { background: rgba(244,114,182,0.12); color: var(--pink); }
+.tag-cyan { background: rgba(34,211,238,0.12); color: var(--cyan); }
+
+/* Section title */
+.section-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin: 28px 0 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.section-desc {
+  font-size: 0.82rem;
+  color: var(--text-dim);
+  margin-bottom: 16px;
+  line-height: 1.5;
+}
+
+/* Stats row */
+.stats {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+}
+
+.stat {
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 12px 18px;
+  text-align: center;
+  flex: 1;
+  min-width: 100px;
+}
+
+.stat-value { font-size: 1.6rem; font-weight: 700; }
+.stat-label { font-size: 0.7rem; color: var(--text-muted); margin-top: 4px; }
+
+/* Connections list */
+.conn-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 10px;
+  margin-top: 16px;
+}
+
+.conn-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px;
+  background: rgba(255,255,255,0.02);
+  border-radius: 8px;
+  font-size: 0.78rem;
+}
+
+.conn-arrow { color: var(--text-muted); font-size: 0.9rem; }
+
+/* Data flow diagram */
+.flow-diagram {
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 24px;
+  margin: 16px 0;
+}
+
+.flow-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  margin: 8px 0;
+  flex-wrap: wrap;
+}
+
+.flow-box {
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 0.78rem;
+  font-weight: 500;
+  text-align: center;
+  border: 1px solid var(--border);
+  min-width: 100px;
+}
+
+.flow-arrow {
+  padding: 0 8px;
+  color: var(--text-muted);
+  font-size: 1rem;
+}
+
+.flow-label {
+  font-size: 0.65rem;
+  color: var(--text-muted);
+  text-align: center;
+  margin-top: 2px;
+}
+
+/* Mermaid container */
+.mermaid-container {
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 24px;
+  margin: 16px 0;
+  overflow-x: auto;
+}
+
+.mermaid { text-align: center; }
+
+/* Responsive */
+@media (max-width: 768px) {
+  .nodes { grid-template-columns: 1fr; }
+  .hook-grid { grid-template-columns: 1fr; }
+  .tier-row { grid-template-columns: 1fr; }
+  .pipeline { flex-direction: column; }
+  .pipe-arrow { transform: rotate(90deg); }
+  .stats { flex-direction: column; }
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>Claude Code Harness</h1>
+  <div class="subtitle">~/.claude &mdash; Personal Productivity System Architecture</div>
+  <div class="badge">L4.6 &middot; 20 Hooks &middot; 7 Lifecycle Events &middot; 4-Tier Memory</div>
+</div>
+
+<div class="tabs">
+  <div class="tab active" onclick="showTab('overview')">System Overview</div>
+  <div class="tab" onclick="showTab('hooks')">Hook Lifecycle</div>
+  <div class="tab" onclick="showTab('memory')">Memory System</div>
+  <div class="tab" onclick="showTab('evolution')">Self-Evolution</div>
+  <div class="tab" onclick="showTab('routing')">Skill Routing</div>
+</div>
+
+<div class="content">
+
+<!-- ========== TAB 1: SYSTEM OVERVIEW ========== -->
+<div id="overview" class="panel active">
+
+  <div class="stats">
+    <div class="stat"><div class="stat-value" style="color:var(--blue)">20</div><div class="stat-label">Hook Scripts</div></div>
+    <div class="stat"><div class="stat-value" style="color:var(--green)">7</div><div class="stat-label">Lifecycle Events</div></div>
+    <div class="stat"><div class="stat-value" style="color:var(--purple)">4</div><div class="stat-label">Memory Tiers</div></div>
+    <div class="stat"><div class="stat-value" style="color:var(--orange)">21+60</div><div class="stat-label">Skills (Local+Plugin)</div></div>
+    <div class="stat"><div class="stat-value" style="color:var(--pink)">9</div><div class="stat-label">CLAUDE.md Sections</div></div>
+  </div>
+
+  <!-- User Layer -->
+  <div class="layer layer-blue">
+    <div class="layer-label lbl-blue"><span>&#9679;</span> USER LAYER</div>
+    <div class="nodes">
+      <div class="node">
+        <div class="node-emoji">&#128187;</div>
+        <div><div class="node-name">Claude Code CLI</div><div class="node-desc">Terminal &middot; claude 명령</div></div>
+      </div>
+      <div class="node">
+        <div class="node-emoji">&#128221;</div>
+        <div><div class="node-name">CLAUDE.md</div><div class="node-desc">9섹션 &middot; 에이전트 운영 매뉴얼</div></div>
+      </div>
+      <div class="node">
+        <div class="node-emoji">&#9889;</div>
+        <div><div class="node-name">Skills (21 Local + 60 Plugin)</div><div class="node-desc">Skill Tool &middot; 자동/수동 invoke</div></div>
+      </div>
+      <div class="node">
+        <div class="node-emoji">&#129302;</div>
+        <div><div class="node-name">Agents</div><div class="node-desc">haiku/sonnet/opus &middot; 위임 테이블</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="connector">
+    <svg width="2" height="20"><line x1="1" y1="0" x2="1" y2="20" stroke="url(#grad1)" stroke-width="2"/></svg>
+    <div class="connector-label">settings.json hooks</div>
+    <svg width="12" height="10"><polygon points="6,10 0,0 12,0" fill="var(--green)" opacity="0.7"/></svg>
+  </div>
+
+  <!-- Hook Layer -->
+  <div class="layer layer-green">
+    <div class="layer-label lbl-green"><span>&#9679;</span> HOOK LAYER &mdash; 7 Lifecycle Events</div>
+    <div class="nodes">
+      <div class="node">
+        <div class="node-emoji">&#127793;</div>
+        <div><div class="node-name">SessionStart</div><div class="node-desc">2 hooks &middot; context inject + promote</div></div>
+      </div>
+      <div class="node">
+        <div class="node-emoji">&#128295;</div>
+        <div><div class="node-name">PostToolUse</div><div class="node-desc">7 hooks &middot; *, Edit|Write, Skill, Agent</div></div>
+      </div>
+      <div class="node">
+        <div class="node-emoji">&#128683;</div>
+        <div><div class="node-name">PreToolUse</div><div class="node-desc">1 hook &middot; EnterPlanMode guard</div></div>
+      </div>
+      <div class="node">
+        <div class="node-emoji">&#128230;</div>
+        <div><div class="node-name">PreCompact</div><div class="node-desc">1 hook &middot; context 긴급 저장</div></div>
+      </div>
+      <div class="node">
+        <div class="node-emoji">&#9995;</div>
+        <div><div class="node-name">Stop</div><div class="node-desc">2 hooks &middot; daily log guard + context update</div></div>
+      </div>
+      <div class="node">
+        <div class="node-emoji">&#128075;</div>
+        <div><div class="node-name">SessionEnd</div><div class="node-desc">3 hooks (async) &middot; flush + archive + observe</div></div>
+      </div>
+      <div class="node">
+        <div class="node-emoji">&#128172;</div>
+        <div><div class="node-name">UserPromptSubmit</div><div class="node-desc">1 hook &middot; /clear 인터셉트</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="connector">
+    <svg width="2" height="20"><line x1="1" y1="0" x2="1" y2="20" stroke="url(#grad2)" stroke-width="2"/></svg>
+    <div class="connector-label">Read / Write</div>
+    <svg width="12" height="10"><polygon points="6,10 0,0 12,0" fill="var(--purple)" opacity="0.7"/></svg>
+  </div>
+
+  <!-- Memory Layer -->
+  <div class="layer layer-purple">
+    <div class="layer-label lbl-purple"><span>&#9679;</span> MEMORY LAYER &mdash; 4-Tier Persistence</div>
+    <div class="nodes">
+      <div class="node">
+        <div class="node-emoji">&#128293;</div>
+        <div><div class="node-name">Active</div><div class="node-desc">active/ (branch) + sessions/ (project)</div></div>
+      </div>
+      <div class="node">
+        <div class="node-emoji">&#9728;&#65039;</div>
+        <div><div class="node-name">Hot</div><div class="node-desc">daily/ &middot; 오늘+어제 로그</div></div>
+      </div>
+      <div class="node">
+        <div class="node-emoji">&#128204;</div>
+        <div><div class="node-name">Always</div><div class="node-desc">MEMORY.md &middot; 항상 로드</div></div>
+      </div>
+      <div class="node">
+        <div class="node-emoji">&#10052;&#65039;</div>
+        <div><div class="node-name">Cold</div><div class="node-desc">topics/ &middot; 필요 시 Read</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="connector">
+    <svg width="2" height="20"><line x1="1" y1="0" x2="1" y2="20" stroke="url(#grad3)" stroke-width="2"/></svg>
+    <div class="connector-label">MCP + Git</div>
+    <svg width="12" height="10"><polygon points="6,10 0,0 12,0" fill="var(--orange)" opacity="0.7"/></svg>
+  </div>
+
+  <!-- External Layer -->
+  <div class="layer layer-orange">
+    <div class="layer-label lbl-orange"><span>&#9679;</span> EXTERNAL SERVICES</div>
+    <div class="nodes">
+      <div class="node">
+        <div class="node-emoji">&#128270;</div>
+        <div><div class="node-name">memory-search MCP</div><div class="node-desc">BM25+Vector &middot; 시맨틱 검색</div></div>
+      </div>
+      <div class="node">
+        <div class="node-emoji">&#128214;</div>
+        <div><div class="node-name">Notion MCP</div><div class="node-desc">CDP + Anthropic &middot; 페이지 CRUD</div></div>
+      </div>
+      <div class="node">
+        <div class="node-emoji">&#128230;</div>
+        <div><div class="node-name">GitHub</div><div class="node-desc">gh CLI &middot; PR/Issue 관리</div></div>
+      </div>
+      <div class="node">
+        <div class="node-emoji">&#128172;</div>
+        <div><div class="node-name">Telegram</div><div class="node-desc">Bot API &middot; 채널 메시지</div></div>
+      </div>
+      <div class="node">
+        <div class="node-emoji">&#128218;</div>
+        <div><div class="node-name">Context7</div><div class="node-desc">라이브러리 문서 조회</div></div>
+      </div>
+      <div class="node">
+        <div class="node-emoji">&#127760;</div>
+        <div><div class="node-name">Chrome DevTools</div><div class="node-desc">브라우저 자동화 &middot; 스크린샷</div></div>
+      </div>
+      <div class="node">
+        <div class="node-emoji">&#127912;</div>
+        <div><div class="node-name">Figma MCP</div><div class="node-desc">디자인 읽기 &middot; Code Connect</div></div>
+      </div>
+      <div class="node">
+        <div class="node-emoji">&#127916;</div>
+        <div><div class="node-name">Playwright MCP</div><div class="node-desc">브라우저 E2E &middot; 스냅샷</div></div>
+      </div>
+      <div class="node">
+        <div class="node-emoji">&#128296;</div>
+        <div><div class="node-name">XcodeBuild MCP</div><div class="node-desc">iOS 빌드/테스트 &middot; 시뮬레이터</div></div>
+      </div>
+      <div class="node">
+        <div class="node-emoji">&#128193;</div>
+        <div><div class="node-name">Filesystem MCP</div><div class="node-desc">파일 읽기/쓰기 &middot; 디렉토리 탐색</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Connections -->
+  <div class="section-title" style="color:var(--cyan)">&#128279; Key Connections</div>
+  <div class="conn-list">
+    <div class="conn-item"><span class="tag tag-blue">SessionStart</span><span class="conn-arrow">&rarr;</span> context inject + [PROMOTE] 자동 승격</div>
+    <div class="conn-item"><span class="tag tag-green">PostToolUse *</span><span class="conn-arrow">&rarr;</span> observations.jsonl 관찰 기록</div>
+    <div class="conn-item"><span class="tag tag-green">PostToolUse Edit</span><span class="conn-arrow">&rarr;</span> edit-tracker 삽질 감지</div>
+    <div class="conn-item"><span class="tag tag-purple">Stop</span><span class="conn-arrow">&rarr;</span> daily log + active context 검증</div>
+    <div class="conn-item"><span class="tag tag-orange">SessionEnd</span><span class="conn-arrow">&rarr;</span> metrics + archive + observer 분석</div>
+    <div class="conn-item"><span class="tag tag-green">PostToolUse Agent</span><span class="conn-arrow">&rarr;</span> agent-usage-tracker 에이전트 사용 추적</div>
+    <div class="conn-item"><span class="tag tag-pink">Observer</span><span class="conn-arrow">&rarr;</span> instinct confidence 자동 조정</div>
+  </div>
+</div>
+
+<!-- ========== TAB 2: HOOK LIFECYCLE ========== -->
+<div id="hooks" class="panel">
+
+  <div class="section-title" style="color:var(--green)">&#128260; Hook Lifecycle &mdash; 세션 시작부터 종료까지</div>
+  <div class="section-desc">각 lifecycle 이벤트에 등록된 훅들의 실행 순서와 역할. <span class="tag tag-green">sync</span> = 결과 대기, <span class="tag tag-orange">async</span> = 백그라운드, <span style="color:var(--red)">blocking</span> = exit 2로 차단 가능</div>
+
+  <div class="mermaid-container">
+    <pre class="mermaid">
+sequenceDiagram
+    actor User as User/CLI
+    participant SS as SessionStart
+    participant PT as PostToolUse
+    participant PR as PreToolUse
+    participant PC as PreCompact
+    participant UP as UserPromptSubmit
+    participant ST as Stop
+    participant SE as SessionEnd
+
+    User->>SS: 세션 시작
+    Note over SS: session-start.sh<br/>promote-analyzer.sh
+    SS-->>User: context 주입
+
+    loop 작업 루프
+        User->>PT: 도구 사용
+        Note over PT: post-tool.py (*)<br/>edit-tracker.sh (Edit)<br/>governance-guard.sh (Edit)<br/>skill-usage-tracker.sh (Skill)<br/>agent-usage-tracker.sh (Agent)
+        User->>PR: Plan 모드 진입 시도
+        Note over PR: /feature 스킬 안내
+    end
+
+    User->>UP: /clear 입력
+    Note over UP: pre-clear-handoff.sh<br/>(HANDOFF.md 작성 강제)
+    UP-->>User: exit 2 (차단)
+
+    User->>PC: 컨텍스트 한계
+    Note over PC: precompact-path.sh<br/>(active context 긴급 저장)
+
+    User->>ST: 응답 완료
+    Note over ST: stop-guard.sh<br/>active-context.sh update
+
+    User->>SE: 세션 종료
+    Note over SE: post-tool.py flush (async)<br/>session-end.sh (async)<br/>observer-runner.sh (async)
+    </pre>
+  </div>
+
+  <div class="section-title" style="color:var(--green)">&#128209; Hook 상세 목록</div>
+
+  <div class="hook-grid">
+    <!-- SessionStart -->
+    <div class="hook-card">
+      <div class="hook-event"><span class="dot" style="background:var(--blue)"></span><span style="color:var(--blue)">SessionStart</span></div>
+      <div class="hook-item sync">
+        <div>
+          <div class="file">memory-session-start.sh</div>
+          <div class="desc">Active context 복구 + daily log 로드 + session digest + friction queue + 메타데이터 주입</div>
+        </div>
+      </div>
+      <div class="hook-item sync">
+        <div>
+          <div class="file">memory-promote-analyzer.sh</div>
+          <div class="desc">[PROMOTE] 항목 자동 탐지 &rarr; MEMORY.md 승격 &rarr; [PROMOTED] 마킹</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PostToolUse * -->
+    <div class="hook-card">
+      <div class="hook-event"><span class="dot" style="background:var(--green)"></span><span style="color:var(--green)">PostToolUse *</span></div>
+      <div class="hook-item sync">
+        <div>
+          <div class="file">memory-post-tool.py</div>
+          <div class="desc">모든 도구 호출을 observations.jsonl에 기록 (Observer 파이프라인 입력)</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PostToolUse Edit|Write -->
+    <div class="hook-card">
+      <div class="hook-event"><span class="dot" style="background:var(--green)"></span><span style="color:var(--green)">PostToolUse Edit|Write</span></div>
+      <div class="hook-item sync">
+        <div>
+          <div class="file">prisma-auto-generate.mjs</div>
+          <div class="desc">schema.prisma 변경 시 prisma generate 자동 실행</div>
+        </div>
+      </div>
+      <div class="hook-item sync">
+        <div>
+          <div class="file">edit-tracker.sh</div>
+          <div class="desc">파일별 편집 횟수 추적, 3회+ 시 삽질 경고</div>
+        </div>
+      </div>
+      <div class="hook-item sync">
+        <div>
+          <div class="file">governance-guard.sh</div>
+          <div class="desc">governance.yml 규칙 매칭 &rarr; 파일 변경 경고</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PostToolUse Skill -->
+    <div class="hook-card">
+      <div class="hook-event"><span class="dot" style="background:var(--green)"></span><span style="color:var(--green)">PostToolUse Skill</span></div>
+      <div class="hook-item sync">
+        <div>
+          <div class="file">skill-usage-tracker.sh</div>
+          <div class="desc">스킬 호출을 월별 JSONL에 기록 (사용 빈도 분석용)</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PostToolUse Agent -->
+    <div class="hook-card">
+      <div class="hook-event"><span class="dot" style="background:var(--green)"></span><span style="color:var(--green)">PostToolUse Agent</span></div>
+      <div class="hook-item sync">
+        <div>
+          <div class="file">agent-usage-tracker.sh</div>
+          <div class="desc">에이전트 호출을 월별 JSONL에 기록 (타입/모델/용도 추적)</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PreToolUse -->
+    <div class="hook-card">
+      <div class="hook-event"><span class="dot" style="background:var(--yellow)"></span><span style="color:var(--yellow)">PreToolUse EnterPlanMode</span></div>
+      <div class="hook-item sync">
+        <div>
+          <div class="file">echo (inline)</div>
+          <div class="desc">"새 기능 구현이면 /feature 스킬 사용" 리마인드</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PreCompact -->
+    <div class="hook-card">
+      <div class="hook-event"><span class="dot" style="background:var(--purple)"></span><span style="color:var(--purple)">PreCompact</span></div>
+      <div class="hook-item sync">
+        <div>
+          <div class="file">memory-precompact-path.sh</div>
+          <div class="desc">daily log에 compaction 마커 + active context 긴급 갱신 안내</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- UserPromptSubmit -->
+    <div class="hook-card">
+      <div class="hook-event"><span class="dot" style="background:var(--pink)"></span><span style="color:var(--pink)">UserPromptSubmit</span></div>
+      <div class="hook-item blocking">
+        <div>
+          <div class="file">pre-clear-handoff.sh</div>
+          <div class="desc">/clear 감지 &rarr; HANDOFF.md 작성 강제 (exit 2 차단). 90초 이내 재실행 시 통과</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Stop -->
+    <div class="hook-card">
+      <div class="hook-event"><span class="dot" style="background:var(--red)"></span><span style="color:var(--red)">Stop</span></div>
+      <div class="hook-item sync">
+        <div>
+          <div class="file">memory-stop-guard.sh</div>
+          <div class="desc">daily log 비어있으면 경고 + active context Handoff 검사 + Self-Absorb 삽질 감지</div>
+        </div>
+      </div>
+      <div class="hook-item sync">
+        <div>
+          <div class="file">memory-active-context.sh</div>
+          <div class="desc">active context 자동 갱신 (update 모드)</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SessionEnd -->
+    <div class="hook-card">
+      <div class="hook-event"><span class="dot" style="background:var(--orange)"></span><span style="color:var(--orange)">SessionEnd (async)</span></div>
+      <div class="hook-item async">
+        <div>
+          <div class="file">memory-post-tool.py flush</div>
+          <div class="desc">버퍼된 관찰 데이터 최종 기록</div>
+        </div>
+      </div>
+      <div class="hook-item async">
+        <div>
+          <div class="file">memory-session-end.sh</div>
+          <div class="desc">daily log 아카이브 + metrics 기록 + friction 감지 + git sync (race-safe)</div>
+        </div>
+      </div>
+      <div class="hook-item async">
+        <div>
+          <div class="file">observer-runner.sh</div>
+          <div class="desc">observations.jsonl 패턴 분석 &rarr; instinct confidence 조정 &rarr; instinct-evolve.sh</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ========== TAB 3: MEMORY SYSTEM ========== -->
+<div id="memory" class="panel">
+
+  <div class="section-title" style="color:var(--purple)">&#128451; 4-Tier Memory Architecture</div>
+  <div class="section-desc">세션 간 연속성을 보장하는 4계층 영속 시스템. 위로 갈수록 자주 접근, 아래로 갈수록 장기 보관.</div>
+
+  <!-- Tier diagram -->
+  <div class="layer layer-pink" style="margin-bottom:4px; border-bottom-left-radius:0; border-bottom-right-radius:0;">
+    <div class="layer-label lbl-pink">&#128293; TIER 1: ACTIVE &mdash; 항상 주입</div>
+    <div class="nodes" style="grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));">
+      <div class="node">
+        <div class="node-emoji">&#127796;</div>
+        <div><div class="node-name">active/{branch-slug}.md</div><div class="node-desc">피처 브랜치별 컨텍스트 &middot; Why/Progress/Next/Questions</div></div>
+      </div>
+      <div class="node">
+        <div class="node-emoji">&#128196;</div>
+        <div><div class="node-name">sessions/{project}-context.md</div><div class="node-desc">프로젝트별 컨텍스트 &middot; Goal/Status/Next/Handoff</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="layer layer-orange" style="margin-bottom:4px; border-radius:0;">
+    <div class="layer-label lbl-orange">&#9728;&#65039; TIER 2: HOT &mdash; 오늘+어제 로드</div>
+    <div class="nodes">
+      <div class="node">
+        <div class="node-emoji">&#128197;</div>
+        <div><div class="node-name">daily/YYYY-MM-DD-{project}.md</div><div class="node-desc">일일 작업 로그 &middot; ### HH:MM - 제목</div></div>
+      </div>
+      <div class="node">
+        <div class="node-emoji">&#128230;</div>
+        <div><div class="node-name">archive/YYYY-MM/</div><div class="node-desc">14일 이상 daily log 자동 아카이브</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="layer layer-blue" style="margin-bottom:4px; border-radius:0;">
+    <div class="layer-label lbl-blue">&#128204; TIER 3: ALWAYS &mdash; 매 세션 로드</div>
+    <div class="nodes">
+      <div class="node">
+        <div class="node-emoji">&#128209;</div>
+        <div><div class="node-name">MEMORY.md</div><div class="node-desc">인덱스 파일 &middot; 150줄 제한 &middot; 항상 context에 포함</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="layer layer-cyan" style="border-top-left-radius:0; border-top-right-radius:0;">
+    <div class="layer-label lbl-cyan">&#10052;&#65039; TIER 4: COLD &mdash; 필요 시 Read</div>
+    <div class="nodes">
+      <div class="node">
+        <div class="node-emoji">&#128100;</div>
+        <div><div class="node-name">topics/user-profile.md</div><div class="node-desc">사용자 프로필 &middot; 역할/선호</div></div>
+      </div>
+      <div class="node">
+        <div class="node-emoji">&#128165;</div>
+        <div><div class="node-name">topics/failure-log.md</div><div class="node-desc">삽질 원인 분류 &middot; Prompt/Context/Harness</div></div>
+      </div>
+      <div class="node">
+        <div class="node-emoji">&#128218;</div>
+        <div><div class="node-name">topics/absorbed-articles.md</div><div class="node-desc">외부 아티클 적용 이력</div></div>
+      </div>
+      <div class="node">
+        <div class="node-emoji">&#128200;</div>
+        <div><div class="node-name">topics/evaluation-calibration-pattern.md</div><div class="node-desc">리뷰어 평가 교정 패턴</div></div>
+      </div>
+      <div class="node">
+        <div class="node-emoji">&#127919;</div>
+        <div><div class="node-name">topics/l5-roadmap.md</div><div class="node-desc">L5 자율 진화 로드맵 &middot; 단계별 전략</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Data flows -->
+  <div class="section-title" style="color:var(--purple)">&#128260; Memory Data Flows</div>
+
+  <div class="flow-diagram">
+    <div style="text-align:center; margin-bottom:16px; color:var(--text-dim); font-size:0.8rem;">승격 파이프라인 (아래 &rarr; 위)</div>
+    <div class="flow-row">
+      <div class="flow-box" style="border-color:var(--cyan); color:var(--cyan)">daily log<br><span style="font-size:0.65rem;color:var(--text-muted)">[PROMOTE] 태그</span></div>
+      <div class="flow-arrow">&rarr;</div>
+      <div class="flow-box" style="border-color:var(--pink); color:var(--pink)">promote-analyzer.sh<br><span style="font-size:0.65rem;color:var(--text-muted)">SessionStart 자동 실행</span></div>
+      <div class="flow-arrow">&rarr;</div>
+      <div class="flow-box" style="border-color:var(--blue); color:var(--blue)">MEMORY.md<br><span style="font-size:0.65rem;color:var(--text-muted)">항목 추가 + [PROMOTED]</span></div>
+    </div>
+    <div style="height:20px"></div>
+    <div style="text-align:center; margin-bottom:16px; color:var(--text-dim); font-size:0.8rem;">세션 복구 체인 (우선순위)</div>
+    <div class="flow-row">
+      <div class="flow-box" style="border-color:var(--pink); color:var(--pink)">1. Fresh Context<br><span style="font-size:0.65rem;color:var(--text-muted)">&lt;24h &middot; 전체 로드</span></div>
+      <div class="flow-arrow">&rarr;</div>
+      <div class="flow-box" style="border-color:var(--orange); color:var(--orange)">2. Stale Context<br><span style="font-size:0.65rem;color:var(--text-muted)">&gt;24h &middot; Goal+Handoff만</span></div>
+      <div class="flow-arrow">&rarr;</div>
+      <div class="flow-box" style="border-color:var(--yellow); color:var(--yellow)">3. Session Digest<br><span style="font-size:0.65rem;color:var(--text-muted)">JSONL 파싱 &middot; /clear 시</span></div>
+      <div class="flow-arrow">&rarr;</div>
+      <div class="flow-box" style="border-color:var(--text-muted); color:var(--text-muted)">4. Daily Log<br><span style="font-size:0.65rem;">fallback</span></div>
+    </div>
+    <div style="height:20px"></div>
+    <div style="text-align:center; margin-bottom:16px; color:var(--text-dim); font-size:0.8rem;">아카이브 파이프라인</div>
+    <div class="flow-row">
+      <div class="flow-box" style="border-color:var(--orange); color:var(--orange)">daily/*.md<br><span style="font-size:0.65rem;color:var(--text-muted)">14일 경과</span></div>
+      <div class="flow-arrow">&rarr;</div>
+      <div class="flow-box" style="border-color:var(--green); color:var(--green)">session-end.sh<br><span style="font-size:0.65rem;color:var(--text-muted)">자동 이동</span></div>
+      <div class="flow-arrow">&rarr;</div>
+      <div class="flow-box" style="border-color:var(--text-muted); color:var(--text-muted)">archive/YYYY-MM/<br><span style="font-size:0.65rem;">장기 보관</span></div>
+    </div>
+  </div>
+
+  <!-- Sync -->
+  <div class="section-title" style="color:var(--purple)">&#128257; Multi-Environment Sync</div>
+  <div class="flow-diagram">
+    <div class="flow-row">
+      <div class="flow-box" style="border-color:var(--blue); color:var(--blue)">&#127968; Home<br><span style="font-size:0.65rem;color:var(--text-muted)">~/.claude/memory/</span></div>
+      <div class="flow-arrow">&#8644;</div>
+      <div class="flow-box" style="border-color:var(--green); color:var(--green)">memory-sync.sh<br>+ /harness-sync<br><span style="font-size:0.65rem;color:var(--text-muted)">push/pull/status</span></div>
+      <div class="flow-arrow">&#8644;</div>
+      <div class="flow-box" style="border-color:var(--orange); color:var(--orange)">&#127970; Work<br><span style="font-size:0.65rem;color:var(--text-muted)">git repo 경유</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ========== TAB 4: SELF-EVOLUTION ========== -->
+<div id="evolution" class="panel">
+
+  <div class="section-title" style="color:var(--pink)">&#129504; Self-Evolution Pipeline</div>
+  <div class="section-desc">하네스가 스스로 패턴을 학습하고 진화하는 3개 파이프라인. L5 (자율 진화) 핵심 메커니즘.</div>
+
+  <!-- Pipeline 1: Observer -->
+  <div class="layer layer-pink">
+    <div class="layer-label lbl-pink">&#128065; OBSERVER PIPELINE &mdash; 행동 관찰 &rarr; 인스턴트 진화</div>
+    <div class="pipeline">
+      <div class="pipe-node" style="border-color:var(--green)">
+        <div class="pipe-title" style="color:var(--green)">Observe</div>
+        <div class="pipe-desc">모든 도구 호출 기록</div>
+        <div class="pipe-file">memory-post-tool.py</div>
+      </div>
+      <div class="pipe-arrow">&rarr;</div>
+      <div class="pipe-node" style="border-color:var(--orange)">
+        <div class="pipe-title" style="color:var(--orange)">Accumulate</div>
+        <div class="pipe-desc">JSONL에 축적 (20건+)</div>
+        <div class="pipe-file">observations.jsonl</div>
+      </div>
+      <div class="pipe-arrow">&rarr;</div>
+      <div class="pipe-node" style="border-color:var(--purple)">
+        <div class="pipe-title" style="color:var(--purple)">Analyze</div>
+        <div class="pipe-desc">패턴 추출 (3회+)</div>
+        <div class="pipe-file">observer-runner.sh</div>
+      </div>
+      <div class="pipe-arrow">&rarr;</div>
+      <div class="pipe-node" style="border-color:var(--pink)">
+        <div class="pipe-title" style="color:var(--pink)">Evolve</div>
+        <div class="pipe-desc">confidence 조정</div>
+        <div class="pipe-file">instinct-evolve.sh</div>
+      </div>
+      <div class="pipe-arrow">&rarr;</div>
+      <div class="pipe-node" style="border-color:var(--cyan)">
+        <div class="pipe-title" style="color:var(--cyan)">Instincts</div>
+        <div class="pipe-desc">학습된 패턴 적용</div>
+        <div class="pipe-file">instincts/personal/</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Pipeline 2: Friction -->
+  <div class="layer layer-orange">
+    <div class="layer-label lbl-orange">&#128165; FRICTION PIPELINE &mdash; 삽질 감지 &rarr; 자기 교정</div>
+    <div class="pipeline">
+      <div class="pipe-node" style="border-color:var(--green)">
+        <div class="pipe-title" style="color:var(--green)">Track</div>
+        <div class="pipe-desc">파일별 편집 횟수</div>
+        <div class="pipe-file">edit-tracker.sh</div>
+      </div>
+      <div class="pipe-arrow">&rarr;</div>
+      <div class="pipe-node" style="border-color:var(--red)">
+        <div class="pipe-title" style="color:var(--red)">Detect</div>
+        <div class="pipe-desc">3회+ 반복 경고</div>
+        <div class="pipe-file">stop-guard.sh</div>
+      </div>
+      <div class="pipe-arrow">&rarr;</div>
+      <div class="pipe-node" style="border-color:var(--orange)">
+        <div class="pipe-title" style="color:var(--orange)">Record</div>
+        <div class="pipe-desc">failure-log 자동 기록</div>
+        <div class="pipe-file">session-end.sh</div>
+      </div>
+      <div class="pipe-arrow">&rarr;</div>
+      <div class="pipe-node" style="border-color:var(--purple)">
+        <div class="pipe-title" style="color:var(--purple)">Classify</div>
+        <div class="pipe-desc">Prompt/Context/Harness</div>
+        <div class="pipe-file">session-start.sh</div>
+      </div>
+      <div class="pipe-arrow">&rarr;</div>
+      <div class="pipe-node" style="border-color:var(--blue)">
+        <div class="pipe-title" style="color:var(--blue)">Improve</div>
+        <div class="pipe-desc">개선 제안 &rarr; 적용</div>
+        <div class="pipe-file">improvement-suggestions</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Pipeline 3: Metrics -->
+  <div class="layer layer-cyan">
+    <div class="layer-label lbl-cyan">&#128200; METRICS PIPELINE &mdash; 세션 측정 &rarr; 주간 리뷰</div>
+    <div class="pipeline">
+      <div class="pipe-node" style="border-color:var(--green)">
+        <div class="pipe-title" style="color:var(--green)">Collect</div>
+        <div class="pipe-desc">세션 메트릭 수집</div>
+        <div class="pipe-file">session-end.sh</div>
+      </div>
+      <div class="pipe-arrow">&rarr;</div>
+      <div class="pipe-node" style="border-color:var(--orange)">
+        <div class="pipe-title" style="color:var(--orange)">Store</div>
+        <div class="pipe-desc">JSONL 축적</div>
+        <div class="pipe-file">sessions.jsonl</div>
+      </div>
+      <div class="pipe-arrow">&rarr;</div>
+      <div class="pipe-node" style="border-color:var(--purple)">
+        <div class="pipe-title" style="color:var(--purple)">Analyze</div>
+        <div class="pipe-desc">friction rate, 추이</div>
+        <div class="pipe-file">harness-metrics.sh</div>
+      </div>
+      <div class="pipe-arrow">&rarr;</div>
+      <div class="pipe-node" style="border-color:var(--blue)">
+        <div class="pipe-title" style="color:var(--blue)">Review</div>
+        <div class="pipe-desc">주간 리뷰 리포트</div>
+        <div class="pipe-file">/review-week 스킬</div>
+      </div>
+      <div class="pipe-arrow">&rarr;</div>
+      <div class="pipe-node" style="border-color:var(--pink)">
+        <div class="pipe-title" style="color:var(--pink)">Retire</div>
+        <div class="pipe-desc">friction=0 규칙 은퇴</div>
+        <div class="pipe-file">CLAUDE.md 갱신</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Skill Usage Pipeline -->
+  <div class="layer layer-yellow">
+    <div class="layer-label lbl-yellow">&#128202; SKILL USAGE PIPELINE &mdash; 사용 빈도 추적</div>
+    <div class="pipeline">
+      <div class="pipe-node" style="border-color:var(--green)">
+        <div class="pipe-title" style="color:var(--green)">Invoke</div>
+        <div class="pipe-desc">Skill 도구 호출</div>
+        <div class="pipe-file">PostToolUse Skill</div>
+      </div>
+      <div class="pipe-arrow">&rarr;</div>
+      <div class="pipe-node" style="border-color:var(--yellow)">
+        <div class="pipe-title" style="color:var(--yellow)">Log</div>
+        <div class="pipe-desc">월별 JSONL 기록</div>
+        <div class="pipe-file">skill-usage-tracker.sh</div>
+      </div>
+      <div class="pipe-arrow">&rarr;</div>
+      <div class="pipe-node" style="border-color:var(--orange)">
+        <div class="pipe-title" style="color:var(--orange)">Analyze</div>
+        <div class="pipe-desc">미사용 스킬 식별</div>
+        <div class="pipe-file">skill-usage/YYYY-MM.jsonl</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ========== TAB 5: SKILL ROUTING ========== -->
+<div id="routing" class="panel">
+
+  <div class="section-title" style="color:var(--cyan)">&#128268; Auto Skill Routing (CLAUDE.md &sect;9)</div>
+  <div class="section-desc">작업 컨텍스트에 따라 관련 스킬을 자동으로 invoke. 사용자 요청 불필요.<br>
+  <span style="color:var(--text-muted); font-size:0.78rem;">Local 21개 (absorb, agent-council, arch-diagram, bs, daily-briefing, feature, harness-sync, haru-infra, haru-todo, kotlin-patterns, learned, master-guide, notion-update, notion-writer, redis-cache-patterns, research-to-notion, review-week, review, security-fix, subagent-driven-development, ui-ux-pro-max) + Plugin 60개 (superpowers, everything-claude-code, Notion, telegram 등)</span></div>
+
+  <!-- Routing flow -->
+  <div class="flow-diagram">
+    <div style="text-align:center; margin-bottom:16px; color:var(--text-dim); font-size:0.8rem;">라우팅 판단 흐름</div>
+    <div class="flow-row">
+      <div class="flow-box" style="border-color:var(--blue); color:var(--blue)">사용자 요청<br><span style="font-size:0.65rem;color:var(--text-muted)">코드 작성/수정/질문</span></div>
+      <div class="flow-arrow">&rarr;</div>
+      <div class="flow-box" style="border-color:var(--purple); color:var(--purple)">CLAUDE.md &sect;9<br><span style="font-size:0.65rem;color:var(--text-muted)">트리거 매칭</span></div>
+      <div class="flow-arrow">&rarr;</div>
+      <div class="flow-box" style="border-color:var(--green); color:var(--green)">우선순위 해결<br><span style="font-size:0.65rem;color:var(--text-muted)">프로젝트 &gt; 글로벌<br>워크플로우 &gt; 파일</span></div>
+      <div class="flow-arrow">&rarr;</div>
+      <div class="flow-box" style="border-color:var(--pink); color:var(--pink)">Skill invoke<br><span style="font-size:0.65rem;color:var(--text-muted)">참고 자료로 로드</span></div>
+    </div>
+  </div>
+
+  <!-- File/Language triggers -->
+  <div class="section-title" style="color:var(--green)">&#128196; File/Language Triggers</div>
+  <table class="route-table">
+    <thead><tr><th>Trigger</th><th>Skill</th><th>Type</th></tr></thead>
+    <tbody>
+      <tr><td><span class="tag tag-orange">.kt</span> 파일 작성/수정</td><td>kotlin-patterns</td><td><span class="tag tag-green">language</span></td></tr>
+      <tr><td><span class="tag tag-blue">.swift</span> 파일 작성/수정</td><td>ecc:swiftui-patterns <span class="tag tag-cyan">plugin</span></td><td><span class="tag tag-green">language</span></td></tr>
+      <tr><td>JPA Entity / Repository 변경</td><td>ecc:jpa-patterns <span class="tag tag-cyan">plugin</span></td><td><span class="tag tag-purple">framework</span></td></tr>
+      <tr><td><span class="tag tag-orange">@Cacheable</span>, Redis 설정</td><td>redis-cache-patterns <span class="tag tag-green">local</span></td><td><span class="tag tag-purple">framework</span></td></tr>
+      <tr><td>SQL 마이그레이션 / 스키마 변경</td><td>ecc:postgres-patterns + ecc:database-migrations <span class="tag tag-cyan">plugin</span></td><td><span class="tag tag-orange">data</span></td></tr>
+      <tr><td>Security 설정, 인증/인가 코드</td><td>ecc:springboot-security + ecc:security-review <span class="tag tag-cyan">plugin</span></td><td><span class="tag tag-pink">security</span></td></tr>
+    </tbody>
+  </table>
+
+  <!-- Workflow triggers -->
+  <div class="section-title" style="color:var(--pink)">&#9889; Workflow Triggers</div>
+  <table class="route-table">
+    <thead><tr><th>Trigger</th><th>Skill</th><th>Type</th></tr></thead>
+    <tbody>
+      <tr><td>새 기능 구현 시작</td><td>/feature (brainstorming &rarr; plan &rarr; exec)</td><td><span class="tag tag-pink">workflow</span></td></tr>
+      <tr><td>기술 뉴스/동향 요청</td><td>/daily-briefing</td><td><span class="tag tag-cyan">info</span></td></tr>
+      <tr><td>버그 수정/디버깅</td><td>sp:systematic-debugging <span class="tag tag-cyan">plugin</span></td><td><span class="tag tag-orange">debug</span></td></tr>
+      <tr><td>버그 수정 완료</td><td>sp:verification-before-completion <span class="tag tag-cyan">plugin</span></td><td><span class="tag tag-green">verify</span></td></tr>
+      <tr><td>PR 전 최종 검증</td><td>ecc:springboot-verification / sp:vc <span class="tag tag-cyan">plugin</span></td><td><span class="tag tag-green">verify</span></td></tr>
+      <tr><td>하네스 데이터 동기화</td><td>harness-sync <span class="tag tag-green">local</span></td><td><span class="tag tag-blue">sync</span></td></tr>
+      <tr><td>업무 기술 + "가이드/마스터"</td><td>/master-guide</td><td><span class="tag tag-purple">learning</span></td></tr>
+      <tr><td>일반 주제 + "노션에 정리"</td><td>/research-to-notion</td><td><span class="tag tag-blue">research</span></td></tr>
+      <tr><td>URL 분석 + 설정 적용</td><td>/absorb</td><td><span class="tag tag-pink">evolve</span></td></tr>
+      <tr><td>아키텍처 다이어그램</td><td>/arch-diagram</td><td><span class="tag tag-cyan">docs</span></td></tr>
+      <tr><td>빌드 실패</td><td>build-fixer (agent)</td><td><span class="tag tag-orange">fix</span></td></tr>
+    </tbody>
+  </table>
+
+  <!-- Agent Routing -->
+  <div class="section-title" style="color:var(--orange)">&#129302; Agent Model Routing (CLAUDE.md &sect;3)</div>
+  <div class="layer layer-green" style="padding:14px">
+    <div class="nodes" style="grid-template-columns: repeat(3, 1fr);">
+      <div class="node" style="flex-direction:column; text-align:center; padding:14px;">
+        <div style="font-size:0.7rem; font-weight:700; color:var(--green); letter-spacing:1px; margin-bottom:6px;">HAIKU</div>
+        <div class="node-desc">explore, writer, style-reviewer</div>
+        <div style="font-size:0.65rem; color:var(--text-muted); margin-top:4px;">&#128269; 검색/수집</div>
+      </div>
+      <div class="node" style="flex-direction:column; text-align:center; padding:14px;">
+        <div style="font-size:0.7rem; font-weight:700; color:var(--blue); letter-spacing:1px; margin-bottom:6px;">SONNET</div>
+        <div class="node-desc">executor, debugger, build-fixer, test-engineer, designer, qa-tester, verifier, git-master +9</div>
+        <div style="font-size:0.65rem; color:var(--text-muted); margin-top:4px;">&#128295; 실행/구현</div>
+      </div>
+      <div class="node" style="flex-direction:column; text-align:center; padding:14px;">
+        <div style="font-size:0.7rem; font-weight:700; color:var(--purple); letter-spacing:1px; margin-bottom:6px;">OPUS</div>
+        <div class="node-desc">architect, planner, analyst, critic, deep-executor, quality-reviewer, security-reviewer, code-reviewer</div>
+        <div style="font-size:0.65rem; color:var(--text-muted); margin-top:4px;">&#129504; 판단/설계</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Priority resolution -->
+  <div class="section-title" style="color:var(--yellow)">&#127942; Priority Resolution (충돌 시)</div>
+  <div class="flow-diagram">
+    <div class="flow-row">
+      <div class="flow-box" style="border-color:var(--pink); color:var(--pink)">1. 프로젝트별<br><span style="font-size:0.65rem;color:var(--text-muted)">&gt; 글로벌</span></div>
+      <div class="flow-arrow">&gt;</div>
+      <div class="flow-box" style="border-color:var(--orange); color:var(--orange)">2. 워크플로우<br><span style="font-size:0.65rem;color:var(--text-muted)">&gt; 파일/언어</span></div>
+      <div class="flow-arrow">&gt;</div>
+      <div class="flow-box" style="border-color:var(--green); color:var(--green)">3. 좁은 범위<br><span style="font-size:0.65rem;color:var(--text-muted)">&gt; 넓은 범위</span></div>
+    </div>
+  </div>
+</div>
+
+</div><!-- /content -->
+
+<!-- SVG Gradients -->
+<svg width="0" height="0" style="position:absolute">
+  <defs>
+    <linearGradient id="grad1" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="var(--blue)" stop-opacity="0.6"/>
+      <stop offset="100%" stop-color="var(--green)" stop-opacity="0.3"/>
+    </linearGradient>
+    <linearGradient id="grad2" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="var(--green)" stop-opacity="0.6"/>
+      <stop offset="100%" stop-color="var(--purple)" stop-opacity="0.3"/>
+    </linearGradient>
+    <linearGradient id="grad3" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="var(--purple)" stop-opacity="0.6"/>
+      <stop offset="100%" stop-color="var(--orange)" stop-opacity="0.3"/>
+    </linearGradient>
+  </defs>
+</svg>
+
+<script>
+mermaid.initialize({
+  startOnLoad: true,
+  theme: 'dark',
+  themeVariables: {
+    primaryColor: '#1f6feb',
+    primaryTextColor: '#e2e8f0',
+    primaryBorderColor: '#253650',
+    lineColor: '#64748b',
+    secondaryColor: '#131d2e',
+    tertiaryColor: '#0c1220',
+    actorBkg: '#1e3a5f',
+    actorBorder: '#3b82f6',
+    actorTextColor: '#e2e8f0',
+    signalColor: '#94a3b8',
+    signalTextColor: '#e2e8f0',
+    labelBoxBkgColor: '#131d2e',
+    labelBoxBorderColor: '#253650',
+    labelTextColor: '#e2e8f0',
+    noteBkgColor: '#1e1e3f',
+    noteTextColor: '#e2e8f0',
+    noteBorderColor: '#4338ca',
+    sequenceNumberColor: '#e2e8f0',
+  },
+  sequence: {
+    useMaxWidth: true,
+    mirrorActors: false,
+    actorMargin: 60,
+    messageMargin: 40,
+    boxMargin: 10,
+  }
+});
+
+function showTab(id) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  event.target.classList.add('active');
+  // Re-render mermaid if needed
+  if (id === 'hooks') {
+    mermaid.run({ querySelector: '#hooks .mermaid' }).catch(() => {});
+  }
+}
+</script>
+
+</body>
+</html>
