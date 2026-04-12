@@ -160,38 +160,7 @@ for log_file in "$DAILY_DIR"/*.md; do
   fi
 done
 
-# ── Sync metrics + daily logs to git repo (for remote agent access) ──
-MGMT_REPO="$HOME/IdeaProjects/관리"
-if [ -d "$MGMT_REPO/.git" ]; then
-  SYNC_DIR="$MGMT_REPO/.harness-sync"
-  mkdir -p "$SYNC_DIR/metrics" "$SYNC_DIR/daily"
-
-  # Copy metrics
-  [ -f "$METRICS_DIR/sessions.jsonl" ] && cp "$METRICS_DIR/sessions.jsonl" "$SYNC_DIR/metrics/"
-
-  # Copy recent daily logs (last 7 days only)
-  for log_file in "$DAILY_DIR"/*.md; do
-    [ -f "$log_file" ] || continue
-    filename=$(basename "$log_file")
-    date_only="${filename:0:10}"
-    if [[ "$date_only" > "$CUTOFF" ]] 2>/dev/null; then
-      cp "$log_file" "$SYNC_DIR/daily/"
-    fi
-  done
-
-  # Copy failure-log
-  [ -f "$MEM_DIR/topics/failure-log.md" ] && cp "$MEM_DIR/topics/failure-log.md" "$SYNC_DIR/"
-
-  # Auto-commit and push (silent, best-effort)
-  (
-    cd "$MGMT_REPO"
-    git add .harness-sync/ 2>/dev/null
-    if ! git diff --cached --quiet 2>/dev/null; then
-      git commit -m "chore: sync harness metrics [auto]" 2>/dev/null
-      git push origin main 2>/dev/null
-    fi
-  ) &>/dev/null || true
-fi
+# (관리 레포 sync 블록 제거 — auto-sync가 claude-config 레포로 직접 push)
 
 # ── Save current session JSONL path for next session's digest ──
 PROJ_JSONL_DIR=$(find_project_jsonl_dir)
@@ -211,5 +180,17 @@ if [ -f "$SESSION_MARKER" ]; then
     rm -f "$SESSION_MARKER" 2>/dev/null || true
   fi
 fi
+
+# ── Auto-sync: commit + push tracked changes (allowlist) ──
+(
+  cd "$HOME/.claude"
+  git add hooks/ skills/ rules/ scripts/ agents/ commands/ docs/ \
+    memory/MEMORY.md memory/topics/ memory/metrics/ memory/skill-usage/ \
+    settings.base.json CLAUDE.md .gitignore sync-data/ 2>/dev/null
+  if ! git diff --cached --quiet 2>/dev/null; then
+    git commit -m "chore: auto-sync [$(hostname -s)] $(date +%Y-%m-%d)" 2>/dev/null
+    git -c http.lowSpeedLimit=1000 -c http.lowSpeedTime=5 push origin main 2>/dev/null || true
+  fi
+) &>/dev/null || true
 
 exit 0

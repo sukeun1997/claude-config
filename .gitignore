@@ -89,3 +89,6 @@ metrics/
 
 # Nested .claude (project-level)
 .claude/
+
+# Playwright MCP logs (machine-local)
+.playwright-mcp/

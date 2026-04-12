@@ -6,6 +6,15 @@
 set -euo pipefail
 source "$HOME/.claude/hooks/memory-lib.sh"
 
+# --- Auto-sync: pull latest from remote (3s network timeout) ---
+(
+  cd "$HOME/.claude"
+  git rebase --abort 2>/dev/null || true
+  git -c http.lowSpeedLimit=1000 -c http.lowSpeedTime=3 pull --rebase --autostash origin main 2>/dev/null || {
+    git rebase --abort 2>/dev/null || true
+  }
+) &>/dev/null || true
+
 MEM_DIR=$(get_memory_dir)
 ensure_dirs "$MEM_DIR"
 
