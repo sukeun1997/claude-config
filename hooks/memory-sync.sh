@@ -21,8 +21,8 @@ MGMT_REPO="$HOME/IdeaProjects/관리"
 SYNC_DIR="$MGMT_REPO/.harness-sync"
 
 if [ ! -d "$MGMT_REPO/.git" ]; then
-  echo "ERROR: 관리 레포 없음 ($MGMT_REPO)"
-  exit 1
+  echo "WARN: 관리 레포 없음 ($MGMT_REPO) — /harness-sync 스킬을 사용하세요" >&2
+  exit 0
 fi
 
 CMD="${1:-status}"

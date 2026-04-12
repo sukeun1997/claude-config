@@ -53,9 +53,10 @@ plugins/claude-hud/.usage-cache.json
 plugins/claude-hud/config-cache/
 plugins/claude-hud/transcript-cache/
 
-# Memory - daily logs are machine-local
+# Memory - daily logs and active contexts are machine-local
 memory/daily/
 memory/archive/
+memory/active/
 
 # MCP config (machine-specific)
 .mcp.json
