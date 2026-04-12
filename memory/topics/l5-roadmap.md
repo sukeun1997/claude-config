@@ -38,3 +38,4 @@ type: project
 | 2026-03-30 | 4.3 | 4.0 | 훅/자기진화 각 +0.5 |
 | 2026-04-01 | 4.5 | 4.0 | agent-tracker 등록 + failure-log 7건 |
 | 2026-04-10 | 4.5 | 4.2 | Opus critic 조정: 오케스트레이션 4.7(5.0→), 자기진화 4.2(4.5→). evolved skill 미발동 + friction 은퇴 0건 |
+| 2026-04-12 | - | - | 주간 리뷰 적용: SessionEnd 레이스 수정, confidence bump log2 스케일링, review-week codex 통합, dead code 정리 |

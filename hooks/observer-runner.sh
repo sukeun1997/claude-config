@@ -65,10 +65,10 @@ while IFS=$'\t' read -r ptype pname pcount pdomain pdesc ptrigger paction pproje
     [ -f "$instinct_file" ] || continue
     if grep -Fq "name: $pname" "$instinct_file" 2>/dev/null; then
       MATCHED=true
-      # Bump confidence by 0.05 (cap at 0.95)
+      # Bump confidence — scaled by observed count (log2), cap at 0.95
       current=$(sed -n 's/^confidence: *\([0-9.]*\).*/\1/p' "$instinct_file" 2>/dev/null | head -1)
       current="${current:-0.5}"
-      new_conf=$(python3 -c "print(round(min(0.95, $current + 0.05), 2))" 2>/dev/null || echo "$current")
+      new_conf=$(python3 -c "import math; bump=min(0.15, 0.03+0.02*math.log2(max(1,$pcount))); print(round(min(0.95, $current+bump), 2))" 2>/dev/null || echo "$current")
       if [ "$new_conf" != "$current" ]; then
         escaped_current=$(echo "$current" | sed 's/\./\\./g')
         sed -i '' "s/^confidence: ${escaped_current}$/confidence: ${new_conf}/" "$instinct_file" 2>/dev/null || \

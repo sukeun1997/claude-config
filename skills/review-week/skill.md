@@ -49,6 +49,7 @@ memory_search("설정 구성 변경 디버깅 구현", top_k=10)
 - `.omc/plans/*.md` — 이번 주 생성된 플랜 파일
 - `project-memory.json` — 프로젝트별 컨텍스트
 - MEMORY.md — 영구 메모리
+- **Codex 세션**: 각 날짜에 대해 `python3 ~/.claude/scripts/codex-harvest.py --date {YYYY-MM-DD} --json` 실행 (주간 7일분)
 
 ### 수집할 정보
 
@@ -93,6 +94,8 @@ memory_search("설정 구성 변경 디버깅 구현", top_k=10)
 - [ ] CLAUDE.md 무게 — 시스템 프롬프트가 과도하지 않은지
 - [ ] 자동화 가능한 반복 작업이 있는지
 - [ ] Convention Drift — 최근 커밋 diff에서 CLAUDE.md §5 위반 샘플링 (축약 변수명, 하드코딩, 50줄+ 함수, Read:Edit 비율 하락 추세)
+- [ ] Codex vs Claude 작업 분배 — Codex로 위임 가능한 작업을 Claude에서 직접 처리하지 않았는지
+- [ ] Codex 세션 효율 — tool_call_count=0 세션 비율, 같은 프로젝트 동시 작업 시 충돌 여부
 
 **출력 형식:**
 

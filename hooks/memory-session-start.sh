@@ -225,6 +225,11 @@ date +%s > "$SESSION_MARKER"
 # Generate stable session ID for edit-tracker ↔ session-end coordination
 # PPID is unreliable across async hooks — use a file-based ID instead
 SESSION_ID_FILE="$MEM_DIR/sessions/.current-session-id"
+PREVIOUS_ID_FILE="$MEM_DIR/sessions/.previous-session-id"
+# Preserve previous session ID before overwriting (fixes async SessionEnd race)
+if [ -f "$SESSION_ID_FILE" ]; then
+  cp "$SESSION_ID_FILE" "$PREVIOUS_ID_FILE"
+fi
 SESSION_ID="session-$(date +%s)-$$"
 echo "$SESSION_ID" > "$SESSION_ID_FILE"
 
@@ -375,6 +380,37 @@ if [ -d "$MEM_DIR/daily" ] && [ -f "$MEM_DIR/MEMORY.md" ]; then
   done
   [ "$_PROMOTED" -gt 0 ] && CONTEXT+="${_PROMOTED} item(s) auto-promoted to MEMORY.md.
 "
+fi
+
+# --- Codex activity summary (today, compact) ---
+CODEX_SUMMARY=$(python3 "$HOME/.claude/scripts/codex-harvest.py" --date "$TODAY" --json 2>/dev/null || true)
+if [ -n "$CODEX_SUMMARY" ] && [ "$CODEX_SUMMARY" != "[]" ]; then
+  CODEX_STATS=$(python3 -c "
+import json, sys
+data = json.loads(sys.stdin.read())
+if not data: sys.exit(0)
+projects = {}
+for s in data:
+    p = s['project']
+    projects.setdefault(p, {'sessions': 0, 'tools': 0, 'files': set()})
+    projects[p]['sessions'] += 1
+    projects[p]['tools'] += s['tool_call_count']
+    projects[p]['files'].update(s['files_touched'])
+lines = []
+for p, v in sorted(projects.items(), key=lambda x: -x[1]['tools']):
+    lines.append(f'- **{p}**: {v[\"sessions\"]}s/{v[\"tools\"]}t/{len(v[\"files\"])}f')
+total_s = sum(v['sessions'] for v in projects.values())
+total_t = sum(v['tools'] for v in projects.values())
+total_f = len({f for v in projects.values() for f in v['files']})
+lines.append(f'Total: {total_s} sessions, {total_t} tools, {total_f} files. Run: codex-harvest.py --date $TODAY for details')
+print('\n'.join(lines))
+" <<< "$CODEX_SUMMARY" 2>/dev/null || true)
+  if [ -n "$CODEX_STATS" ]; then
+    CONTEXT+="# Codex Activity (${TODAY})
+${CODEX_STATS}
+
+"
+  fi
 fi
 
 # --- Semantic search availability (MCP-based) ---

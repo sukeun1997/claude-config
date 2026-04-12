@@ -61,11 +61,15 @@ DATE_STR=$(today)
 PROJECT=$(detect_project)
 
 # Session ID: prefer $1 (captured inline before async, race-safe) over file read
+# Fallback chain: $1 → .previous-session-id → .current-session-id → PPID
 if [ -n "${1:-}" ] && [ "$1" != "unknown" ]; then
   SESSION_ID="$1"
 else
+  PREVIOUS_ID_FILE="$MEM_DIR/sessions/.previous-session-id"
   SESSION_ID_FILE="$MEM_DIR/sessions/.current-session-id"
-  if [ -f "$SESSION_ID_FILE" ]; then
+  if [ -f "$PREVIOUS_ID_FILE" ]; then
+    SESSION_ID=$(cat "$PREVIOUS_ID_FILE" 2>/dev/null || echo "unknown")
+  elif [ -f "$SESSION_ID_FILE" ]; then
     SESSION_ID=$(cat "$SESSION_ID_FILE" 2>/dev/null || echo "unknown")
   else
     SESSION_ID="fallback-${PPID:-unknown}"
@@ -76,7 +80,7 @@ CAPTURED_START_TS="${2:-0}"
 TRACK_FILE_PATH="/tmp/claude-edit-tracker-${SESSION_ID}"
 READ_TRACK_FILE="/tmp/claude-read-tracker-${SESSION_ID}"
 
-# Collect metrics from tool-tracker
+# Collect metrics from tool-tracker (primary) or captures fallback
 TOTAL_EDITS=0
 FRICTION_COUNT=0
 UNIQUE_FILES=0
@@ -85,6 +89,15 @@ if [ -f "$TRACK_FILE_PATH" ]; then
   TOTAL_EDITS=$(wc -l < "$TRACK_FILE_PATH" | tr -d ' ')
   UNIQUE_FILES=$(sort -u "$TRACK_FILE_PATH" | wc -l | tr -d ' ')
   FRICTION_COUNT=$(sort "$TRACK_FILE_PATH" | uniq -c | awk '$1 >= 3' | wc -l | tr -d ' ')
+fi
+# Fallback: read from captures JSONL if tracker file missing/empty
+if [ "$TOTAL_EDITS" -eq 0 ]; then
+  CAPTURES_FILE="$MEM_DIR/daily/.captures-${DATE_STR}.jsonl"
+  if [ -f "$CAPTURES_FILE" ]; then
+    TOTAL_EDITS=$(grep -c '"tool":"Edit\|"tool":"Write' "$CAPTURES_FILE" 2>/dev/null || echo "0")
+    TOTAL_EDITS=$(echo "$TOTAL_EDITS" | tr -d '[:space:]')
+    TOTAL_EDITS="${TOTAL_EDITS:-0}"
+  fi
 fi
 if [ -f "$READ_TRACK_FILE" ]; then
   TOTAL_READS=$(wc -l < "$READ_TRACK_FILE" | tr -d ' ')
