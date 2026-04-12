@@ -34,7 +34,7 @@ Anthropic Notion MCP(`mcp__claude_ai_Notion__*`)를 우선 사용하고, 실패 
 Notion Electron 앱이 CDP 포트로 실행 중이어야 함:
 
 ```bash
-/Users/sukeun/IdeaProjects/관리/launch-notion.sh
+~/IdeaProjects/관리/launch-notion.sh
 ```
 
 ## MCP Tools
@@ -143,5 +143,5 @@ MCP 서버가 자동 변환하는 마크다운 문법:
 MCP 서버 장애 시에만 레거시 방식 사용:
 
 - 레퍼런스: `src/create-notion-page.ts`, `src/create-openclaw-analysis-page.ts`
-- 빌드: `cd /Users/sukeun/IdeaProjects/관리 && npx tsc`
+- 빌드: `cd ~/IdeaProjects/관리 && npx tsc`
 - 실행: `node dist/create-{name}-page.js`

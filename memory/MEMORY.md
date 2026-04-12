@@ -39,7 +39,7 @@
 ### Promoted 2026-03-31
 - EventKit 연동: CalendarManager actor, iCloud 우선 + fallback, endDate=startDate(종일)
 - 품질: @BatchSize N+1 해결, DateFormatter 중앙화, Color(hex:) 통합
-- v379 repo: sukeun1997/v379, branch: main, 로컬: /Users/sukeun/379
+- v379 repo: sukeun1997/v379, branch: main, 로컬: ~/379
 - v379 서버 포트: 8584 (v373은 8484)
 - 캘린더 CRUD: DayDetail 집중형, optimistic update, EKEventEditWrapper iOS only
 - 브랜치 전략: 앞으로 모든 PR base = main (feat/phase1 은퇴)
@@ -66,8 +66,10 @@
 ### Promoted 2026-04-06
 - settings base+local 분리 시 hooks 보호 패턴: frozen-keys + integrity guard
 
+### Promoted 2026-04-09
+- 스마트.exe Lazy Copy 메커니즘: R_Cost_Smart(원본) → R_Cost(조회 시 복사). 마이그레이션은 R_Cost_Smart 기준으로 해야 함
+
 ### Promoted 2026-04-10
 - 하네스 4.5 유지 (Opus critic 검증: 오케스트레이션 4.7, 자기진화 4.2). 5.0 갭: evolved skill 미발동 + friction 은퇴 0건
 - absorb 주 2회 제한 (화/금 배치). 적용률 41%→70% 목표. Phase 0 사전 필터링 추가
 - Active Context Hygiene: SessionStart에서 stale(3일+변경0)/비대(7일+) context 자동 경고
-

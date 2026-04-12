@@ -456,7 +456,7 @@ Agent(
 
 **CDP MCP (폴백):**
 - Notion Electron 앱이 `--remote-debugging-port=9222`로 실행 중
-- 런처: `/Users/sukeun/IdeaProjects/관리/launch-notion.sh`
+- 런처: `~/IdeaProjects/관리/launch-notion.sh`
 - Notion MCP 서버가 `.mcp.json`에 등록됨
 
 ---
