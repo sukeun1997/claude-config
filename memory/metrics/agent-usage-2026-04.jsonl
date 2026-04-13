@@ -89,3 +89,6 @@
 {"date": "2026-04-12", "time": "22:22", "agent": "executor", "model": "sonnet", "description": "Day 7: PWA config + icons"}
 {"date": "2026-04-12", "time": "22:23", "agent": "verifier", "model": "opus", "description": "Day 7 검증"}
 {"date": "2026-04-13", "time": "10:18", "agent": "Explore", "model": "haiku", "description": "Explore superpowers plan save paths"}
+{"date": "2026-04-13", "time": "13:23", "agent": "code-reviewer", "model": "sonnet", "description": "Code review: sync_lpn retry fix"}
+{"date": "2026-04-13", "time": "14:36", "agent": "Explore", "model": "haiku", "description": "Trace institution loan report data flow"}
+{"date": "2026-04-13", "time": "15:00", "agent": "Explore", "model": "haiku", "description": "Compare interest distribution order"}

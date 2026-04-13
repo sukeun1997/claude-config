@@ -40,3 +40,4 @@ edit-tracker (3회+ 반복 편집 감지)
 | 2026-04-13 | MEMORY.md 4회 반복 편집 | 미분류 — 다음 세션에서 원인 분석 필요 | - |
 | 2026-04-13 | MEMORY.md 4회 반복 편집 | 미분류 — 다음 세션에서 원인 분석 필요 | - |
 | 2026-04-13 | sync_lpn_settlement_to_legacy_schedule.py 4회 반복 편집 | 미분류 — 다음 세션에서 원인 분석 필요 | - |
+| 2026-04-13 | 2026-04-10-sale-loss-implementation-v2-design.md 6회 반복 편집 | 미분류 — 다음 세션에서 원인 분석 필요 | - |
