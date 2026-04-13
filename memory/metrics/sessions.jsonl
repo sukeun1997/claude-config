@@ -21,6 +21,12 @@
 {"date":"2026-04-06","project":"global","duration_min":40,"total_edits":0,"unique_files":0,"friction_files":0,"log_lines":6}
 {"date":"2026-04-06","project":"global","duration_min":19,"total_edits":0,"unique_files":0,"friction_files":0,"log_lines":6}
 {"date":"2026-04-06","project":"global","duration_min":8,"total_edits":0,"unique_files":0,"friction_files":0,"log_lines":6}
+{"date":"2026-04-10","project":"global","duration_min":5,"total_edits":5,"total_reads":0,"unique_files":1,"friction_files":1,"log_lines":23}
+{"date":"2026-04-10","project":"global","duration_min":21,"total_edits":7,"total_reads":44,"unique_files":6,"friction_files":0,"log_lines":23}
+{"date":"2026-04-10","project":"global","duration_min":63,"total_edits":0,"total_reads":44,"unique_files":0,"friction_files":0,"log_lines":23}
+{"date":"2026-04-10","project":"global","duration_min":30,"total_edits":1,"total_reads":46,"unique_files":1,"friction_files":0,"log_lines":23}
+{"date":"2026-04-10","project":"global","duration_min":58,"total_edits":0,"total_reads":50,"unique_files":0,"friction_files":0,"log_lines":23}
+{"date":"2026-04-10","project":"global","duration_min":34,"total_edits":0,"total_reads":18,"unique_files":0,"friction_files":0,"log_lines":23}
 {"date":"2026-04-12","project":"global","duration_min":0,"total_edits":1,"total_reads":0,"unique_files":1,"friction_files":0,"log_lines":0}
 {"date":"2026-04-12","project":"maple","duration_min":4,"total_edits":8,"total_reads":6,"unique_files":6,"friction_files":0,"log_lines":1}
 {"date":"2026-04-12","project":"maple","duration_min":0,"total_edits":1,"total_reads":0,"unique_files":1,"friction_files":0,"log_lines":1}
@@ -33,3 +39,4 @@
 {"date":"2026-04-12","project":"building","duration_min":0,"total_edits":2,"total_reads":13,"unique_files":1,"friction_files":0,"log_lines":13}
 {"date":"2026-04-12","project":"global","duration_min":0,"total_edits":2,"total_reads":0,"unique_files":2,"friction_files":0,"log_lines":1}
 {"date":"2026-04-12","project":"global","duration_min":0,"total_edits":1,"total_reads":0,"unique_files":1,"friction_files":0,"log_lines":1}
+{"date":"2026-04-13","project":"global","duration_min":3908,"total_edits":5,"total_reads":45,"unique_files":5,"friction_files":0,"log_lines":0}
