@@ -22,6 +22,14 @@
 {"date": "2026-04-10", "time": "16:29", "agent": "Explore", "model": "haiku", "description": "CMS related models/tables search"}
 {"date": "2026-04-10", "time": "16:51", "agent": "Explore", "model": "haiku", "description": "banking-loan CMS EB12 result code analysis"}
 {"date": "2026-04-10", "time": "16:52", "agent": "Explore", "model": "haiku", "description": "banking-loan CMS change flow and CORE-1041"}
+{"date": "2026-04-10", "time": "17:36", "agent": "Explore", "model": "haiku", "description": "Verify EOD interest types"}
+{"date": "2026-04-10", "time": "17:36", "agent": "Explore", "model": "haiku", "description": "Verify inAPI sale interest handling"}
+{"date": "2026-04-10", "time": "18:24", "agent": "Explore", "model": "haiku", "description": "Explore designated repayment invoice creation"}
+{"date": "2026-04-10", "time": "18:24", "agent": "Explore", "model": "haiku", "description": "Explore inAPI verification events"}
+{"date": "2026-04-13", "time": "10:09", "agent": "Explore", "model": "haiku", "description": "Check inAPI to banking-loan communication"}
+{"date": "2026-04-13", "time": "10:09", "agent": "Explore", "model": "haiku", "description": "Check designated repayment non-EOD applicability"}
+{"date": "2026-04-13", "time": "10:09", "agent": "Explore", "model": "haiku", "description": "Check RepaymentInvoice Type impact"}
+{"date": "2026-04-13", "time": "10:14", "agent": "architect", "model": "opus", "description": "Merge safety analysis for main pull"}
 {"date": "2026-04-12", "time": "15:27", "agent": "Explore", "model": "haiku", "description": "매물장 관련 코드 탐색"}
 {"date": "2026-04-12", "time": "15:33", "agent": "Explore", "model": "haiku", "description": "Auction/옥션 패킷 코드 탐색"}
 {"date": "2026-04-12", "time": "16:02", "agent": "architect", "model": "opus", "description": "KPI 데이터 수집 검증"}
@@ -80,3 +88,4 @@
 {"date": "2026-04-12", "time": "22:20", "agent": "verifier", "model": "opus", "description": "Day 6 검증"}
 {"date": "2026-04-12", "time": "22:22", "agent": "executor", "model": "sonnet", "description": "Day 7: PWA config + icons"}
 {"date": "2026-04-12", "time": "22:23", "agent": "verifier", "model": "opus", "description": "Day 7 검증"}
+{"date": "2026-04-13", "time": "10:18", "agent": "Explore", "model": "haiku", "description": "Explore superpowers plan save paths"}
