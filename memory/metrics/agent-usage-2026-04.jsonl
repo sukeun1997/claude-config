@@ -94,3 +94,4 @@
 {"date": "2026-04-13", "time": "15:00", "agent": "Explore", "model": "haiku", "description": "Compare interest distribution order"}
 {"date": "2026-04-13", "time": "15:10", "agent": "Explore", "model": "haiku", "description": "loan_execution consumer 코드 탐색"}
 {"date": "2026-04-13", "time": "15:39", "agent": "architect", "model": "opus", "description": "@Qualifier kafkaTemplate 안전성 검증"}
+{"date": "2026-04-13", "time": "15:53", "agent": "Explore", "model": "haiku", "description": "예치금 계좌 입금불가 코드 탐색"}
