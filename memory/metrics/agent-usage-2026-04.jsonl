@@ -92,3 +92,5 @@
 {"date": "2026-04-13", "time": "13:23", "agent": "code-reviewer", "model": "sonnet", "description": "Code review: sync_lpn retry fix"}
 {"date": "2026-04-13", "time": "14:36", "agent": "Explore", "model": "haiku", "description": "Trace institution loan report data flow"}
 {"date": "2026-04-13", "time": "15:00", "agent": "Explore", "model": "haiku", "description": "Compare interest distribution order"}
+{"date": "2026-04-13", "time": "15:10", "agent": "Explore", "model": "haiku", "description": "loan_execution consumer 코드 탐색"}
+{"date": "2026-04-13", "time": "15:39", "agent": "architect", "model": "opus", "description": "@Qualifier kafkaTemplate 안전성 검증"}
