@@ -99,3 +99,6 @@
 {"date": "2026-04-13", "time": "17:56", "agent": "Explore", "model": "haiku", "description": "Banking-report 신정원 보고 플로우 탐색"}
 {"date": "2026-04-13", "time": "18:33", "agent": "code-reviewer", "model": "sonnet", "description": "Code review PR #17000"}
 {"date": "2026-04-13", "time": "18:35", "agent": "security-reviewer", "model": "sonnet", "description": "Security review PR #17000"}
+{"date": "2026-04-14", "time": "14:15", "agent": "verifier", "model": "opus", "description": "Opus test case verification"}
+{"date": "2026-04-14", "time": "15:21", "agent": "Explore", "model": "haiku", "description": "기관 자동출금 에러 코드 조사"}
+{"date": "2026-04-14", "time": "15:34", "agent": "code-reviewer", "model": "opus", "description": "Opus full PR risk audit"}
