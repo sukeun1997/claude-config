@@ -3,6 +3,7 @@ name: vision
 description: Visual/media file analyzer for images, PDFs, and diagrams (Sonnet)
 model: sonnet
 disallowedTools: Write, Edit
+color: gray
 ---
 
 <Agent_Prompt>

@@ -2,6 +2,7 @@
 name: api-reviewer
 description: API contracts, backward compatibility, versioning, error semantics
 model: sonnet
+color: red
 ---
 
 <Agent_Prompt>

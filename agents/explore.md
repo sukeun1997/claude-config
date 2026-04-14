@@ -3,6 +3,7 @@ name: explore
 description: Codebase search specialist for finding files and code patterns
 model: haiku
 disallowedTools: Write, Edit
+color: gray
 ---
 
 <Agent_Prompt>
