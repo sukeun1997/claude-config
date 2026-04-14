@@ -36,13 +36,13 @@ edit-tracker (3회+ 반복 편집 감지)
 | 2026-04-10 | agent-usage-tracker settings.json 미등록 (4/6 복구 시 누락) | Harness | 원인: hooks 복구 시 Agent matcher 미등록. 해법: PostToolUse Agent matcher 추가 |
 | 2026-04-10 | Active Context Changed Files 무제한 → 20줄 규칙 위반 (52줄) | Harness | 원인: memory-active-context.sh가 전체 파일 목록 덤프. 해법: Changed Files 블록 제거, 커밋 5개 + diff stat만 표시 |
 | 2026-04-10 | test-5x.txt 5회 반복 편집 | 미분류 — 다음 세션에서 원인 분석 필요 | - |
-| 2026-04-12 | index.ts 3회 반복 편집 | 미분류 — 다음 세션에서 원인 분석 필요 | - |
-| 2026-04-13 | VacantListingManage.tsx 4회 반복 편집 | 미분류 — 다음 세션에서 원인 분석 필요 | - |
-| 2026-04-13 | ListingStyleEditor.tsx 4회 반복 편집 | 미분류 — 다음 세션에서 원인 분석 필요 | - |
-| 2026-04-13 | VacantListing.tsx 13회 반복 편집 | 미분류 — 다음 세션에서 원인 분석 필요 | - |
-| 2026-04-13 | ListingStyleEditor.tsx 9회 반복 편집 | 미분류 — 다음 세션에서 원인 분석 필요 | - |
-| 2026-04-13 | listing-config.ts 3회 반복 편집 | 미분류 — 다음 세션에서 원인 분석 필요 | - |
-| 2026-04-13 | ListingStyleEditor.tsx 3회 반복 편집 | 미분류 — 다음 세션에서 원인 분석 필요 | - |
-| 2026-04-14 | excel-import.service.ts 4회 반복 편집 | 미분류 — 다음 세션에서 원인 분석 필요 | - |
-| 2026-04-14 | BuildingExcel.tsx 5회 반복 편집 | 미분류 — 다음 세션에서 원인 분석 필요 | - |
-| 2026-04-14 | depositStore.ts 3회 반복 편집 | 미분류 — 다음 세션에서 원인 분석 필요 | - |
+| 2026-04-12 | index.ts 3회 반복 편집 | Context (추정) | 소스 반복 — 관련 파일/타입 정의 확인 필요 |
+| 2026-04-13 | VacantListingManage.tsx 4회 반복 편집 | Context (추정) | 소스 반복 — 관련 파일/타입 정의 확인 필요 |
+| 2026-04-13 | ListingStyleEditor.tsx 4회 반복 편집 | Context (추정) | 소스 반복 — 관련 파일/타입 정의 확인 필요 |
+| 2026-04-13 | VacantListing.tsx 13회 반복 편집 | Prompt (추정·13회) | 접근법 오류 가능성 — 초기화 후 재설계 권장 |
+| 2026-04-13 | ListingStyleEditor.tsx 9회 반복 편집 | Prompt (추정·9회) | 접근법 오류 가능성 — 초기화 후 재설계 권장 |
+| 2026-04-13 | listing-config.ts 3회 반복 편집 | Context (추정) | 소스 반복 — 관련 파일/타입 정의 확인 필요 |
+| 2026-04-13 | ListingStyleEditor.tsx 3회 반복 편집 | Context (추정) | 소스 반복 — 관련 파일/타입 정의 확인 필요 |
+| 2026-04-14 | excel-import.service.ts 4회 반복 편집 | Context (추정) | 소스 반복 — 관련 파일/타입 정의 확인 필요 |
+| 2026-04-14 | BuildingExcel.tsx 5회 반복 편집 | Context (추정·강) | 소스 5회+ — 파일 전체 Read 후 재접근 권장 |
+| 2026-04-14 | depositStore.ts 3회 반복 편집 | Context (추정) | 소스 반복 — 관련 파일/타입 정의 확인 필요 |

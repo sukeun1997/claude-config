@@ -343,11 +343,12 @@ if [ -f "$FRICTION_QUEUE" ] && [ -s "$FRICTION_QUEUE" ]; then
     CONTEXT+="- $(basename "$F_PATH"): ${F_COUNT}회 반복 편집
 "
   done < "$FRICTION_QUEUE"
-  CONTEXT+="failure-log.md에 '미분류' 상태로 자동 기록됨.
-⏸️ 작업 시작 전에 failure-log.md의 '미분류' 엔트리를 분류하세요:
+  CONTEXT+="failure-log.md에 원인 계층이 자동 pre-fill됨 (경로+횟수 휴리스틱).
+⏸️ 작업 시작 전에 failure-log.md의 신규 엔트리를 확정하세요:
 1. Read memory/topics/failure-log.md
-2. '미분류' 행의 원인을 Prompt/Context/Harness 중 택1로 변경
-3. 해법 컬럼에 재발 방지책 기록
+2. 'X (추정)' 행을 검증 → 맞으면 '(추정)' 제거하여 확정, 틀리면 다른 계층으로 변경
+3. '미분류' 행은 원인을 Prompt/Context/Harness 중 택1로 분류
+4. 해법 컬럼에 재발 방지책 기록 (pre-fill된 힌트 검토)
 (1분이면 됩니다. 이것이 하네스 자기 진화의 핵심 루프입니다)
 
 "

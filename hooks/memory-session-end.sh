@@ -129,6 +129,32 @@ fi
 
 # ── Friction pattern detection ──
 # Check edit-tracker temp files for repeated edits (3+ on same file)
+# Pre-fill 원인 계층(Prompt/Context/Harness) — 경로 + 횟수 휴리스틱
+classify_friction() {
+  local path="$1" count="$2" layer hint
+  if [ "$count" -ge 7 ]; then
+    echo "Prompt (추정·${count}회)|접근법 오류 가능성 — 초기화 후 재설계 권장"
+    return
+  fi
+  case "$path" in
+    */hooks/*.sh|*/hooks/*.py|*/hooks/*.mjs|*settings.json|*settings.base.json|*governance.yml|*policy-*.json)
+      layer="Harness (추정)"; hint="훅/설정 반복 — settings integrity + hook exec path 확인" ;;
+    */agents/*.md|*/skills/*/SKILL.md|*/commands/*.md|*CLAUDE.md|*/rules/**/*.md)
+      layer="Prompt (추정)"; hint="지시문/스킬 정의 반복 — description/triggers 모호성 점검" ;;
+    *.tsx|*.ts|*.jsx|*.js|*.kt|*.java|*.py|*.go|*.rb)
+      if [ "$count" -ge 5 ]; then
+        layer="Context (추정·강)"; hint="소스 ${count}회+ — 파일 전체 Read 후 재접근 권장"
+      else
+        layer="Context (추정)"; hint="소스 반복 — 관련 파일/타입 정의 확인 필요"
+      fi ;;
+    *.css|*.scss|*.yml|*.yaml|*.toml|*.json)
+      layer="Context (추정)"; hint="설정/스타일 반복 — 기존 값과 원하는 값 명확화" ;;
+    *)
+      layer="미분류"; hint="다음 세션에서 원인 분석 필요" ;;
+  esac
+  echo "${layer}|${hint}"
+}
+
 TRACK_FILE="$TRACK_FILE_PATH"
 if [ -f "$TRACK_FILE" ]; then
   DATE_STR=$(today)
@@ -141,7 +167,10 @@ if [ -f "$TRACK_FILE" ]; then
         COUNT=$(echo "$line" | awk '{print $1}')
         FPATH=$(echo "$line" | awk '{print $2}')
         FNAME=$(basename "$FPATH")
-        echo "| $DATE_STR | ${FNAME} ${COUNT}회 반복 편집 | 미분류 — 다음 세션에서 원인 분석 필요 | - |" >> "$FRICTION_LOG"
+        CLASS=$(classify_friction "$FPATH" "$COUNT")
+        LAYER="${CLASS%%|*}"
+        HINT="${CLASS#*|}"
+        echo "| $DATE_STR | ${FNAME} ${COUNT}회 반복 편집 | ${LAYER} | ${HINT} |" >> "$FRICTION_LOG"
       done <<< "$FRICTION_FILES"
     fi
     # Queue for next session start (model will see this)
