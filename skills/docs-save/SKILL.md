@@ -5,7 +5,7 @@ description: "Claude 생성 문서(plan/spec)를 Obsidian vault에 저장. Use w
 
 # docs-save — Obsidian Vault 저장
 
-Claude가 생성한 plan/spec/설계 문서를 `~/vault/{project}/{branch}/`에 저장한다.
+Claude가 생성한 plan/spec/설계 문서를 `~/IdeaProjects/docs/{project}/{branch}/`에 저장한다.
 
 ## When to Apply
 
@@ -70,15 +70,15 @@ status: active
 ### 6. 복사 + 확인
 
 ```bash
-mkdir -p ~/vault/{project}/{branch-slug}/
+mkdir -p ~/IdeaProjects/docs/{project}/{branch-slug}/
 ```
 
 원본 파일을 Read → frontmatter 주입 → Write로 대상 경로에 저장.
 
 저장 완료 메시지:
-> "저장 완료: `~/vault/{project}/{branch}/{파일명}`"
+> "저장 완료: `~/IdeaProjects/docs/{project}/{branch}/{파일명}`"
 
 ## 제외
 
 - `memory/active/*.md`, `memory/daily/*.md` → 저장 거부 + 안내
-- 이미 `~/vault/` 하위에 있는 파일 → "이미 vault에 있습니다" 안내
+- 이미 `~/IdeaProjects/docs/` 하위에 있는 파일 → "이미 vault에 있습니다" 안내

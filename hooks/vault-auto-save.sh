@@ -53,11 +53,11 @@ BRANCH=$(git rev-parse --abbrev-ref HEAD 2>/dev/null || echo "main")
 # 브랜치 슬러그 결정
 case "$BRANCH" in
   main|master|develop)
-    DEST_DIR="$HOME/vault/${PROJECT}"
+    DEST_DIR="$HOME/IdeaProjects/docs/${PROJECT}"
     ;;
   *)
     BRANCH_SLUG=$(echo "$BRANCH" | sed 's|/|--|g')
-    DEST_DIR="$HOME/vault/${PROJECT}/${BRANCH_SLUG}"
+    DEST_DIR="$HOME/IdeaProjects/docs/${PROJECT}/${BRANCH_SLUG}"
     ;;
 esac
 
@@ -116,7 +116,15 @@ with open(dst, 'w') as f:
     f.write(frontmatter + content)
 PYEOF
 
+# 원본 파일 삭제 (docs/superpowers/ 잔류 방지)
+rm -f "$FILE_PATH"
+
+# 빈 디렉토리 정리
+SRC_DIR=$(dirname "$FILE_PATH")
+rmdir "$SRC_DIR" 2>/dev/null || true
+rmdir "$(dirname "$SRC_DIR")" 2>/dev/null || true
+
 # 성공 메시지 (stderr → Claude에 피드백)
-echo "[vault] Saved: ${DEST_FILE/#$HOME/~}" >&2
+echo "[docs-save] Saved: ${DEST_FILE/#$HOME/~}" >&2
 
 exit 0
