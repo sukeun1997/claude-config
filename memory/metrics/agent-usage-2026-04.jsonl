@@ -148,3 +148,5 @@
 {"date": "2026-04-14", "time": "20:21", "agent": "verifier", "model": "opus", "description": "팝빌 결과코드 처리 검증"}
 {"date": "2026-04-14", "time": "20:22", "agent": "executor", "model": "sonnet", "description": "Task 4 getUnmatchedBills select 교체"}
 {"date": "2026-04-14", "time": "20:24", "agent": "code-reviewer", "model": "opus", "description": "Opus code review 5-point scale"}
+{"date": "2026-04-14", "time": "20:32", "agent": "executor", "model": "sonnet", "description": "Task 5 unmatchedCount 전역 카운터 분리"}
+{"date": "2026-04-14", "time": "20:33", "agent": "Explore", "model": "", "description": "Investigate SMS status polling"}
