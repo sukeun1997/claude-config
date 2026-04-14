@@ -3,7 +3,7 @@
 # superpowers가 생성한 spec/plan 파일을 ~/vault/{project}/{branch}/ 에 자동 복사
 # 비매칭 시 아무 동작 안 함 (exit 0)
 
-set -euo pipefail
+set -uo pipefail  # -e 제거: hook은 실패해도 Claude 세션을 방해하면 안 됨
 
 TOOL_NAME="${TOOL_NAME:-}"
 TOOL_INPUT="${TOOL_INPUT:-}"
@@ -14,22 +14,22 @@ case "$TOOL_NAME" in
   *) exit 0 ;;
 esac
 
-# 변경된 파일 경로 추출
-FILE_PATH=$(echo "$TOOL_INPUT" | python3 -c "
-import sys, json
+# 변경된 파일 경로 추출 (TOOL_INPUT이 클 수 있으므로 env로 전달)
+FILE_PATH=$(TOOL_INPUT="$TOOL_INPUT" python3 -c "
+import os, json
 try:
-    data = json.load(sys.stdin)
+    data = json.loads(os.environ.get('TOOL_INPUT', '{}'))
     print(data.get('file_path', ''))
 except:
     print('')
-" 2>/dev/null)
+" 2>/dev/null) || true
 
 [ -z "$FILE_PATH" ] && exit 0
 
 # 패턴 매칭: superpowers가 생성하는 spec/plan 파일만 대상
 VAULT_TYPE=""
 case "$FILE_PATH" in
-  */docs/superpowers/specs/*-design.md)
+  */docs/superpowers/specs/*.md)
     VAULT_TYPE="spec"
     ;;
   */docs/superpowers/plans/*.md)
@@ -65,7 +65,7 @@ esac
 mkdir -p "$DEST_DIR"
 
 # 원본에서 제목 추출
-TITLE=$(grep -m1 '^# ' "$FILE_PATH" | sed 's/^# //' || echo "Untitled")
+TITLE=$(grep -m1 '^# ' "$FILE_PATH" 2>/dev/null | sed 's/^# //' || echo "Untitled")
 TODAY=$(date +%Y-%m-%d)
 
 # 같은 이름 파일이 이미 있으면 topic suffix 추가

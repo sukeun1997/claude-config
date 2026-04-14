@@ -89,3 +89,48 @@
 {"date": "2026-04-12", "time": "22:22", "agent": "executor", "model": "sonnet", "description": "Day 7: PWA config + icons"}
 {"date": "2026-04-12", "time": "22:23", "agent": "verifier", "model": "opus", "description": "Day 7 검증"}
 {"date": "2026-04-13", "time": "10:18", "agent": "Explore", "model": "haiku", "description": "Explore superpowers plan save paths"}
+{"date": "2026-04-13", "time": "12:57", "agent": "quality-reviewer", "model": "opus", "description": "Japanese phrases QA review"}
+{"date": "2026-04-13", "time": "13:57", "agent": "Explore", "model": "haiku", "description": "채팅비서 엑셀 파싱 코드 탐색"}
+{"date": "2026-04-13", "time": "15:34", "agent": "executor", "model": "sonnet", "description": "Task 1: DB 스키마 + 타입"}
+{"date": "2026-04-13", "time": "15:36", "agent": "executor", "model": "sonnet", "description": "Task 2: Backend 서비스 + IPC + API"}
+{"date": "2026-04-13", "time": "15:38", "agent": "executor", "model": "sonnet", "description": "Task 3: 스타일 편집 Drawer UI"}
+{"date": "2026-04-13", "time": "15:40", "agent": "executor", "model": "sonnet", "description": "Task 4: 공개 페이지 스타일 적용"}
+{"date": "2026-04-13", "time": "15:44", "agent": "executor", "model": "sonnet", "description": "Task 5: 로고 강조 + 업데이트 로그"}
+{"date": "2026-04-13", "time": "16:17", "agent": "verifier", "model": "opus", "description": "Opus 검증: 매물장 디자인 커스터마이징"}
+{"date": "2026-04-13", "time": "20:07", "agent": "analyst", "model": "opus", "description": "Phase 0: analyst interview"}
+{"date": "2026-04-13", "time": "20:21", "agent": "deep-executor", "model": "opus", "description": "Phase 1: review-aggregator"}
+{"date": "2026-04-13", "time": "20:24", "agent": "code-reviewer", "model": "sonnet", "description": "Code review ListingConfig"}
+{"date": "2026-04-13", "time": "20:24", "agent": "quality-reviewer", "model": "sonnet", "description": "Quality review ListingConfig"}
+{"date": "2026-04-13", "time": "20:24", "agent": "security-reviewer", "model": "sonnet", "description": "Security review ListingConfig"}
+{"date": "2026-04-13", "time": "20:24", "agent": "architect", "model": "opus", "description": "Architecture review ListingConfig"}
+{"date": "2026-04-13", "time": "20:29", "agent": "critic", "model": "opus", "description": "Phase 2: critic evaluation"}
+{"date": "2026-04-13", "time": "20:31", "agent": "verifier", "model": "opus", "description": "Phase 4: verify build+diff"}
+{"date": "2026-04-13", "time": "20:33", "agent": "Explore", "model": "", "description": "호실 모델 및 관련 UI 탐색"}
+{"date": "2026-04-13", "time": "21:36", "agent": "critic", "model": "opus", "description": "호실 일괄 추가 설계 critic 검증"}
+{"date": "2026-04-13", "time": "22:00", "agent": "Explore", "model": "", "description": "기존 패턴 & 테스트 파일 확인"}
+{"date": "2026-04-13", "time": "22:09", "agent": "critic", "model": "opus", "description": "구현 플랜 adversarial 검증"}
+{"date": "2026-04-13", "time": "22:16", "agent": "executor", "model": "sonnet", "description": "B1: Task 1 (타입) + Task 2 (TDD 유틸)"}
+{"date": "2026-04-13", "time": "22:17", "agent": "executor", "model": "sonnet", "description": "B2: Task 3 Prisma Service 함수"}
+{"date": "2026-04-13", "time": "22:18", "agent": "executor", "model": "sonnet", "description": "B3: Task 4 IPC + Express + routeMap"}
+{"date": "2026-04-13", "time": "22:19", "agent": "executor", "model": "sonnet", "description": "B4: Task 5 Zustand store 액션"}
+{"date": "2026-04-13", "time": "22:22", "agent": "executor", "model": "sonnet", "description": "B5: Task 6 UnitBulkCreateModal UI"}
+{"date": "2026-04-13", "time": "22:23", "agent": "executor", "model": "sonnet", "description": "B6: Task 7 + 8 ExcelGrid 통합 + UpdateLog"}
+{"date": "2026-04-13", "time": "22:27", "agent": "verifier", "model": "opus", "description": "Task 9 최종 검증 (opus verifier)"}
+{"date": "2026-04-13", "time": "22:29", "agent": "code-reviewer", "model": "opus", "description": "최종 코드 품질 리뷰 (opus)"}
+{"date": "2026-04-14", "time": "09:28", "agent": "executor", "model": "sonnet", "description": "HIGH + MEDIUM 일괄 수정 (5건)"}
+{"date": "2026-04-14", "time": "09:38", "agent": "verifier", "model": "opus", "description": "PR #2 머지 전 최종 안전성 검증"}
+{"date": "2026-04-14", "time": "09:38", "agent": "performance-reviewer", "model": "sonnet", "description": "성능 병목 진단 + 인덱스/캐싱 제안"}
+{"date": "2026-04-14", "time": "11:40", "agent": "Explore", "model": "haiku", "description": "엑셀 임포트 관련 코드 탐색"}
+{"date": "2026-04-14", "time": "11:43", "agent": "executor", "model": "sonnet", "description": "Task 1 slow query 로그 활성화"}
+{"date": "2026-04-14", "time": "15:18", "agent": "general-purpose", "model": "sonnet", "description": "Task 1+2: excel-import 서비스"}
+{"date": "2026-04-14", "time": "15:21", "agent": "general-purpose", "model": "sonnet", "description": "Task 3: API 엔드포인트 수정"}
+{"date": "2026-04-14", "time": "15:24", "agent": "general-purpose", "model": "sonnet", "description": "Task 4: VoiceAssistant Modal 개선"}
+{"date": "2026-04-14", "time": "15:26", "agent": "verifier", "model": "opus", "description": "최종 검증: 빌드+diff+스펙 확인"}
+{"date": "2026-04-14", "time": "16:22", "agent": "quality-reviewer", "model": "opus", "description": "테스트 케이스 적절성 검증"}
+{"date": "2026-04-14", "time": "18:04", "agent": "Explore", "model": "haiku", "description": "납부처리 코드 탐색"}
+{"date": "2026-04-14", "time": "18:27", "agent": "verifier", "model": "opus", "description": "구현 검증 (verifier)"}
+{"date": "2026-04-14", "time": "18:27", "agent": "critic", "model": "opus", "description": "Baseline 기반 우선순위 재조정 adversarial 검증"}
+{"date": "2026-04-14", "time": "18:39", "agent": "verifier", "model": "opus", "description": "opus 구현 검증"}
+{"date": "2026-04-14", "time": "19:30", "agent": "executor", "model": "sonnet", "description": "Task 2 findAllBuildings 쿼리 2+4 병렬화"}
+{"date": "2026-04-14", "time": "19:31", "agent": "verifier", "model": "opus", "description": "Task 2 병렬화 결과 검증"}
+{"date": "2026-04-14", "time": "19:33", "agent": "Explore", "model": "haiku", "description": "SMS 발송/결과 코드 탐색"}
