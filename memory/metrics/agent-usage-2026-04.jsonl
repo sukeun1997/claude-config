@@ -140,3 +140,11 @@
 {"date": "2026-04-14", "time": "20:01", "agent": "executor", "model": "sonnet", "description": "Task 5-7: Store + Modal + LogTab"}
 {"date": "2026-04-14", "time": "20:03", "agent": "verifier", "model": "opus", "description": "빌드 + 테스트 검증"}
 {"date": "2026-04-14", "time": "20:09", "agent": "Explore", "model": "haiku", "description": "Find OCI server briefing setup"}
+{"date": "2026-04-14", "time": "20:14", "agent": "Explore", "model": "haiku", "description": "Compare claude-mem vs memory hooks"}
+{"date": "2026-04-14", "time": "20:14", "agent": "Explore", "model": "haiku", "description": "Review PreCompact exit 2 blocking"}
+{"date": "2026-04-14", "time": "20:14", "agent": "Explore", "model": "haiku", "description": "Test gh stack CLI availability"}
+{"date": "2026-04-14", "time": "20:16", "agent": "architect", "model": "opus", "description": "Opus 검증 — karpathy 원칙 적용안"}
+{"date": "2026-04-14", "time": "20:18", "agent": "executor", "model": "sonnet", "description": "Task 3' Prisma 인덱스 3개 추가"}
+{"date": "2026-04-14", "time": "20:21", "agent": "verifier", "model": "opus", "description": "팝빌 결과코드 처리 검증"}
+{"date": "2026-04-14", "time": "20:22", "agent": "executor", "model": "sonnet", "description": "Task 4 getUnmatchedBills select 교체"}
+{"date": "2026-04-14", "time": "20:24", "agent": "code-reviewer", "model": "opus", "description": "Opus code review 5-point scale"}
