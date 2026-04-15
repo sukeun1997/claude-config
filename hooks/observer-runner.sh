@@ -9,7 +9,7 @@ HOMUNCULUS_DIR="$HOME/.claude/homunculus"
 OBS_FILE="$HOMUNCULUS_DIR/observations.jsonl"
 CURSOR_FILE="$HOMUNCULUS_DIR/.observer-cursor"
 INSTINCTS_DIR="$HOMUNCULUS_DIR/instincts/personal"
-MIN_NEW_OBS=20  # Minimum new observations before triggering analysis
+MIN_NEW_OBS=10  # Minimum new observations before triggering analysis (lowered from 20 for faster evolution)
 
 # Exit early if no observations file
 [ -f "$OBS_FILE" ] || exit 0
@@ -114,6 +114,12 @@ done < "$PATTERNS_FILE"
 
 # Update cursor
 echo "$TOTAL_LINES" > "$CURSOR_FILE"
+
+# Apply failure-log human-verified boosts (runs regardless of volume)
+BOOST_SCRIPT="$HOME/.claude/hooks/failure-log-instinct-boost.py"
+if [ -f "$BOOST_SCRIPT" ]; then
+  python3 "$BOOST_SCRIPT" 2>/dev/null || true
+fi
 
 # Run instinct evolution check
 EVOLVE_SCRIPT="$HOME/.claude/hooks/instinct-evolve.sh"

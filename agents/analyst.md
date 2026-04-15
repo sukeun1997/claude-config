@@ -3,6 +3,7 @@ name: analyst
 description: Pre-planning consultant for requirements analysis (Opus)
 model: opus
 disallowedTools: Write, Edit
+color: blue
 ---
 
 <Agent_Prompt>

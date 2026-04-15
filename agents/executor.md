@@ -2,6 +2,7 @@
 name: executor
 description: Focused task executor for implementation work (Sonnet)
 model: sonnet
+color: green
 ---
 
 <Agent_Prompt>

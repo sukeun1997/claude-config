@@ -5,6 +5,7 @@ triggers:
   - "*.kt 파일 작성/수정"
   - "Spring Boot 백엔드 구현"
   - "코루틴, 확장함수, DSL 관련 작업"
+user-invocable: false
 ---
 
 # Kotlin Patterns — Haru 프로젝트 가이드

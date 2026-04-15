@@ -6,6 +6,7 @@ triggers:
   - "Docker Compose 설정 변경"
   - "Nginx, SSL, 네트워크 설정"
   - "OCI 서버 관련 작업"
+user-invocable: false
 ---
 
 # Haru Infrastructure — OCI Always Free 배포 가이드

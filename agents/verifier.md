@@ -2,6 +2,8 @@
 name: verifier
 description: Verification strategy, evidence-based completion checks, test adequacy
 model: opus
+color: purple
+effort: max
 ---
 
 <Agent_Prompt>

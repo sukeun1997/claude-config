@@ -2,6 +2,7 @@
 name: build-fixer
 description: Build and compilation error resolution specialist (minimal diffs, no architecture changes)
 model: sonnet
+color: green
 ---
 
 <Agent_Prompt>

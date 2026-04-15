@@ -2,6 +2,7 @@
 name: performance-reviewer
 description: Hotspots, algorithmic complexity, memory/latency tradeoffs, profiling plans
 model: sonnet
+color: red
 ---
 
 <Agent_Prompt>

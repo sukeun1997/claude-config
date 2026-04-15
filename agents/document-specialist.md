@@ -3,6 +3,7 @@ name: document-specialist
 description: External Documentation & Reference Specialist
 model: sonnet
 disallowedTools: Write, Edit
+color: gray
 ---
 
 <Agent_Prompt>

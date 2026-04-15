@@ -42,30 +42,68 @@ Phase 3: Execution
 
 ## 실행 방법
 
+### Pre-flight: Vault 경로 계산
+
+brainstorming/writing-plans 호출 **이전**에 저장 경로를 결정해 preference로 전달한다.
+두 skill 모두 `(User preferences for location override this default)`를 지원하므로, 하드코딩된 `docs/superpowers/{specs,plans}/` 대신 Obsidian vault를 주 저장소로 쓴다.
+
+1. **Project 감지** (CWD 기반, `docs-save` skill과 동일 규칙):
+   - `~/.claude` 또는 매칭 없음 → `global`
+   - 그 외 → 디렉토리명 (예: `banking-loan`, `haru`, `rms`)
+2. **Branch 감지**:
+   ```bash
+   BRANCH=$(git rev-parse --abbrev-ref HEAD 2>/dev/null || echo "main")
+   ```
+   - `main`/`master`/`develop` → 브랜치 폴더 없음
+   - 그 외 → 슬래시를 `--`로 치환 (`fix/avro-dlt` → `fix--avro-dlt`)
+3. **Target 디렉토리**: `~/vault/{project}/{branch-slug}/` (base 브랜치면 `~/vault/{project}/`)
+4. 디렉토리가 없으면 `mkdir -p`로 생성
+
 ### Phase 1: Brainstorming
 
-`superpowers:brainstorming` 스킬을 인자 `{설명}`과 함께 invoke한다.
+`superpowers:brainstorming` 스킬을 아래 인자로 invoke한다:
+
+```
+{설명}
+
+[저장 선호]
+- spec 파일 경로: ~/vault/{project}/{branch-slug}/spec.md
+  (이미 같은 이름이 있으면 spec-{topic-slug}.md)
+- docs/superpowers/specs/ 에는 저장하지 않음 (vault가 정본)
+- commit은 해당 디렉토리가 git 저장소가 아니면 skip
+```
+
 brainstorming 스킬이 인터뷰 → 접근법 제안 → 설계안 → 스펙 문서 작성까지 수행한다.
 
 ### Gate 1
 
 brainstorming 완료 후 사용자에게 확인:
 
-> "설계 완료. 스펙: `{spec_path}`. 플랜 작성으로 넘어갈까요? (docs에 저장하려면 `/docs-save`)"
+> "설계 완료. 스펙: `~/vault/{project}/{branch}/spec.md`. 플랜 작성으로 넘어갈까요?"
 
 - 사용자 OK → Phase 2 진행
 - 사용자 피드백 → brainstorming 내에서 수정 후 다시 Gate 1
 
 ### Phase 2: Planning
 
-`superpowers:writing-plans` 스킬을 invoke한다.
+`superpowers:writing-plans` 스킬을 아래 인자로 invoke한다:
+
+```
+[스펙 경로] ~/vault/{project}/{branch-slug}/spec.md
+
+[저장 선호]
+- plan 파일 경로: ~/vault/{project}/{branch-slug}/plan.md
+  (이미 같은 이름이 있으면 plan-{topic-slug}.md)
+- docs/superpowers/plans/ 에는 저장하지 않음 (vault가 정본)
+```
+
 스펙 문서 기반으로 구현 계획을 작성한다.
 
 ### Gate 2
 
 플랜 완료 후 사용자에게 확인:
 
-> "플랜 완료. `{plan_path}`. 구현 시작할까요? (1: Subagent-Driven / 2: Inline) — docs 저장: `/docs-save`"
+> "플랜 완료. `~/vault/{project}/{branch}/plan.md`. 구현 시작할까요? (1: Subagent-Driven / 2: Inline)"
 
 - 사용자 OK → Phase 3 진행
 - 사용자 피드백 → 플랜 수정 후 다시 Gate 2

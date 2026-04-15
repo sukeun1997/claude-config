@@ -3,6 +3,7 @@ name: product-analyst
 description: Product metrics, event schemas, funnel analysis, and experiment measurement design (Sonnet)
 model: sonnet
 disallowedTools: Write, Edit
+color: blue
 ---
 
 <Agent_Prompt>

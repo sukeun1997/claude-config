@@ -6,6 +6,22 @@ type: reference
 
 # Absorbed Articles
 
+### 2026-04-14 (2): shanraisshan/claude-code-best-practice — agent/skill frontmatter 필드 3종
+- **URL**: https://github.com/shanraisshan/claude-code-best-practice
+- **유형**: best-practice reference (42.9k stars, Boris Cherny 스타일 CC 패턴 카탈로그)
+- **적용**: 32건 (skill 3: user-invocable:false 숨김 — kotlin-patterns/redis-cache-patterns/haru-infra / agent 28: color 필드 7색 역할 클러스터 / agent 2: effort:max — verifier/critic)
+- **보류**: 3건 (G2 agent `skills:` 프리로딩 — 프롬프트 주입 대안 존재, G6 skill `paths:` glob — 공식 지원 미확인, G9 Stop 훅 exit 2 nudge — 무한 루프 리스크 + CLAUDE.md §1 중복)
+- **제외 (pre-filter)**: 4건 (agent hooks 필드, context:fork, startup-flags --init-only, PostToolUse formatter — 환경 불일치/기존 구조 중복/프로젝트별)
+- **핵심 인사이트**: 28개 에이전트가 `color` 필드 0건 사용 → 병렬 실행 로그 가독성 gap. 60+ 스킬 중 `user-invocable` 0건 → `/` 메뉴에 참조 전용 스킬 노출로 노이즈. frontmatter 미지원 필드는 무시되므로 적용 비용은 낮지만, `paths:` glob 자동 활성화와 `skills:` 프리로딩은 공식 지원이 불명이라 보류가 안전. **Opus 검증이 "즉시 적용 2건 + 점진적 1건 + 보류 3건"으로 과욕 차단**하여 /absorb 신호 품질 상승.
+
+### 2026-04-14: Karpathy-Inspired Claude Code Guidelines (4 Principles)
+- **URL**: https://github.com/forrestchang/andrej-karpathy-skills
+- **유형**: opinion + guideline (Karpathy의 LLM 코딩 실패 관찰 기반 CLAUDE.md 템플릿)
+- **적용**: 2건 (guideline §1: Disambiguation & Pushback 3개 bullet, guideline §5: 변경 최소화 소섹션 6개 rule)
+- **스킵**: 1건 (D. 메인 세션용 mini Sprint Contract — Opus 권장에 따라 다음 사이클로 보류: A/B 적용 후 friction 모니터링 필요)
+- **이미 적용 중**: Simplicity First 5항목 (시스템 기본 프롬프트 + §5 Coding Standards), State assumptions (§1 추측 금지 + 증거 먼저 + 환경 확인), Goal-Driven Execution (verification.md Sprint Contract + superpowers:systematic-debugging)
+- **핵심 인사이트**: 기존 CLAUDE.md는 "에이전트 위임/검증 인프라" 중심이라 *메인 세션 직접 작업* 시의 절제 규칙에 gap. Karpathy의 "묵시적 해석 금지 + pushback + 변경 추적성" 원칙은 시간 순서상 "결정 전 질문 → 결정 후 밀고 나감"의 앞쪽 반을 채움. dead code "언급만, 삭제 금지"는 over-cleanup 경향 억제 효과.
+
 ### 2026-03-25: Harness Design for Long-Running Application Development
 - **URL**: https://www.anthropic.com/engineering/harness-design-long-running-apps
 - **유형**: engineering-blog
