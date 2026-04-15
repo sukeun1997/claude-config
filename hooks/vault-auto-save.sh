@@ -53,11 +53,11 @@ BRANCH=$(git rev-parse --abbrev-ref HEAD 2>/dev/null || echo "main")
 # 브랜치 슬러그 결정
 case "$BRANCH" in
   main|master|develop|dev)
-    DEST_DIR="$HOME/IdeaProjects/docs/${PROJECT}"
+    DEST_DIR="$HOME/vault/${PROJECT}"
     ;;
   *)
     BRANCH_SLUG=$(echo "$BRANCH" | sed 's|/|--|g')
-    DEST_DIR="$HOME/IdeaProjects/docs/${PROJECT}/${BRANCH_SLUG}"
+    DEST_DIR="$HOME/vault/${PROJECT}/${BRANCH_SLUG}"
     ;;
 esac
 
