@@ -193,3 +193,7 @@
 {"date": "2026-04-14", "time": "22:06", "agent": "verifier", "model": "opus", "description": "Task 17: 통합 검증"}
 {"date": "2026-04-14", "time": "22:10", "agent": "code-reviewer", "model": "opus", "description": "Task 18: 최종 종합 코드 리뷰"}
 {"date": "2026-04-14", "time": "22:12", "agent": "executor", "model": "sonnet", "description": "HIGH 2건 수정"}
+{"date": "2026-04-15", "time": "10:21", "agent": "Explore", "model": "", "description": "AI 비서 SMS 기능 탐색"}
+{"date": "2026-04-15", "time": "10:33", "agent": "Explore", "model": "", "description": "에러 메시지 노출 범위 탐색"}
+{"date": "2026-04-15", "time": "11:25", "agent": "Explore", "model": "", "description": "AI 비서 연락처 갱신 가능 여부 탐색"}
+{"date": "2026-04-15", "time": "13:25", "agent": "Explore", "model": "", "description": "청구서 생성/삭제 로직 탐색"}
