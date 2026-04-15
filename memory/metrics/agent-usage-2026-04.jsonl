@@ -193,3 +193,8 @@
 {"date": "2026-04-14", "time": "22:06", "agent": "verifier", "model": "opus", "description": "Task 17: 통합 검증"}
 {"date": "2026-04-14", "time": "22:10", "agent": "code-reviewer", "model": "opus", "description": "Task 18: 최종 종합 코드 리뷰"}
 {"date": "2026-04-14", "time": "22:12", "agent": "executor", "model": "sonnet", "description": "HIGH 2건 수정"}
+{"date": "2026-04-15", "time": "13:13", "agent": "Explore", "model": "haiku", "description": "Entity comment 현황 조사"}
+{"date": "2026-04-15", "time": "13:43", "agent": "Explore", "model": "haiku", "description": "RepaymentConfirmedEvent 구조 확인"}
+{"date": "2026-04-15", "time": "13:43", "agent": "Explore", "model": "haiku", "description": "지정상환 계산기 PR/구현 확인"}
+{"date": "2026-04-15", "time": "13:43", "agent": "Explore", "model": "haiku", "description": "inapi process_type 값 확인"}
+{"date": "2026-04-15", "time": "13:43", "agent": "Explore", "model": "haiku", "description": "inapi LoanLossEvent 확인"}
