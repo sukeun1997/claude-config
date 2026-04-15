@@ -40,3 +40,4 @@
 {"timestamp": "2026-04-14T21:02:54.824164", "skill": "merge-check", "project": "global"}
 {"timestamp": "2026-04-14T21:06:22.142719", "skill": "superpowers:writing-plans", "project": "building"}
 {"timestamp": "2026-04-14T21:25:30.453449", "skill": "superpowers:subagent-driven-development", "project": "building"}
+{"timestamp": "2026-04-15T17:35:11.975333", "skill": "sync-pr", "project": "global"}
