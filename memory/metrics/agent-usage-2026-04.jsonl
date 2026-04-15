@@ -199,3 +199,10 @@
 {"date": "2026-04-15", "time": "13:43", "agent": "Explore", "model": "haiku", "description": "inapi process_type 값 확인"}
 {"date": "2026-04-15", "time": "13:43", "agent": "Explore", "model": "haiku", "description": "inapi LoanLossEvent 확인"}
 {"date": "2026-04-15", "time": "15:31", "agent": "Explore", "model": "haiku", "description": "EOD 지정상환 Port 인터페이스 상세"}
+{"date": "2026-04-15", "time": "16:12", "agent": "Explore", "model": "haiku", "description": "Type enum + when문 전수 조사"}
+{"date": "2026-04-15", "time": "16:23", "agent": "executor", "model": "sonnet", "description": "Phase 0 매각상환 Type 추가 구현"}
+{"date": "2026-04-15", "time": "17:01", "agent": "Explore", "model": "haiku", "description": "기존 JPA Entity 패턴 조사"}
+{"date": "2026-04-15", "time": "17:05", "agent": "Explore", "model": "haiku", "description": "inapi 매각상환 도메인 코드 조사"}
+{"date": "2026-04-15", "time": "17:16", "agent": "deep-executor", "model": "opus", "description": "Phase 1 매각 기반 인프라 구현"}
+{"date": "2026-04-15", "time": "17:18", "agent": "critic", "model": "opus", "description": "Tech advisor 스킬 검증"}
+{"date": "2026-04-15", "time": "17:28", "agent": "critic", "model": "opus", "description": "Tech advisor 시니어/CTO 관점 검증"}
