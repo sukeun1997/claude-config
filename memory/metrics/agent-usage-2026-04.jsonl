@@ -211,3 +211,4 @@
 {"date": "2026-04-15", "time": "18:05", "agent": "general-purpose", "model": "haiku", "description": "Notion 매각 스펙 문서 조회"}
 {"date": "2026-04-15", "time": "18:06", "agent": "Explore", "model": "haiku", "description": "inapi RepaymentSchedule 매각 필드 확인"}
 {"date": "2026-04-16", "time": "10:32", "agent": "Explore", "model": "haiku", "description": "ParentLoan 에러 원인 분석"}
+{"date": "2026-04-16", "time": "13:38", "agent": "Explore", "model": "haiku", "description": "Explore Invoice hierarchy structure"}
