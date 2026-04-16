@@ -224,3 +224,5 @@
 {"date": "2026-04-16", "time": "15:51", "agent": "Explore", "model": "sonnet", "description": "Trace sale completion in inapi codebase"}
 {"date": "2026-04-16", "time": "15:53", "agent": "Explore", "model": "haiku", "description": "Find LoanStatusLog model structure"}
 {"date": "2026-04-16", "time": "16:02", "agent": "architect", "model": "opus", "description": "Verify SQL join accuracy against inapi models"}
+{"date": "2026-04-16", "time": "17:04", "agent": "Explore", "model": "haiku", "description": "Find error codes in JB banking"}
+{"date": "2026-04-16", "time": "17:04", "agent": "Explore", "model": "haiku", "description": "Find 1000번 전문 messagerule"}
