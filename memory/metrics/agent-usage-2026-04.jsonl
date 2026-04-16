@@ -212,3 +212,15 @@
 {"date": "2026-04-15", "time": "18:06", "agent": "Explore", "model": "haiku", "description": "inapi RepaymentSchedule 매각 필드 확인"}
 {"date": "2026-04-16", "time": "10:32", "agent": "Explore", "model": "haiku", "description": "ParentLoan 에러 원인 분석"}
 {"date": "2026-04-16", "time": "13:38", "agent": "Explore", "model": "haiku", "description": "Explore Invoice hierarchy structure"}
+{"date": "2026-04-16", "time": "13:49", "agent": "Explore", "model": "haiku", "description": "Check current feature/sale-base changes"}
+{"date": "2026-04-16", "time": "13:49", "agent": "Explore", "model": "haiku", "description": "Explore inapi sale_loan_history table"}
+{"date": "2026-04-16", "time": "13:51", "agent": "Explore", "model": "haiku", "description": "Explore Phase 0 매각상환 changes to roll back"}
+{"date": "2026-04-16", "time": "13:51", "agent": "Explore", "model": "haiku", "description": "Explore EodRepaymentInvoice pattern deeply"}
+{"date": "2026-04-16", "time": "13:52", "agent": "Explore", "model": "haiku", "description": "Explore repayment process flow"}
+{"date": "2026-04-16", "time": "13:56", "agent": "Explore", "model": "haiku", "description": "Read key files for v3 plan"}
+{"date": "2026-04-16", "time": "13:56", "agent": "Explore", "model": "haiku", "description": "Read EodInvoiceUseCase and EodRepaymentRecord"}
+{"date": "2026-04-16", "time": "14:10", "agent": "Explore", "model": "haiku", "description": "Check InvoiceRepository + event contracts"}
+{"date": "2026-04-16", "time": "15:33", "agent": "Explore", "model": "haiku", "description": "Find inAPI overdue/EOD table structure"}
+{"date": "2026-04-16", "time": "15:51", "agent": "Explore", "model": "sonnet", "description": "Trace sale completion in inapi codebase"}
+{"date": "2026-04-16", "time": "15:53", "agent": "Explore", "model": "haiku", "description": "Find LoanStatusLog model structure"}
+{"date": "2026-04-16", "time": "16:02", "agent": "architect", "model": "opus", "description": "Verify SQL join accuracy against inapi models"}
