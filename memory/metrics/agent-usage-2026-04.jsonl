@@ -227,3 +227,6 @@
 {"date": "2026-04-16", "time": "17:04", "agent": "Explore", "model": "haiku", "description": "Find error codes in JB banking"}
 {"date": "2026-04-16", "time": "17:04", "agent": "Explore", "model": "haiku", "description": "Find 1000번 전문 messagerule"}
 {"date": "2026-04-16", "time": "18:02", "agent": "Explore", "model": "haiku", "description": "매각 spec 검토용 코드 탐색"}
+{"date": "2026-04-17", "time": "10:51", "agent": "general-purpose", "model": "sonnet", "description": "Notion AS-IS 매각 페이지 분석"}
+{"date": "2026-04-17", "time": "10:51", "agent": "explore", "model": "", "description": "inapi 매각 코드 조사"}
+{"date": "2026-04-17", "time": "10:52", "agent": "explore", "model": "", "description": "banking-loan 매각 + RepaymentSchedule 조사"}
