@@ -230,3 +230,7 @@
 {"date": "2026-04-17", "time": "10:51", "agent": "general-purpose", "model": "sonnet", "description": "Notion AS-IS 매각 페이지 분석"}
 {"date": "2026-04-17", "time": "10:51", "agent": "explore", "model": "", "description": "inapi 매각 코드 조사"}
 {"date": "2026-04-17", "time": "10:52", "agent": "explore", "model": "", "description": "banking-loan 매각 + RepaymentSchedule 조사"}
+{"date": "2026-04-17", "time": "11:19", "agent": "Explore", "model": "haiku", "description": "차입자 주소/지번주소 저장 위치 탐색"}
+{"date": "2026-04-17", "time": "11:32", "agent": "Explore", "model": "haiku", "description": "pf-user 주소 저장 로직 추적"}
+{"date": "2026-04-17", "time": "13:00", "agent": "Explore", "model": "haiku", "description": "RepaymentSchedule/Invoice 생성 시점 조사"}
+{"date": "2026-04-17", "time": "14:34", "agent": "Explore", "model": "", "description": "대출실행 3000/7000 전문 호출 조사"}
