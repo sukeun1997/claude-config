@@ -198,3 +198,26 @@
 {"date": "2026-04-15", "time": "11:25", "agent": "Explore", "model": "", "description": "AI 비서 연락처 갱신 가능 여부 탐색"}
 {"date": "2026-04-15", "time": "13:25", "agent": "Explore", "model": "", "description": "청구서 생성/삭제 로직 탐색"}
 {"date": "2026-04-18", "time": "12:57", "agent": "critic", "model": "opus", "description": "추천 방향 opus 검증"}
+{"date": "2026-04-18", "time": "13:17", "agent": "executor", "model": "sonnet", "description": "T1 implementer — skeleton + route"}
+{"date": "2026-04-18", "time": "13:18", "agent": "general-purpose", "model": "sonnet", "description": "T1 spec reviewer"}
+{"date": "2026-04-18", "time": "13:18", "agent": "code-reviewer", "model": "sonnet", "description": "T1 code quality review"}
+{"date": "2026-04-18", "time": "13:20", "agent": "executor", "model": "sonnet", "description": "T2 implementer — resolveStatus TDD"}
+{"date": "2026-04-18", "time": "13:21", "agent": "general-purpose", "model": "sonnet", "description": "T2 spec reviewer"}
+{"date": "2026-04-18", "time": "13:21", "agent": "code-reviewer", "model": "sonnet", "description": "T2 code quality"}
+{"date": "2026-04-18", "time": "13:23", "agent": "executor", "model": "sonnet", "description": "T3 implementer — classifyMemo TDD"}
+{"date": "2026-04-18", "time": "13:23", "agent": "general-purpose", "model": "sonnet", "description": "T3 spec reviewer"}
+{"date": "2026-04-18", "time": "13:23", "agent": "code-reviewer", "model": "sonnet", "description": "T3 code quality"}
+{"date": "2026-04-18", "time": "13:25", "agent": "executor", "model": "sonnet", "description": "T4 implementer — CSS"}
+{"date": "2026-04-18", "time": "13:26", "agent": "executor", "model": "sonnet", "description": "T5+T6 implementer — 2 simple components"}
+{"date": "2026-04-18", "time": "13:27", "agent": "executor", "model": "sonnet", "description": "T7 implementer — UnitRow"}
+{"date": "2026-04-18", "time": "13:28", "agent": "executor", "model": "sonnet", "description": "T8 implementer — BuildingCard"}
+{"date": "2026-04-18", "time": "13:29", "agent": "executor", "model": "sonnet", "description": "T9 implementer — RegionSection + barrel"}
+{"date": "2026-04-18", "time": "13:31", "agent": "executor", "model": "sonnet", "description": "T10+T11 implementer — main page + mobile"}
+{"date": "2026-04-18", "time": "13:32", "agent": "general-purpose", "model": "sonnet", "description": "T10+11 spec reviewer"}
+{"date": "2026-04-18", "time": "13:32", "agent": "code-reviewer", "model": "sonnet", "description": "T10+11 code quality"}
+{"date": "2026-04-18", "time": "13:33", "agent": "executor", "model": "sonnet", "description": "T10+11 fix — phone const + catch"}
+{"date": "2026-04-18", "time": "13:33", "agent": "code-reviewer", "model": "sonnet", "description": "T10+11 re-review after fix"}
+{"date": "2026-04-18", "time": "13:34", "agent": "executor", "model": "sonnet", "description": "T12 implementer — V2 preview button"}
+{"date": "2026-04-18", "time": "13:35", "agent": "executor", "model": "sonnet", "description": "T13 implementer — UpdateLog entry"}
+{"date": "2026-04-18", "time": "13:36", "agent": "executor", "model": "sonnet", "description": "T14 implementer — Playwright E2E"}
+{"date": "2026-04-18", "time": "13:38", "agent": "verifier", "model": "opus", "description": "T15 final verifier — independent judgment"}
