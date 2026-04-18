@@ -35,21 +35,21 @@ edit-tracker (3회+ 반복 편집 감지)
 | 2026-04-10 | sessions.jsonl total_edits 항상 0 (3/29~ 전수) | Harness | 원인: tool-tracker.sh의 `grep -cxF \|\| echo "0"` — grep count=0 시 exit 1 → echo "0" 추가 출력 → COUNT="0\n0" → arithmetic syntax error. 해법: `COUNT=$(...) \|\| COUNT=0` 패턴으로 수정 |
 | 2026-04-10 | agent-usage-tracker settings.json 미등록 (4/6 복구 시 누락) | Harness | 원인: hooks 복구 시 Agent matcher 미등록. 해법: PostToolUse Agent matcher 추가 |
 | 2026-04-10 | Active Context Changed Files 무제한 → 20줄 규칙 위반 (52줄) | Harness | 원인: memory-active-context.sh가 전체 파일 목록 덤프. 해법: Changed Files 블록 제거, 커밋 5개 + diff stat만 표시 |
-| 2026-04-10 | test-5x.txt 5회 반복 편집 | 미분류 — 다음 세션에서 원인 분석 필요 | - |
-| 2026-04-12 | index.ts 3회 반복 편집 | 미분류 — 다음 세션에서 원인 분석 필요 | - |
-| 2026-04-13 | MEMORY.md 4회 반복 편집 | 미분류 — 다음 세션에서 원인 분석 필요 | - |
-| 2026-04-13 | MEMORY.md 4회 반복 편집 | 미분류 — 다음 세션에서 원인 분석 필요 | - |
-| 2026-04-13 | sync_lpn_settlement_to_legacy_schedule.py 4회 반복 편집 | 미분류 — 다음 세션에서 원인 분석 필요 | - |
-| 2026-04-13 | 2026-04-10-sale-loss-implementation-v2-design.md 6회 반복 편집 | 미분류 — 다음 세션에서 원인 분석 필요 | - |
-| 2026-04-14 | test_sync_lpn_settlement_info.py 4회 반복 편집 | 미분류 — 다음 세션에서 원인 분석 필요 | - |
-| 2026-04-14 | ecr.md 4회 반복 편집 | 미분류 — 다음 세션에서 원인 분석 필요 | - |
-| 2026-04-12 | index.ts 3회 반복 편집 | Context (추정) | 소스 반복 — 관련 파일/타입 정의 확인 필요 |
-| 2026-04-13 | VacantListingManage.tsx 4회 반복 편집 | Context (추정) | 소스 반복 — 관련 파일/타입 정의 확인 필요 |
-| 2026-04-13 | ListingStyleEditor.tsx 4회 반복 편집 | Context (추정) | 소스 반복 — 관련 파일/타입 정의 확인 필요 |
-| 2026-04-13 | VacantListing.tsx 13회 반복 편집 | Prompt (추정·13회) | 접근법 오류 가능성 — 초기화 후 재설계 권장 |
-| 2026-04-13 | ListingStyleEditor.tsx 9회 반복 편집 | Prompt (추정·9회) | 접근법 오류 가능성 — 초기화 후 재설계 권장 |
-| 2026-04-13 | listing-config.ts 3회 반복 편집 | Context (추정) | 소스 반복 — 관련 파일/타입 정의 확인 필요 |
-| 2026-04-13 | ListingStyleEditor.tsx 3회 반복 편집 | Context (추정) | 소스 반복 — 관련 파일/타입 정의 확인 필요 |
-| 2026-04-14 | excel-import.service.ts 4회 반복 편집 | Context (추정) | 소스 반복 — 관련 파일/타입 정의 확인 필요 |
-| 2026-04-14 | BuildingExcel.tsx 5회 반복 편집 | Context (추정·강) | 소스 5회+ — 파일 전체 Read 후 재접근 권장 |
-| 2026-04-14 | depositStore.ts 3회 반복 편집 | Context (추정) | 소스 반복 — 관련 파일/타입 정의 확인 필요 |
+| 2026-04-10 | test-5x.txt 5회 반복 편집 | Harness (false-positive) | edit-tracker 테스트 픽스처 (파일명 "5x") — 트래커에서 제외 대상. 향후 `test-*` / `*-fixture.*` 제외 필터 추가 |
+| 2026-04-12 | index.ts 3회 반복 편집 | Context | 타입 정의/의존 모듈 선행 Read 없이 반복 수정 — Read:Edit 비율 관찰 필요 |
+| 2026-04-13 | MEMORY.md 4회 반복 편집 | Context (meta) | 메모리 시스템 개편 중 의도된 연속 수정 — 실패 신호 아님 (예상 패턴) |
+| 2026-04-13 | MEMORY.md 4회 반복 편집 | Context (meta) | 상동 — 중복 엔트리. dedup 로직 점검 필요 (Harness) |
+| 2026-04-13 | sync_lpn_settlement_to_legacy_schedule.py 4회 반복 편집 | Context | legacy 스키마 매핑 반복 — 관련 엔티티/DTO 선행 Read 미흡 |
+| 2026-04-13 | 2026-04-10-sale-loss-implementation-v2-design.md 6회 반복 편집 | Prompt | 설계 스펙 6회 수정 — 요구사항 확정 전 구현 착수 (스코프 모호). `/feature` brainstorming 게이트 엄격 적용 |
+| 2026-04-14 | test_sync_lpn_settlement_info.py 4회 반복 편집 | Context | 테스트 반복 — sync 대상 스키마/Fixture 불명확. 구현부 Read 후 테스트 작성 원칙 재확인 |
+| 2026-04-14 | ecr.md 4회 반복 편집 | Harness (meta) | skill 정의 파일 튜닝 — 실패 신호 아님 (의도된 반복) |
+| 2026-04-12 | index.ts 3회 반복 편집 | Context | 타입 정의/의존 모듈 선행 Read 미흡 |
+| 2026-04-13 | VacantListingManage.tsx 4회 반복 편집 | Context | 부모-자식 prop 타입 불일치 반복 — 상위 컴포넌트 Read 선행 필요 |
+| 2026-04-13 | ListingStyleEditor.tsx 4회 반복 편집 | Context | 스타일/Props 정의 반복 접근 — 파일 전체 Read 후 수정 |
+| 2026-04-13 | VacantListing.tsx 13회 반복 편집 | Prompt | 13회는 접근법 오류 신호 — 공실관리 UX 개편 스코프 세분화 실패. `/feature` brainstorming 게이트 미적용 |
+| 2026-04-13 | ListingStyleEditor.tsx 9회 반복 편집 | Prompt | 9회 — 스타일 에디터 설계 초기화 후 재접근 권장. 단일 컴포넌트에 과다 책임 |
+| 2026-04-13 | listing-config.ts 3회 반복 편집 | Context | 설정 상수 반복 — 사용처 grep 없이 수정 |
+| 2026-04-13 | ListingStyleEditor.tsx 3회 반복 편집 | Context | 동일 파일 별도 세션 — 세션 맥락 보존 실패 (active-context handoff 부족) |
+| 2026-04-14 | excel-import.service.ts 4회 반복 편집 | Context | Excel 파싱 서비스 반복 — 스키마/시트 구조 선행 확인 부족 |
+| 2026-04-14 | BuildingExcel.tsx 5회 반복 편집 | Context | 5회+ → 파일 전체 Read 후 재접근 룰 적용 필요 (edit 전 limit=없는 Read 1회) |
+| 2026-04-14 | depositStore.ts 3회 반복 편집 | Context | Zustand 스토어 액션 반복 — 관련 selector/subscriber Read 미흡 |
