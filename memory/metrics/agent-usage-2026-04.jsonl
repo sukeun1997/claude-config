@@ -221,3 +221,5 @@
 {"date": "2026-04-18", "time": "13:35", "agent": "executor", "model": "sonnet", "description": "T13 implementer — UpdateLog entry"}
 {"date": "2026-04-18", "time": "13:36", "agent": "executor", "model": "sonnet", "description": "T14 implementer — Playwright E2E"}
 {"date": "2026-04-18", "time": "13:38", "agent": "verifier", "model": "opus", "description": "T15 final verifier — independent judgment"}
+{"date": "2026-04-18", "time": "14:05", "agent": "critic", "model": "", "description": "Verify opus 4.7 harness recommendations"}
+{"date": "2026-04-18", "time": "14:10", "agent": "architect", "model": "opus", "description": "Assess current model routing fitness"}
