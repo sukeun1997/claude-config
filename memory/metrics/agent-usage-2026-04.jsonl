@@ -227,3 +227,5 @@
 {"date": "2026-04-18", "time": "16:04", "agent": "Explore", "model": "", "description": "Find 공실 usage and V1 table structure"}
 {"date": "2026-04-18", "time": "16:12", "agent": "executor", "model": "sonnet", "description": "Replace \"공실\" with \"매물\" in UI text"}
 {"date": "2026-04-18", "time": "16:17", "agent": "critic", "model": "opus", "description": "Critic: 하네스 자기진화 병목 분석"}
+{"date": "2026-04-18", "time": "16:19", "agent": "architect", "model": "opus", "description": "v2 문서 사실성/구조 검증"}
+{"date": "2026-04-18", "time": "16:22", "agent": "designer", "model": "opus", "description": "V2 listing table visual refinement spec"}

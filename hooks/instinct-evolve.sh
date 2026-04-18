@@ -45,9 +45,10 @@ for f in Path(instincts_dir).glob("*.md"):
     if domain_match:
         domain = domain_match.group(1).strip('"')
 
-    # Only consider high-confidence instincts (lowered 0.7→0.6 for faster evolution,
-    # based on critic analysis 2026-04-18: single domain clustering was unreachable at 0.7)
-    if confidence >= 0.6:
+    # Only consider high-confidence instincts (lowered 0.7→0.55 based on 2026-04-18 data:
+    # post-backlog-process cluster analysis shows 0.55 is minimum to reach 3-file clustering
+    # in both project-workflow (3 files) and sequence (3 files) domains)
+    if confidence >= 0.55:
         instincts_by_domain[domain].append({
             "name": name,
             "confidence": confidence,
