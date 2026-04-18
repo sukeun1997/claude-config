@@ -83,3 +83,5 @@
 {"date":"2026-04-18","project":"global","duration_min":0,"total_edits":1,"total_reads":0,"unique_files":1,"friction_files":0,"log_lines":18}
 {"date":"2026-04-18","project":"global","duration_min":1,"total_edits":2,"total_reads":0,"unique_files":1,"friction_files":0,"log_lines":18}
 {"date":"2026-04-18","project":"building","duration_min":0,"total_edits":2,"total_reads":3,"unique_files":2,"friction_files":0,"log_lines":0}
+{"date":"2026-04-18","project":"global","duration_min":0,"total_edits":1,"total_reads":1,"unique_files":1,"friction_files":0,"log_lines":26}
+{"date":"2026-04-18","project":"global","duration_min":1,"total_edits":1,"total_reads":2,"unique_files":1,"friction_files":0,"log_lines":26}

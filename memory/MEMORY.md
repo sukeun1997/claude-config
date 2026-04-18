@@ -109,3 +109,6 @@
 - failure-log 적체 게이트는 **주간 리뷰 첫 관문**으로 유지 — 15건 쌓이면 KPI 분석 의미 없음. 자체 분류 기준을 Harness/Context/Prompt 3계층으로 일관화 (모델명·추정 레이블 금지)
 - **주간 15건 분류 결과 (W16 분포)**: Context 9 / Prompt 3 / Harness 3 / Meta 2. **1위 원인 = "파일 Read 선행 미흡"(Context 9건)**. 단일 파일 5회+ 반복 시 파일 전체 Read 의무화. Prompt 3건은 모두 스코프 경계 모호(6회·9회·13회) → `/feature` brainstorming 게이트 미적용
 - **SessionEnd 훅 관측 갭 (진단 중)**: `sessions.jsonl` 4/16~17 누락. 훅 코드·settings 등록 정상, 수동 실행 정상. `async: true` 종료 경합 또는 특정 종료 경로에서 미트리거 추정 — debugger 에이전트 별도 세션 위임 예정
+
+### Promoted 2026-04-18
+- **주간 리뷰 후 즉시 적용 패턴**: 리뷰 결과 → opus critic 검증 → REVISE 수용 → 작은 것부터 병렬 실행. critic이 실제 파일 확인으로 범위 좁혀줌 ("4개가 아니라 5개", "경로는 metrics/sessions.jsonl")
