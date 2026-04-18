@@ -53,6 +53,27 @@ if [ "$ARCHIVED" -gt 0 ]; then
   echo "Archived $ARCHIVED daily log(s) older than 14 days."
 fi
 
+# ── Archive stale active context files (7+ day mtime, untracked only) ──
+ACTIVE_DIR="$MEM_DIR/active"
+ACTIVE_ARCHIVE_DIR="$ACTIVE_DIR/archive"
+if [ -d "$ACTIVE_DIR" ]; then
+  STALE_COUNT=0
+  mkdir -p "$ACTIVE_ARCHIVE_DIR"
+  while IFS= read -r -d '' active_file; do
+    [ -f "$active_file" ] || continue
+    # Defensive: skip if somehow git-tracked (all should be gitignored)
+    REPO_ROOT="$HOME/.claude"
+    REL_PATH="${active_file#$REPO_ROOT/}"
+    if (cd "$REPO_ROOT" && git ls-files --error-unmatch "$REL_PATH" &>/dev/null); then
+      continue
+    fi
+    mv "$active_file" "$ACTIVE_ARCHIVE_DIR/" && STALE_COUNT=$((STALE_COUNT + 1))
+  done < <(find "$ACTIVE_DIR" -maxdepth 1 -type f -name '*.md' -mtime +7 -print0 2>/dev/null)
+  if [ "$STALE_COUNT" -gt 0 ]; then
+    echo "Archived $STALE_COUNT stale active context file(s) (7+ day mtime)."
+  fi
+fi
+
 # ── Session metrics snapshot ──
 METRICS_DIR="$MEM_DIR/metrics"
 mkdir -p "$METRICS_DIR"
