@@ -53,3 +53,4 @@ edit-tracker (3회+ 반복 편집 감지)
 | 2026-04-14 | excel-import.service.ts 4회 반복 편집 | Context | Excel 파싱 서비스 반복 — 스키마/시트 구조 선행 확인 부족 |
 | 2026-04-14 | BuildingExcel.tsx 5회 반복 편집 | Context | 5회+ → 파일 전체 Read 후 재접근 룰 적용 필요 (edit 전 limit=없는 Read 1회) |
 | 2026-04-14 | depositStore.ts 3회 반복 편집 | Context | Zustand 스토어 액션 반복 — 관련 selector/subscriber Read 미흡 |
+| 2026-04-18 | listing-v2.css 3회 반복 편집 | Context (추정) | 설정/스타일 반복 — 기존 값과 원하는 값 명확화 |
