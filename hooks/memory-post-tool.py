@@ -398,7 +398,7 @@ def cmd_capture():
     # --- Agent ---
     elif tool == "Agent":
         agent_type = tool_input.get("subagent_type", "general-purpose") or "general-purpose"
-        model = tool_input.get("model", "") or ""
+        model = tool_input.get("model", "") or "default"
         description = tool_input.get("description", "")
         entry["agent"] = agent_type
         entry["model"] = model
@@ -410,7 +410,7 @@ def cmd_capture():
             "date": datetime.now().strftime("%Y-%m-%d"),
             "time": datetime.now().strftime("%H:%M"),
             "agent": agent_type,
-            "model": model,
+            "model": model or "default",
             "description": description[:80].replace("\n", " ").strip(),
         })
 

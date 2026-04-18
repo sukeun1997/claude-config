@@ -66,6 +66,10 @@ if [ -d "$ACTIVE_DIR" ]; then
   for ac_file in "$ACTIVE_DIR"/*.md; do
     [ -f "$ac_file" ] || continue
     ac_basename=$(basename "$ac_file")
+    # Skip archive subdirectory entries (only top-level active contexts count)
+    case "$ac_file" in
+      */archive/*) continue ;;
+    esac
     # Skip non-branch contexts (e.g., date-based like 20260406.md)
     # Check: empty Changed Files (no real changes)
     changed_count=$(grep -cE '^[a-zA-Z]' <(sed -n '/^### Changed Files$/,/^```$/{ /^```$/d; /^### Changed Files$/d; p; }' "$ac_file") 2>/dev/null || echo "0")
@@ -85,8 +89,8 @@ if [ -d "$ACTIVE_DIR" ]; then
       HYGIENE_WARNINGS+="- ${ac_basename}: ${age_days}일 미갱신 (archive 이동 권장)\n"
     fi
   done
-  # Count active contexts
-  ac_total=$(find "$ACTIVE_DIR" -name "*.md" -type f 2>/dev/null | wc -l | tr -d ' ')
+  # Count active contexts (top-level only, excluding archive/)
+  ac_total=$(find "$ACTIVE_DIR" -maxdepth 1 -name "*.md" -type f 2>/dev/null | wc -l | tr -d ' ')
   if [ "$ac_total" -gt 5 ]; then
     HYGIENE_WARNINGS+="- Active context ${ac_total}개 (권장: 3개 이하). 완료된 브랜치 정리 필요\n"
   fi

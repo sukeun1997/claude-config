@@ -46,7 +46,19 @@ tail -n +"$((CURSOR + 1))" "$OBS_FILE" | \
   python3 "$ANALYZER" > "$PATTERNS_FILE" 2>/dev/null || true
 
 # Concurrency lock (mkdir-based, macOS compatible)
+# Auto-clean stale lock (>1 hour old) — protects against crashed runs
 LOCK_DIR="$HOMUNCULUS_DIR/.observer-runner.lock"
+if [ -d "$LOCK_DIR" ]; then
+  if [ "$(uname)" = "Darwin" ]; then
+    lock_mtime=$(stat -f %m "$LOCK_DIR" 2>/dev/null || echo "0")
+  else
+    lock_mtime=$(stat -c %Y "$LOCK_DIR" 2>/dev/null || echo "0")
+  fi
+  now_ts=$(date +%s)
+  if [ $((now_ts - lock_mtime)) -gt 3600 ]; then
+    rmdir "$LOCK_DIR" 2>/dev/null || true
+  fi
+fi
 mkdir "$LOCK_DIR" 2>/dev/null || exit 0
 trap "rmdir '$LOCK_DIR' 2>/dev/null; rm -f '$PATTERNS_FILE'" EXIT
 

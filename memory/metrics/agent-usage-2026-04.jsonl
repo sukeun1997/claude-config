@@ -225,3 +225,5 @@
 {"date": "2026-04-18", "time": "14:10", "agent": "architect", "model": "opus", "description": "Assess current model routing fitness"}
 {"date": "2026-04-18", "time": "16:00", "agent": "Explore", "model": "", "description": "Investigate V2 layout and style editor"}
 {"date": "2026-04-18", "time": "16:04", "agent": "Explore", "model": "", "description": "Find 공실 usage and V1 table structure"}
+{"date": "2026-04-18", "time": "16:12", "agent": "executor", "model": "sonnet", "description": "Replace \"공실\" with \"매물\" in UI text"}
+{"date": "2026-04-18", "time": "16:17", "agent": "critic", "model": "opus", "description": "Critic: 하네스 자기진화 병목 분석"}
