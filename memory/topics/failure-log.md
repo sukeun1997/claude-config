@@ -58,3 +58,5 @@ edit-tracker (3회+ 반복 편집 감지)
 | 2026-04-18 | VacantList.tsx 4회 반복 편집 | Context | 부모 컴포넌트 Prop 전달 확인 없이 반복 수정 — VacantListingManage 4회와 동일 패턴 재발. 편집 전 부모/자식 컴포넌트 전체 Read 의무화 |
 | 2026-04-18 | ListingEditTable.tsx 3회 반복 편집 | Context | 테이블 컬럼/핸들러 정의 반복 — 상위 Container 컴포넌트 선행 Read 미흡 |
 | 2026-04-18 | TenantDrawer.tsx 3회 반복 편집 | Context | 세입자 drawer props 반복 — related store/hook 선행 Read 미흡 |
+| 2026-04-18 | 상환-인수인계-diagram.d2 5회 반복 편집 | 미분류 | 다음 세션에서 원인 분석 필요 |
+| 2026-04-18 | 상환-인수인계-v2.md 4회 반복 편집 | 미분류 | 다음 세션에서 원인 분석 필요 |
