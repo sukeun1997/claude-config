@@ -1,7 +1,11 @@
 #!/usr/bin/env bash
 # instinct-evolve.sh — Cluster high-confidence instincts into evolved skills
 # Called by: observer-runner.sh (not a standalone hook)
-# Logic: Same domain + confidence >= 0.7 + 3 or more → merge into evolved/skills/
+# Logic: Same domain + confidence >= COLLECTION_THRESHOLD (0.55, lowered 2026-04-18
+#        based on cluster-depth analysis) + 3 or more → merge into evolved/skills/.
+#        A separate PROMOTION_THRESHOLD (0.7) gates the symlink into skills/ so
+#        only mature clusters surface to the live skill loader (one-way promotion —
+#        confidence downgrades do not auto-unpublish).
 
 set -euo pipefail
 
@@ -18,6 +22,8 @@ python3 << 'PYEOF'
 import os, re, sys
 from collections import defaultdict
 from pathlib import Path
+
+COLLECTION_THRESHOLD = 0.55  # see header comment — kept in sync with L10
 
 instincts_dir = os.path.expanduser("~/.claude/homunculus/instincts/personal")
 evolved_dir = os.path.expanduser("~/.claude/homunculus/evolved/skills")
@@ -45,10 +51,8 @@ for f in Path(instincts_dir).glob("*.md"):
     if domain_match:
         domain = domain_match.group(1).strip('"')
 
-    # Only consider high-confidence instincts (lowered 0.7→0.55 based on 2026-04-18 data:
-    # post-backlog-process cluster analysis shows 0.55 is minimum to reach 3-file clustering
-    # in both project-workflow (3 files) and sequence (3 files) domains)
-    if confidence >= 0.55:
+    # Only consider high-confidence instincts (threshold defined at top of this block)
+    if confidence >= COLLECTION_THRESHOLD:
         instincts_by_domain[domain].append({
             "name": name,
             "confidence": confidence,
@@ -81,7 +85,7 @@ confidence: {sum(i['confidence'] for i in instincts) / len(instincts):.2f}
 
 # {domain.title()} Patterns (Auto-Evolved)
 
-Clustered from {len(instincts)} instincts with confidence >= 0.7.
+Clustered from {len(instincts)} instincts with confidence >= {COLLECTION_THRESHOLD} (min in cluster: {min(i['confidence'] for i in instincts):.2f}).
 
 ## Rules
 
@@ -117,5 +121,28 @@ if evolved_count == 0:
     # Silent exit — no clusters ready yet
     pass
 PYEOF
+
+# ── Promotion: symlink high-confidence evolved skills into skills/ ──
+# Threshold: confidence >= 0.7 (from frontmatter). Below that stays in staging.
+# Skill loader scans skills/*/SKILL.md — create skills/evolved-{domain}/ dir + symlink.
+SKILLS_DIR="$HOME/.claude/skills"
+PROMOTION_THRESHOLD="0.7"
+for evolved_file in "$EVOLVED_DIR"/*.md; do
+  [ -f "$evolved_file" ] || continue
+  domain=$(basename "$evolved_file" .md)
+  conf=$(awk '/^confidence:/ {print $2; exit}' "$evolved_file" 2>/dev/null || echo "0")
+  # Numeric compare (awk for float)
+  promote=$(awk -v c="$conf" -v t="$PROMOTION_THRESHOLD" 'BEGIN { print (c+0 >= t+0) ? "yes" : "no" }')
+  [ "$promote" = "yes" ] || continue
+
+  skill_dir="$SKILLS_DIR/evolved-${domain}"
+  link_path="$skill_dir/SKILL.md"
+  mkdir -p "$skill_dir"
+  # Idempotent: recreate symlink if target changed or missing
+  if [ ! -L "$link_path" ] || [ "$(readlink "$link_path")" != "../../homunculus/evolved/skills/${domain}.md" ]; then
+    ln -sf "../../homunculus/evolved/skills/${domain}.md" "$link_path"
+    echo "Promoted: evolved-${domain} (confidence ${conf}) → $link_path"
+  fi
+done
 
 exit 0

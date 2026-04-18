@@ -230,3 +230,14 @@
 {"date": "2026-04-18", "time": "16:19", "agent": "architect", "model": "opus", "description": "v2 문서 사실성/구조 검증"}
 {"date": "2026-04-18", "time": "16:22", "agent": "designer", "model": "opus", "description": "V2 listing table visual refinement spec"}
 {"date": "2026-04-18", "time": "16:25", "agent": "architect", "model": "opus", "description": "Opus 검증 (absorb report.html)"}
+{"date": "2026-04-18", "time": "16:39", "agent": "Explore", "model": "default", "description": "Explore v2 listing code"}
+{"date": "2026-04-18", "time": "16:39", "agent": "Explore", "model": "default", "description": "정산흐름 축 탐색"}
+{"date": "2026-04-18", "time": "16:39", "agent": "Explore", "model": "default", "description": "시대흐름 축 탐색"}
+{"date": "2026-04-18", "time": "16:39", "agent": "Explore", "model": "default", "description": "계좌계 흐름 축 탐색"}
+{"date": "2026-04-18", "time": "16:46", "agent": "code-reviewer", "model": "opus", "description": "Critical verification of harness changes"}
+{"date": "2026-04-18", "time": "21:51", "agent": "Explore", "model": "default", "description": "Inspect live v2 listing color bug"}
+{"date": "2026-04-18", "time": "22:15", "agent": "code-reviewer", "model": "opus", "description": "Re-review: verify HIGH+MED fixes"}
+{"date": "2026-04-18", "time": "22:19", "agent": "verifier", "model": "opus", "description": "Final Opus verification before commit"}
+{"date": "2026-04-18", "time": "22:23", "agent": "Explore", "model": "default", "description": "Verify bank message codes in inapi"}
+{"date": "2026-04-18", "time": "22:29", "agent": "Explore", "model": "default", "description": "Find V2 listing image export code"}
+{"date": "2026-04-18", "time": "22:47", "agent": "Explore", "model": "default", "description": "Gather scenario facts for v4"}

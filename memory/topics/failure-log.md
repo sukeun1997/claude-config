@@ -60,3 +60,5 @@ edit-tracker (3회+ 반복 편집 감지)
 | 2026-04-18 | TenantDrawer.tsx 3회 반복 편집 | Context | 세입자 drawer props 반복 — related store/hook 선행 Read 미흡 |
 | 2026-04-18 | 상환-인수인계-diagram.d2 5회 반복 편집 | 미분류 | 다음 세션에서 원인 분석 필요 |
 | 2026-04-18 | 상환-인수인계-v2.md 4회 반복 편집 | 미분류 | 다음 세션에서 원인 분석 필요 |
+| 2026-04-18 | listing-v2.css 3회 반복 편집 | Context (추정) | 설정/스타일 반복 — 기존 값과 원하는 값 명확화 |
+| 2026-04-18 | VacantListingV2.tsx 3회 반복 편집 | Context (추정) | 소스 반복 — 관련 파일/타입 정의 확인 필요 |

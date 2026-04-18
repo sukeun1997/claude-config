@@ -112,3 +112,6 @@
 
 ### Promoted 2026-04-18
 - **주간 리뷰 후 즉시 적용 패턴**: 리뷰 결과 → opus critic 검증 → REVISE 수용 → 작은 것부터 병렬 실행. critic이 실제 파일 확인으로 범위 좁혀줌 ("4개가 아니라 5개", "경로는 metrics/sessions.jsonl")
+
+### Promoted 2026-04-18
+- CSS specificity 계산법: inline > class×n > (class + pseudo) > element. `:nth-child`는 pseudo-class로 0,0,1,0 추가. 같은 class를 두 번 쓰면 specificity bump 가능 (hack인 듯 hack 아닌)

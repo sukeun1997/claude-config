@@ -105,6 +105,7 @@ memory_search("설정 구성 변경 디버깅 구현", top_k=10)
 - `project-memory.json` — 프로젝트별 컨텍스트
 - MEMORY.md — 영구 메모리
 - **Codex 세션**: 각 날짜에 대해 `python3 ~/.claude/scripts/codex-harvest.py --date {YYYY-MM-DD} --json` 실행 (주간 7일분)
+- **Friction 분석**: `python3 ~/.claude/scripts/friction-rule-scanner.py --write` 실행 → `memory/metrics/friction-YYYY-MM-DD.md` 생성. 원인 계층 분포 + 재발 파일 + 룰 방지 실패 횟수가 포함된다. Phase 2 축 2 근거로 직접 인용.
 
 ### 수집할 정보
 
@@ -149,6 +150,7 @@ memory_search("설정 구성 변경 디버깅 구현", top_k=10)
 - [ ] CLAUDE.md 무게 — 시스템 프롬프트가 과도하지 않은지
 - [ ] 자동화 가능한 반복 작업이 있는지
 - [ ] Convention Drift — 최근 커밋 diff에서 CLAUDE.md §5 위반 샘플링 (축약 변수명, 하드코딩, 50줄+ 함수, Read:Edit 비율 하락 추세)
+- [ ] Friction Rule Effectiveness — friction-rule-scanner.py 출력의 `§3. 규칙 효과` 섹션에서 3건+ 재등장 룰 식별. 해당 룰은 **방지 실패** 상태로 보고 (a) 룰 강도 상향, (b) 훅으로 자동화 전환, (c) 은퇴 중 하나를 축 4 액션 아이템에 반영
 - [ ] Codex vs Claude 작업 분배 — Codex로 위임 가능한 작업을 Claude에서 직접 처리하지 않았는지
 - [ ] Codex 세션 효율 — tool_call_count=0 세션 비율, 같은 프로젝트 동시 작업 시 충돌 여부
 

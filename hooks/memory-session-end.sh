@@ -54,13 +54,23 @@ if [ "$ARCHIVED" -gt 0 ]; then
 fi
 
 # ── Archive stale active context files (7+ day mtime, untracked only) ──
+# Exempt the current branch's active context so a long break doesn't archive
+# work-in-progress state right before resuming.
 ACTIVE_DIR="$MEM_DIR/active"
 ACTIVE_ARCHIVE_DIR="$ACTIVE_DIR/archive"
 if [ -d "$ACTIVE_DIR" ]; then
   STALE_COUNT=0
   mkdir -p "$ACTIVE_ARCHIVE_DIR"
+  CURRENT_ACTIVE_FILE=""
+  CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD 2>/dev/null || echo "")
+  if [ -n "$CURRENT_BRANCH" ] && [ "$CURRENT_BRANCH" != "HEAD" ]; then
+    CURRENT_SLUG=$(branch_slug "$CURRENT_BRANCH" 2>/dev/null || echo "")
+    [ -n "$CURRENT_SLUG" ] && CURRENT_ACTIVE_FILE="$ACTIVE_DIR/${CURRENT_SLUG}.md"
+  fi
   while IFS= read -r -d '' active_file; do
     [ -f "$active_file" ] || continue
+    # Skip current branch's active file — avoid surprising archive on return
+    [ -n "$CURRENT_ACTIVE_FILE" ] && [ "$active_file" = "$CURRENT_ACTIVE_FILE" ] && continue
     # Defensive: skip if somehow git-tracked (all should be gitignored)
     REPO_ROOT="$HOME/.claude"
     REL_PATH="${active_file#$REPO_ROOT/}"
@@ -232,14 +242,42 @@ if [ -f "$SESSION_MARKER" ]; then
 fi
 
 # ── Auto-sync: commit + push tracked changes (allowlist) ──
+# Same-day squash: if HEAD is today's auto-sync from this host AND fetch succeeds
+# AND origin/main points at HEAD, amend + force-with-lease. Otherwise a normal
+# new commit. If force-with-lease is rejected (remote advanced between fetch
+# and push), roll the amend back with `reset --soft HEAD@{1}` so the staged
+# changes are preserved for the next SessionEnd to commit fresh — never silently
+# drop work.
 (
   cd "$HOME/.claude"
   git add hooks/ skills/ rules/ scripts/ agents/ commands/ docs/ \
     memory/MEMORY.md memory/topics/ memory/metrics/ memory/skill-usage/ \
     settings.base.json CLAUDE.md .gitignore sync-data/ 2>/dev/null
   if ! git diff --cached --quiet 2>/dev/null; then
-    git commit -m "chore: auto-sync [$(hostname -s)] $(date +%Y-%m-%d)" 2>/dev/null
-    git -c http.lowSpeedLimit=1000 -c http.lowSpeedTime=5 push origin main 2>/dev/null || true
+    HOST_SHORT=$(hostname -s)
+    TODAY_STR=$(date +%Y-%m-%d)
+    EXPECTED_MSG="chore: auto-sync [${HOST_SHORT}] ${TODAY_STR}"
+    LAST_MSG=$(git log -1 --format=%s 2>/dev/null || echo "")
+
+    AMEND_SAFE=false
+    if [ "$LAST_MSG" = "$EXPECTED_MSG" ]; then
+      if git fetch origin main --quiet 2>/dev/null; then
+        HEAD_SHA=$(git rev-parse HEAD 2>/dev/null || echo "")
+        REMOTE_SHA=$(git rev-parse origin/main 2>/dev/null || echo "")
+        if [ -n "$HEAD_SHA" ] && [ "$HEAD_SHA" = "$REMOTE_SHA" ]; then
+          AMEND_SAFE=true
+        fi
+      fi
+    fi
+
+    if [ "$AMEND_SAFE" = true ] && git commit --amend --no-edit 2>/dev/null; then
+      if ! git -c http.lowSpeedLimit=1000 -c http.lowSpeedTime=5 push --force-with-lease origin main 2>/dev/null; then
+        git reset --soft 'HEAD@{1}' 2>/dev/null || true
+      fi
+    else
+      git commit -m "$EXPECTED_MSG" 2>/dev/null
+      git -c http.lowSpeedLimit=1000 -c http.lowSpeedTime=5 push origin main 2>/dev/null || true
+    fi
   fi
 ) &>/dev/null || true
 
