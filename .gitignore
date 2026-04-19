@@ -50,6 +50,7 @@ plugins/install-counts-cache.json
 plugins/blocklist.json
 plugins/.usage-cache.json
 plugins/claude-hud/.usage-cache.json
+plugins/claude-hud/.keychain-backoff
 plugins/claude-hud/config-cache/
 plugins/claude-hud/transcript-cache/
 
@@ -57,6 +58,7 @@ plugins/claude-hud/transcript-cache/
 memory/daily/
 memory/archive/
 memory/active/
+memory/briefing-history.jsonl
 
 # MCP config (machine-specific)
 .mcp.json
