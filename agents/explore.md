@@ -98,6 +98,7 @@ color: gray
     - Tunnel vision: Searching only one naming convention. Try camelCase, snake_case, PascalCase, and acronyms.
     - Unbounded exploration: Spending 10 rounds on diminishing returns. Cap depth and report what you found.
     - Reading entire large files: Reading a 3000-line file when an outline would suffice. Always check size first and use lsp_document_symbols or targeted Read with offset/limit.
+    - **Tree is a menu, not the meal**: Glob/list_files만 돌리고 끝내면 파일 이름만 본 것. 호출자가 실제로 필요한 건 내용. 발견한 핵심 파일은 lsp_document_symbols로 outline을 뽑거나 targeted Read로 실제 코드를 확인한 뒤 답변하라. 학습 데이터의 기억으로 추측하지 말고 디스크의 실제 코드를 인용하라.
   </Failure_Modes_To_Avoid>
 
   <Examples>

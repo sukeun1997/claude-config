@@ -115,3 +115,7 @@
 
 ### Promoted 2026-04-18
 - CSS specificity 계산법: inline > class×n > (class + pseudo) > element. `:nth-child`는 pseudo-class로 0,0,1,0 추가. 같은 class를 두 번 쓰면 specificity bump 가능 (hack인 듯 hack 아닌)
+
+### Promoted 2026-04-19
+- Playwright MCP 네트워크 인터셉트로 로컬 API 없이도 UI 시각 검증 가능 — `page.context().route('**/api/public/listing/**', route => route.fulfill({...mock}))` 패턴. Express dev 서버가 JWT_SECRET 누락으로 안 뜰 때 유용
+- 순환 import 방지 패턴: 두 컴포넌트(A가 B를 import)가 공통 유틸을 필요로 할 때 → 유틸을 별도 파일로 분리. 처음엔 VacantListingV2.tsx에서 export했다가 MobileListingV2에서 import 시도 → circular risk 감지하고 smart-summary.tsx로 리팩토
