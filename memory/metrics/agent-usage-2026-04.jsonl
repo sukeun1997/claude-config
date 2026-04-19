@@ -241,3 +241,31 @@
 {"date": "2026-04-18", "time": "22:23", "agent": "Explore", "model": "default", "description": "Verify bank message codes in inapi"}
 {"date": "2026-04-18", "time": "22:29", "agent": "Explore", "model": "default", "description": "Find V2 listing image export code"}
 {"date": "2026-04-18", "time": "22:47", "agent": "Explore", "model": "default", "description": "Gather scenario facts for v4"}
+{"date": "2026-04-19", "time": "15:19", "agent": "Explore", "model": "default", "description": "Survey current listing V2 structure"}
+{"date": "2026-04-19", "time": "15:26", "agent": "Explore", "model": "haiku", "description": "S0 loan execution exploration"}
+{"date": "2026-04-19", "time": "15:26", "agent": "Explore", "model": "haiku", "description": "Settlement detailed flow exploration"}
+{"date": "2026-04-19", "time": "15:27", "agent": "Explore", "model": "haiku", "description": "Repayment detailed flow exploration"}
+{"date": "2026-04-19", "time": "15:38", "agent": "Explore", "model": "haiku", "description": "Find celery beat batch schedules"}
+{"date": "2026-04-19", "time": "15:54", "agent": "Explore", "model": "haiku", "description": "Verify S0 task chain actual count"}
+{"date": "2026-04-19", "time": "15:57", "agent": "Explore", "model": "haiku", "description": "Verify v4-detail content claims"}
+{"date": "2026-04-19", "time": "15:58", "agent": "Explore", "model": "haiku", "description": "Find missing topics in v4 vs codebase"}
+{"date": "2026-04-19", "time": "15:59", "agent": "Explore", "model": "default", "description": "Explore listing design settings system"}
+{"date": "2026-04-19", "time": "16:31", "agent": "Explore", "model": "default", "description": "Verify v4-detail §1 (S0) claims"}
+{"date": "2026-04-19", "time": "16:32", "agent": "Explore", "model": "default", "description": "Verify v4-detail §2 (Repayment) claims"}
+{"date": "2026-04-19", "time": "16:32", "agent": "Explore", "model": "default", "description": "Verify v4-detail §3 (Settlement) claims"}
+{"date": "2026-04-19", "time": "16:32", "agent": "Explore", "model": "default", "description": "Verify §6 batch schedule + recent commits"}
+{"date": "2026-04-19", "time": "16:34", "agent": "executor", "model": "sonnet", "description": "Plan Task 1 implementer"}
+{"date": "2026-04-19", "time": "16:35", "agent": "style-reviewer", "model": "sonnet", "description": "Task 1 review"}
+{"date": "2026-04-19", "time": "16:37", "agent": "executor", "model": "sonnet", "description": "Plan Task 2 implementer"}
+{"date": "2026-04-19", "time": "16:38", "agent": "style-reviewer", "model": "sonnet", "description": "Task 2 review"}
+{"date": "2026-04-19", "time": "16:39", "agent": "executor", "model": "sonnet", "description": "Plan Task 3 implementer"}
+{"date": "2026-04-19", "time": "16:39", "agent": "style-reviewer", "model": "sonnet", "description": "Task 3 review"}
+{"date": "2026-04-19", "time": "16:40", "agent": "executor", "model": "sonnet", "description": "Plan Task 4 implementer"}
+{"date": "2026-04-19", "time": "16:41", "agent": "code-reviewer", "model": "opus", "description": "Task 4 code review"}
+{"date": "2026-04-19", "time": "16:42", "agent": "designer", "model": "default", "description": "Evaluate V3 header as designer"}
+{"date": "2026-04-19", "time": "16:43", "agent": "executor", "model": "sonnet", "description": "Plan Task 5 implementer"}
+{"date": "2026-04-19", "time": "16:53", "agent": "executor", "model": "sonnet", "description": "V3 settings expansion Pass 1"}
+{"date": "2026-04-19", "time": "16:57", "agent": "executor", "model": "sonnet", "description": "V3 settings expansion Pass 2"}
+{"date": "2026-04-19", "time": "19:29", "agent": "architect", "model": "opus", "description": "Untracked 파일 분류 감사"}
+{"date": "2026-04-19", "time": "19:30", "agent": "architect", "model": "opus", "description": "Electron 제거 스코프 분석"}
+{"date": "2026-04-19", "time": "19:40", "agent": "verifier", "model": "opus", "description": "Electron 제거 영향 독립 검증"}

@@ -119,3 +119,21 @@
 ### Promoted 2026-04-19
 - Playwright MCP 네트워크 인터셉트로 로컬 API 없이도 UI 시각 검증 가능 — `page.context().route('**/api/public/listing/**', route => route.fulfill({...mock}))` 패턴. Express dev 서버가 JWT_SECRET 누락으로 안 뜰 때 유용
 - 순환 import 방지 패턴: 두 컴포넌트(A가 B를 import)가 공통 유틸을 필요로 할 때 → 유틸을 별도 파일로 분리. 처음엔 VacantListingV2.tsx에서 export했다가 MobileListingV2에서 import 시도 → circular risk 감지하고 smart-summary.tsx로 리팩토
+
+### Promoted 2026-04-19
+- 디자인 핸드오프 번들 디코딩 패턴: Anthropic Design API의 `webfetch-*.bin`은 gzip+tar → `gunzip payload.gz && tar -xf payload -C extracted` 2단계로 풀림. chat transcript(`untitled/chats/chat1.md`)에 사용자 의도 흐름이 담겨 있어 반드시 먼저 읽을 것. README의 "선택 구현" 표시가 실제로 사용자가 원한 범위와 엇갈릴 수 있어 확인 필수
+- CSS 프리픽스 격리 패턴: 기존 컴포넌트(V2)와 공존하는 새 variant는 전용 프리픽스(`lt-v3-*`)로 CSS 스코프를 잘라내는 것이 가장 단순. CSS 변수(`--mono`, `--orange`)는 `.lt-v3-root` 안에 가두면 V2의 동명 변수와 충돌 없음
+
+### Promoted 2026-04-19
+- CSS 변수 런타임 주입 패턴(B안): 컴포넌트에 props를 줄줄이 내려꽂지 않고, 루트 DOM에 inline style로 `--token-name: value` 를 쏟아넣으면 자식 CSS가 `var(--token-name, fallback)`로 받음. 프리픽스(`.lt-v2-*` vs `.lt-v3-*`)로 스코프 격리돼 있으면 두 variant의 토큰 세트를 다르게 유지 가능. 단점은 CSS 하드코딩 → 변수 치환 1회성 작업 필요. 장점은 V1/V2/V3처럼 variant가 늘어나도 props drill 없이 루트 한 곳에서만 토큰 주입
+- html-to-image 캡처 안 잘리게: 부모 컨테이너에 `overflow: hidden` + 반응형 레이아웃 있으면 좁은 뷰포트 상태가 그대로 캡처됨. 해결: 캡처 동안만 (1) 캡처 대상 `width`/`maxWidth` 강제, (2) 부모의 `overflow: visible`로 풀기, (3) 부모 `minWidth`를 타겟 폭 + padding만큼 확장, (4) `void el.offsetWidth`로 리플로우, (5) 캡처 후 모든 스타일 원복. V2는 `overflow: hidden`이 없어서 width만 바꿔도 됐지만 V3는 부모 overflow까지 풀어야 함
+
+### Promoted 2026-04-19
+- variant별 독립 토큰 원칙: V2(다크 배경)와 V3(라이트 배경)처럼 배경 톤이 반대되는 variant는 "공통" 토큰(색/배경)을 공유하지 말 것. 흰색 텍스트가 V2에선 완벽하지만 V3에서 투명처럼 보임. 기본값이 다른 variant는 처음부터 토큰을 분리하고, 필요하면 "프리셋 복사" UI로 옮기도록 설계. 이번처럼 먼저 공유했다가 분리하는 리팩토도 괜찮지만 DB 마이그레이션 필요 없는 것만 장점
+
+### Promoted 2026-04-19
+- WYSIWYG RichTextEditor 매칭/렌더 분리 패턴: 공통조건 dedup처럼 "텍스트 매칭 후 원본 HTML 보존"이 필요할 때 → (1) DOMParser로 블록 단위 HTML 조각 배열 생성, (2) 매칭은 각 조각의 textContent 정규화로 수행, (3) 반환/렌더는 원본 HTML 조각 그대로 + DOMPurify sanitize. 결과: 에디터 색/굵기 살아남으면서 dedup 동작
+- `scrollWidth` 함정: 부모가 `overflow: visible`이면 자식 overflow를 scrollWidth가 잡지 못함. 캡처/측정에서 정확한 자연 폭이 필요할 땐 모든 자식 `getBoundingClientRect().right` 최대값 순회. 1회성 이벤트(캡처)라면 DOM 순회 overhead 허용
+
+### Promoted 2026-04-19
+- 모바일 fallback → variant별 분리 패턴: `isMobile` 분기에서 variant 대응 모바일 컴포넌트를 아예 분리하는 것이 (V2 모바일 재사용 + CSS variable 덮어쓰기)보다 깔끔. V3 모바일은 토큰은 공유하되(root에 CSS var 주입), DOM 구조/프리픽스는 완전 독립 — V2 모바일 CSS 충돌 위험 제로
