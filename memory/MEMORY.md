@@ -137,3 +137,7 @@
 
 ### Promoted 2026-04-19
 - 모바일 fallback → variant별 분리 패턴: `isMobile` 분기에서 variant 대응 모바일 컴포넌트를 아예 분리하는 것이 (V2 모바일 재사용 + CSS variable 덮어쓰기)보다 깔끔. V3 모바일은 토큰은 공유하되(root에 CSS var 주입), DOM 구조/프리픽스는 완전 독립 — V2 모바일 CSS 충돌 위험 제로
+
+### Promoted 2026-04-19
+- Cloudflare Tunnel + `trust proxy 1` 환경의 `requireLocal` 올바른 구현: `req.socket.remoteAddress` 단독 검증은 역효과 — cloudflared가 loopback으로 express에 접속하므로 모든 터널 트래픽이 127.0.0.1로 보임. 정답은 `req.ip`(XFF 기반) AND `req.socket.remoteAddress` 둘 다 127.0.0.1일 때만 통과. 터널 트래픽: socket=127.0.0.1 ✓ / ip=실제클라이언트IP ✗ → 차단. 로컬 직접 접속: 둘 다 127.0.0.1 → 통과. XFF 스푸핑: socket=공격자IP ✗ → 차단
+- `dangerouslySetInnerHTML` 감사 패턴: 공개 페이지에 DOMPurify 적용해도 **관리자 내부 페이지가 누락**되면 XSS → 세션 탈취 → 전체 앱 장악 경로 그대로 열려 있음. `grep -n dangerouslySetInnerHTML` 로 전수 검사 후 sanitize 없는 곳 모두 보완해야 함. 입력 신뢰도(공개 vs 관리자)와 무관하게 sanitize 기본 적용
