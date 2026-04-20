@@ -242,7 +242,8 @@ Agent 호출 시 `model` 파라미터 필수 지정.
 ### 워크플로우 기반
 | 트리거 | 스킬 |
 |--------|------|
-| 새 기능 구현 시작 | `feature` (brainstorming → plans → execution 2-gate 래퍼) |
+| 구현 요청에 **미확정** 기술/설계 선택이 포함된 경우 (기존 스택으로 자연스럽게 결정되면 스킵) | `tech-advisor` (대안 비교 → 사용자 선택 → 구현 진행) |
+| 새 기능 구현 시작 | `feature` (tech-advisor → brainstorming → plans → execution) |
 | 기술 뉴스/동향 요청 | `daily-briefing` (quick/deep 모드) |
 | 테스트 코드 작성 | `everything-claude-code:springboot-tdd` (백엔드) / `everything-claude-code:swift-protocol-di-testing` (iOS) |
 | PR 전 최종 검증 | `everything-claude-code:springboot-verification` (백엔드) / `superpowers:verification-before-completion` |

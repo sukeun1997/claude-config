@@ -270,3 +270,47 @@
 {"date": "2026-04-19", "time": "19:30", "agent": "architect", "model": "opus", "description": "Electron 제거 스코프 분석"}
 {"date": "2026-04-19", "time": "19:40", "agent": "verifier", "model": "opus", "description": "Electron 제거 영향 독립 검증"}
 {"date": "2026-04-19", "time": "22:27", "agent": "security-reviewer", "model": "opus", "description": "Penetration-oriented security audit"}
+{"date": "2026-04-15", "time": "13:13", "agent": "Explore", "model": "haiku", "description": "Entity comment 현황 조사"}
+{"date": "2026-04-15", "time": "13:43", "agent": "Explore", "model": "haiku", "description": "RepaymentConfirmedEvent 구조 확인"}
+{"date": "2026-04-15", "time": "13:43", "agent": "Explore", "model": "haiku", "description": "지정상환 계산기 PR/구현 확인"}
+{"date": "2026-04-15", "time": "13:43", "agent": "Explore", "model": "haiku", "description": "inapi process_type 값 확인"}
+{"date": "2026-04-15", "time": "13:43", "agent": "Explore", "model": "haiku", "description": "inapi LoanLossEvent 확인"}
+{"date": "2026-04-15", "time": "15:31", "agent": "Explore", "model": "haiku", "description": "EOD 지정상환 Port 인터페이스 상세"}
+{"date": "2026-04-15", "time": "16:12", "agent": "Explore", "model": "haiku", "description": "Type enum + when문 전수 조사"}
+{"date": "2026-04-15", "time": "16:23", "agent": "executor", "model": "sonnet", "description": "Phase 0 매각상환 Type 추가 구현"}
+{"date": "2026-04-15", "time": "17:01", "agent": "Explore", "model": "haiku", "description": "기존 JPA Entity 패턴 조사"}
+{"date": "2026-04-15", "time": "17:05", "agent": "Explore", "model": "haiku", "description": "inapi 매각상환 도메인 코드 조사"}
+{"date": "2026-04-15", "time": "17:16", "agent": "deep-executor", "model": "opus", "description": "Phase 1 매각 기반 인프라 구현"}
+{"date": "2026-04-15", "time": "17:18", "agent": "critic", "model": "opus", "description": "Tech advisor 스킬 검증"}
+{"date": "2026-04-15", "time": "17:28", "agent": "critic", "model": "opus", "description": "Tech advisor 시니어/CTO 관점 검증"}
+{"date": "2026-04-15", "time": "17:38", "agent": "analyst", "model": "opus", "description": "Jenkins 빌드 로그 3개 분석"}
+{"date": "2026-04-15", "time": "17:58", "agent": "Explore", "model": "haiku", "description": "inapi 매각상환 플로우 상세 분석"}
+{"date": "2026-04-15", "time": "18:05", "agent": "general-purpose", "model": "haiku", "description": "Notion 매각 스펙 문서 조회"}
+{"date": "2026-04-15", "time": "18:06", "agent": "Explore", "model": "haiku", "description": "inapi RepaymentSchedule 매각 필드 확인"}
+{"date": "2026-04-16", "time": "10:32", "agent": "Explore", "model": "haiku", "description": "ParentLoan 에러 원인 분석"}
+{"date": "2026-04-16", "time": "13:38", "agent": "Explore", "model": "haiku", "description": "Explore Invoice hierarchy structure"}
+{"date": "2026-04-16", "time": "13:49", "agent": "Explore", "model": "haiku", "description": "Check current feature/sale-base changes"}
+{"date": "2026-04-16", "time": "13:49", "agent": "Explore", "model": "haiku", "description": "Explore inapi sale_loan_history table"}
+{"date": "2026-04-16", "time": "13:51", "agent": "Explore", "model": "haiku", "description": "Explore Phase 0 매각상환 changes to roll back"}
+{"date": "2026-04-16", "time": "13:51", "agent": "Explore", "model": "haiku", "description": "Explore EodRepaymentInvoice pattern deeply"}
+{"date": "2026-04-16", "time": "13:52", "agent": "Explore", "model": "haiku", "description": "Explore repayment process flow"}
+{"date": "2026-04-16", "time": "13:56", "agent": "Explore", "model": "haiku", "description": "Read key files for v3 plan"}
+{"date": "2026-04-16", "time": "13:56", "agent": "Explore", "model": "haiku", "description": "Read EodInvoiceUseCase and EodRepaymentRecord"}
+{"date": "2026-04-16", "time": "14:10", "agent": "Explore", "model": "haiku", "description": "Check InvoiceRepository + event contracts"}
+{"date": "2026-04-16", "time": "15:33", "agent": "Explore", "model": "haiku", "description": "Find inAPI overdue/EOD table structure"}
+{"date": "2026-04-16", "time": "15:51", "agent": "Explore", "model": "sonnet", "description": "Trace sale completion in inapi codebase"}
+{"date": "2026-04-16", "time": "15:53", "agent": "Explore", "model": "haiku", "description": "Find LoanStatusLog model structure"}
+{"date": "2026-04-16", "time": "16:02", "agent": "architect", "model": "opus", "description": "Verify SQL join accuracy against inapi models"}
+{"date": "2026-04-16", "time": "17:04", "agent": "Explore", "model": "haiku", "description": "Find error codes in JB banking"}
+{"date": "2026-04-16", "time": "17:04", "agent": "Explore", "model": "haiku", "description": "Find 1000번 전문 messagerule"}
+{"date": "2026-04-16", "time": "18:02", "agent": "Explore", "model": "haiku", "description": "매각 spec 검토용 코드 탐색"}
+{"date": "2026-04-17", "time": "10:51", "agent": "general-purpose", "model": "sonnet", "description": "Notion AS-IS 매각 페이지 분석"}
+{"date": "2026-04-17", "time": "10:51", "agent": "explore", "model": "", "description": "inapi 매각 코드 조사"}
+{"date": "2026-04-17", "time": "10:52", "agent": "explore", "model": "", "description": "banking-loan 매각 + RepaymentSchedule 조사"}
+{"date": "2026-04-17", "time": "11:19", "agent": "Explore", "model": "haiku", "description": "차입자 주소/지번주소 저장 위치 탐색"}
+{"date": "2026-04-17", "time": "11:32", "agent": "Explore", "model": "haiku", "description": "pf-user 주소 저장 로직 추적"}
+{"date": "2026-04-17", "time": "13:00", "agent": "Explore", "model": "haiku", "description": "RepaymentSchedule/Invoice 생성 시점 조사"}
+{"date": "2026-04-17", "time": "14:34", "agent": "Explore", "model": "", "description": "대출실행 3000/7000 전문 호출 조사"}
+{"date": "2026-04-20", "time": "10:48", "agent": "Explore", "model": "haiku", "description": "JB Bank 전문 로그 탐색"}
+{"date": "2026-04-20", "time": "15:06", "agent": "Explore", "model": "", "description": "Explore invoice calculation services"}
+{"date": "2026-04-20", "time": "17:13", "agent": "Explore", "model": "", "description": "Find inapi loss-only admin logic"}

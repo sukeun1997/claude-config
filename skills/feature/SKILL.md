@@ -19,8 +19,14 @@ description: "새 기능 구현 전체 파이프라인. brainstorming → plans 
 /feature {설명}
     │
     ▼
+Phase 0: Tech Advisory (조건부)
+    → 기술 선택이 필요한 경우 tech-advisor 스킬 invoke
+    → 대안 기술/패턴 비교표 제시 → 사용자 선택
+    → 기술 선택이 불필요하면 스킵
+    │
+    ▼
 Phase 1: Brainstorming
-    → superpowers:brainstorming 스킬 invoke (인자: {설명})
+    → superpowers:brainstorming 스킬 invoke (인자: {설명} + [기술 결정])
     → 접근법 탐색, 인터뷰, 설계안 도출
     │
     ▼
@@ -58,6 +64,23 @@ brainstorming/writing-plans 호출 **이전**에 저장 경로를 결정해 pref
    - 그 외 → 슬래시를 `--`로 치환 (`fix/avro-dlt` → `fix--avro-dlt`)
 3. **Target 디렉토리**: `~/vault/{project}/{branch-slug}/` (base 브랜치면 `~/vault/{project}/`)
 4. 디렉토리가 없으면 `mkdir -p`로 생성
+
+### Phase 0: Tech Advisory (조건부)
+
+기능 요청에 기술 선택이 포함된 경우에만 실행한다.
+
+**트리거 판단**: 요청이 아래 도메인 중 하나에 해당하고, 현재 프로젝트에서 해당 기술이 미확정이면 실행:
+- DB/ORM, 캐시, 테스트 전략, 동시성, API 설계, 메시징/이벤트
+
+**실행**: `tech-advisor` 스킬 invoke (인자: 기능 설명에서 추출한 기술 도메인)
+
+**결과 전달**: 사용자가 선택한 기술을 Phase 1 brainstorming 인자에 포함:
+```
+[기술 결정]
+- {도메인}: {선택된 기술} (tech-advisor 선택)
+```
+
+**스킵 조건**: 기술 선택이 이미 명확하거나, 기존 프로젝트 스택으로 자연스럽게 결정되는 경우
 
 ### Phase 1: Brainstorming
 
