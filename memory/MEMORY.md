@@ -141,3 +141,8 @@
 ### Promoted 2026-04-19
 - Cloudflare Tunnel + `trust proxy 1` 환경의 `requireLocal` 올바른 구현: `req.socket.remoteAddress` 단독 검증은 역효과 — cloudflared가 loopback으로 express에 접속하므로 모든 터널 트래픽이 127.0.0.1로 보임. 정답은 `req.ip`(XFF 기반) AND `req.socket.remoteAddress` 둘 다 127.0.0.1일 때만 통과. 터널 트래픽: socket=127.0.0.1 ✓ / ip=실제클라이언트IP ✗ → 차단. 로컬 직접 접속: 둘 다 127.0.0.1 → 통과. XFF 스푸핑: socket=공격자IP ✗ → 차단
 - `dangerouslySetInnerHTML` 감사 패턴: 공개 페이지에 DOMPurify 적용해도 **관리자 내부 페이지가 누락**되면 XSS → 세션 탈취 → 전체 앱 장악 경로 그대로 열려 있음. `grep -n dangerouslySetInnerHTML` 로 전수 검사 후 sanitize 없는 곳 모두 보완해야 함. 입력 신뢰도(공개 vs 관리자)와 무관하게 sanitize 기본 적용
+
+### Promoted 2026-04-20
+- `@ts-expect-error + tsconfig.test.json` 패턴: "이 필드가 공개 타입에 있으면 빌드 깨진다"는 계약을 컴파일 타임에 강제. 재노출 회귀 방지. `typecheck` 스크립트를 `tsc && tsc -p tsconfig.test.json`로 확장해 CI에 자동 편입.
+- `buildListingData`를 공용으로 유지하고 **반환 시점 spread destructuring**(`{ tenantId: _tid, ...unit }`)으로 strip하는 패턴이, "공개/어드민 경로 분기 함수 2개로 쪼개기"보다 변경량이 작고 단일 소스 유지. 단점은 공개 DTO 타입 명시성이 약함(`as` 단언 필요) — 명시적 DTO 타입 분리는 후속 리팩터 후보.
+- V2 레거시 격리 전략 변화: 처음엔 "V2 types.ts 수정 금지"로 두려 했으나 `smart-summary.tsx`(V2/V3 공유 유틸)가 `@/types`로 전환되면서 V2 Building에 `ownerName` 누락이 structural subtyping 에러로 드러남. 결국 V2 types.ts에도 `ownerName: string | null` + `type: string | null` 최소 보정. "격리"보다 "공용 유틸 → 공용 타입 일원화"가 우선순위가 높았던 사례.
