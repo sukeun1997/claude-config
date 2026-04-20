@@ -235,3 +235,4 @@
 {"date": "2026-04-17", "time": "13:00", "agent": "Explore", "model": "haiku", "description": "RepaymentSchedule/Invoice 생성 시점 조사"}
 {"date": "2026-04-17", "time": "14:34", "agent": "Explore", "model": "", "description": "대출실행 3000/7000 전문 호출 조사"}
 {"date": "2026-04-20", "time": "10:48", "agent": "Explore", "model": "haiku", "description": "JB Bank 전문 로그 탐색"}
+{"date": "2026-04-20", "time": "15:06", "agent": "Explore", "model": "", "description": "Explore invoice calculation services"}
