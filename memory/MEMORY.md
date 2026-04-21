@@ -150,3 +150,6 @@
 ### Promoted 2026-04-20
 - "카톡 단톡방에 자동 발송" 요구 시 현실: 공식 API 없음. 봇폰(auto.js), computer-use cron, Automate는 모두 UI 변경·잠금·재부팅으로 주기적 깨짐 + 오픈채팅방 오발송 리스크. **"1명이 하루 30초 작업"으로 안정성 > 완전 자동**이 실용 정답. 텔레그램 봇 공식 API가 진짜 솔루션이지만 가족 설득 필요
 - 업로드 파이프라인 패턴: 상대방 폰에 커스텀 코드/flow 박지 말고, **공식 동기화 앱 + 서버 pull** 구조가 안정적. Autosync (Google Drive 전용) → 서버 Drive API cron 5분. 지연 5~10분이지만 "준실시간" 체감 충분. Service Account 쓰면 OAuth 재인증 없이 영구 동작
+
+### Promoted 2026-04-21
+- Anthropic 공식 frontend-design 스킬은 짧다(200줄 미만). 단일 SKILL.md + lazy-load reference 구조 — 스킬 설계 시 메인은 얇게 유지하고 상세는 references/로 분리가 정답

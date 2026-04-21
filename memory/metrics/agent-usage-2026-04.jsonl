@@ -357,3 +357,13 @@
 {"date": "2026-04-21", "time": "18:01", "agent": "verifier", "model": "opus", "description": "Focused re-verification Gap 1 해결"}
 {"date": "2026-04-21", "time": "20:19", "agent": "Explore", "model": "haiku", "description": "Codebase structure for ticket/SLA plan"}
 {"date": "2026-04-20", "time": "16:23", "agent": "Explore", "model": "haiku", "description": "매물장 + 임대인 데이터 구조 탐색"}
+{"date": "2026-04-21", "time": "21:01", "agent": "executor", "model": "sonnet", "description": "Task 5: Family Tab UI"}
+{"date": "2026-04-21", "time": "21:02", "agent": "code-reviewer", "model": "sonnet", "description": "Task 5 quick review"}
+{"date": "2026-04-21", "time": "21:07", "agent": "architect", "model": "opus", "description": "Validate absorb items with architect"}
+{"date": "2026-04-21", "time": "21:07", "agent": "executor", "model": "sonnet", "description": "Task 6: Building assignee column"}
+{"date": "2026-04-21", "time": "21:09", "agent": "code-reviewer", "model": "opus", "description": "Task 6 scope + quality review"}
+{"date": "2026-04-21", "time": "21:12", "agent": "executor", "model": "sonnet", "description": "Task 7: Ticket CRUD"}
+{"date": "2026-04-21", "time": "21:14", "agent": "code-reviewer", "model": "sonnet", "description": "Task 7 review"}
+{"date": "2026-04-21", "time": "21:15", "agent": "executor", "model": "sonnet", "description": "Task 7 fix: severity sort"}
+{"date": "2026-04-21", "time": "21:17", "agent": "executor", "model": "sonnet", "description": "Task 8: Ticket detail page"}
+{"date": "2026-04-21", "time": "21:31", "agent": "Explore", "model": "haiku", "description": "V2 매물장 전체 코드 의존성 조사"}
