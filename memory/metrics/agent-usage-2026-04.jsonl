@@ -338,3 +338,21 @@
 {"date": "2026-04-20", "time": "19:34", "agent": "executor", "model": "sonnet", "description": "Task 6+7 - 모바일 UI + CSS"}
 {"date": "2026-04-20", "time": "19:43", "agent": "executor", "model": "sonnet", "description": "Task 9-13 - 레거시 제거 일괄"}
 {"date": "2026-04-20", "time": "19:47", "agent": "code-reviewer", "model": "opus", "description": "최종 전체 코드 리뷰"}
+{"date": "2026-04-21", "time": "12:04", "agent": "Explore", "model": "default", "description": "Find listing image save code"}
+{"date": "2026-04-21", "time": "14:48", "agent": "executor", "model": "sonnet", "description": "Task 1: Prisma schema + migration"}
+{"date": "2026-04-21", "time": "14:52", "agent": "executor", "model": "sonnet", "description": "Task 2: service layer TDD"}
+{"date": "2026-04-21", "time": "14:55", "agent": "executor", "model": "sonnet", "description": "Task 4: admin UI checkbox column"}
+{"date": "2026-04-21", "time": "14:58", "agent": "code-reviewer", "model": "opus", "description": "Final code review for feature"}
+{"date": "2026-04-21", "time": "15:25", "agent": "Explore", "model": "default", "description": "Locate listing-manage 비고 display"}
+{"date": "2026-04-21", "time": "15:29", "agent": "Explore", "model": "default", "description": "Find V3 listing render"}
+{"date": "2026-04-21", "time": "17:48", "agent": "executor", "model": "sonnet", "description": "Plan Task 1 테스트 스캐폴드"}
+{"date": "2026-04-21", "time": "17:50", "agent": "executor", "model": "sonnet", "description": "Plan Task 2 데스크톱 비고 컬럼"}
+{"date": "2026-04-21", "time": "17:51", "agent": "executor", "model": "sonnet", "description": "Plan Task 3 데스크톱 ownerName 제거"}
+{"date": "2026-04-21", "time": "17:52", "agent": "executor", "model": "sonnet", "description": "Plan Task 4 모바일 비고 리디자인"}
+{"date": "2026-04-21", "time": "17:53", "agent": "executor", "model": "sonnet", "description": "Plan Task 5 모바일 ownerName 제거"}
+{"date": "2026-04-21", "time": "17:54", "agent": "executor", "model": "sonnet", "description": "Plan Task 6 CSS 스타일 정비"}
+{"date": "2026-04-21", "time": "17:56", "agent": "executor", "model": "sonnet", "description": "Plan Task 7 UpdateLogTab 엔트리"}
+{"date": "2026-04-21", "time": "17:59", "agent": "verifier", "model": "opus", "description": "최종 독립 검증"}
+{"date": "2026-04-21", "time": "18:00", "agent": "executor", "model": "sonnet", "description": "Gap 1 수정 모바일 compact 블록"}
+{"date": "2026-04-21", "time": "18:01", "agent": "verifier", "model": "opus", "description": "Focused re-verification Gap 1 해결"}
+{"date": "2026-04-21", "time": "20:19", "agent": "Explore", "model": "haiku", "description": "Codebase structure for ticket/SLA plan"}
