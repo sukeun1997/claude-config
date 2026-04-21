@@ -146,3 +146,7 @@
 - `@ts-expect-error + tsconfig.test.json` 패턴: "이 필드가 공개 타입에 있으면 빌드 깨진다"는 계약을 컴파일 타임에 강제. 재노출 회귀 방지. `typecheck` 스크립트를 `tsc && tsc -p tsconfig.test.json`로 확장해 CI에 자동 편입.
 - `buildListingData`를 공용으로 유지하고 **반환 시점 spread destructuring**(`{ tenantId: _tid, ...unit }`)으로 strip하는 패턴이, "공개/어드민 경로 분기 함수 2개로 쪼개기"보다 변경량이 작고 단일 소스 유지. 단점은 공개 DTO 타입 명시성이 약함(`as` 단언 필요) — 명시적 DTO 타입 분리는 후속 리팩터 후보.
 - V2 레거시 격리 전략 변화: 처음엔 "V2 types.ts 수정 금지"로 두려 했으나 `smart-summary.tsx`(V2/V3 공유 유틸)가 `@/types`로 전환되면서 V2 Building에 `ownerName` 누락이 structural subtyping 에러로 드러남. 결국 V2 types.ts에도 `ownerName: string | null` + `type: string | null` 최소 보정. "격리"보다 "공용 유틸 → 공용 타입 일원화"가 우선순위가 높았던 사례.
+
+### Promoted 2026-04-20
+- "카톡 단톡방에 자동 발송" 요구 시 현실: 공식 API 없음. 봇폰(auto.js), computer-use cron, Automate는 모두 UI 변경·잠금·재부팅으로 주기적 깨짐 + 오픈채팅방 오발송 리스크. **"1명이 하루 30초 작업"으로 안정성 > 완전 자동**이 실용 정답. 텔레그램 봇 공식 API가 진짜 솔루션이지만 가족 설득 필요
+- 업로드 파이프라인 패턴: 상대방 폰에 커스텀 코드/flow 박지 말고, **공식 동기화 앱 + 서버 pull** 구조가 안정적. Autosync (Google Drive 전용) → 서버 Drive API cron 5분. 지연 5~10분이지만 "준실시간" 체감 충분. Service Account 쓰면 OAuth 재인증 없이 영구 동작
