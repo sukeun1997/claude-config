@@ -50,20 +50,24 @@
 {"timestamp": "2026-04-19T16:28:16.885655", "skill": "superpowers:writing-plans", "project": "building"}
 {"timestamp": "2026-04-19T16:32:10.057323", "skill": "superpowers:subagent-driven-development", "project": "building"}
 {"timestamp": "2026-04-19T20:09:17.695990", "skill": "docs-save", "project": "building"}
-<<<<<<< Updated upstream
 {"timestamp": "2026-04-15T17:35:11.975333", "skill": "sync-pr", "project": "global"}
 {"timestamp": "2026-04-16T13:43:55.190893", "skill": "update-config", "project": "global"}
 {"timestamp": "2026-04-16T13:50:22.331613", "skill": "superpowers:writing-plans", "project": "global"}
-<<<<<<< Updated upstream
-=======
 {"timestamp": "2026-04-20T16:21:50.283688", "skill": "superpowers:brainstorming", "project": "building"}
->>>>>>> Stashed changes
 {"timestamp": "2026-04-20T18:19:10.140317", "skill": "superpowers:writing-plans", "project": "building"}
 {"timestamp": "2026-04-20T18:55:14.391580", "skill": "superpowers:subagent-driven-development", "project": "building"}
-=======
 {"timestamp": "2026-04-20T17:30:55.434978", "skill": "sync-pr", "project": "global"}
->>>>>>> Stashed changes
 {"timestamp": "2026-04-21T10:58:33.308806", "skill": "parallel-dev", "project": "global"}
 {"timestamp": "2026-04-21T18:06:14.470267", "skill": "sentry-debug", "project": "global"}
 {"timestamp": "2026-04-21T18:40:20.406020", "skill": "sentry-debug", "project": "global"}
 {"timestamp": "2026-04-22T10:16:14.331104", "skill": "sentry-debug", "project": "global"}
+{"timestamp": "2026-04-21T14:03:30.087696", "skill": "superpowers:brainstorming", "project": "building"}
+{"timestamp": "2026-04-21T14:37:33.458962", "skill": "superpowers:writing-plans", "project": "building"}
+{"timestamp": "2026-04-21T14:46:51.503012", "skill": "superpowers:subagent-driven-development", "project": "building"}
+{"timestamp": "2026-04-21T15:25:51.206996", "skill": "superpowers:brainstorming", "project": "building"}
+{"timestamp": "2026-04-21T17:15:07.629973", "skill": "superpowers:writing-plans", "project": "building"}
+{"timestamp": "2026-04-21T17:46:46.171616", "skill": "superpowers:subagent-driven-development", "project": "building"}
+{"timestamp": "2026-04-21T20:16:43.673091", "skill": "superpowers:writing-plans", "project": "building"}
+{"timestamp": "2026-04-20T16:21:50.283688", "skill": "superpowers:brainstorming", "project": "building"}
+{"timestamp": "2026-04-21T21:17:05.956491", "skill": "design-audit", "project": "building"}
+{"timestamp": "2026-04-22T10:46:23.509021", "skill": "design-audit", "project": "building"}

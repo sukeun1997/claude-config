@@ -6,6 +6,14 @@ type: reference
 
 # Absorbed Articles
 
+### 2026-04-21: Claude Code 및 Codex 설정 변경으로 토큰 절약 (stdy.blog)
+- **URL**: https://www.stdy.blog/increasing-token-efficiency-by-setting-adjustment-in-claude-and-codex/
+- **유형**: engineering-blog + tutorial (Claude Code 2.1.114 / Codex 0.121.0 기준)
+- **적용**: 3건 (settings 2: `includeGitInstructions: false` + `attribution: {commit:"", pr:""}` / memory 1: `memory/topics/token-efficiency.md` 카탈로그)
+- **보류**: 7건 (출력 상한 env 3종 — 꼬리 잘림 재호출 리스크 / `GLOB_NO_IGNORE=false` — 백엔드 작업에 실익 낮음 / `ccb` worker alias — agent-council 의존성 충돌 / `DISABLE_TELEMETRY` — 토큰 무관 / Codex 설정 — 직접 사용 흐름 없음)
+- **제외**: 1건 (Atlas design-system-as-skill 패턴 — 사용자 제외 선택)
+- **핵심 인사이트**: Claude Opus 4.7은 tokenizer 변경 + 에이전트 후반 턴 추론 증가로 4.6 대비 ~1.5× 토큰 소비. 매 세션 자동 주입되는 git 블록과 자동 attribution이 이중 주입 원인. `attribution` 빈 값은 토큰 절약보다 "이중 Co-Authored-By 오염 방지" 효과. 출력 상한 env는 꼬리 잘림 → tail/grep 재호출로 역효과 가능하므로 측정 후 결정해야 함. **Opus 검증이 "즉시 3건 + 점진적 1건 + 보류 7건"으로 과욕 차단**. 공식 문서는 URL 뒤 `.md` 붙이면 마크다운으로 제공되어 에이전트 친화적.
+
 ### 2026-04-14 (2): shanraisshan/claude-code-best-practice — agent/skill frontmatter 필드 3종
 - **URL**: https://github.com/shanraisshan/claude-code-best-practice
 - **유형**: best-practice reference (42.9k stars, Boris Cherny 스타일 CC 패턴 카탈로그)

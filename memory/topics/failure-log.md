@@ -90,3 +90,6 @@ edit-tracker (3회+ 반복 편집 감지)
 | 2026-04-17 | spec-sale-loss-v3.md 13회 반복 편집 | Prompt (추정·13회) | 접근법 오류 가능성 — 초기화 후 재설계 권장 |
 | 2026-04-21 | invest_only.py 3회 반복 편집 | Context (추정) | 소스 반복 — 관련 파일/타입 정의 확인 필요 |
 | 2026-04-21 | sentry-fetch.py 3회 반복 편집 | Context (추정) | 소스 반복 — 관련 파일/타입 정의 확인 필요 |
+| 2026-04-21 | recording.service.ts 3회 반복 편집 | Context (추정) | 소스 반복 — 관련 파일/타입 정의 확인 필요 |
+| 2026-04-21 | Prisma migrate "가짜 applied" (listingHidden P2022) | Deployment | `_prisma_migrations`에 applied 기록만 남고 ALTER SQL 미실행. `migrate status`는 "up to date" 반환하며 감지 불가. 라이브 API가 전부 500 에러. 수동 `ALTER TABLE ADD COLUMN IF NOT EXISTS` + pm2 restart로 복구. deploy.sh에 smoke test 단계 추가로 재발 방지 |
+| 2026-04-21 | listing-v3.css 12회 반복 편집 | Prompt (추정·12회) | 접근법 오류 가능성 — 초기화 후 재설계 권장 |
