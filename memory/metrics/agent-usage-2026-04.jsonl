@@ -367,3 +367,5 @@
 {"date": "2026-04-21", "time": "21:15", "agent": "executor", "model": "sonnet", "description": "Task 7 fix: severity sort"}
 {"date": "2026-04-21", "time": "21:17", "agent": "executor", "model": "sonnet", "description": "Task 8: Ticket detail page"}
 {"date": "2026-04-21", "time": "21:31", "agent": "Explore", "model": "haiku", "description": "V2 매물장 전체 코드 의존성 조사"}
+{"date": "2026-04-22", "time": "10:39", "agent": "Explore", "model": "haiku", "description": "Find V1 image save logic and error"}
+{"date": "2026-04-22", "time": "10:58", "agent": "verifier", "model": "opus", "description": "Independent V1 fixes verification"}
