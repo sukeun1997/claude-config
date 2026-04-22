@@ -6,6 +6,12 @@ type: reference
 
 # Absorbed Articles
 
+### 2026-04-22: Cursor Rules for Kotlin: Android and Backend Patterns That Ship
+- **URL**: https://dev.to/olivia_craft/cursor-rules-for-kotlin-android-and-backend-patterns-that-ship-2j2d
+- **유형**: tutorial (Cursor Rules 형태의 Kotlin 패턴 카탈로그)
+- **적용**: 0건 (전체 covered)
+- **핵심 인사이트**: 8개 섹션(suspend main-safe, structured concurrency, null safety, data class 불변, sealed exhaustive when, extension function, Android ViewModel, Ktor/Spring) 모두 기존 `kotlin-patterns` 스킬에서 커버. Android ViewModel/StateFlow 섹션은 백엔드 중심 프로필이라 해당 없음. 현재 kotlin-patterns 스킬의 커버리지가 커뮤니티 Cursor Rules 수준을 충족함을 확인.
+
 ### 2026-04-21: Claude Code 및 Codex 설정 변경으로 토큰 절약 (stdy.blog)
 - **URL**: https://www.stdy.blog/increasing-token-efficiency-by-setting-adjustment-in-claude-and-codex/
 - **유형**: engineering-blog + tutorial (Claude Code 2.1.114 / Codex 0.121.0 기준)
