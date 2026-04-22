@@ -54,8 +54,16 @@
 {"timestamp": "2026-04-15T17:35:11.975333", "skill": "sync-pr", "project": "global"}
 {"timestamp": "2026-04-16T13:43:55.190893", "skill": "update-config", "project": "global"}
 {"timestamp": "2026-04-16T13:50:22.331613", "skill": "superpowers:writing-plans", "project": "global"}
+<<<<<<< Updated upstream
 =======
 {"timestamp": "2026-04-20T16:21:50.283688", "skill": "superpowers:brainstorming", "project": "building"}
 >>>>>>> Stashed changes
 {"timestamp": "2026-04-20T18:19:10.140317", "skill": "superpowers:writing-plans", "project": "building"}
 {"timestamp": "2026-04-20T18:55:14.391580", "skill": "superpowers:subagent-driven-development", "project": "building"}
+=======
+{"timestamp": "2026-04-20T17:30:55.434978", "skill": "sync-pr", "project": "global"}
+>>>>>>> Stashed changes
+{"timestamp": "2026-04-21T10:58:33.308806", "skill": "parallel-dev", "project": "global"}
+{"timestamp": "2026-04-21T18:06:14.470267", "skill": "sentry-debug", "project": "global"}
+{"timestamp": "2026-04-21T18:40:20.406020", "skill": "sentry-debug", "project": "global"}
+{"timestamp": "2026-04-22T10:16:14.331104", "skill": "sentry-debug", "project": "global"}
