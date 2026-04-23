@@ -377,3 +377,7 @@
 {"date": "2026-04-22", "time": "10:39", "agent": "Explore", "model": "haiku", "description": "Find V1 image save logic and error"}
 {"date": "2026-04-22", "time": "10:58", "agent": "verifier", "model": "opus", "description": "Independent V1 fixes verification"}
 {"date": "2026-04-22", "time": "16:30", "agent": "Explore", "model": "haiku", "description": "신정산 정산 플로우 코드 탐색"}
+{"date": "2026-04-23", "time": "10:16", "agent": "Explore", "model": "default", "description": "Explore inapi sale-related loan_management usage"}
+{"date": "2026-04-23", "time": "10:21", "agent": "Explore", "model": "default", "description": "Investigate sale_reason and loss logic in inapi"}
+{"date": "2026-04-23", "time": "10:25", "agent": "Explore", "model": "default", "description": "Check DebtRestructuringLoan relation to loss"}
+{"date": "2026-04-23", "time": "10:32", "agent": "Explore", "model": "default", "description": "Trace inapi sale repayment to investor settlement"}
