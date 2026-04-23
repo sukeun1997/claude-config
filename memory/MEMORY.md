@@ -6,7 +6,7 @@
 ## 작업 환경
 - macOS, zsh, Claude Code CLI 사용
 - GitHub: sukeun1997 (gh CLI 인증됨)
-- Notion: MCP (notion-cdp + Anthropic Notion MCP) 연동
+- Notion: MCP (`plugin:Notion:notion`, 도구 프리픽스 `mcp__plugin_Notion_notion__*`) 연동
 - Memory: 4계층 (Active: active/+sessions/, Hot: daily/, Always: MEMORY.md, Cold: topics/)
 
 ## 글로벌 설정 구조 (~/.claude/)

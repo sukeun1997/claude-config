@@ -266,4 +266,4 @@ memory_search("설정 구성 변경 디버깅 구현", top_k=10)
 ## Prerequisites
 
 - memory-search MCP 서버 활성화 (memory_search, memory_index)
-- Notion 기록 시: Notion CDP 모드 실행 (launch-notion.sh)
+- Notion 기록 시: `plugin:Notion:notion` MCP 서버 연결 확인 (`/mcp`)
