@@ -381,3 +381,14 @@
 {"date": "2026-04-23", "time": "10:21", "agent": "Explore", "model": "default", "description": "Investigate sale_reason and loss logic in inapi"}
 {"date": "2026-04-23", "time": "10:25", "agent": "Explore", "model": "default", "description": "Check DebtRestructuringLoan relation to loss"}
 {"date": "2026-04-23", "time": "10:32", "agent": "Explore", "model": "default", "description": "Trace inapi sale repayment to investor settlement"}
+{"date": "2026-04-23", "time": "10:40", "agent": "Explore", "model": "default", "description": "Trace banking-loan settlement InvoiceFullyRepaid handling"}
+{"date": "2026-04-23", "time": "10:52", "agent": "Explore", "model": "default", "description": "Verify inapi sale repayment publishes repayment_confirmed"}
+{"date": "2026-04-23", "time": "10:55", "agent": "Explore", "model": "default", "description": "Check SettlementCalculationUseCase sale case compatibility"}
+{"date": "2026-04-23", "time": "11:18", "agent": "critic", "model": "opus", "description": "Adversarial spec review"}
+{"date": "2026-04-23", "time": "11:23", "agent": "Explore", "model": "haiku", "description": "Verify sale/loss entities status"}
+{"date": "2026-04-23", "time": "11:29", "agent": "planner", "model": "opus", "description": "Write implementation plan for spec-sale-loss-v3"}
+{"date": "2026-04-23", "time": "11:33", "agent": "critic", "model": "opus", "description": "Adversarial review of implementation plan"}
+{"date": "2026-04-23", "time": "12:50", "agent": "Explore", "model": "haiku", "description": "Trace repayment settlement flow"}
+{"date": "2026-04-23", "time": "12:51", "agent": "Explore", "model": "haiku", "description": "Deep dive EOD interest calculation"}
+{"date": "2026-04-23", "time": "12:51", "agent": "Explore", "model": "haiku", "description": "Verify spec flow against actual code"}
+{"date": "2026-04-23", "time": "12:52", "agent": "Explore", "model": "haiku", "description": "Inspect inapi SaleBondHistory full schema"}
