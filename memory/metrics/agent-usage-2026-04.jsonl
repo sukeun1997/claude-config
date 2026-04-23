@@ -393,3 +393,5 @@
 {"date": "2026-04-23", "time": "12:51", "agent": "Explore", "model": "haiku", "description": "Verify spec flow against actual code"}
 {"date": "2026-04-23", "time": "12:52", "agent": "Explore", "model": "haiku", "description": "Inspect inapi SaleBondHistory full schema"}
 {"date": "2026-04-23", "time": "13:51", "agent": "Explore", "model": "haiku", "description": "Trace repayment-to-settlement fund flow"}
+{"date": "2026-04-23", "time": "17:42", "agent": "code-reviewer", "model": "opus", "description": "Opus verification of dedup PR"}
+{"date": "2026-04-23", "time": "17:55", "agent": "code-reviewer", "model": "opus", "description": "Final Opus verification of dedup PR"}
