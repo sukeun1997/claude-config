@@ -71,9 +71,20 @@ python3 ~/.claude/scripts/sync-codex-skills.py \
 2. Codex는 `omc-shared/` 아래로만 받아서 충돌 범위 축소
 3. shared skill 수정 후에는 dry-run → 실제 sync 순서 유지
 
+## 현재 로컬 상태
+
+- 현재 로컬 스캔 기준 portable skill **21개**가 `~/.codex/skills/omc-shared/`에 동기화됨
+- 현재 skip 대상 **6개**
+  - `daily-briefing`
+  - `feature`
+  - `master-guide`
+  - `notion-writer`
+  - `research-to-notion`
+  - `subagent-driven-development`
+
 ## 주의
 
-- 현재 세션 샌드박스에서는 `~/.codex` 직접 쓰기가 막힐 수 있다.
-- 그 경우 dry-run으로 먼저 검증하고, 실제 sync는 권한 승인 후 수행한다.
+- 호환성 필터는 보수적으로 동작한다. 본문뿐 아니라 references 파일 안의 Claude 전용 패턴도 검사한다.
+- sync 결과가 늘 정답은 아니므로, 새로 공유된 skill은 처음 1회 실제 사용 전 간단히 열어보는 것이 안전하다.
 
 $ARGUMENTS

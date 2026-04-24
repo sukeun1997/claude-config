@@ -5,7 +5,7 @@ description: "Claude 생성 문서(plan/spec)를 Obsidian vault에 저장. Use w
 
 # docs-save — Obsidian Vault 저장
 
-Claude가 생성한 plan/spec/설계 문서를 `~/vault/{project}/{branch}/`에 저장한다.
+Claude가 생성한 plan/spec/설계 문서를 `~/vault/project/{project}/{branch}/`에 저장한다.
 
 ## When to Apply
 
@@ -39,18 +39,21 @@ BRANCH=$(git rev-parse --abbrev-ref HEAD 2>/dev/null || echo "main")
 ### 3. 저장 경로 결정
 
 ```
-~/vault/{project}/{branch-slug}/
+~/vault/project/{project}/{branch-slug}/
 ```
 
 ### 4. 파일명 결정
 
+모든 저장 파일명 끝에 **작성일(YYYY-MM-DD)** postfix를 붙여 생성 시점을 식별 가능하게 한다.
+
 | 원본 유형 | 저장 이름 |
 |-----------|-----------|
-| superpowers plan (랜덤 이름 .md) | `plan.md` 또는 `plan-{topic}.md` (같은 브랜치에 이미 plan.md 있으면) |
-| superpowers spec (*-design.md) | `spec.md` 또는 `spec-{topic}.md` |
-| 기타 | 원본 파일명 유지 |
+| superpowers plan (랜덤 이름 .md) | `plan-{YYYY-MM-DD}.md` 또는 `plan-{topic}-{YYYY-MM-DD}.md` (topic이 추출 가능한 경우) |
+| superpowers spec (*-design.md) | `spec-{YYYY-MM-DD}.md` 또는 `spec-{topic}-{YYYY-MM-DD}.md` |
+| 기타 | `{원본파일명}-{YYYY-MM-DD}.md` (확장자 앞에 삽입) |
 
 topic은 원본 파일에서 `# ` 헤딩의 첫 번째 단어 2-3개를 slug화하여 사용.
+같은 날 같은 이름이 이미 존재하면 `-2`, `-3` 순번을 덧붙인다.
 
 ### 5. Frontmatter 주입
 
@@ -70,13 +73,13 @@ status: active
 ### 6. 복사 + 확인
 
 ```bash
-mkdir -p ~/vault/{project}/{branch-slug}/
+mkdir -p ~/vault/project/{project}/{branch-slug}/
 ```
 
 원본 파일을 Read → frontmatter 주입 → Write로 대상 경로에 저장.
 
 저장 완료 메시지:
-> "저장 완료: `~/vault/{project}/{branch}/{파일명}`"
+> "저장 완료: `~/vault/project/{project}/{branch}/{파일명}-{YYYY-MM-DD}.md`"
 
 ## 제외
 

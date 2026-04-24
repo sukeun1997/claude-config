@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 # vault-auto-save.sh — PostToolUse Hook
-# superpowers가 생성한 spec/plan 파일을 ~/vault/{project}/{branch}/ 에 자동 복사
+# superpowers가 생성한 spec/plan 파일을 ~/vault/project/{project}/{branch}/ 에 자동 복사
+# 파일명에 -{YYYY-MM-DD} postfix를 붙여 작성일을 식별 가능하게 함
 # 비매칭 시 아무 동작 안 함 (exit 0)
 
 set -uo pipefail  # -e 제거: hook은 실패해도 Claude 세션을 방해하면 안 됨
