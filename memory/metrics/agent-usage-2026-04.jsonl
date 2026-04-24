@@ -421,3 +421,5 @@
 {"date": "2026-04-24", "time": "20:55", "agent": "executor", "model": "default", "description": "Wave 2 Lane A — ListingEditTable UI 반전"}
 {"date": "2026-04-24", "time": "20:56", "agent": "executor", "model": "default", "description": "Wave 2 Lane B — 검색 체인 (types + findAllListings + 검색 UI + RTL 테스트)"}
 {"date": "2026-04-24", "time": "21:02", "agent": "executor", "model": "default", "description": "Wave 3 — UpdateLog + 최종 빌드 + push (프로덕션 복구 긴급)"}
+{"date": "2026-04-24", "time": "21:30", "agent": "code-reviewer", "model": "default", "description": "ticket-sla-ownership 도메인 코드리뷰"}
+{"date": "2026-04-24", "time": "21:31", "agent": "explore", "model": "default", "description": "녹음관리 플로우 코드 트레이스"}
