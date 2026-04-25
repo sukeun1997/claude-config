@@ -423,3 +423,6 @@
 {"date": "2026-04-24", "time": "21:02", "agent": "executor", "model": "default", "description": "Wave 3 — UpdateLog + 최종 빌드 + push (프로덕션 복구 긴급)"}
 {"date": "2026-04-24", "time": "21:30", "agent": "code-reviewer", "model": "default", "description": "ticket-sla-ownership 도메인 코드리뷰"}
 {"date": "2026-04-24", "time": "21:31", "agent": "explore", "model": "default", "description": "녹음관리 플로우 코드 트레이스"}
+{"date": "2026-04-25", "time": "14:35", "agent": "general-purpose", "model": "sonnet", "description": "Notion에 주간 리뷰 페이지 생성"}
+{"date": "2026-04-25", "time": "14:36", "agent": "critic", "model": "opus", "description": "Critic: 5 action items 검증"}
+{"date": "2026-04-25", "time": "15:01", "agent": "explore", "model": "haiku", "description": "Codebase facts for portal plan"}

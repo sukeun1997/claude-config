@@ -198,10 +198,16 @@ if [ -f "$TRACK_FILE" ]; then
         COUNT=$(echo "$line" | awk '{print $1}')
         FPATH=$(echo "$line" | awk '{print $2}')
         FNAME=$(basename "$FPATH")
+        # Dedup: skip if (date, fname, count) row already exists.
+        # Prevents (추정) re-fill from creating duplicate rows when user has classified.
+        ROW_PREFIX="| $DATE_STR | ${FNAME} ${COUNT}회 반복 편집 |"
+        if grep -qF "$ROW_PREFIX" "$FRICTION_LOG"; then
+          continue
+        fi
         CLASS=$(classify_friction "$FPATH" "$COUNT")
         LAYER="${CLASS%%|*}"
         HINT="${CLASS#*|}"
-        echo "| $DATE_STR | ${FNAME} ${COUNT}회 반복 편집 | ${LAYER} | ${HINT} |" >> "$FRICTION_LOG"
+        echo "${ROW_PREFIX} ${LAYER} | ${HINT} |" >> "$FRICTION_LOG"
       done <<< "$FRICTION_FILES"
     fi
     # Queue for next session start (model will see this)
