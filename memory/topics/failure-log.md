@@ -58,48 +58,27 @@ edit-tracker (3회+ 반복 편집 감지)
 | 2026-04-18 | VacantList.tsx 4회 반복 편집 | Context | 부모 컴포넌트 Prop 전달 확인 없이 반복 수정 — VacantListingManage 4회와 동일 패턴 재발. 편집 전 부모/자식 컴포넌트 전체 Read 의무화 |
 | 2026-04-18 | ListingEditTable.tsx 3회 반복 편집 | Context | 테이블 컬럼/핸들러 정의 반복 — 상위 Container 컴포넌트 선행 Read 미흡 |
 | 2026-04-18 | TenantDrawer.tsx 3회 반복 편집 | Context | 세입자 drawer props 반복 — related store/hook 선행 Read 미흡 |
-| 2026-04-18 | 상환-인수인계-diagram.d2 5회 반복 편집 | 미분류 | 다음 세션에서 원인 분석 필요 |
-| 2026-04-18 | 상환-인수인계-v2.md 4회 반복 편집 | 미분류 | 다음 세션에서 원인 분석 필요 |
-| 2026-04-18 | listing-v2.css 3회 반복 편집 | Context (추정) | 설정/스타일 반복 — 기존 값과 원하는 값 명확화 |
-| 2026-04-18 | VacantListingV2.tsx 3회 반복 편집 | Context (추정) | 소스 반복 — 관련 파일/타입 정의 확인 필요 |
-| 2026-04-19 | 상환-인수인계-v4.md 3회 반복 편집 | 미분류 | 다음 세션에서 원인 분석 필요 |
-| 2026-04-19 | 상환-인수인계-v4.md 3회 반복 편집 | 미분류 | 다음 세션에서 원인 분석 필요 |
-| 2026-04-19 | VacantListingV3.tsx 3회 반복 편집 | Context (추정) | 소스 반복 — 관련 파일/타입 정의 확인 필요 |
-| 2026-04-19 | VacantListingV3.tsx 5회 반복 편집 | Context (추정·강) | 소스 5회+ — 파일 전체 Read 후 재접근 권장 |
-| 2026-04-19 | MobileListingV2.tsx 3회 반복 편집 | Context (추정) | 소스 반복 — 관련 파일/타입 정의 확인 필요 |
-| 2026-04-10 | test-5x.txt 5회 반복 편집 | 미분류 — 다음 세션에서 원인 분석 필요 | - |
-| 2026-04-12 | index.ts 3회 반복 편집 | 미분류 — 다음 세션에서 원인 분석 필요 | - |
-| 2026-04-13 | MEMORY.md 4회 반복 편집 | 미분류 — 다음 세션에서 원인 분석 필요 | - |
-| 2026-04-13 | MEMORY.md 4회 반복 편집 | 미분류 — 다음 세션에서 원인 분석 필요 | - |
-| 2026-04-13 | sync_lpn_settlement_to_legacy_schedule.py 4회 반복 편집 | 미분류 — 다음 세션에서 원인 분석 필요 | - |
-| 2026-04-13 | 2026-04-10-sale-loss-implementation-v2-design.md 6회 반복 편집 | 미분류 — 다음 세션에서 원인 분석 필요 | - |
-| 2026-04-14 | test_sync_lpn_settlement_info.py 4회 반복 편집 | 미분류 — 다음 세션에서 원인 분석 필요 | - |
-| 2026-04-14 | ecr.md 4회 반복 편집 | 미분류 — 다음 세션에서 원인 분석 필요 | - |
-| 2026-04-12 | index.ts 3회 반복 편집 | Context (추정) | 소스 반복 — 관련 파일/타입 정의 확인 필요 |
-| 2026-04-13 | VacantListingManage.tsx 4회 반복 편집 | Context (추정) | 소스 반복 — 관련 파일/타입 정의 확인 필요 |
-| 2026-04-13 | ListingStyleEditor.tsx 4회 반복 편집 | Context (추정) | 소스 반복 — 관련 파일/타입 정의 확인 필요 |
-| 2026-04-13 | VacantListing.tsx 13회 반복 편집 | Prompt (추정·13회) | 접근법 오류 가능성 — 초기화 후 재설계 권장 |
-| 2026-04-13 | ListingStyleEditor.tsx 9회 반복 편집 | Prompt (추정·9회) | 접근법 오류 가능성 — 초기화 후 재설계 권장 |
-| 2026-04-13 | listing-config.ts 3회 반복 편집 | Context (추정) | 소스 반복 — 관련 파일/타입 정의 확인 필요 |
-| 2026-04-13 | ListingStyleEditor.tsx 3회 반복 편집 | Context (추정) | 소스 반복 — 관련 파일/타입 정의 확인 필요 |
-| 2026-04-14 | excel-import.service.ts 4회 반복 편집 | Context (추정) | 소스 반복 — 관련 파일/타입 정의 확인 필요 |
-| 2026-04-14 | BuildingExcel.tsx 5회 반복 편집 | Context (추정·강) | 소스 5회+ — 파일 전체 Read 후 재접근 권장 |
-| 2026-04-14 | depositStore.ts 3회 반복 편집 | Context (추정) | 소스 반복 — 관련 파일/타입 정의 확인 필요 |
-| 2026-04-15 | SKILL.md 8회 반복 편집 | Prompt (추정·8회) | 접근법 오류 가능성 — 초기화 후 재설계 권장 |
-| 2026-04-16 | spec-sale-loss-v3.md 3회 반복 편집 | 미분류 | 다음 세션에서 원인 분석 필요 |
-| 2026-04-17 | spec-sale-loss-v3.md 13회 반복 편집 | Prompt (추정·13회) | 접근법 오류 가능성 — 초기화 후 재설계 권장 |
-| 2026-04-21 | invest_only.py 3회 반복 편집 | Context (추정) | 소스 반복 — 관련 파일/타입 정의 확인 필요 |
-| 2026-04-21 | sentry-fetch.py 3회 반복 편집 | Context (추정) | 소스 반복 — 관련 파일/타입 정의 확인 필요 |
-| 2026-04-21 | recording.service.ts 3회 반복 편집 | Context (추정) | 소스 반복 — 관련 파일/타입 정의 확인 필요 |
-| 2026-04-21 | Prisma migrate "가짜 applied" (listingHidden P2022) | Deployment | `_prisma_migrations`에 applied 기록만 남고 ALTER SQL 미실행. `migrate status`는 "up to date" 반환하며 감지 불가. 라이브 API가 전부 500 에러. 수동 `ALTER TABLE ADD COLUMN IF NOT EXISTS` + pm2 restart로 복구. deploy.sh에 smoke test 단계 추가로 재발 방지 |
-| 2026-04-21 | listing-v3.css 12회 반복 편집 | Prompt (추정·12회) | 접근법 오류 가능성 — 초기화 후 재설계 권장 |
-| 2026-04-22 | reset_loan_scenario.py 4회 반복 편집 | Context (추정) | 소스 반복 — 관련 파일/타입 정의 확인 필요 |
-| 2026-04-23 | spec-sale-loss-v3.md 5회 반복 편집 | 미분류 | 다음 세션에서 원인 분석 필요 |
-| 2026-04-24 | loan_execution_jb_1001.py 3회 반복 편집 | Context (추정) | 소스 반복 — 관련 파일/타입 정의 확인 필요 |
-| 2026-04-24 | bank_virtualaccount.py 4회 반복 편집 | Context (추정) | 소스 반복 — 관련 파일/타입 정의 확인 필요 |
-| 2026-04-27 | application-local.yml 8회 반복 편집 | Prompt (추정·8회) | 접근법 오류 가능성 — 초기화 후 재설계 권장 |
-| 2026-04-27 | plan.md 6회 반복 편집 | 미분류 | 다음 세션에서 원인 분석 필요 |
-| 2026-04-27 | personal.py 5회 반복 편집 | Context (추정·강) | 소스 5회+ — 파일 전체 Read 후 재접근 권장 |
-| 2026-04-27 | ArsFacadeService.kt 5회 반복 편집 | Context (추정·강) | 소스 5회+ — 파일 전체 Read 후 재접근 권장 |
-| 2026-04-27 | MockCooconApiTest.kt 3회 반복 편집 | Context (추정) | 소스 반복 — 관련 파일/타입 정의 확인 필요 |
-| 2026-04-27 | MockCooconApi.kt 3회 반복 편집 | Context (추정) | 소스 반복 — 관련 파일/타입 정의 확인 필요 |
+| 2026-04-18 | 상환-인수인계-diagram.d2 5회 반복 편집 | Prompt | 문서 스코프 미확정 상태에서 반복 편집. brainstorming 게이트 미적용 |
+| 2026-04-18 | 상환-인수인계-v2.md 4회 반복 편집 | Prompt | 인수인계 문서 구조 미확정 — v2→v4까지 매번 재작성 |
+| 2026-04-18 | VacantListingV2.tsx 3회 반복 편집 | Context | prop/state 타입 선행 Read 미흡 — 부모 컴포넌트 확인 필요 |
+| 2026-04-19 | 상환-인수인계-v4.md 3회 반복 편집 | Prompt | 문서 구조 미확정 반복 (diagram.d2 → v2 → v4 연쇄) |
+| 2026-04-19 | VacantListingV3.tsx 5회 반복 편집 | Context | 파일 전체 Read 없이 반복 수정. 관련 타입/prop 정의 선행 확인 필요 |
+| 2026-04-19 | MobileListingV2.tsx 3회 반복 편집 | Context | 전일(4/18) 동일 패턴 재발 — active context handoff 부족 |
+| 2026-04-15 | SKILL.md 8회 반복 편집 | Prompt | skill 요구사항 미확정 상태에서 반복 편집. 목표 정의 후 작성 필요 |
+| 2026-04-16 | spec-sale-loss-v3.md 3회 반복 편집 | Prompt | 스펙 스코프 미확정 — 요구사항 확정 전 문서 작성 |
+| 2026-04-17 | spec-sale-loss-v3.md 13회 반복 편집 | Prompt | 13회 — 접근법 오류. 스펙 구조 재설계 후 재작성 필요 |
+| 2026-04-21 | invest_only.py 3회 반복 편집 | Context | 관련 파일/타입 정의 선행 Read 미흡 |
+| 2026-04-21 | sentry-fetch.py 3회 반복 편집 | Context | Sentry API 응답 구조 선행 확인 없이 반복 수정 |
+| 2026-04-21 | recording.service.ts 3회 반복 편집 | Context | 의존 모듈/타입 선행 Read 미흡 |
+| 2026-04-21 | Prisma migrate "가짜 applied" (listingHidden P2022) | Deployment | `_prisma_migrations`에 applied 기록만 남고 ALTER SQL 미실행. deploy.sh에 smoke test 추가로 재발 방지 |
+| 2026-04-21 | listing-v3.css 12회 반복 편집 | Prompt | 12회 — CSS 접근법 오류. 디자인 시안 확정 후 한번에 적용 필요 |
+| 2026-04-22 | reset_loan_scenario.py 4회 반복 편집 | Context | 관련 시나리오 데이터/스키마 선행 Read 미흡 |
+| 2026-04-23 | spec-sale-loss-v3.md 5회 반복 편집 | Prompt | 스펙 반복 수정 — 요구사항 확정 전 편집 반복 (3주간 3회 재발) |
+| 2026-04-24 | loan_execution_jb_1001.py 3회 반복 편집 | Context | 쿠콘 전문 스펙/응답 구조 선행 확인 미흡 |
+| 2026-04-24 | bank_virtualaccount.py 4회 반복 편집 | Context | 가상계좌 API 스펙 선행 확인 미흡 |
+| 2026-04-27 | application-local.yml 8회 반복 편집 | Prompt | 8회 — Mock API 설정 구조 미확정 상태에서 반복. 설정 스키마 정의 후 편집 필요 |
+| 2026-04-27 | plan.md 6회 반복 편집 | Prompt | 계획 스코프 미확정 — 요구사항 인터뷰 후 plan 작성 필요 |
+| 2026-04-27 | personal.py 5회 반복 편집 | Context | 쿠콘 전문 스펙/의존 모듈 선행 Read 미흡 |
+| 2026-04-27 | ArsFacadeService.kt 5회 반복 편집 | Context | 의존 인터페이스(CooconApi) 선행 Read 미흡 |
+| 2026-04-27 | MockCooconApiTest.kt 3회 반복 편집 | Context | 테스트 대상 프로덕션 코드 선행 Read 미흡 |
+| 2026-04-27 | MockCooconApi.kt 3회 반복 편집 | Context | 구현 대상 인터페이스/스펙 선행 Read 미흡 |
