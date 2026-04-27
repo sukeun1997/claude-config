@@ -426,3 +426,8 @@
 {"date": "2026-04-25", "time": "14:35", "agent": "general-purpose", "model": "sonnet", "description": "Notion에 주간 리뷰 페이지 생성"}
 {"date": "2026-04-25", "time": "14:36", "agent": "critic", "model": "opus", "description": "Critic: 5 action items 검증"}
 {"date": "2026-04-25", "time": "15:01", "agent": "explore", "model": "haiku", "description": "Codebase facts for portal plan"}
+{"date": "2026-04-25", "time": "15:16", "agent": "critic", "model": "opus", "description": "Adversarial plan critique"}
+{"date": "2026-04-25", "time": "17:04", "agent": "critic", "model": "opus", "description": "Re-validation of revised plan"}
+{"date": "2026-04-26", "time": "13:43", "agent": "explore", "model": "default", "description": "Drive puller 사전 탐색"}
+{"date": "2026-04-26", "time": "14:01", "agent": "debugger", "model": "sonnet", "description": "Apple/Google Sign In 버그 진단"}
+{"date": "2026-04-26", "time": "17:48", "agent": "explore", "model": "default", "description": "Toggle complete logic 탐색"}

@@ -163,3 +163,7 @@
 ### Promoted 2026-04-24
 - **2단 critic 평가의 가치**: aggregator 내부 critic(Phase 1) + 독립 critic 1차(Phase 2) + 적용가치 재검증 critic(Phase 2 재검증) 3단 구조에서 각 단계가 추가 false positive를 걸러냄. 특히 "적용할 가치 있는지" 프롬프트는 "버그인지"와 다른 축 — 이론적 버그 vs 실사용 영향을 분리 평가하는 프롬프트 설계가 filler 수정 방지에 유효
 - **리뷰어 코드 오독 패턴**: reviewer 4명 중 3명이 CSS 1635 라인을 잘못 지목, address null을 타입 무시하고 경고, regions null 플래시를 early-return 없이 가정. critic이 실제 Read로 잡음 → **"리뷰어는 라인 번호 + 근거 필수"** 규칙이 유효하나 critic Read 검증 단계가 없으면 통과. 생산-검증 분리가 단일 리뷰 layer만으로 부족함을 시사
+
+### Promoted 2026-04-26
+- TestFlight 새 빌드 못 올라가는 가장 흔한 원인: CFBundleVersion 동일. xcodegen project.yml에 정적 빌드 번호 두지 말 것.
+- 클라이언트 에러를 LGTM에 흘리는 가장 단순한 패턴: SLF4J logger.warn(...) 한 줄. docker stdout → Alloy/Promtail이 자동 수집. 별도 HTTP push 코드 불필요.
