@@ -77,3 +77,6 @@
 {"timestamp": "2026-04-24T09:58:28.187966", "skill": "sentry-debug", "project": "global"}
 {"timestamp": "2026-04-24T10:06:52.540727", "skill": "sentry-debug", "project": "global"}
 {"timestamp": "2026-04-24T10:49:28.332720", "skill": "sentry-debug", "project": "global"}
+{"timestamp": "2026-04-24T16:28:56.969938", "skill": "superpowers:systematic-debugging", "project": "global"}
+{"timestamp": "2026-04-24T16:41:57.597841", "skill": "sentry-debug", "project": "global"}
+{"timestamp": "2026-04-24T18:33:29.854957", "skill": "ecr", "project": "global"}
