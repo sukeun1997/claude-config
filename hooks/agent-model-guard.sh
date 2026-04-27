@@ -9,12 +9,13 @@ set -euo pipefail
 INPUT="${TOOL_INPUT:-}"
 [ -z "$INPUT" ] && exit 0
 
-# Extract subagent_type (or description for heuristic matching)
-SUBAGENT=$(echo "$INPUT" | grep -o '"subagent_type"[[:space:]]*:[[:space:]]*"[^"]*"' | head -1 | sed 's/.*"subagent_type"[[:space:]]*:[[:space:]]*"//' | sed 's/"$//')
-MODEL=$(echo "$INPUT" | grep -o '"model"[[:space:]]*:[[:space:]]*"[^"]*"' | head -1 | sed 's/.*"model"[[:space:]]*:[[:space:]]*"//' | sed 's/"$//')
+# Extract subagent_type and model (|| true for set -e safety when field is absent)
+SUBAGENT=$(echo "$INPUT" | grep -o '"subagent_type"[[:space:]]*:[[:space:]]*"[^"]*"' | head -1 | sed 's/.*"subagent_type"[[:space:]]*:[[:space:]]*"//' | sed 's/"$//' || true)
+MODEL=$(echo "$INPUT" | grep -o '"model"[[:space:]]*:[[:space:]]*"[^"]*"' | head -1 | sed 's/.*"model"[[:space:]]*:[[:space:]]*"//' | sed 's/"$//' || true)
 
-# Only check agents that have a required model tier
-case "${SUBAGENT,,}" in
+# Only check agents that have a required model tier (tr for bash 3.2 compat)
+SUBAGENT_LOWER=$(echo "$SUBAGENT" | tr '[:upper:]' '[:lower:]')
+case "$SUBAGENT_LOWER" in
   explore|writer|style-reviewer)
     if [ -z "$MODEL" ] || [ "$MODEL" = "default" ] || [ "$MODEL" = "sonnet" ] || [ "$MODEL" = "opus" ]; then
       echo "§3 Model Routing: ${SUBAGENT}는 haiku 티어입니다. model: \"haiku\"를 지정하세요."
