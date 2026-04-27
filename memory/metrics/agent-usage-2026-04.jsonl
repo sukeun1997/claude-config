@@ -402,3 +402,10 @@
 {"date": "2026-04-24", "time": "18:36", "agent": "code-reviewer", "model": "sonnet", "description": "Code review PR 1342"}
 {"date": "2026-04-24", "time": "18:36", "agent": "api-reviewer", "model": "sonnet", "description": "API contract review PR 1342"}
 {"date": "2026-04-24", "time": "18:37", "agent": "security-reviewer", "model": "sonnet", "description": "Security review PR 1342"}
+{"date": "2026-04-27", "time": "11:14", "agent": "critic", "model": "opus", "description": "Plan adversarial review"}
+{"date": "2026-04-27", "time": "11:30", "agent": "Explore", "model": "haiku", "description": "Find 6100/3000 messageconvertor code"}
+{"date": "2026-04-27", "time": "11:35", "agent": "code-reviewer", "model": "sonnet", "description": "Code review"}
+{"date": "2026-04-27", "time": "11:35", "agent": "security-reviewer", "model": "sonnet", "description": "Security review"}
+{"date": "2026-04-27", "time": "11:36", "agent": "api-reviewer", "model": "sonnet", "description": "API contract review"}
+{"date": "2026-04-27", "time": "11:36", "agent": "verifier", "model": "sonnet", "description": "Build verification + bootRun"}
+{"date": "2026-04-27", "time": "13:33", "agent": "Explore", "model": "default", "description": "Banking-loan invoice/breakdown/record 구조 확인"}
