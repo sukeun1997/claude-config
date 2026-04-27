@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 # vault-auto-save.sh — PostToolUse Hook
-# superpowers가 생성한 spec/plan 파일을 ~/vault/{project}/{branch}/ 에 자동 복사
+# superpowers가 생성한 spec/plan 파일을 ~/vault/project/{project}/{branch}/ 에 자동 복사
+# 파일명에 -{YYYY-MM-DD} postfix를 붙여 작성일을 식별 가능하게 함
 # 비매칭 시 아무 동작 안 함 (exit 0)
 
 set -uo pipefail  # -e 제거: hook은 실패해도 Claude 세션을 방해하면 안 됨
@@ -50,14 +51,14 @@ PROJECT=$(detect_project 2>/dev/null || echo "global")
 # 브랜치 감지
 BRANCH=$(git rev-parse --abbrev-ref HEAD 2>/dev/null || echo "main")
 
-# 브랜치 슬러그 결정
+# 브랜치 슬러그 결정 (base: ~/vault/project/{project}/...)
 case "$BRANCH" in
   main|master|develop|dev)
-    DEST_DIR="$HOME/vault/${PROJECT}"
+    DEST_DIR="$HOME/vault/project/${PROJECT}"
     ;;
   *)
     BRANCH_SLUG=$(echo "$BRANCH" | sed 's|/|--|g')
-    DEST_DIR="$HOME/vault/${PROJECT}/${BRANCH_SLUG}"
+    DEST_DIR="$HOME/vault/project/${PROJECT}/${BRANCH_SLUG}"
     ;;
 esac
 
@@ -68,13 +69,23 @@ mkdir -p "$DEST_DIR"
 TITLE=$(grep -m1 '^# ' "$FILE_PATH" 2>/dev/null | sed 's/^# //' || echo "Untitled")
 TODAY=$(date +%Y-%m-%d)
 
-# 같은 이름 파일이 이미 있으면 topic suffix 추가
-DEST_FILE="${DEST_DIR}/${VAULT_TYPE}.md"
-if [ -f "$DEST_FILE" ]; then
-  # 원본 파일에서 topic slug 추출 (첫 헤딩의 2-3단어)
-  TOPIC_SLUG=$(echo "$TITLE" | tr '[:upper:]' '[:lower:]' | tr ' ' '-' | cut -d'-' -f1-3 | sed 's/[^a-z0-9-]//g')
-  DEST_FILE="${DEST_DIR}/${VAULT_TYPE}-${TOPIC_SLUG}.md"
+# topic slug 추출 (첫 헤딩의 2-3단어)
+TOPIC_SLUG=$(echo "$TITLE" | tr '[:upper:]' '[:lower:]' | tr ' ' '-' | cut -d'-' -f1-3 | sed 's/[^a-z0-9-]//g')
+
+# 파일명: {type}[-{topic}]-{YYYY-MM-DD}.md (날짜 postfix로 작성일 식별 가능)
+if [ -n "$TOPIC_SLUG" ] && [ "$TOPIC_SLUG" != "untitled" ]; then
+  BASE_NAME="${VAULT_TYPE}-${TOPIC_SLUG}-${TODAY}"
+else
+  BASE_NAME="${VAULT_TYPE}-${TODAY}"
 fi
+DEST_FILE="${DEST_DIR}/${BASE_NAME}.md"
+
+# 같은 날 같은 이름이 이미 있으면 순번 부여 (-2, -3 ...)
+SEQ=2
+while [ -f "$DEST_FILE" ]; do
+  DEST_FILE="${DEST_DIR}/${BASE_NAME}-${SEQ}.md"
+  SEQ=$((SEQ + 1))
+done
 
 # frontmatter 주입 + 복사 (환경변수로 전달하여 injection 방지)
 SRC="$FILE_PATH" DST="$DEST_FILE" TITLE="$TITLE" \

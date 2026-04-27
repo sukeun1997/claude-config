@@ -91,7 +91,14 @@ metrics/
 
 # Nested .claude (project-level)
 .claude/
+!.claude/
+.claude/*
+!.claude/governance.yml
 
 # Playwright MCP logs (machine-local)
 .playwright-mcp/
 .omx/
+!.omx/
+.omx/*
+!.omx/notepad.md
+!.omx/project-memory.json

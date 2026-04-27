@@ -6,7 +6,7 @@
 ## 작업 환경
 - macOS, zsh, Claude Code CLI 사용
 - GitHub: sukeun1997 (gh CLI 인증됨)
-- Notion: MCP (notion-cdp + Anthropic Notion MCP) 연동
+- Notion: MCP (`plugin:Notion:notion`, 도구 프리픽스 `mcp__plugin_Notion_notion__*`) 연동
 - Memory: 4계층 (Active: active/+sessions/, Hot: daily/, Always: MEMORY.md, Cold: topics/)
 
 ## 글로벌 설정 구조 (~/.claude/)
@@ -159,3 +159,11 @@
 
 ### Promoted 2026-04-21
 - 사용자 증상 보고 + 내 해석의 2-pass 조정: 1차에 "연락처 없는 호실은 그대로 '-'로"라고 했지만, 실제로는 "관리자에 연락처가 있는 호실(= 퇴거예정 세입자 포함)이 매물장에 안 보이는 것이 불만"이었음. 사용자 자연어는 축약되므로 스크린샷으로 실제 데이터 비교 시 **표현과 의도 간극** 재확인 필요. 증상 스크린샷은 의도 스크린샷보다 훨씬 구체적
+
+### Promoted 2026-04-24
+- **2단 critic 평가의 가치**: aggregator 내부 critic(Phase 1) + 독립 critic 1차(Phase 2) + 적용가치 재검증 critic(Phase 2 재검증) 3단 구조에서 각 단계가 추가 false positive를 걸러냄. 특히 "적용할 가치 있는지" 프롬프트는 "버그인지"와 다른 축 — 이론적 버그 vs 실사용 영향을 분리 평가하는 프롬프트 설계가 filler 수정 방지에 유효
+- **리뷰어 코드 오독 패턴**: reviewer 4명 중 3명이 CSS 1635 라인을 잘못 지목, address null을 타입 무시하고 경고, regions null 플래시를 early-return 없이 가정. critic이 실제 Read로 잡음 → **"리뷰어는 라인 번호 + 근거 필수"** 규칙이 유효하나 critic Read 검증 단계가 없으면 통과. 생산-검증 분리가 단일 리뷰 layer만으로 부족함을 시사
+
+### Promoted 2026-04-26
+- TestFlight 새 빌드 못 올라가는 가장 흔한 원인: CFBundleVersion 동일. xcodegen project.yml에 정적 빌드 번호 두지 말 것.
+- 클라이언트 에러를 LGTM에 흘리는 가장 단순한 패턴: SLF4J logger.warn(...) 한 줄. docker stdout → Alloy/Promtail이 자동 수집. 별도 HTTP push 코드 불필요.

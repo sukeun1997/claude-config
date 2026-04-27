@@ -411,3 +411,65 @@
 {"date": "2026-04-27", "time": "13:33", "agent": "Explore", "model": "default", "description": "Banking-loan invoice/breakdown/record 구조 확인"}
 {"date": "2026-04-27", "time": "14:22", "agent": "architect", "model": "opus", "description": "Verify prd impact of ArsFacadeService change"}
 {"date": "2026-04-27", "time": "14:41", "agent": "verifier", "model": "opus", "description": "Verify test coverage for PR 508"}
+{"date": "2026-04-23", "time": "09:35", "agent": "verifier", "model": "default", "description": "V1 모바일 실행정보 섹션 검증"}
+{"date": "2026-04-23", "time": "13:35", "agent": "verifier", "model": "default", "description": "매물장관리 모바일 카드 레이아웃 검증"}
+{"date": "2026-04-23", "time": "20:32", "agent": "architect", "model": "opus", "description": "Validate unified harness design"}
+{"date": "2026-04-23", "time": "20:55", "agent": "verifier", "model": "opus", "description": "Independent SLA engine verification"}
+{"date": "2026-04-23", "time": "20:56", "agent": "executor", "model": "sonnet", "description": "Implement Task 13 formatter"}
+{"date": "2026-04-24", "time": "14:52", "agent": "critic", "model": "default", "description": "Adversarial spec review"}
+{"date": "2026-04-24", "time": "18:06", "agent": "executor", "model": "sonnet", "description": "Task 1 implement pure helpers"}
+{"date": "2026-04-24", "time": "18:08", "agent": "executor", "model": "sonnet", "description": "Task 2 searchbar component"}
+{"date": "2026-04-24", "time": "18:12", "agent": "executor", "model": "sonnet", "description": "Task 3 V3 integration"}
+{"date": "2026-04-24", "time": "18:12", "agent": "verifier", "model": "default", "description": "Task 3 spec compliance review"}
+{"date": "2026-04-24", "time": "18:13", "agent": "code-reviewer", "model": "default", "description": "Task 3 code quality review"}
+{"date": "2026-04-24", "time": "18:17", "agent": "executor", "model": "sonnet", "description": "Fix Task 3 CRITICAL hooks"}
+{"date": "2026-04-24", "time": "19:15", "agent": "executor", "model": "sonnet", "description": "IME composition fix"}
+{"date": "2026-04-24", "time": "19:28", "agent": "analyst", "model": "opus", "description": "Phase 0 implementation interview"}
+{"date": "2026-04-24", "time": "19:32", "agent": "deep-executor", "model": "opus", "description": "Phase 1 aggregated review"}
+{"date": "2026-04-24", "time": "19:34", "agent": "critic", "model": "opus", "description": "Phase 2 independent evaluation"}
+{"date": "2026-04-24", "time": "19:41", "agent": "critic", "model": "opus", "description": "Opus second-opinion on fix worthiness"}
+{"date": "2026-04-24", "time": "20:06", "agent": "critic", "model": "opus", "description": "Adversarial critic on audit-log plan"}
+{"date": "2026-04-24", "time": "20:13", "agent": "critic", "model": "opus", "description": "Re-verify revised audit plan"}
+{"date": "2026-04-24", "time": "20:18", "agent": "executor", "model": "sonnet", "description": "Implement Task 1: Prisma schema + migration"}
+{"date": "2026-04-24", "time": "20:18", "agent": "executor", "model": "sonnet", "description": "Implement Task 2: audit-actions.ts"}
+{"date": "2026-04-24", "time": "20:18", "agent": "executor", "model": "sonnet", "description": "Implement Task 3: audit-config.ts + tests"}
+{"date": "2026-04-24", "time": "20:19", "agent": "executor", "model": "sonnet", "description": "Implement Task 4: audit-context.ts (AsyncLocalStorage)"}
+{"date": "2026-04-24", "time": "20:19", "agent": "executor", "model": "sonnet", "description": "Implement Task 6: prisma.ts refactor"}
+{"date": "2026-04-24", "time": "20:21", "agent": "executor", "model": "sonnet", "description": "Implement Task 5: audit-writer.ts"}
+{"date": "2026-04-24", "time": "20:21", "agent": "executor", "model": "sonnet", "description": "Implement Task 16 Step 1: UpdateLog entry only"}
+{"date": "2026-04-24", "time": "20:22", "agent": "code-reviewer", "model": "opus", "description": "Wave 1 통합 리뷰 (spec + quality)"}
+{"date": "2026-04-24", "time": "20:28", "agent": "executor", "model": "sonnet", "description": "Wave 1 review fixes (3 items)"}
+{"date": "2026-04-24", "time": "20:29", "agent": "executor", "model": "sonnet", "description": "Implement Task 7: Prisma audit extension"}
+{"date": "2026-04-24", "time": "20:29", "agent": "executor", "model": "sonnet", "description": "Implement Task 11: audit API routes"}
+{"date": "2026-04-24", "time": "20:32", "agent": "executor", "model": "sonnet", "description": "Implement Task 8: barrel export"}
+{"date": "2026-04-24", "time": "20:32", "agent": "code-reviewer", "model": "opus", "description": "Wave 3 통합 리뷰 (Task 7 + 11)"}
+{"date": "2026-04-24", "time": "20:37", "agent": "executor", "model": "sonnet", "description": "Implement Task 9: auth withActor wrap"}
+{"date": "2026-04-24", "time": "20:37", "agent": "executor", "model": "sonnet", "description": "Implement Task 10: cron services withActor"}
+{"date": "2026-04-24", "time": "20:38", "agent": "executor", "model": "sonnet", "description": "Implement Task 12: integration tests"}
+{"date": "2026-04-24", "time": "20:38", "agent": "executor", "model": "sonnet", "description": "Implement Task 13: auditStore (frontend)"}
+{"date": "2026-04-24", "time": "20:38", "agent": "executor", "model": "sonnet", "description": "Fix Wave 3 MEDIUM: audit log path"}
+{"date": "2026-04-24", "time": "20:40", "agent": "executor", "model": "sonnet", "description": "Implement Task 14: AuditLog page"}
+{"date": "2026-04-24", "time": "20:40", "agent": "code-reviewer", "model": "opus", "description": "Wave 5 통합 리뷰"}
+{"date": "2026-04-24", "time": "20:43", "agent": "executor", "model": "default", "description": "Wave 0 — Task 1 Prisma 마이그레이션 구현"}
+{"date": "2026-04-24", "time": "20:44", "agent": "general-purpose", "model": "default", "description": "Wave 0 spec compliance 리뷰"}
+{"date": "2026-04-24", "time": "20:44", "agent": "executor", "model": "sonnet", "description": "Fix Wave 5 HIGH: popbill lock + AuditEntry comment"}
+{"date": "2026-04-24", "time": "20:44", "agent": "executor", "model": "sonnet", "description": "Implement Task 15: App routing + Sidebar"}
+{"date": "2026-04-24", "time": "20:46", "agent": "code-reviewer", "model": "default", "description": "Wave 0 code quality 리뷰"}
+{"date": "2026-04-24", "time": "20:46", "agent": "executor", "model": "sonnet", "description": "Audit perf bench (Task 16 Step 3)"}
+{"date": "2026-04-24", "time": "20:46", "agent": "code-reviewer", "model": "opus", "description": "Final code review for entire audit system"}
+{"date": "2026-04-24", "time": "20:51", "agent": "executor", "model": "default", "description": "Wave 1 — 백엔드 필터 반전 + 테스트 체인"}
+{"date": "2026-04-24", "time": "20:52", "agent": "general-purpose", "model": "default", "description": "Wave 1 spec compliance 리뷰"}
+{"date": "2026-04-24", "time": "20:54", "agent": "code-reviewer", "model": "default", "description": "Wave 1 code quality 리뷰"}
+{"date": "2026-04-24", "time": "20:55", "agent": "executor", "model": "default", "description": "Wave 2 Lane A — ListingEditTable UI 반전"}
+{"date": "2026-04-24", "time": "20:56", "agent": "executor", "model": "default", "description": "Wave 2 Lane B — 검색 체인 (types + findAllListings + 검색 UI + RTL 테스트)"}
+{"date": "2026-04-24", "time": "21:02", "agent": "executor", "model": "default", "description": "Wave 3 — UpdateLog + 최종 빌드 + push (프로덕션 복구 긴급)"}
+{"date": "2026-04-24", "time": "21:30", "agent": "code-reviewer", "model": "default", "description": "ticket-sla-ownership 도메인 코드리뷰"}
+{"date": "2026-04-24", "time": "21:31", "agent": "explore", "model": "default", "description": "녹음관리 플로우 코드 트레이스"}
+{"date": "2026-04-25", "time": "14:35", "agent": "general-purpose", "model": "sonnet", "description": "Notion에 주간 리뷰 페이지 생성"}
+{"date": "2026-04-25", "time": "14:36", "agent": "critic", "model": "opus", "description": "Critic: 5 action items 검증"}
+{"date": "2026-04-25", "time": "15:01", "agent": "explore", "model": "haiku", "description": "Codebase facts for portal plan"}
+{"date": "2026-04-25", "time": "15:16", "agent": "critic", "model": "opus", "description": "Adversarial plan critique"}
+{"date": "2026-04-25", "time": "17:04", "agent": "critic", "model": "opus", "description": "Re-validation of revised plan"}
+{"date": "2026-04-26", "time": "13:43", "agent": "explore", "model": "default", "description": "Drive puller 사전 탐색"}
+{"date": "2026-04-26", "time": "14:01", "agent": "debugger", "model": "sonnet", "description": "Apple/Google Sign In 버그 진단"}
+{"date": "2026-04-26", "time": "17:48", "agent": "explore", "model": "default", "description": "Toggle complete logic 탐색"}

@@ -9,17 +9,13 @@
 
 ## MCP 경로
 
-### Anthropic Notion MCP (기본)
-- 엔드포인트: `mcp.notion.com/mcp` (Notion 직접 호스팅, Anthropic 경유 아님)
-- 도구: `notion-search`, `notion-fetch`, `notion-create-pages`, `notion-update-page`, `notion-create-database` 등
+### Notion MCP
+- 서버: `plugin:Notion:notion` (엔드포인트: `mcp.notion.com/mcp`, Notion 직접 호스팅)
+- 도구 프리픽스: `mcp__plugin_Notion_notion__*`
+- 도구: `notion-search`, `notion-fetch`, `notion-create-pages`, `notion-update-page`, `notion-create-database`, `notion-duplicate-page`, `notion-move-pages` 등
 - 부분 업데이트: `replace_content_range` + `selection_with_ellipsis` (앞~10자...뒤~10자)
 - 이미지 임베드: `![alt](url)` 마크다운 지원
-- Notion 앱 실행 불필요
-
-### CDP Notion MCP (폴백, 미사용)
-- `notion-cdp`: Notion Electron 앱 CDP 포트 9222 WebSocket 직접 통신
-- 현재 미설정 상태. 벤치마크 데이터 없이 속도 비교 불가
-- 활성화 시 Notion 앱 항상 실행 필요 (운영 부담)
+- Notion 앱 실행 불필요 (OAuth 기반)
 
 ## 토큰 최적화 원칙
 

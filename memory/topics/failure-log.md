@@ -38,12 +38,11 @@ edit-tracker (3회+ 반복 편집 감지)
 | 2026-04-10 | test-5x.txt 5회 반복 편집 | Harness (false-positive) | edit-tracker 테스트 픽스처 (파일명 "5x") — 트래커에서 제외 대상. 향후 `test-*` / `*-fixture.*` 제외 필터 추가 |
 | 2026-04-12 | index.ts 3회 반복 편집 | Context | 타입 정의/의존 모듈 선행 Read 없이 반복 수정 — Read:Edit 비율 관찰 필요 |
 | 2026-04-13 | MEMORY.md 4회 반복 편집 | Context (meta) | 메모리 시스템 개편 중 의도된 연속 수정 — 실패 신호 아님 (예상 패턴) |
-| 2026-04-13 | MEMORY.md 4회 반복 편집 | Context (meta) | 상동 — 중복 엔트리. dedup 로직 점검 필요 (Harness) |
+| 2026-04-13 | MEMORY.md 4회 반복 편집 | Harness (dedup) | 동일 (파일,날짜) 키로 중복 행 — failure-log-instinct-boost.py dedup 로직 점검 필요 |
 | 2026-04-13 | sync_lpn_settlement_to_legacy_schedule.py 4회 반복 편집 | Context | legacy 스키마 매핑 반복 — 관련 엔티티/DTO 선행 Read 미흡 |
 | 2026-04-13 | 2026-04-10-sale-loss-implementation-v2-design.md 6회 반복 편집 | Prompt | 설계 스펙 6회 수정 — 요구사항 확정 전 구현 착수 (스코프 모호). `/feature` brainstorming 게이트 엄격 적용 |
 | 2026-04-14 | test_sync_lpn_settlement_info.py 4회 반복 편집 | Context | 테스트 반복 — sync 대상 스키마/Fixture 불명확. 구현부 Read 후 테스트 작성 원칙 재확인 |
 | 2026-04-14 | ecr.md 4회 반복 편집 | Harness (meta) | skill 정의 파일 튜닝 — 실패 신호 아님 (의도된 반복) |
-| 2026-04-12 | index.ts 3회 반복 편집 | Context | 타입 정의/의존 모듈 선행 Read 미흡 |
 | 2026-04-13 | VacantListingManage.tsx 4회 반복 편집 | Context | 부모-자식 prop 타입 불일치 반복 — 상위 컴포넌트 Read 선행 필요 |
 | 2026-04-13 | ListingStyleEditor.tsx 4회 반복 편집 | Context | 스타일/Props 정의 반복 접근 — 파일 전체 Read 후 수정 |
 | 2026-04-13 | VacantListing.tsx 13회 반복 편집 | Prompt | 13회는 접근법 오류 신호 — 공실관리 UX 개편 스코프 세분화 실패. `/feature` brainstorming 게이트 미적용 |
@@ -53,6 +52,9 @@ edit-tracker (3회+ 반복 편집 감지)
 | 2026-04-14 | excel-import.service.ts 4회 반복 편집 | Context | Excel 파싱 서비스 반복 — 스키마/시트 구조 선행 확인 부족 |
 | 2026-04-14 | BuildingExcel.tsx 5회 반복 편집 | Context | 5회+ → 파일 전체 Read 후 재접근 룰 적용 필요 (edit 전 limit=없는 Read 1회) |
 | 2026-04-14 | depositStore.ts 3회 반복 편집 | Context | Zustand 스토어 액션 반복 — 관련 selector/subscriber Read 미흡 |
+| 2026-04-15 | SKILL.md 8회 반복 편집 | Harness (meta) | 스킬 정의 파일 튜닝 — 의도된 반복 (ecr.md L45 패턴과 동일) |
+| 2026-04-16 | spec-sale-loss-v3.md 3회 반복 편집 | Prompt | sale-loss v3 fork — 요구사항 미확정 상태에서 새 버전 시작 |
+| 2026-04-17 | spec-sale-loss-v3.md 13회 반복 편집 | Prompt (강) | 13회 = brainstorming 게이트 부재. v2 6회(L43) → v3 13회로 악화. `/feature` 강제 적용 필요 |
 | 2026-04-18 | listing-v2.css 3회 반복 편집 | Context (meta) | 스타일 반복 조정은 UI 개편 중 자연 패턴 — 실패 신호 아님. 3회 threshold 관대화 검토 |
 | 2026-04-18 | MobileListingV2.tsx 3회 반복 편집 | Context (meta) | 공실관리 UX 개편 중 다수 컴포넌트 동시 편집 — 실패 신호 아님 |
 | 2026-04-18 | VacantList.tsx 4회 반복 편집 | Context | 부모 컴포넌트 Prop 전달 확인 없이 반복 수정 — VacantListingManage 4회와 동일 패턴 재발. 편집 전 부모/자식 컴포넌트 전체 Read 의무화 |

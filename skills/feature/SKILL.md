@@ -62,8 +62,32 @@ brainstorming/writing-plans 호출 **이전**에 저장 경로를 결정해 pref
    ```
    - `main`/`master`/`develop` → 브랜치 폴더 없음
    - 그 외 → 슬래시를 `--`로 치환 (`fix/avro-dlt` → `fix--avro-dlt`)
-3. **Target 디렉토리**: `~/vault/{project}/{branch-slug}/` (base 브랜치면 `~/vault/{project}/`)
+3. **Target 디렉토리**: `~/vault/project/{project}/{branch-slug}/` (base 브랜치면 `~/vault/project/{project}/`)
 4. 디렉토리가 없으면 `mkdir -p`로 생성
+
+### Frontmatter 규약 (MANDATORY)
+
+vault에 저장되는 모든 spec/plan 파일은 아래 YAML frontmatter를 **본문 최상단**에 포함한다 (Obsidian Properties로 인식됨):
+
+```yaml
+---
+title: "<문서 제목 — # 헤딩과 동일>"
+type: spec | plan
+project: <프로젝트명>
+branch: <브랜치 풀네임 — 슬래시 유지, 예: refactor/display>
+created: YYYY-MM-DD
+status: active
+---
+```
+
+- `title`: 본문 첫 `# ` 헤딩과 일치 (따옴표 escape 주의)
+- `type`: `spec` 또는 `plan`
+- `project`: Pre-flight에서 감지한 프로젝트명
+- `branch`: 슬러시 유지 (`refactor/display`, 폴더명 슬러그(`refactor--display`)가 아님)
+- `created`: 작성일 (오늘)
+- `status`: 신규는 `active`
+
+brainstorming/writing-plans에 invoke 시 위 frontmatter를 본문 앞에 포함하라고 명시한다.
 
 ### Phase 0: Tech Advisory (조건부)
 
@@ -90,9 +114,10 @@ brainstorming/writing-plans 호출 **이전**에 저장 경로를 결정해 pref
 {설명}
 
 [저장 선호]
-- spec 파일 경로: ~/vault/{project}/{branch-slug}/spec.md
+- spec 파일 경로: ~/vault/project/{project}/{branch-slug}/spec.md
   (이미 같은 이름이 있으면 spec-{topic-slug}.md)
 - docs/superpowers/specs/ 에는 저장하지 않음 (vault가 정본)
+- 본문 최상단에 YAML frontmatter 필수 (위 "Frontmatter 규약" 섹션 참조)
 - commit은 해당 디렉토리가 git 저장소가 아니면 skip
 ```
 
@@ -115,9 +140,10 @@ brainstorming 완료 후 사용자에게 확인:
 [스펙 경로] ~/vault/{project}/{branch-slug}/spec.md
 
 [저장 선호]
-- plan 파일 경로: ~/vault/{project}/{branch-slug}/plan.md
+- plan 파일 경로: ~/vault/project/{project}/{branch-slug}/plan.md
   (이미 같은 이름이 있으면 plan-{topic-slug}.md)
 - docs/superpowers/plans/ 에는 저장하지 않음 (vault가 정본)
+- 본문 최상단에 YAML frontmatter 필수 (위 "Frontmatter 규약" 섹션 참조)
 ```
 
 스펙 문서 기반으로 구현 계획을 작성한다.

@@ -5,6 +5,11 @@
 - 열지 않은 파일/코드에 대해 추측하지 않음 — Read 후 답변
 - 토큰 예산 부족으로 작업을 일찍 마무리하지 않음 — 끝까지 진행
 
+## Codex/OMX Interop
+- Codex 세션의 실행 규약은 `AGENTS.md`가 담당하고, 이 파일은 정책/제약의 소스 역할을 유지
+- 메모리 기본 매핑: Active=`.omx/state/`, Hot=`.omx/notepad.md`, Always=`.omx/project-memory.json`, Cold=`memory/topics/*.md`
+- 변경 감시는 `.claude/governance.yml`의 경고 규칙을 우선 사용하고, 훅이 없을 때도 같은 검증 추천을 수동 적용
+
 ## Profile & Persona
 - 세션 시작 시 `memory/topics/user-profile.md` 참조 (필요 시 Read)
 
@@ -152,11 +157,12 @@ Agent 호출 시 `model` 파라미터 필수 지정.
 2. **로그 경로 선확인 후 tail**: 디버깅 전에 서버의 실제 로그 파일 경로를 먼저 확인. 잘못된 로그를 tail하여 "수정이 안 들어간 줄 알았지만 다른 로그였던" 루프 방지
 3. **시그니처 grep**: 새 코드 실행을 증명하는 고유 로그 라인(수정된 메서드명, 새 버전 태그, 추가한 DEBUG 로그)을 라이브 로그에서 발견해야 통과
 
-**DB 마이그레이션 전용 추가 가드** (reporter.html이 식별한 4회 반복 마찰):
+**DB 마이그레이션 전용 추가 가드** (reporter.html이 식별한 4회 반복 마찰 + 4/21·4/24 운영 사고 2회 대응):
 - 실행 전 `.env`의 DB host/name을 출력해 의도한 타겟(로컬 vs 서버) 확인
 - 건드릴 모든 테이블을 `DESCRIBE`로 실제 컬럼 확인 (컬럼명 가정 금지)
 - dry-run을 먼저 실행하여 예상 행 수 보고 후 사용자 승인
 - idempotency 키 또는 체크섬으로 중복 실행 방지
+- **서브에이전트 위임 금지 (또는 가드 prepend 필수)**: 마이그레이션 실행을 executor/deep-executor에 위임할 경우, 이 가드 4항목 + `pnpm prisma migrate dev`는 pending 마이그 전부 적용한다는 사실을 프롬프트에 반드시 포함. governance.yml `prisma/migrations/**` 경고가 PostToolUse에서 트리거되지만 사후 알림이므로, 메인 세션이 직접 실행하는 것을 우선
 
 **생략**: 문서/설정만 수정, 사용자 "검증 스킵" 요청
 
