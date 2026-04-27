@@ -409,3 +409,5 @@
 {"date": "2026-04-27", "time": "11:36", "agent": "api-reviewer", "model": "sonnet", "description": "API contract review"}
 {"date": "2026-04-27", "time": "11:36", "agent": "verifier", "model": "sonnet", "description": "Build verification + bootRun"}
 {"date": "2026-04-27", "time": "13:33", "agent": "Explore", "model": "default", "description": "Banking-loan invoice/breakdown/record 구조 확인"}
+{"date": "2026-04-27", "time": "14:22", "agent": "architect", "model": "opus", "description": "Verify prd impact of ArsFacadeService change"}
+{"date": "2026-04-27", "time": "14:41", "agent": "verifier", "model": "opus", "description": "Verify test coverage for PR 508"}
