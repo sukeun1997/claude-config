@@ -84,3 +84,5 @@ edit-tracker (3회+ 반복 편집 감지)
 | 2026-04-27 | ArsFacadeService.kt 5회 반복 편집 | Context | 의존 인터페이스(CooconApi) 선행 Read 미흡 |
 | 2026-04-27 | MockCooconApiTest.kt 3회 반복 편집 | Context | 테스트 대상 프로덕션 코드 선행 Read 미흡 |
 | 2026-04-27 | MockCooconApi.kt 3회 반복 편집 | Context | 구현 대상 인터페이스/스펙 선행 Read 미흡 |
+| 2026-04-27 | spec-sale-loss-v3.md 20회 반복 편집 | Prompt (추정·20회) | 접근법 오류 가능성 — 초기화 후 재설계 권장 |
+| 2026-04-27 | as-is-to-be-analysis.md 9회 반복 편집 | Prompt (추정·9회) | 접근법 오류 가능성 — 초기화 후 재설계 권장 |
