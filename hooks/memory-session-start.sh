@@ -75,7 +75,7 @@ if [ -d "$ACTIVE_DIR" ]; then
       */archive/*) continue ;;
     esac
     # Check: empty Changed Files (no real changes)
-    changed_count=$(grep -cE '^[a-zA-Z]' <(sed -n '/^### Changed Files$/,/^```$/{ /^```$/d; /^### Changed Files$/d; p; }' "$ac_file") 2>/dev/null || echo "0")
+    changed_count=$(sed -n '/^### Changed Files$/,/^```$/{/^```$/d; /^### Changed Files$/d; p;}' "$ac_file" | grep -cE '^[a-zA-Z]' 2>/dev/null || echo "0")
     changed_count=$(echo "$changed_count" | tr -d '[:space:]')
     changed_count="${changed_count:-0}"
     # Check: last modified > N days ago
@@ -86,8 +86,11 @@ if [ -d "$ACTIVE_DIR" ]; then
     fi
     now_ts=$(date +%s)
     age_days=$(( (now_ts - file_mtime) / 86400 ))
-    # Auto-archive: 7+ days old (any state) or 5+ days with no changes
-    if [ "$age_days" -ge 7 ] || { [ "$changed_count" -eq 0 ] && [ "$age_days" -ge 5 ]; }; then
+    # Auto-archive: 7+ days old (any state) or 5+ days with no changes AND content-light
+    file_lines=$(wc -l < "$ac_file" 2>/dev/null | tr -d ' ')
+    file_lines="${file_lines:-0}"
+    has_todos=$(grep -c '^\- \[ \]' "$ac_file" 2>/dev/null || echo "0")
+    if { [ "$age_days" -ge 7 ] && [ "$has_todos" -eq 0 ]; } || { [ "$changed_count" -eq 0 ] && [ "$age_days" -ge 5 ] && [ "$file_lines" -le 5 ]; }; then
       mv "$ac_file" "$MONTH_DIR/" 2>/dev/null && AUTO_ARCHIVED=$((AUTO_ARCHIVED + 1)) || true
     elif [ "$changed_count" -eq 0 ] && [ "$age_days" -ge 3 ]; then
       HYGIENE_WARNINGS+="- ${ac_basename}: 변경 0개 + ${age_days}일 미갱신 (삭제 권장)\n"
