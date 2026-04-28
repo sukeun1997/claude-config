@@ -179,3 +179,7 @@
 {"date":"2026-04-27","project":"global","duration_min":0,"total_edits":1,"total_reads":0,"unique_files":1,"friction_files":0,"log_lines":11}
 {"date":"2026-04-27","project":"global","duration_min":14,"total_edits":22,"total_reads":9,"unique_files":3,"friction_files":3,"log_lines":11}
 {"date":"2026-04-27","project":"global","duration_min":17,"total_edits":15,"total_reads":21,"unique_files":8,"friction_files":1,"log_lines":11}
+{"date":"2026-04-27","project":"global","duration_min":29,"total_edits":26,"total_reads":39,"unique_files":14,"friction_files":4,"log_lines":13}
+{"date":"2026-04-27","project":"global","duration_min":13,"total_edits":40,"total_reads":40,"unique_files":28,"friction_files":2,"log_lines":25}
+{"date":"2026-04-27","project":"global","duration_min":28,"total_edits":33,"total_reads":34,"unique_files":23,"friction_files":3,"log_lines":28}
+{"date":"2026-04-28","project":"global","duration_min":935,"total_edits":23,"total_reads":26,"unique_files":9,"friction_files":4,"log_lines":0}

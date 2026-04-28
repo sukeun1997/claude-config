@@ -90,3 +90,15 @@ edit-tracker (3회+ 반복 편집 감지)
 | 2026-04-27 | spec.md 4회 반복 편집 | 미분류 | 다음 세션에서 원인 분석 필요 |
 | 2026-04-27 | as-is-to-be-analysis.md 4회 반복 편집 | 미분류 | 다음 세션에서 원인 분석 필요 |
 | 2026-04-27 | spec-sale-loss-v3.md 6회 반복 편집 | 미분류 | 다음 세션에서 원인 분석 필요 |
+| 2026-04-27 | input-mortgage.json 4회 반복 편집 | Context (추정) | 설정/스타일 반복 — 기존 값과 원하는 값 명확화 |
+| 2026-04-27 | update_sale_bond_history.py 3회 반복 편집 | Context (추정) | 소스 반복 — 관련 파일/타입 정의 확인 필요 |
+| 2026-04-27 | test_update_sale_bond_history.py 3회 반복 편집 | Context (추정) | 소스 반복 — 관련 파일/타입 정의 확인 필요 |
+| 2026-04-27 | plan-step1-sync.md 7회 반복 편집 | Prompt (추정·7회) | 접근법 오류 가능성 — 초기화 후 재설계 권장 |
+| 2026-04-27 | interprete.py 3회 반복 편집 | Context (추정) | 소스 반복 — 관련 파일/타입 정의 확인 필요 |
+| 2026-04-27 | product.py 3회 반복 편집 | Context (추정) | 소스 반복 — 관련 파일/타입 정의 확인 필요 |
+| 2026-04-27 | test_sale_bond_sync.py 3회 반복 편집 | Context (추정) | 소스 반복 — 관련 파일/타입 정의 확인 필요 |
+| 2026-04-27 | plan-step1-sync.md 3회 반복 편집 | 미분류 | 다음 세션에서 원인 분석 필요 |
+| 2026-04-28 | sale_loan_history_request.py 5회 반복 편집 | Context (추정·강) | 소스 5회+ — 파일 전체 Read 후 재접근 권장 |
+| 2026-04-28 | test_sale_loan_history_request.py 4회 반복 편집 | Context (추정) | 소스 반복 — 관련 파일/타입 정의 확인 필요 |
+| 2026-04-28 | sale_bond_sync.py 4회 반복 편집 | Context (추정) | 소스 반복 — 관련 파일/타입 정의 확인 필요 |
+| 2026-04-28 | change_status.py 4회 반복 편집 | Context (추정) | 소스 반복 — 관련 파일/타입 정의 확인 필요 |

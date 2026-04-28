@@ -478,3 +478,5 @@
 {"date": "2026-04-27", "time": "15:35", "agent": "code-reviewer", "model": "opus", "description": "Code review W17 hook changes"}
 {"date": "2026-04-27", "time": "15:36", "agent": "critic", "model": "opus", "description": "Adversarial review of PR #1348 #1350"}
 {"date": "2026-04-27", "time": "15:37", "agent": "code-reviewer", "model": "opus", "description": "Code review PR #1348 and #1350"}
+{"date": "2026-04-27", "time": "17:52", "agent": "code-reviewer", "model": "opus", "description": "Code review for sale-loss step 1"}
+{"date": "2026-04-27", "time": "18:26", "agent": "code-reviewer", "model": "opus", "description": "매각 동기화 step1 코드 리뷰"}
