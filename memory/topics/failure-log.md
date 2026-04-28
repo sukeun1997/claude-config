@@ -102,3 +102,5 @@ edit-tracker (3회+ 반복 편집 감지)
 | 2026-04-28 | test_sale_loan_history_request.py 4회 반복 편집 | Context (추정) | 소스 반복 — 관련 파일/타입 정의 확인 필요 |
 | 2026-04-28 | sale_bond_sync.py 4회 반복 편집 | Context (추정) | 소스 반복 — 관련 파일/타입 정의 확인 필요 |
 | 2026-04-28 | change_status.py 4회 반복 편집 | Context (추정) | 소스 반복 — 관련 파일/타입 정의 확인 필요 |
+| 2026-04-28 | settlement.py 4회 반복 편집 | Context (추정) | 소스 반복 — 관련 파일/타입 정의 확인 필요 |
+| 2026-04-28 | InapiClient.kt 3회 반복 편집 | Context (추정) | 소스 반복 — 관련 파일/타입 정의 확인 필요 |
