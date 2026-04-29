@@ -489,3 +489,5 @@
 {"date": "2026-04-28", "time": "13:20", "agent": "explore", "model": "haiku", "description": "RepaymentInvestorScheduleShowcase 정산이체 흐름 조사"}
 {"date": "2026-04-28", "time": "13:59", "agent": "general-purpose", "model": "haiku", "description": "Slack thread summarize for CB cancel pattern"}
 {"date": "2026-04-28", "time": "15:04", "agent": "Explore", "model": "default", "description": "Find scenario reset logic and repayment_account handling"}
+{"date": "2026-04-28", "time": "16:52", "agent": "explore", "model": "default", "description": "003000 전문 송수신 코드 탐색"}
+{"date": "2026-04-28", "time": "18:05", "agent": "explore", "model": "default", "description": "전북은행 100번/003000 전문 코드 탐색"}
