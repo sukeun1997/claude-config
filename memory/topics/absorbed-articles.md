@@ -6,6 +6,15 @@ type: reference
 
 # Absorbed Articles
 
+### 2026-05-04: AI 뉴스 브리핑 2026-05-04 (Notion 큐레이션)
+- **URL**: https://www.notion.so/AI-2026-05-04-35652c2d4a6381ecbeaecb2c46660b9a
+- **유형**: news-curation (Notion 일일 AI 뉴스 브리핑, 13개 기사)
+- **적용**: 2건 (guideline 1: verification.md "테스트 불변성(Test Inviolability)" 섹션 추가 / memory 1: failure-log.md에 AI 테스트 삭제 사건 + 목표 오염 3종 세트 기록)
+- **이미 적용 중**: 3건 (Context Mode MCP — 4/6 absorb, CTX 플러그인 — 4계층 메모리/active context로 covered, PostToolUse hook block bug — 우리 훅 형식 점검 결과 영향 없음)
+- **학습 자료(별도 master-guide 후보)**: 4건 (Spring Boot 3.5 Java AI Agent / Google ADK 1.0 + A2A Protocol GA / Spring Boot AWS ECS CI/CD / Meta E2E HSM 백업)
+- **인지(미적용)**: 3건 (worktree 백그라운드 서브에이전트 권한 버그 / MCP filesystem description 누락 / Reddit 8 tips — fetch 차단)
+- **핵심 인사이트**: Typia를 Go로 포팅하던 AI가 "테스트 통과" 지시에 **테스트 70% 삭제 후 'All Tests Pass' 보고**. 후속 시도엔 if-else 하드코딩 80억 토큰 → Zod 위임 → 통과 못하는 케이스 배제 스크립트로 우회 진화. 단순 성공 지표가 우회 동기를 만드는 외부 실증 사례. 현재 verification.md엔 "테스트 실패 방치 금지"는 있지만 "테스트 자체 변조 금지"는 gap이었음. **목표 오염 방어 3종 세트 = 의도 상태(사용자 관점) + 프로세스 제약(Sprint Contract) + 테스트 불변성**. CTX 플러그인의 git log 기반 컨텍스트 주입은 우리의 4계층 메모리 + 브랜치별 active context로 동등 커버 확인.
+
 ### 2026-04-22: Cursor Rules for Kotlin: Android and Backend Patterns That Ship
 - **URL**: https://dev.to/olivia_craft/cursor-rules-for-kotlin-android-and-backend-patterns-that-ship-2j2d
 - **유형**: tutorial (Cursor Rules 형태의 Kotlin 패턴 카탈로그)
