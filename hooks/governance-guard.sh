@@ -27,11 +27,15 @@ except:
 
 [ -z "$FILE_PATH" ] && exit 0
 
-# 프로젝트 디렉토리의 governance.yml 찾기
+# governance.yml: 프로젝트별 + 글로벌 모두 적용 (글로벌 fallback)
+# 글로벌 정책(테스트 불변성 등)이 모든 프로젝트에서 동작하려면 둘 다 읽어야 한다
 PROJECT_DIR="${CLAUDE_PROJECT_DIR:-$(pwd)}"
-GOVERNANCE_FILE="$PROJECT_DIR/.claude/governance.yml"
+PROJECT_GOVERNANCE="$PROJECT_DIR/.claude/governance.yml"
+GLOBAL_GOVERNANCE="$HOME/.claude/.claude/governance.yml"
 
-[ ! -f "$GOVERNANCE_FILE" ] && exit 0
+if [ ! -f "$PROJECT_GOVERNANCE" ] && [ ! -f "$GLOBAL_GOVERNANCE" ]; then
+    exit 0
+fi
 
 # 파일명만 추출
 BASENAME=$(basename "$FILE_PATH")
@@ -41,38 +45,55 @@ RELPATH="${FILE_PATH#$PROJECT_DIR/}"
 python3 -c "
 import sys, os, fnmatch, re
 
-governance_file = '$GOVERNANCE_FILE'
+governance_files_raw = ['$PROJECT_GOVERNANCE', '$GLOBAL_GOVERNANCE']
 relpath = '$RELPATH'
 basename = os.path.basename(relpath)
 
-try:
-    import yaml
-    with open(governance_file) as f:
-        config = yaml.safe_load(f)
-except ImportError:
-    # PyYAML 없으면 간단한 파싱
-    import re
-    config = {'rules': []}
-    with open(governance_file) as f:
-        content = f.read()
-    # 간단한 YAML 파싱 (pattern, message, recommend, severity)
-    current_rule = {}
-    for line in content.split('\n'):
-        line = line.strip()
-        if line.startswith('- pattern:'):
-            if current_rule:
-                config['rules'].append(current_rule)
-            current_rule = {'pattern': line.split(':', 1)[1].strip().strip('\"').strip(\"'\")}
-        elif line.startswith('message:') and current_rule:
-            current_rule['message'] = line.split(':', 1)[1].strip().strip('\"').strip(\"'\")
-        elif line.startswith('recommend:') and current_rule:
-            current_rule['recommend'] = line.split(':', 1)[1].strip().strip('\"').strip(\"'\")
-        elif line.startswith('severity:') and current_rule:
-            current_rule['severity'] = line.split(':', 1)[1].strip().strip('\"').strip(\"'\")
-    if current_rule:
-        config['rules'].append(current_rule)
+# 두 파일이 같은 실제 경로를 가리키면(글로벌 작업 시) 한 번만 처리
+governance_files = []
+seen = set()
+for p in governance_files_raw:
+    if not p or not os.path.exists(p):
+        continue
+    real = os.path.realpath(p)
+    if real in seen:
+        continue
+    seen.add(real)
+    governance_files.append(p)
 
-if not config or 'rules' not in config:
+def parse_governance(path):
+    try:
+        import yaml
+        with open(path) as f:
+            return yaml.safe_load(f) or {'rules': []}
+    except ImportError:
+        cfg = {'rules': []}
+        with open(path) as f:
+            content = f.read()
+        current_rule = {}
+        for line in content.split('\n'):
+            line = line.strip()
+            if line.startswith('- pattern:'):
+                if current_rule:
+                    cfg['rules'].append(current_rule)
+                current_rule = {'pattern': line.split(':', 1)[1].strip().strip('\"').strip(\"'\")}
+            elif line.startswith('message:') and current_rule:
+                current_rule['message'] = line.split(':', 1)[1].strip().strip('\"').strip(\"'\")
+            elif line.startswith('recommend:') and current_rule:
+                current_rule['recommend'] = line.split(':', 1)[1].strip().strip('\"').strip(\"'\")
+            elif line.startswith('severity:') and current_rule:
+                current_rule['severity'] = line.split(':', 1)[1].strip().strip('\"').strip(\"'\")
+        if current_rule:
+            cfg['rules'].append(current_rule)
+        return cfg
+
+config = {'rules': []}
+for gf in governance_files:
+    sub_cfg = parse_governance(gf)
+    if sub_cfg and 'rules' in sub_cfg:
+        config['rules'].extend(sub_cfg['rules'])
+
+if not config['rules']:
     sys.exit(0)
 
 def expand_braces(p):
