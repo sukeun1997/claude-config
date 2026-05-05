@@ -27,7 +27,8 @@ Phase 0: Tech Advisory (조건부)
     ▼
 Phase 1: Brainstorming
     → superpowers:brainstorming 스킬 invoke (인자: {설명} + [기술 결정])
-    → 접근법 탐색, 인터뷰, 설계안 도출
+    → 명확화 인터뷰 → 접근법 비교 → 바로 spec 작성
+    → ※ 섹션 단위 설계 발표/승인 단계는 생략 (인터뷰에서 결정사항 모이면 바로 spec)
     │
     ▼
 Gate 1: 설계 확인 ←── 사용자 "ㅇㅋ" 또는 피드백
@@ -119,9 +120,15 @@ brainstorming/writing-plans에 invoke 시 위 frontmatter를 본문 앞에 포�
 - docs/superpowers/specs/ 에는 저장하지 않음 (vault가 정본)
 - 본문 최상단에 YAML frontmatter 필수 (위 "Frontmatter 규약" 섹션 참조)
 - commit은 해당 디렉토리가 git 저장소가 아니면 skip
+
+[설계 발표 정책]
+- 섹션 단위 설계 발표(아키텍처/컴포넌트/플로우/에러처리/테스트를 하나씩 사용자 승인 받기)는 생략
+- 명확화 질문 → 접근법 2-3개 비교 → 사용자 선택 후 바로 spec 작성
+- spec 작성 후 self-review → Gate 1(사용자 spec 검토)에서 한 번에 피드백 받음
+- 이유: 결정 시점이 한 번으로 모이면 사용자 부담이 줄고, 섹션 발표 후 바로 spec에 동일 내용을 다시 적는 중복 제거
 ```
 
-brainstorming 스킬이 인터뷰 → 접근법 제안 → 설계안 → 스펙 문서 작성까지 수행한다.
+brainstorming 스킬이 인터뷰 → 접근법 제안 → 스펙 문서 작성까지 수행한다 (섹션 단위 발표는 건너뜀).
 
 ### Gate 1
 

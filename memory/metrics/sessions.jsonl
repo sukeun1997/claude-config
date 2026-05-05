@@ -180,3 +180,4 @@
 {"date":"2026-05-05","project":"global","duration_min":11,"total_edits":11,"total_reads":16,"unique_files":6,"friction_files":1,"log_lines":20}
 {"date":"2026-05-05","project":"global","duration_min":2,"total_edits":7,"total_reads":3,"unique_files":6,"friction_files":0,"log_lines":20}
 {"date":"2026-05-05","project":"global","duration_min":7,"total_edits":2,"total_reads":22,"unique_files":1,"friction_files":0,"log_lines":20}
+{"date":"2026-05-05","project":"haru","duration_min":14,"total_edits":22,"total_reads":16,"unique_files":15,"friction_files":1,"log_lines":24}
