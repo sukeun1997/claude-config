@@ -98,7 +98,7 @@
 
 ### 작업 판단 플로우
 1. **단순 작업** (단일 파일, 100줄 이하) → 직접 실행
-2. **버그 수정** → `superpowers:systematic-debugging` 스킬 invoke → 재현 확인 → 원인 격리 → 최소 수정 → `superpowers:verification-before-completion`으로 검증. 재현 없이 수정 코드 작성 금지
+2. **버그 수정** → `/sdebug` (`superpowers:systematic-debugging`) invoke → Phase 1 증거 수집 → **가설 후보 2개+ 또는 원인 모호 시 `/triage` 분기 (5개 가설 병렬 발산 → 심판 수렴) → 결과 받아 sdebug Phase 2 복귀** → 원인 격리 → 최소 수정 → `superpowers:verification-before-completion` 검증. 재현 없이 수정 코드 작성 금지. Sentry URL/ID 제공 시 `sentry-debug` 우선
 3. **설계 결정 필요** → 인터뷰 먼저
 4. **구현 작업** (2개+ 파일) → Plan-First
    - planner의 plan이 6+파일, 200줄+ 변경을 포함하면: `critic`(opus)이 plan을 adversarial 검증 → user approval. critic REJECT 시 planner 1회 수정 → 재REJECT 시 사용자 보고
@@ -266,7 +266,7 @@ Agent 호출 시 `model` 파라미터 필수 지정.
 | 기술 뉴스/동향 요청 | `daily-briefing` (quick/deep 모드) |
 | 테스트 코드 작성 | `everything-claude-code:springboot-tdd` (백엔드) / `everything-claude-code:swift-protocol-di-testing` (iOS) |
 | PR 전 최종 검증 | `everything-claude-code:springboot-verification` (백엔드) / `superpowers:verification-before-completion` |
-| 버그 수정/디버깅 시작 | `superpowers:systematic-debugging` (증거 기반 진단 후 debugger 에이전트) |
+| 버그 수정/디버깅 시작 | `/sdebug` (`superpowers:systematic-debugging`) — Phase 1 증거 수집 후 **가설 후보 2개+ 또는 원인 모호 시 `/triage` 분기** (병렬 발산 → 심판 수렴) → 결과 받아 sdebug Phase 2 복귀. 단일 가설로 명확하면 triage 스킵하고 직진 |
 | 버그 수정 코드 작성 완료 | `superpowers:verification-before-completion` (수정 결과 실행 확인) |
 | 빌드 실패 | `build-fixer` 에이전트 (스킬 아닌 에이전트) |
 | LLM API 비용/쿼터 관련 | `everything-claude-code:cost-aware-llm-pipeline` |
