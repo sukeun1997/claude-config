@@ -1,0 +1,89 @@
+rules:
+  - pattern: "AGENTS.md"
+    message: "Codex 운영 계약 변경 감지"
+    recommend: "CLAUDE.md 및 rules/common/*.md와 교차 검토하고 검증/메모리/거버넌스 경로를 확인"
+    severity: warn
+
+  - pattern: "CLAUDE.md"
+    message: "전역 하네스 정책 변경 감지"
+    recommend: "AGENTS.md와 layered-context.md를 동기화하고 과도한 자동화 여부를 재검토"
+    severity: warn
+
+  - pattern: "rules/common/*.md"
+    message: "공통 규칙 변경 감지"
+    recommend: "관련 상위 문서와 연결된 훅/설정/예시를 교차 검토"
+    severity: warn
+
+  - pattern: ".omx/*.json"
+    message: "OMX 상태 또는 메모리 계약 변경 감지"
+    recommend: "JSON 문법과 소비 주체 경로를 확인하고 필요한 memory/state 스모크 체크를 수행"
+    severity: warn
+
+  - pattern: ".omx/*.md"
+    message: "OMX handoff 문서 변경 감지"
+    recommend: "notepad 구조와 handoff 내용이 최신인지 확인"
+    severity: warn
+
+  - pattern: "hooks/*"
+    message: "훅 동작 변경 감지"
+    recommend: "관련 훅을 직접 실행하거나 연결된 설정 경로를 스모크 테스트"
+    severity: warn
+
+  - pattern: "scripts/*"
+    message: "런타임 스크립트 변경 감지"
+    recommend: "셸 문법 검사와 대상 명령 스모크 테스트를 수행"
+    severity: warn
+
+  - pattern: "settings*.json"
+    message: "설정 파일 변경 감지"
+    recommend: "JSON 문법과 실제 로딩 경로를 확인"
+    severity: warn
+
+  - pattern: "prisma/migrations/**"
+    message: "Prisma 마이그레이션 변경 감지"
+    recommend: "실행 전 'echo $DATABASE_URL'로 타겟 DB 출력 + pending 마이그 list + dry-run 후 사용자 승인 (CLAUDE.md §4 'DB 마이그레이션 가드'). 서브에이전트 위임 시 이 가드를 프롬프트에 반드시 prepend"
+    severity: warn
+
+  - pattern: "**/migration*.sql"
+    message: "마이그레이션 SQL 변경 감지"
+    recommend: "타겟 DB 확인 + 컬럼 DESCRIBE + 사용자 승인 후 실행. 운영 host(prod/maple/smartjootek 등) 감지 시 추가 confirmation 필수"
+    severity: warn
+
+  - pattern: "**/.env"
+    message: ".env 변경 감지 (공유 상태 — Codex/Claude 양 런타임이 같은 값 참조)"
+    recommend: "DATABASE_URL/API_KEY 등 운영 자원 변경 시 사용자 명시 승인. LOCAL_*/PROD_* 접두사 분리 패턴(rules/mcp/mysql-setup.md) 준수"
+    severity: warn
+
+  - pattern: "**/.mcp.json"
+    message: "MCP 서버 설정 변경 감지"
+    recommend: "env 값에 평문 시크릿(API_KEY/TOKEN/SECRET/PASSWORD) 포함 금지 — `${ENV_VAR}` 참조만 사용. ~/.zshrc에 export 후 참조"
+    severity: warn
+
+  - pattern: "**/.mcp.local.json"
+    message: "MCP 로컬 설정 변경 감지"
+    recommend: ".mcp.json과 동일 — 평문 시크릿 금지, 환경변수 참조만"
+    severity: warn
+
+  # 아래 4개 패턴은 의도적으로 `**/` 접두 제거 — fnmatch는 `**`를 일반 `*`로 처리하여
+  # root-level 파일이 매칭에서 빠진다 (`tests/test_foo.py`는 OK인데 `test_foo.py`는 미매칭).
+  # governance-guard.sh가 basename도 매칭하므로 디렉토리 무관 단순 패턴이 더 정확하다.
+
+  - pattern: "*Test*.{kt,java,ts,tsx,py,scala}"
+    message: "테스트 파일 변경 감지 (PascalCase)"
+    recommend: "테스트 불변성(rules/common/verification.md § 테스트 불변성) 점검: 삭제·@Disabled/@Ignore/skip/xit/test.todo/pytest.skip/t.Skip/#[ignore] 패턴 추가 여부 + assertion 약화 여부. 명세 오류는 사용자 승인, 환경/flaky/리팩토링은 Sprint Contract [제외 범위]에 명시 필수. 보안 테스트(Auth/Authorization/InputValidation)는 모든 분기에서 사용자 승인 필수"
+    severity: warn
+
+  - pattern: "*.{test,spec}.{ts,tsx,js,jsx,mts,cts}"
+    message: "테스트 파일 변경 감지 (JS/TS dot-style)"
+    recommend: "동일: rules/common/verification.md § 테스트 불변성"
+    severity: warn
+
+  - pattern: "test_*.py"
+    message: "테스트 파일 변경 감지 (pytest)"
+    recommend: "동일: rules/common/verification.md § 테스트 불변성"
+    severity: warn
+
+  - pattern: "*_test.{py,go,rs}"
+    message: "테스트 파일 변경 감지 (Go/Rust/Python snake_case)"
+    recommend: "동일: rules/common/verification.md § 테스트 불변성"
+    severity: warn

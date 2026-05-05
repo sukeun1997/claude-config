@@ -56,6 +56,8 @@ for i, line in enumerate(lines, 1):
     if not row_re.match(line): continue
     cells = [c.strip() for c in line.split('|')]
     if len(cells) < 5: continue
+    if '[EXTERNAL]' in cells[2]:  # cells[2] = 증상 열 (날짜|증상|원인|해법 4열 테이블)
+        continue  # 외부 사례는 자체 friction 카운트에서 제외 (rules/common/verification.md § 테스트 불변성 4주 friction 0건 트리거 보호)
     layer = cells[3]
     if '미분류' in layer or '(추정)' in layer:
         pending.append((i, cells[2], layer))
@@ -151,6 +153,7 @@ memory_search("설정 구성 변경 디버깅 구현", top_k=10)
 - [ ] 자동화 가능한 반복 작업이 있는지
 - [ ] Convention Drift — 최근 커밋 diff에서 CLAUDE.md §5 위반 샘플링 (축약 변수명, 하드코딩, 50줄+ 함수, Read:Edit 비율 하락 추세)
 - [ ] Friction Rule Effectiveness — friction-rule-scanner.py 출력의 `§3. 규칙 효과` 섹션에서 3건+ 재등장 룰 식별. 해당 룰은 **방지 실패** 상태로 보고 (a) 룰 강도 상향, (b) 훅으로 자동화 전환, (c) 은퇴 중 하나를 축 4 액션 아이템에 반영
+- [ ] **Test Inviolability 효과성** — failure-log에서 `[EXTERNAL]` 태그를 제외한 자체 friction 중 "테스트 변조" 관련 행 개수. 4주 연속 0건이면 verification.md § 테스트 불변성 섹션을 **은퇴 후보**로 액션 아이템에 등록 (eval-based harness evolution). 카운트 시 외부 사례 행은 노이즈이므로 반드시 분리
 - [ ] Codex vs Claude 작업 분배 — Codex로 위임 가능한 작업을 Claude에서 직접 처리하지 않았는지
 - [ ] Codex 세션 효율 — tool_call_count=0 세션 비율, 같은 프로젝트 동시 작업 시 충돌 여부
 

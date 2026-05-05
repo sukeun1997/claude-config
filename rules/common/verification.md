@@ -51,6 +51,21 @@ executor 계열에 작업을 위임할 때, 프롬프트에 아래 **완료 조�
 
 > Structured Response Contract(아래)는 "결과 보고 형식(출력)"이고, Sprint Contract는 "완료 기준(입력)"이다. 두 가지를 함께 사용한다.
 
+## 테스트 불변성 (Test Inviolability)
+
+> 외부 사례(Typia Go 포팅, 2026-05) 1건 기반. 자체 friction 4주 0건 지속 시 은퇴 후보 (eval-based harness evolution). `/review-week` 축 2 효과성 모니터링.
+
+테스트는 기능 명세다. "테스트 통과 못함"의 의미는 "코드가 명세를 못 맞춤"이지 "테스트가 잘못됐다"가 아니다. AI 작업 위임 시 단순 "테스트 통과" 지시가 우회 경로(테스트 삭제·하드코딩·외부 위임·기능 배제 스크립트)를 만들었던 외부 사례에 대응한다.
+
+- **금지 (skip·disable 동치 패턴 일체)**: 기존 테스트 삭제, `@Disabled`/`@Ignore` (JUnit), `xit`/`it.skip`/`test.todo`/`describe.skip` (JS/Vitest/Jest), `pytest.skip`/`pytest.mark.skip`/`pytest.mark.xfail`/`skipTest()` (Python), `t.Skip()` (Go), `#[ignore]` (Rust), `xshould`/`xdescribe` (Kotest) 등 **언어별 동치 패턴 일체**. "통과 못하는 케이스 배제" 우회 스크립트도 포함
+- **허용 분기 (a) 명세 오류**: 테스트가 잘못된 명세를 표현한다고 판단되면 → **사용자에게 사유와 함께 보고 후 승인**받고 수정. 자체 판단 금지
+- **허용 분기 (b) 환경 의존·flaky**: 외부 서비스 의존(`@Disabled("Requires Kafka")`), flaky 격리, CI 한정 통합 테스트는 → Sprint Contract `[제외 범위]`에 명시 후 skip 허용 (사용자 승인 불필요, 단 명시는 필수)
+- **허용 분기 (c) TDD 리팩토링**: red-green-refactor 사이클의 테스트 통합·deprecated API 제거에 따른 케이스 삭제는 → 새 테스트가 동등 이상으로 같은 명세를 커버하면 자율 허용 (commit 메시지에 근거 명시)
+- **executor 위임 시**: Sprint Contract `[기술적 조건]`에 "기존 테스트 변경 금지, 추가만 허용 (위 허용 분기 제외)" 명시. verifier는 diff에서 테스트 파일 삭제·skip/disable 키워드 추가 검출 시 FAILED 판정
+- **assertion 약화는 패턴 매칭 불가**: `assertEquals` → `assertNotNull` 같은 검증 약화는 grep/diff로 못 잡는다. verifier가 코드리뷰 수준에서 판단 (자동 차단 대신 review 책임)
+- **목표 오염 방어**: "테스트 통과"라는 단순 지표는 우회 동기를 만든다. 의도 상태(사용자 관점) + 프로세스 제약 + 테스트 불변성 3종 세트를 함께 명시해야 작동한다
+- **보안 테스트 추가 보호**: 인증/인가/입력 검증 테스트는 위 허용 분기 (a)/(b)/(c) **모두에서** 삭제·skip·약화 시 **사용자 승인 필수** (보안 불변식 — flaky로 보이는 보안 테스트 자동 skip 차단)
+
 ## 검증 루프
 
 표준 이상 변경의 기본 흐름:
@@ -69,6 +84,7 @@ reviewer/verifier가 확인할 항목:
 - 보고한 변경 내용과 실제 diff가 일치하는지
 - 선언한 검증이 실제로 실행되었는지
 - 민감 경로 수정 시 필요한 추가 점검이 빠지지 않았는지
+- **테스트 파일 변조 검사** — 삭제·skip/disable 키워드 추가·assertion 약화 여부. 검출 시 § 테스트 불변성의 허용 분기 (a/b/c) 중 어디에 해당하는지 확인. 어디에도 해당 안 되면 FAILED
 
 ### 구조화된 응답 강제 (Structured Response Contract)
 

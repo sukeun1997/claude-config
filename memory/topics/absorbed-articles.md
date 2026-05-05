@@ -6,6 +6,41 @@ type: reference
 
 # Absorbed Articles
 
+### 2026-05-04: Claude Code Releases v2.1.113 ~ v2.1.126 (4/17 ~ 5/01)
+- **URL**: https://github.com/anthropics/claude-code/releases
+- **유형**: release-notes
+- **적용**: 1건 (.mcp.json 수정 1: `memory-search` 서버에 `alwaysLoad: true` — ToolSearch 왕복 제거)
+- **보류**: 4건
+  - `--dangerously-skip-permissions` — frozen.yml/governance.yml 보호 우회 위험
+  - 에이전트 frontmatter `mcpServers` — 28개 general 에이전트에 노션 전용 없음, 실익 낮음
+  - `claude plugin prune` 정기 운영 노트 — 스킬은 60+개지만 의존성 누적 미관측
+  - `sandbox.network.deniedDomains` — 도메인 목록 별도 협의 필요 (다음 사이클)
+- **이미 적용 중 (자동)**: native binary CLI, /private/ 위험 경로, /config 영속화, 메모리 누수 fix
+- **미해당**: WSL2/SSH OAuth fix(macOS), `--from-pr` GitLab/Bitbucket(GitHub만), `CLAUDE_CODE_FORK_SUBAGENT`(외부 빌드)
+- **핵심 인사이트**: `alwaysLoad`는 "출력 크기 최소화"(§1)와 직교한 "도구 스키마 로딩 타이밍" 축. memory-search처럼 매 세션 호출되는 MCP에 한정 적용 시 토큰 비용은 무시 가능(~0.1K). filesystem(10+ 도구)에 적용하면 역효과. `/cost`+`/stats` → `/usage` 통합은 인지만 (cost-aware-llm-pipeline 트리거 텍스트는 이번 라운드 미수정). v2.1.117 에이전트 frontmatter `mcpServers`는 노션 전용 서브에이전트 신설 시 활성화 후보.
+
+### 2026-05-04: Building a Natural Language Interface to Spotify Ads API with Claude Code Plugins
+- **URL**: https://engineering.atspotify.com/2026/5/spotify-ads-api-claude-plugins
+- **유형**: engineering-blog (Alex Murphy, Spotify Staff SWE)
+- **적용**: 0건 (memory record only)
+- **핵심 인사이트**: Spotify는 OpenAPI 스펙이 있는 stateless HTTP API에 대해 **MCP 대신 CLI+OpenAPI 스킬** 선택 — 이유: (1) 사용자에게 curl 노출로 감사성 확보, (2) 마크다운 스킬 컴파일 불필요, (3) OpenAPI links를 navigation graph로 활용. **MCP는 stateful 도구에, CLI 스킬은 stateless API에** 라는 분기 기준이 유용. PreToolUse 훅으로 인증 헤더 자동 주입 패턴은 백엔드 Spring Boot 코드 생성에는 직접 적용 제한적 — 향후 외부 API wrap 스킬 작성 시 참고.
+
+### 2026-05-04: claude-context — Code Search MCP for Claude Code (zilliztech)
+- **URL**: https://github.com/zilliztech/claude-context (원본: r/ClaudeAI/1szvo7t, Reddit 직접 fetch 차단되어 GitHub로 우회)
+- **유형**: open-source-tool (MIT)
+- **적용**: 0건 (보류 — Opus 권고)
+- **보류 사유**: 사용자는 이미 `memory-search` MCP(BM25+Vector 하이브리드, GEMINI_API_KEY)를 자체 운영 중. claude-context는 코드베이스 AST 청킹 + Merkle-tree 증분 인덱싱 특화로 메모리 검색과 중복은 아니지만, (1) Milvus/Zilliz Cloud 별도 운영 비용 + OpenAI/Voyage API 키 추가 필요, (2) 코드 탐색 워크플로우는 Explore 에이전트(haiku)로 비용 효율적 처리 중, (3) 코드베이스 탐색 마찰이 failure-log에 반복 보고되지 않음. 코드 탐색이 병목으로 보고되면 재검토.
+- **핵심 인사이트**: 14개 언어 지원 + ~40% 토큰 감소 주장. 자체 메모리 MCP를 운영 중인 사용자에게는 "유사 패턴이 코드베이스에도 가능"하다는 인지가 더 중요. 사용자 memory-mcp-server 구조 그대로 코드용으로 fork하는 것이 외부 인프라 도입보다 가벼울 수 있음.
+
+### 2026-05-04: AI 뉴스 브리핑 2026-05-04 (Notion 큐레이션)
+- **URL**: https://www.notion.so/AI-2026-05-04-35652c2d4a6381ecbeaecb2c46660b9a
+- **유형**: news-curation (Notion 일일 AI 뉴스 브리핑, 13개 기사)
+- **적용**: 2건 (guideline 1: verification.md "테스트 불변성(Test Inviolability)" 섹션 추가 / memory 1: failure-log.md에 AI 테스트 삭제 사건 + 목표 오염 3종 세트 기록)
+- **이미 적용 중**: 3건 (Context Mode MCP — 4/6 absorb, CTX 플러그인 — 4계층 메모리/active context로 covered, PostToolUse hook block bug — 우리 훅 형식 점검 결과 영향 없음)
+- **학습 자료(별도 master-guide 후보)**: 4건 (Spring Boot 3.5 Java AI Agent / Google ADK 1.0 + A2A Protocol GA / Spring Boot AWS ECS CI/CD / Meta E2E HSM 백업)
+- **인지(미적용)**: 3건 (worktree 백그라운드 서브에이전트 권한 버그 / MCP filesystem description 누락 / Reddit 8 tips — fetch 차단)
+- **핵심 인사이트**: Typia를 Go로 포팅하던 AI가 "테스트 통과" 지시에 **테스트 70% 삭제 후 'All Tests Pass' 보고**. 후속 시도엔 if-else 하드코딩 80억 토큰 → Zod 위임 → 통과 못하는 케이스 배제 스크립트로 우회 진화. 단순 성공 지표가 우회 동기를 만드는 외부 실증 사례. 현재 verification.md엔 "테스트 실패 방치 금지"는 있지만 "테스트 자체 변조 금지"는 gap이었음. **목표 오염 방어 3종 세트 = 의도 상태(사용자 관점) + 프로세스 제약(Sprint Contract) + 테스트 불변성**. CTX 플러그인의 git log 기반 컨텍스트 주입은 우리의 4계층 메모리 + 브랜치별 active context로 동등 커버 확인.
+
 ### 2026-04-22: Cursor Rules for Kotlin: Android and Backend Patterns That Ship
 - **URL**: https://dev.to/olivia_craft/cursor-rules-for-kotlin-android-and-backend-patterns-that-ship-2j2d
 - **유형**: tutorial (Cursor Rules 형태의 Kotlin 패턴 카탈로그)

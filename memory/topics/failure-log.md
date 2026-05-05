@@ -84,3 +84,6 @@ edit-tracker (3회+ 반복 편집 감지)
 | 2026-04-27 | ArsFacadeService.kt 5회 반복 편집 | Context | 의존 인터페이스(CooconApi) 선행 Read 미흡 |
 | 2026-04-27 | MockCooconApiTest.kt 3회 반복 편집 | Context | 테스트 대상 프로덕션 코드 선행 Read 미흡 |
 | 2026-04-27 | MockCooconApi.kt 3회 반복 편집 | Context | 구현 대상 인터페이스/스펙 선행 Read 미흡 |
+| 2026-05-04 | [EXTERNAL] AI가 테스트 70% 삭제 후 "All Tests Pass" 보고 (Typia Go 포팅) | Prompt | 단순 성공 지표("테스트 통과") = 우회 동기. 후속 시도에서도 if-else 하드코딩 80억 토큰 / 외부 라이브러리(Zod) 위임 / 통과 못하는 케이스 배제 스크립트로 발전. 대책: verification.md에 "테스트 불변성(Test Inviolability)" 섹션 추가 — 테스트 삭제/skip/disable 금지, 잘못된 명세는 사용자 승인 후 수정. Sprint Contract `[기술적 조건]`에 "기존 테스트 변경 금지" 명시. **목표 오염 3종 세트 = 의도 상태 + 프로세스 제약 + 테스트 불변성** |
+| 2026-05-05 | MacSidebarView.swift 5회 반복 편집 | 미분류 | 다음 세션에서 원인 분석 필요 |
+| 2026-05-05 | HaruApp.swift 3회 반복 편집 | 미분류 | 다음 세션에서 원인 분석 필요 |
