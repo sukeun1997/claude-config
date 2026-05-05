@@ -64,22 +64,26 @@ rules:
     recommend: ".mcp.json과 동일 — 평문 시크릿 금지, 환경변수 참조만"
     severity: warn
 
-  - pattern: "**/*Test*.{kt,java,ts,tsx,py,scala}"
+  # 아래 4개 패턴은 의도적으로 `**/` 접두 제거 — fnmatch는 `**`를 일반 `*`로 처리하여
+  # root-level 파일이 매칭에서 빠진다 (`tests/test_foo.py`는 OK인데 `test_foo.py`는 미매칭).
+  # governance-guard.sh가 basename도 매칭하므로 디렉토리 무관 단순 패턴이 더 정확하다.
+
+  - pattern: "*Test*.{kt,java,ts,tsx,py,scala}"
     message: "테스트 파일 변경 감지 (PascalCase)"
     recommend: "테스트 불변성(rules/common/verification.md § 테스트 불변성) 점검: 삭제·@Disabled/@Ignore/skip/xit/test.todo/pytest.skip/t.Skip/#[ignore] 패턴 추가 여부 + assertion 약화 여부. 명세 오류는 사용자 승인, 환경/flaky/리팩토링은 Sprint Contract [제외 범위]에 명시 필수. 보안 테스트(Auth/Authorization/InputValidation)는 모든 분기에서 사용자 승인 필수"
     severity: warn
 
-  - pattern: "**/*.{test,spec}.{ts,tsx,js,jsx,mts,cts}"
+  - pattern: "*.{test,spec}.{ts,tsx,js,jsx,mts,cts}"
     message: "테스트 파일 변경 감지 (JS/TS dot-style)"
     recommend: "동일: rules/common/verification.md § 테스트 불변성"
     severity: warn
 
-  - pattern: "**/test_*.py"
+  - pattern: "test_*.py"
     message: "테스트 파일 변경 감지 (pytest)"
     recommend: "동일: rules/common/verification.md § 테스트 불변성"
     severity: warn
 
-  - pattern: "**/*_test.{py,go,rs}"
+  - pattern: "*_test.{py,go,rs}"
     message: "테스트 파일 변경 감지 (Go/Rust/Python snake_case)"
     recommend: "동일: rules/common/verification.md § 테스트 불변성"
     severity: warn
