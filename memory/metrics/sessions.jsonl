@@ -182,3 +182,5 @@
 {"date":"2026-05-05","project":"global","duration_min":7,"total_edits":2,"total_reads":22,"unique_files":1,"friction_files":0,"log_lines":20}
 {"date":"2026-05-05","project":"haru","duration_min":14,"total_edits":22,"total_reads":16,"unique_files":15,"friction_files":1,"log_lines":24}
 {"date":"2026-05-05","project":"global","duration_min":6,"total_edits":9,"total_reads":7,"unique_files":8,"friction_files":0,"log_lines":33}
+{"date":"2026-05-05","project":"haru","duration_min":92,"total_edits":60,"total_reads":92,"unique_files":32,"friction_files":6,"log_lines":69}
+{"date":"2026-05-05","project":"haru","duration_min":29,"total_edits":25,"total_reads":36,"unique_files":13,"friction_files":3,"log_lines":95}
