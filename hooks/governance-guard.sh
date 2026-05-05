@@ -39,7 +39,7 @@ RELPATH="${FILE_PATH#$PROJECT_DIR/}"
 
 # governance.yml 파싱 및 패턴 매칭
 python3 -c "
-import sys, os, fnmatch
+import sys, os, fnmatch, re
 
 governance_file = '$GOVERNANCE_FILE'
 relpath = '$RELPATH'
@@ -75,12 +75,26 @@ except ImportError:
 if not config or 'rules' not in config:
     sys.exit(0)
 
+def expand_braces(p):
+    # {a,b,c} brace expansion (fnmatch 미지원 보완, 재귀, 비중첩)
+    m = re.search(r'\{([^{}]+)\}', p)
+    if not m:
+        return [p]
+    options = [o.strip() for o in m.group(1).split(',')]
+    expanded = []
+    for opt in options:
+        for sub in expand_braces(p[:m.start()] + opt + p[m.end():]):
+            expanded.append(sub)
+    return expanded
+
 matched = []
 for rule in config['rules']:
     pattern = rule.get('pattern', '')
-    # fnmatch으로 basename과 relpath 모두 매칭
-    if fnmatch.fnmatch(basename, pattern) or fnmatch.fnmatch(relpath, pattern):
-        matched.append(rule)
+    # fnmatch는 {a,b} brace 미지원이라 사전 expansion. basename/relpath 모두 매칭
+    for sub_pattern in expand_braces(pattern):
+        if fnmatch.fnmatch(basename, sub_pattern) or fnmatch.fnmatch(relpath, sub_pattern):
+            matched.append(rule)
+            break  # 동일 rule 중복 등록 방지
 
 if matched:
     print()

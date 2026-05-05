@@ -56,7 +56,7 @@ for i, line in enumerate(lines, 1):
     if not row_re.match(line): continue
     cells = [c.strip() for c in line.split('|')]
     if len(cells) < 5: continue
-    if '[EXTERNAL]' in cells[2]:
+    if '[EXTERNAL]' in cells[2]:  # cells[2] = 증상 열 (날짜|증상|원인|해법 4열 테이블)
         continue  # 외부 사례는 자체 friction 카운트에서 제외 (rules/common/verification.md § 테스트 불변성 4주 friction 0건 트리거 보호)
     layer = cells[3]
     if '미분류' in layer or '(추정)' in layer:
