@@ -35,6 +35,9 @@ edit-tracker (3회+ 반복 편집 감지)
 | 2026-04-10 | sessions.jsonl total_edits 항상 0 (3/29~ 전수) | Harness | 원인: tool-tracker.sh의 `grep -cxF \|\| echo "0"` — grep count=0 시 exit 1 → echo "0" 추가 출력 → COUNT="0\n0" → arithmetic syntax error. 해법: `COUNT=$(...) \|\| COUNT=0` 패턴으로 수정 |
 | 2026-04-10 | agent-usage-tracker settings.json 미등록 (4/6 복구 시 누락) | Harness | 원인: hooks 복구 시 Agent matcher 미등록. 해법: PostToolUse Agent matcher 추가 |
 | 2026-04-10 | Active Context Changed Files 무제한 → 20줄 규칙 위반 (52줄) | Harness | 원인: memory-active-context.sh가 전체 파일 목록 덤프. 해법: Changed Files 블록 제거, 커밋 5개 + diff stat만 표시 |
+| 2026-04-10 | test-5x.txt 5회 반복 편집 | 미분류 — 다음 세션에서 원인 분석 필요 | - |
+| 2026-04-12 | index.ts 3회 반복 편집 | 미분류 — 다음 세션에서 원인 분석 필요 | - |
+| 2026-04-14 | spec-sale-loss-v2.md 7회 반복 편집 | 미분류 — 다음 세션에서 원인 분석 필요 | - |
 | 2026-04-10 | test-5x.txt 5회 반복 편집 | Harness (false-positive) | edit-tracker 테스트 픽스처 (파일명 "5x") — 트래커에서 제외 대상. 향후 `test-*` / `*-fixture.*` 제외 필터 추가 |
 | 2026-04-12 | index.ts 3회 반복 편집 | Context | 타입 정의/의존 모듈 선행 Read 없이 반복 수정 — Read:Edit 비율 관찰 필요 |
 | 2026-04-13 | MEMORY.md 4회 반복 편집 | Context (meta) | 메모리 시스템 개편 중 의도된 연속 수정 — 실패 신호 아님 (예상 패턴) |
