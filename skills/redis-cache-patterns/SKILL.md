@@ -5,6 +5,7 @@ triggers:
   - "캐시 관련 코드 작성/수정"
   - "Redis 설정 변경"
   - "@Cacheable, CacheManager 사용"
+user-invocable: false
 ---
 
 # Redis Cache Patterns — Haru 프로젝트 가이드

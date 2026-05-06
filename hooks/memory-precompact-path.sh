@@ -64,9 +64,10 @@ if [ -f "$CONTEXT_FILE" ] && [ -s "$CONTEXT_FILE" ]; then
 fi
 
 if [ -f "$CONTEXT_FILE" ] && is_context_fresh "$CONTEXT_FILE" 1; then
-  echo "STATUS: active context 존재 (fresh). 현재 작업 상태로 갱신해주세요."
+  echo "STATUS: active context 존재 (fresh). compaction 진행."
+  # exit 0 (implicit) — compaction 허용
 else
-  echo "STATUS: active context 없음 또는 stale. 아래 템플릿으로 새로 작성해주세요."
+  echo "STATUS: active context 없음 또는 stale. 아래 템플릿으로 작성 후 compaction이 재시도됩니다."
   cat << TMPL
 
 ---
@@ -87,4 +88,6 @@ updated: $(date +%Y-%m-%dT%H:%M+09:00)
 - 다음 파일: {파일 경로}
 - 남은 위험: {이슈}
 TMPL
+  # exit 2 — compaction 차단. 모델이 active context를 먼저 갱신하도록 강제.
+  exit 2
 fi

@@ -3,6 +3,24 @@
 4계층 메모리 + 브랜치별 Active Context로 compaction 이후에도 핵심 컨텍스트를 보존한다.
 **원칙: "파일이 진실의 원천 — 모델은 디스크에 쓴 것만 기억한다"**
 
+## Codex/OMX 매핑
+
+Claude 메모리와 Codex/OMX 메모리를 충돌시키지 말고 역할을 분리한다.
+
+| 역할 | Claude Harness | Codex/OMX |
+|------|----------------|-----------|
+| Active | `memory/active/{branch-slug}.md` | `.omx/state/` |
+| Hot | `memory/daily/YYYY-MM-DD.md` 최근 작업 | `.omx/notepad.md` |
+| Always | `memory/MEMORY.md` | `.omx/project-memory.json` |
+| Cold | `memory/topics/*.md` | `memory/topics/*.md` 공용 |
+
+운영 기준:
+
+- Codex 세션 handoff는 `.omx/notepad.md`에 짧게 남긴다.
+- 구조화된 장기 지침은 `.omx/project-memory.json`에 둔다.
+- 긴 회고, 사례, 실패 패턴은 `memory/topics/*.md`로 보낸다.
+- Claude 전용 훅이 쓰는 기존 `memory/*` 구조는 유지하되, Codex가 같은 책임을 중복해서 쓰지 않게 한다.
+
 ## 4-Layer Architecture (branch-based Active Context 통합)
 
 | Layer | 파일 | 로딩 방식 | 용도 | 수명 |
@@ -19,6 +37,11 @@
 - main/master/develop 브랜치는 건너뜀
 - 구조: Why / Progress / Next / Open Questions
 - 머지/삭제된 브랜치의 active context는 SessionEnd에서 archive/ 이동
+
+Codex/OMX에서는 같은 목적을 아래처럼 대응한다.
+
+- `.omx/state/`: 현재 phase, active mode, runtime state
+- `.omx/notepad.md`: handoff 요약, 다음 단계, 남은 위험
 
 ## Daily Log 작성 시점
 
@@ -44,6 +67,8 @@
 - 상세 내용은 `memory/topics/*.md`로 이동하고 MEMORY.md에는 링크만 유지
 - `[PROMOTE]` 태그된 Daily Log 항목을 정기적으로 MEMORY.md에 승격
 
+Codex/OMX에서는 위 승격 결과를 `.omx/project-memory.json`의 `notes` 또는 `directives`에도 반영할 수 있다.
+
 ## Topic 파일 관리
 
 - **생성 기준**: 동일 주제에 대한 항목이 Daily Log에서 10개 이상 누적
@@ -67,9 +92,20 @@
 4. `Grep` 도구로 `memory/` 디렉토리 전체 검색 (정확 텍스트 매칭)
 5. Topic 파일에서 상세 정보 조회
 
+Codex/OMX 추가 순서:
+
+1. `.omx/project-memory.json` 확인
+2. `.omx/notepad.md` 확인
+3. `memory/topics/*.md`와 `memory/daily/*.md` 확인
+
 ## 자동화 (Hooks)
 
 - **SessionStart**: 오늘+어제 Daily Log 자동 주입
 - **PreCompact**: compaction 전 중요 컨텍스트 Daily Log 플러시
 - **Stop**: 의미 있는 작업이었으면 세션 요약 저장 유도
 - **SessionEnd**: 14일 초과 Daily Log → archive/ 이동
+
+Codex/OMX는 동일 훅 체인을 전제하지 않는다. 훅이 없더라도 아래는 수동으로 유지한다.
+
+- handoff 필요 시 `.omx/notepad.md` 갱신
+- 장기 규칙 변경 시 `.omx/project-memory.json` 갱신

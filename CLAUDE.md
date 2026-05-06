@@ -5,6 +5,11 @@
 - 열지 않은 파일/코드에 대해 추측하지 않음 — Read 후 답변
 - 토큰 예산 부족으로 작업을 일찍 마무리하지 않음 — 끝까지 진행
 
+## Codex/OMX Interop
+- Codex 세션의 실행 규약은 `AGENTS.md`가 담당하고, 이 파일은 정책/제약의 소스 역할을 유지
+- 메모리 기본 매핑: Active=`.omx/state/`, Hot=`.omx/notepad.md`, Always=`.omx/project-memory.json`, Cold=`memory/topics/*.md`
+- 변경 감시는 `.claude/governance.yml`의 경고 규칙을 우선 사용하고, 훅이 없을 때도 같은 검증 추천을 수동 적용
+
 ## Profile & Persona
 - 세션 시작 시 `memory/topics/user-profile.md` 참조 (필요 시 Read)
 
@@ -21,6 +26,7 @@
 - Insight 제공: 구현 전후 교육적 설명 포함
 - URL 제공 시 자동 WebFetch / SDK·API 구현 전 문서 조사 (Context7 MCP)
 - **배포**: `scripts/deploy.sh` 사용 필수 (없는 프로젝트는 예외)
+- **Plan/Spec 저장 경로**: `~/vault/{project}/{branch-slug}/` (superpowers 생성 파일은 vault-auto-save 훅이 자동 이동 + 원본 삭제)
 
 ### 컨텍스트 절약
 - 파일 3개+ 탐색 → Explore 서브에이전트 위임
@@ -37,11 +43,28 @@
 - 강조 표현(MUST, CRITICAL, MANDATORY 등) 최소화 — 4.6은 일반 표현으로 충분히 따르며, 과도한 강조는 overtriggering 유발
 - 도구/스킬 트리거: "~할 때 사용" 형태의 조건부 안내. "반드시", "의심되면 사용" 등 이전 모델용 강제 표현 지양
 
+### 학습 모드 (Learning Mode)
+- **기본 ON** — 백엔드 학습/시야 확장을 전달 효율과 동등 비중으로 다룸
+- **ON 동작**: 구현 요청에 기술 선택이 포함되면 사용자가 단일 후보만 언급해도 §9 `tech-advisor` 트리거. 기존 코드/매니페스트에 이미 채택된 스택은 그대로 진행하되, **현 스택 안에서 더 적합한 라이브러리/패턴이 있으면 1줄 + 트레이드오프 1줄로 언급** (예: "JPA 쓰시면 동적 쿼리는 QueryDSL보다 JDSL이 Kotlin 친화적입니다 — 컴파일 안정성 ↑, 학습 곡선 ↑"). 사용자가 그대로 진행하라고 하면 즉시 진행
+- **OFF 동작**: §9 워크플로우 라우팅의 "미확정" 케이스만 tech-advisor 트리거 (기존 동작)
+- **전환**: 사용자가 "학습 모드 OFF/ON" 또는 "바로 해줘"(임시 OFF, 해당 요청만) 발화 시 즉시 반영. 세션 단위 적용
+- **스킵 조건**: 명백한 1-2줄 수정, 기존 패턴과 동일한 추가, 버그 픽스, 사용자가 이미 대안을 비교한 후 선택한 경우는 ON이어도 대안 제시 생략
+
 ### 코드 응답 원칙
 - **추측 금지**: 열지 않은 파일/코드에 대해 추측하지 않음. 참조된 파일은 Read 후 답변
+- **사실 vs 결정 분기 (정보 수집 라우팅)**: 정보가 필요할 때 출처별 4-경로로 라우팅 (Ouroboros Path Matrix 채택). 매번 "Kotlin 버전?", "프레임워크?" 묻던 마찰 제거
+  - **(a) 매니페스트 정확매치 → 자동 확정**: `pyproject.toml`/`package.json`/`build.gradle.kts`/`go.mod`/`Cargo.toml`/`Dockerfile`/`.env.example`에서 **단일 정확매치**(언어/버전/프레임워크/패키지매니저/CI 도구)는 1줄 알림만 하고 진행 — 예: `ℹ️ 자동 확정: Kotlin 1.9, Spring Boot 3.2 (build.gradle.kts)`. 사용자가 "그거 아냐" 시 즉시 정정
+  - **(b) 코드 추론 → 1-tap 확인**: 매니페스트 미매치/다중 후보/패턴 추론일 때, 발견 내용 + "맞나요?" 단일 확인 (AskUserQuestion 2-옵션: "맞음" / "정정")
+  - **(c) 신규 동작·AC·비즈니스 로직 → 항상 사용자**: 코드에서 답이 안 나오는 결정(목표/수용 기준/UX/트레이드오프)은 묵시적 선택 금지 (위 "복수 해석 처리"와 동일 톤)
+  - **(d) 외부 사실(API/버전/요금) → WebFetch 후 1-tap**: 라이브러리 호환성·레이트리밋·가격 등은 Context7/WebFetch 수집 후 (b) 패턴
+  - 핵심 구분: "X는 JWT를 쓴다"는 **사실** (a/b 자체 해결), "새 기능도 JWT를 써야 한다"는 **결정** (c 필수 사용자). 사실은 가능한 한 자체 확인, 결정은 항상 사용자
+- **반복 편집 방지**: 동일 파일을 2회+ 편집하려 할 때 → 파일 전체 Read(limit 없이) + 호출하는/호출되는 최소 1개 파일 Read 후 재시도. W16 주간 분석 1위 원인(Context 9건, 파일 Read 선행 미흡) 대응
 - **디버깅 증거 먼저**: 에러 로그, 스택 트레이스, 실제 출력을 먼저 확인 후 진단. 가설 기반 추측 진단 금지. 사용자가 "안 돼", "에러 나" 등만 보고해도 → 직접 로그/출력/상태를 수집하여 진단 (증거 요청 대신 자체 수집)
 - **환경 확인 우선**: DB/API 결과가 예상과 다를 때 → 환경(.env, 연결 정보, 마이그레이션 상태) 먼저 확인. 코드 원인만 의심하지 않음
-- 접근법 결정 후 밀고 나감 — 새 정보가 기존 판단을 직접 부정하지 않는 한 재검토 않음
+- **모호한 요구사항 명시**: 요구사항이 모호할 때 → 모호한 부분을 구체적으로 지목하여 질문 (예: "X는 A인가 B인가?"). "알아서 처리" 금지. (증거/환경 부족 → 자체 수집. 요구사항/의도 모호 → 질문. 두 축 혼동 금지)
+- **복수 해석 처리**: 요청에 2개 이상 해석 가능할 때 → 묵시적 선택 금지, 후보 제시 후 사용자 선택
+- **간단한 길 pushback**: 요청한 접근법보다 코드량/의존성/단계 수가 절반 이하로 줄어드는 방법이 있을 때 → 구현 전 1-2문장으로 제안 (트레이드오프 포함)
+- 접근법 결정 후 밀고 나감 — 새 정보가 기존 판단을 직접 부정하지 않는 한 재검토 않음 (결정 전에는 묻고, 결정 후에는 밀고 나감)
 
 ### 메모리
 - compaction 후 / 이전 작업 이어갈 때 → memory_search 먼저
@@ -75,7 +98,7 @@
 
 ### 작업 판단 플로우
 1. **단순 작업** (단일 파일, 100줄 이하) → 직접 실행
-2. **버그 수정** → `superpowers:systematic-debugging` 스킬 invoke → 재현 확인 → 원인 격리 → 최소 수정 → `superpowers:verification-before-completion`으로 검증. 재현 없이 수정 코드 작성 금지
+2. **버그 수정** → `/sdebug` (`superpowers:systematic-debugging`) invoke → Phase 1 증거 수집 → **가설 후보 2개+ 또는 원인 모호 시 `/triage` 분기 (5개 가설 병렬 발산 → 심판 수렴) → 결과 받아 sdebug Phase 2 복귀** → 원인 격리 → 최소 수정 → `superpowers:verification-before-completion` 검증. 재현 없이 수정 코드 작성 금지. Sentry URL/ID 제공 시 `sentry-debug` 우선
 3. **설계 결정 필요** → 인터뷰 먼저
 4. **구현 작업** (2개+ 파일) → Plan-First
    - planner의 plan이 6+파일, 200줄+ 변경을 포함하면: `critic`(opus)이 plan을 adversarial 검증 → user approval. critic REJECT 시 planner 1회 수정 → 재REJECT 시 사용자 보고
@@ -139,6 +162,21 @@ Agent 호출 시 `model` 파라미터 필수 지정.
 - 상태 전이 설계 ↔ 실제 분기 로직
 - 환경 설정(.env) ↔ 코드 참조
 
+### 배포 검증 (Deployment Verification)
+
+`deploy.sh`가 exit 0으로 끝나도 배포 **성공이 아님**. 아래 3단계를 모두 확인해야 "수정이 라이브"임을 선언할 수 있다. `/deploy-verified` 스킬이 자동화한다.
+
+1. **아티팩트 포함 확인**: 배포된 JAR/번들의 빌드 타임스탬프가 현재 커밋 이후인지, 수정한 메서드/문자열 시그니처가 바이너리에 존재하는지 (`unzip -p <jar> | grep <signature>` 또는 `strings`)
+2. **로그 경로 선확인 후 tail**: 디버깅 전에 서버의 실제 로그 파일 경로를 먼저 확인. 잘못된 로그를 tail하여 "수정이 안 들어간 줄 알았지만 다른 로그였던" 루프 방지
+3. **시그니처 grep**: 새 코드 실행을 증명하는 고유 로그 라인(수정된 메서드명, 새 버전 태그, 추가한 DEBUG 로그)을 라이브 로그에서 발견해야 통과
+
+**DB 마이그레이션 전용 추가 가드** (reporter.html이 식별한 4회 반복 마찰 + 4/21·4/24 운영 사고 2회 대응):
+- 실행 전 `.env`의 DB host/name을 출력해 의도한 타겟(로컬 vs 서버) 확인
+- 건드릴 모든 테이블을 `DESCRIBE`로 실제 컬럼 확인 (컬럼명 가정 금지)
+- dry-run을 먼저 실행하여 예상 행 수 보고 후 사용자 승인
+- idempotency 키 또는 체크섬으로 중복 실행 방지
+- **서브에이전트 위임 금지 (또는 가드 prepend 필수)**: 마이그레이션 실행을 executor/deep-executor에 위임할 경우, 이 가드 4항목 + `pnpm prisma migrate dev`는 pending 마이그 전부 적용한다는 사실을 프롬프트에 반드시 포함. governance.yml `prisma/migrations/**` 경고가 PostToolUse에서 트리거되지만 사후 알림이므로, 메인 세션이 직접 실행하는 것을 우선
+
 **생략**: 문서/설정만 수정, 사용자 "검증 스킵" 요청
 
 ---
@@ -152,12 +190,27 @@ Agent 호출 시 `model` 파라미터 필수 지정.
 - **입력 검증**: 시스템 경계에서 반드시 검증
 - **하드코딩 금지**: 상수 또는 설정 사용
 
+### 변경 최소화 (Surgical Changes)
+- **Filler 금지 (1000 no's for every yes)**: 모든 줄/함수/파일은 자기 자리값을 해야 함. 빈 공간은 레이아웃·구성으로 풀고, 추측성 helper·placeholder·"혹시 모를" 에러 핸들링·dummy 섹션으로 채우지 않음. Less is more
+- 인접 코드/주석/포맷 "개선" 금지 — 사용자 요청과 무관하면 손대지 않음
+- 미파손 코드 리팩토링 금지 — "더 나은 구조"는 사용자 요청 시에만 (보안/데이터 손상 위험은 §7에 따라 즉시 보고)
+- 기존 파일 스타일 매치 — 내 취향 강제 금지. 단 §5 다른 규칙(빈 catch, 거대 함수 등) 위반 스타일은 매치 대상이 아님
+- 관련 없는 dead code: **언급만 하고 삭제하지 않음** (사용자 판단 위임)
+- 내 변경이 고아로 만든 import/변수/함수만 제거, 기존 dead code는 그대로
+- 자가 테스트: 변경된 모든 줄이 사용자 요청으로 직접 추적 가능한가?
+
 ---
 
 ## 6. Git Workflow
 
 **커밋**: `<type>: <description>` (feat/fix/refactor/docs/test/chore/perf/ci)
 **PR**: 전체 커밋 히스토리 분석 → 종합 요약 → 테스트 플랜 포함
+
+### PR body 안전 입력 (필수)
+- `gh pr create` / `gh pr edit`로 본문을 전달할 때 **`--body-file`** 사용. 본문은 임시 파일(`/tmp/pr_body_<N>.md` 등)에 Write 도구로 작성 후 경로 전달.
+- `--body "$(cat <<'EOF' ... EOF)"` 패턴 금지 — 외부 큰따옴표 안의 명령 치환 때문에 `` ` ``, `\``, ` ``` ` 가 escape되어 그대로 본문에 들어가 코드블록/인라인 코드가 깨짐 (PR #17099 1차 시도에서 재현됨).
+- 작성 후 `gh pr view <num> --json body --jq .body | head`로 백틱 escape 여부 즉시 검증.
+- 코드 스니펫이 없는 단순 한두 줄 본문은 `--body "..."` 직접 전달 가능.
 
 ---
 
@@ -214,11 +267,12 @@ Agent 호출 시 `model` 파라미터 필수 지정.
 ### 워크플로우 기반
 | 트리거 | 스킬 |
 |--------|------|
-| 새 기능 구현 시작 | `feature` (brainstorming → plans → execution 2-gate 래퍼) |
+| 구현 요청에 기술/설계 선택이 포함된 경우 — **학습 모드 ON(기본)**: 사용자가 단일 후보만 언급해도 트리거 (현 스택 내 라이브러리/패턴 대안 1-2개 + 트레이드오프 1줄). **학습 모드 OFF**: 미확정 케이스만 트리거 (기존 스택으로 자연 결정되면 스킵). 학습 모드 정의는 §1 참조 | `tech-advisor` (대안 비교 → 사용자 선택 → 구현 진행) |
+| 새 기능 구현 시작 | `feature` (tech-advisor → brainstorming → plans → execution) |
 | 기술 뉴스/동향 요청 | `daily-briefing` (quick/deep 모드) |
 | 테스트 코드 작성 | `everything-claude-code:springboot-tdd` (백엔드) / `everything-claude-code:swift-protocol-di-testing` (iOS) |
 | PR 전 최종 검증 | `everything-claude-code:springboot-verification` (백엔드) / `superpowers:verification-before-completion` |
-| 버그 수정/디버깅 시작 | `superpowers:systematic-debugging` (증거 기반 진단 후 debugger 에이전트) |
+| 버그 수정/디버깅 시작 | `/sdebug` (`superpowers:systematic-debugging`) — Phase 1 증거 수집 후 **가설 후보 2개+ 또는 원인 모호 시 `/triage` 분기** (병렬 발산 → 심판 수렴) → 결과 받아 sdebug Phase 2 복귀. 단일 가설로 명확하면 triage 스킵하고 직진 |
 | 버그 수정 코드 작성 완료 | `superpowers:verification-before-completion` (수정 결과 실행 확인) |
 | 빌드 실패 | `build-fixer` 에이전트 (스킬 아닌 에이전트) |
 | LLM API 비용/쿼터 관련 | `everything-claude-code:cost-aware-llm-pipeline` |

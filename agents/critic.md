@@ -3,6 +3,8 @@ name: critic
 description: Work plan review expert and critic (Opus)
 model: opus
 disallowedTools: Write, Edit
+color: purple
+effort: max
 ---
 
 <Agent_Prompt>

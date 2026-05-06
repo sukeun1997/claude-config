@@ -63,15 +63,22 @@ ACTIVE_DIR="$MEM_DIR/active"
 ARCHIVE_DIR="$MEM_DIR/archive/active"
 if [ -d "$ACTIVE_DIR" ]; then
   HYGIENE_WARNINGS=""
+  # Auto-archive target directory (W17 review: stale context auto-cleanup)
+  MONTH_DIR="$ARCHIVE_DIR/$(date +%Y-%m)"
+  mkdir -p "$MONTH_DIR" 2>/dev/null || true
+  AUTO_ARCHIVED=0
   for ac_file in "$ACTIVE_DIR"/*.md; do
     [ -f "$ac_file" ] || continue
     ac_basename=$(basename "$ac_file")
-    # Skip non-branch contexts (e.g., date-based like 20260406.md)
+    # Skip archive subdirectory entries (only top-level active contexts count)
+    case "$ac_file" in
+      */archive/*) continue ;;
+    esac
     # Check: empty Changed Files (no real changes)
-    changed_count=$(grep -cE '^[a-zA-Z]' <(sed -n '/^### Changed Files$/,/^```$/{ /^```$/d; /^### Changed Files$/d; p; }' "$ac_file") 2>/dev/null || echo "0")
+    changed_count=$(sed -n '/^### Changed Files$/,/^```$/{/^```$/d; /^### Changed Files$/d; p;}' "$ac_file" | grep -cE '^[a-zA-Z]' 2>/dev/null || echo "0")
     changed_count=$(echo "$changed_count" | tr -d '[:space:]')
     changed_count="${changed_count:-0}"
-    # Check: last modified > 3 days ago
+    # Check: last modified > N days ago
     if [ "$(uname)" = "Darwin" ]; then
       file_mtime=$(stat -f %m "$ac_file" 2>/dev/null || echo "0")
     else
@@ -79,16 +86,23 @@ if [ -d "$ACTIVE_DIR" ]; then
     fi
     now_ts=$(date +%s)
     age_days=$(( (now_ts - file_mtime) / 86400 ))
-    if [ "$changed_count" -eq 0 ] && [ "$age_days" -ge 3 ]; then
+    # Auto-archive: 7+ days old (any state) or 5+ days with no changes AND content-light
+    file_lines=$(wc -l < "$ac_file" 2>/dev/null | tr -d ' ')
+    file_lines="${file_lines:-0}"
+    has_todos=$(grep -c '^\- \[ \]' "$ac_file" 2>/dev/null || echo "0")
+    if { [ "$age_days" -ge 7 ] && [ "$has_todos" -eq 0 ]; } || { [ "$changed_count" -eq 0 ] && [ "$age_days" -ge 5 ] && [ "$file_lines" -le 5 ]; }; then
+      mv "$ac_file" "$MONTH_DIR/" 2>/dev/null && AUTO_ARCHIVED=$((AUTO_ARCHIVED + 1)) || true
+    elif [ "$changed_count" -eq 0 ] && [ "$age_days" -ge 3 ]; then
       HYGIENE_WARNINGS+="- ${ac_basename}: 변경 0개 + ${age_days}일 미갱신 (삭제 권장)\n"
-    elif [ "$age_days" -ge 7 ]; then
-      HYGIENE_WARNINGS+="- ${ac_basename}: ${age_days}일 미갱신 (archive 이동 권장)\n"
     fi
   done
-  # Count active contexts
-  ac_total=$(find "$ACTIVE_DIR" -name "*.md" -type f 2>/dev/null | wc -l | tr -d ' ')
+  # Count active contexts (top-level only, excluding archive/)
+  ac_total=$(find "$ACTIVE_DIR" -maxdepth 1 -name "*.md" -type f 2>/dev/null | wc -l | tr -d ' ')
   if [ "$ac_total" -gt 5 ]; then
     HYGIENE_WARNINGS+="- Active context ${ac_total}개 (권장: 3개 이하). 완료된 브랜치 정리 필요\n"
+  fi
+  if [ "$AUTO_ARCHIVED" -gt 0 ]; then
+    HYGIENE_WARNINGS+="- ${AUTO_ARCHIVED}개 stale context 자동 archive 완료 (→ ${MONTH_DIR})\n"
   fi
   if [ -n "$HYGIENE_WARNINGS" ]; then
     CONTEXT+="⚠️ Active Context Hygiene:
@@ -343,11 +357,12 @@ if [ -f "$FRICTION_QUEUE" ] && [ -s "$FRICTION_QUEUE" ]; then
     CONTEXT+="- $(basename "$F_PATH"): ${F_COUNT}회 반복 편집
 "
   done < "$FRICTION_QUEUE"
-  CONTEXT+="failure-log.md에 '미분류' 상태로 자동 기록됨.
-⏸️ 작업 시작 전에 failure-log.md의 '미분류' 엔트리를 분류하세요:
+  CONTEXT+="failure-log.md에 원인 계층이 자동 pre-fill됨 (경로+횟수 휴리스틱).
+⏸️ 작업 시작 전에 failure-log.md의 신규 엔트리를 확정하세요:
 1. Read memory/topics/failure-log.md
-2. '미분류' 행의 원인을 Prompt/Context/Harness 중 택1로 변경
-3. 해법 컬럼에 재발 방지책 기록
+2. 'X (추정)' 행을 검증 → 맞으면 '(추정)' 제거하여 확정, 틀리면 다른 계층으로 변경
+3. '미분류' 행은 원인을 Prompt/Context/Harness 중 택1로 분류
+4. 해법 컬럼에 재발 방지책 기록 (pre-fill된 힌트 검토)
 (1분이면 됩니다. 이것이 하네스 자기 진화의 핵심 루프입니다)
 
 "

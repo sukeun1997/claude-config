@@ -2,6 +2,7 @@
 name: planner
 description: Strategic planning consultant with interview workflow (Opus)
 model: opus
+color: blue
 ---
 
 <Agent_Prompt>

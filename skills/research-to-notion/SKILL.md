@@ -39,8 +39,7 @@ Phase 2: Plan
   → 사용자 피드백 후 확정
 
 Phase 3: Write to Notion
-  → Anthropic MCP 우선 (mcp__claude_ai_Notion__*)
-  → 실패 시 CDP MCP 폴백 (mcp__notion-cdp__*)
+  → Notion MCP 사용 (mcp__plugin_Notion_notion__*)
   → 이미지는 ![alt](url) 마크다운으로 각 섹션 본문에 인라인 삽입
 
 Phase 4: Verification
@@ -273,55 +272,38 @@ WebSearch("{topic} architecture diagram infographic")
 
 ## Phase 3: Write to Notion (듀얼 MCP)
 
-### Notion MCP 경로 (우선순위)
+### Notion MCP 사용
 
 ```
-1차: Anthropic Notion MCP (mcp__claude_ai_Notion__*)
+Notion MCP (mcp__plugin_Notion_notion__*)
   - notion-search → 부모 페이지 찾기
   - notion-create-pages → 페이지 + 전체 콘텐츠 한번에 생성
   - notion-update-page (replace_content_range) → 부분 수정
   - notion-fetch → 검증
-
-2차: CDP Notion MCP (mcp__notion-cdp__*) — 폴백
-  - search_notion → 부모 찾기
-  - create_notion_page → 생성
-  - write_to_notion_page → 콘텐츠 추가
-  - read_notion_page → 검증
-
-판단: Anthropic MCP 도구가 응답하면 계속 사용, 연결 에러 시 CDP 전환
 ```
 
 ### 부모 페이지 찾기
 
 ```
-# Anthropic MCP
-mcp__claude_ai_Notion__notion-search(query="부모 페이지 키워드")
-
-# CDP 폴백
-mcp__notion-cdp__search_notion(query="부모 페이지 키워드")
+mcp__plugin_Notion_notion__notion-search(query="부모 페이지 키워드")
 ```
 
 ### 페이지 생성
 
 ```
-# Anthropic MCP — 페이지 + 콘텐츠 동시 생성
-mcp__claude_ai_Notion__notion-create-pages(
+mcp__plugin_Notion_notion__notion-create-pages(
   parent={"page_id": "부모ID"},
   pages=[{
     "properties": {"title": "제목"},
     "content": "전체 마크다운 콘텐츠..."
   }]
 )
-
-# CDP 폴백 — 생성 후 콘텐츠 분리 추가
-mcp__notion-cdp__create_notion_page(parent_page_id="부모ID", title="제목")
-mcp__notion-cdp__write_to_notion_page(page_id="새ID", markdown="콘텐츠...")
 ```
 
-### 부분 수정 (Anthropic MCP 전용)
+### 부분 수정
 
 ```
-mcp__claude_ai_Notion__notion-update-page(
+mcp__plugin_Notion_notion__notion-update-page(
   page_id="ID",
   command="replace_content_range",
   selection_with_ellipsis="# 기존 섹션...섹션 끝",
@@ -375,11 +357,7 @@ mcp__claude_ai_Notion__notion-update-page(
 ### 페이지 확인
 
 ```
-# Anthropic MCP
-mcp__claude_ai_Notion__notion-fetch(id="페이지ID")
-
-# CDP 폴백
-mcp__notion-cdp__read_notion_page(page_id="페이지ID")
+mcp__plugin_Notion_notion__notion-fetch(id="페이지ID")
 ```
 
 ### 체크리스트
@@ -394,17 +372,12 @@ mcp__notion-cdp__read_notion_page(page_id="페이지ID")
 ### 오류 시 수정
 
 ```
-# Anthropic MCP — 부분 교체
-mcp__claude_ai_Notion__notion-update-page(
+mcp__plugin_Notion_notion__notion-update-page(
   page_id="ID",
   command="replace_content_range",
   selection_with_ellipsis="문제 섹션 시작...문제 섹션 끝",
   new_str="수정된 내용"
 )
-
-# CDP 폴백 — 삭제 후 재작성
-mcp__notion-cdp__delete_notion_blocks(page_id="ID", block_count=N)
-mcp__notion-cdp__write_to_notion_page(page_id="ID", markdown="수정된 내용")
 ```
 
 ---
@@ -450,14 +423,8 @@ Agent(
 
 ## Prerequisites
 
-**Anthropic MCP (우선):**
-- Claude.ai Notion 연동이 활성화되어 있으면 자동 사용
-- 별도 앱 실행 불필요
-
-**CDP MCP (폴백):**
-- Notion Electron 앱이 `--remote-debugging-port=9222`로 실행 중
-- 런처: `~/IdeaProjects/관리/launch-notion.sh`
-- Notion MCP 서버가 `.mcp.json`에 등록됨
+- `/mcp` 명령으로 `plugin:Notion:notion` 서버 연결 확인 (OAuth 기반)
+- Notion 앱 실행 불필요
 
 ---
 
@@ -509,6 +476,7 @@ Phase 5: → Opus 내용 검증 → 이슈 수정 반영
 
 ## Changelog
 
+- **v5** (2026-04-23): notion-cdp 제거, `plugin:Notion:notion` MCP 단일 경로로 통합
 - **v4** (2026-03-29): Phase 5 Opus Content Review 단계 추가
 - **v3** (2026-02-28): 주제 유형 자동 분류, 이미지 병렬 수집, Anthropic MCP 듀얼 경로, 인라인 이미지 배치
 - **v2** (2026-02-18): CDP MCP 기반, TypeScript 레거시 제거

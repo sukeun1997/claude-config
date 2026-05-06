@@ -6,8 +6,10 @@ Usage:
   sentry-fetch.py <issue_id_or_url> [--deep]
 
 Environment:
-  SENTRY_AUTH_TOKEN  — Sentry API auth token (required)
-  SENTRY_BASE_URL    — Sentry base URL, e.g. https://sentry.pfct.io (required)
+  SENTRY_AUTH_TOKEN      — Sentry API auth token (required for default/prod)
+  SENTRY_BASE_URL        — Sentry base URL, e.g. https://sentry.pfct.io (required)
+  SENTRY_DEV_AUTH_TOKEN  — Dev Sentry token (optional; auto-used when URL host matches SENTRY_DEV_BASE_URL)
+  SENTRY_DEV_BASE_URL    — Dev Sentry base URL (optional; e.g. https://sentry.dev.pfct.io)
 """
 
 import json
@@ -32,8 +34,19 @@ def parse_issue_id(arg: str) -> str:
     sys.exit(1)
 
 
-def get_env() -> tuple[str, str]:
-    """Read required environment variables."""
+def get_env(hint_url: str = "") -> tuple[str, str]:
+    """Read required environment variables.
+
+    If ``hint_url`` matches ``SENTRY_DEV_BASE_URL`` host, use the dev token/URL pair.
+    Otherwise fall back to the default ``SENTRY_AUTH_TOKEN`` / ``SENTRY_BASE_URL``.
+    """
+    dev_base = os.environ.get("SENTRY_DEV_BASE_URL", "").rstrip("/")
+    dev_token = os.environ.get("SENTRY_DEV_AUTH_TOKEN", "")
+    if hint_url and dev_base and dev_token:
+        dev_host = re.sub(r"^https?://", "", dev_base).split("/", 1)[0]
+        if dev_host and dev_host in hint_url:
+            return dev_token, dev_base
+
     token = os.environ.get("SENTRY_AUTH_TOKEN", "")
     base_url = os.environ.get("SENTRY_BASE_URL", "").rstrip("/")
     if not token:
@@ -216,7 +229,7 @@ def main() -> None:
         sys.exit(1)
 
     issue_id = parse_issue_id(positional[0])
-    token, base_url = get_env()
+    token, base_url = get_env(hint_url=positional[0])
 
     # Fetch issue metadata
     issue_raw = fetch_issue(issue_id, token, base_url)

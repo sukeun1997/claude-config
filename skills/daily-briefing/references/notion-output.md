@@ -1,10 +1,10 @@
 # Notion Output — 출력 가이드
 
-`--notion` 플래그 시 사용. Anthropic MCP 우선, CDP 폴백.
+`--notion` 플래그 시 사용. Notion MCP(`mcp__plugin_Notion_notion__*`) 사용.
 
 ## 부모 페이지 찾기
 
-1. `mcp__claude_ai_Notion__notion-search(query="Tech Briefing")`
+1. `mcp__plugin_Notion_notion__notion-search(query="Tech Briefing")`
 2. 결과 있으면: 해당 페이지를 부모로 사용
 3. 결과 없으면:
    - 사용자에게 "Notion 어디에 저장할까요?" 질문 (1회만)
@@ -13,28 +13,13 @@
 
 ## 페이지 생성
 
-### Anthropic MCP (1차)
-
 ```
-mcp__claude_ai_Notion__notion-create-pages(
+mcp__plugin_Notion_notion__notion-create-pages(
   parent={"page_id": "{parent_id}"},
   pages=[{
     "properties": {"title": "Tech Briefing — {date}"},
     "content": "{markdown_content}"
   }]
-)
-```
-
-### CDP MCP (폴백)
-
-```
-mcp__notion-cdp__create_notion_page(
-  parent_page_id="{parent_id}",
-  title="Tech Briefing — {date}"
-)
-mcp__notion-cdp__write_to_notion_page(
-  page_id="{new_page_id}",
-  markdown="{markdown_content}"
 )
 ```
 
@@ -47,7 +32,7 @@ mcp__notion-cdp__write_to_notion_page(
 ## 검증
 
 ```
-mcp__claude_ai_Notion__notion-fetch(id="{page_id}")
+mcp__plugin_Notion_notion__notion-fetch(id="{page_id}")
 ```
 
 - 모든 섹션 렌더링 확인
@@ -55,8 +40,7 @@ mcp__claude_ai_Notion__notion-fetch(id="{page_id}")
 
 ## 에러 처리
 
-- Anthropic MCP 실패 → CDP 폴백 시도
-- CDP도 실패 → "Notion 저장 실패. terminal 출력으로 대체합니다." 메시지
+- MCP 호출 실패 → "Notion 저장 실패. terminal 출력으로 대체합니다." 메시지
 
 ## 캐시
 

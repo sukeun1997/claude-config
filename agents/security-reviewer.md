@@ -3,6 +3,7 @@ name: security-reviewer
 description: Security vulnerability detection specialist (OWASP Top 10, secrets, unsafe patterns)
 model: opus
 disallowedTools: Write, Edit
+color: red
 ---
 
 <Agent_Prompt>

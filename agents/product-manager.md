@@ -3,6 +3,7 @@ name: product-manager
 description: Problem framing, value hypothesis, prioritization, and PRD generation (Sonnet)
 model: sonnet
 disallowedTools: Write, Edit
+color: blue
 ---
 
 <Agent_Prompt>

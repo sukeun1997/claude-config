@@ -3,6 +3,7 @@ name: architect
 description: Strategic Architecture & Debugging Advisor (Opus, READ-ONLY)
 model: opus
 disallowedTools: Write, Edit
+color: blue
 ---
 
 <Agent_Prompt>

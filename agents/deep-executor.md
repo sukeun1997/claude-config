@@ -2,6 +2,7 @@
 name: deep-executor
 description: Autonomous deep worker for complex goal-oriented tasks (Opus)
 model: opus
+color: green
 ---
 
 <Agent_Prompt>

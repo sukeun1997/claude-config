@@ -53,6 +53,37 @@ if [ "$ARCHIVED" -gt 0 ]; then
   echo "Archived $ARCHIVED daily log(s) older than 14 days."
 fi
 
+# ── Archive stale active context files (7+ day mtime, untracked only) ──
+# Exempt the current branch's active context so a long break doesn't archive
+# work-in-progress state right before resuming.
+ACTIVE_DIR="$MEM_DIR/active"
+ACTIVE_ARCHIVE_DIR="$ACTIVE_DIR/archive"
+if [ -d "$ACTIVE_DIR" ]; then
+  STALE_COUNT=0
+  mkdir -p "$ACTIVE_ARCHIVE_DIR"
+  CURRENT_ACTIVE_FILE=""
+  CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD 2>/dev/null || echo "")
+  if [ -n "$CURRENT_BRANCH" ] && [ "$CURRENT_BRANCH" != "HEAD" ]; then
+    CURRENT_SLUG=$(branch_slug "$CURRENT_BRANCH" 2>/dev/null || echo "")
+    [ -n "$CURRENT_SLUG" ] && CURRENT_ACTIVE_FILE="$ACTIVE_DIR/${CURRENT_SLUG}.md"
+  fi
+  while IFS= read -r -d '' active_file; do
+    [ -f "$active_file" ] || continue
+    # Skip current branch's active file — avoid surprising archive on return
+    [ -n "$CURRENT_ACTIVE_FILE" ] && [ "$active_file" = "$CURRENT_ACTIVE_FILE" ] && continue
+    # Defensive: skip if somehow git-tracked (all should be gitignored)
+    REPO_ROOT="$HOME/.claude"
+    REL_PATH="${active_file#$REPO_ROOT/}"
+    if (cd "$REPO_ROOT" && git ls-files --error-unmatch "$REL_PATH" &>/dev/null); then
+      continue
+    fi
+    mv "$active_file" "$ACTIVE_ARCHIVE_DIR/" && STALE_COUNT=$((STALE_COUNT + 1))
+  done < <(find "$ACTIVE_DIR" -maxdepth 1 -type f -name '*.md' -mtime +7 -print0 2>/dev/null)
+  if [ "$STALE_COUNT" -gt 0 ]; then
+    echo "Archived $STALE_COUNT stale active context file(s) (7+ day mtime)."
+  fi
+fi
+
 # ── Session metrics snapshot ──
 METRICS_DIR="$MEM_DIR/metrics"
 mkdir -p "$METRICS_DIR"
@@ -129,6 +160,32 @@ fi
 
 # ── Friction pattern detection ──
 # Check edit-tracker temp files for repeated edits (3+ on same file)
+# Pre-fill 원인 계층(Prompt/Context/Harness) — 경로 + 횟수 휴리스틱
+classify_friction() {
+  local path="$1" count="$2" layer hint
+  if [ "$count" -ge 7 ]; then
+    echo "Prompt (추정·${count}회)|접근법 오류 가능성 — 초기화 후 재설계 권장"
+    return
+  fi
+  case "$path" in
+    */hooks/*.sh|*/hooks/*.py|*/hooks/*.mjs|*settings.json|*settings.base.json|*governance.yml|*policy-*.json)
+      layer="Harness (추정)"; hint="훅/설정 반복 — settings integrity + hook exec path 확인" ;;
+    */agents/*.md|*/skills/*/SKILL.md|*/commands/*.md|*CLAUDE.md|*/rules/**/*.md)
+      layer="Prompt (추정)"; hint="지시문/스킬 정의 반복 — description/triggers 모호성 점검" ;;
+    *.tsx|*.ts|*.jsx|*.js|*.kt|*.java|*.py|*.go|*.rb)
+      if [ "$count" -ge 5 ]; then
+        layer="Context (추정·강)"; hint="소스 ${count}회+ — 파일 전체 Read 후 재접근 권장"
+      else
+        layer="Context (추정)"; hint="소스 반복 — 관련 파일/타입 정의 확인 필요"
+      fi ;;
+    *.css|*.scss|*.yml|*.yaml|*.toml|*.json)
+      layer="Context (추정)"; hint="설정/스타일 반복 — 기존 값과 원하는 값 명확화" ;;
+    *)
+      layer="미분류"; hint="다음 세션에서 원인 분석 필요" ;;
+  esac
+  echo "${layer}|${hint}"
+}
+
 TRACK_FILE="$TRACK_FILE_PATH"
 if [ -f "$TRACK_FILE" ]; then
   DATE_STR=$(today)
@@ -141,7 +198,16 @@ if [ -f "$TRACK_FILE" ]; then
         COUNT=$(echo "$line" | awk '{print $1}')
         FPATH=$(echo "$line" | awk '{print $2}')
         FNAME=$(basename "$FPATH")
-        echo "| $DATE_STR | ${FNAME} ${COUNT}회 반복 편집 | 미분류 — 다음 세션에서 원인 분석 필요 | - |" >> "$FRICTION_LOG"
+        # Dedup: skip if (date, fname, count) row already exists.
+        # Prevents (추정) re-fill from creating duplicate rows when user has classified.
+        ROW_PREFIX="| $DATE_STR | ${FNAME} ${COUNT}회 반복 편집 |"
+        if grep -qF "$ROW_PREFIX" "$FRICTION_LOG"; then
+          continue
+        fi
+        CLASS=$(classify_friction "$FPATH" "$COUNT")
+        LAYER="${CLASS%%|*}"
+        HINT="${CLASS#*|}"
+        echo "${ROW_PREFIX} ${LAYER} | ${HINT} |" >> "$FRICTION_LOG"
       done <<< "$FRICTION_FILES"
     fi
     # Queue for next session start (model will see this)
@@ -182,14 +248,42 @@ if [ -f "$SESSION_MARKER" ]; then
 fi
 
 # ── Auto-sync: commit + push tracked changes (allowlist) ──
+# Same-day squash: if HEAD is today's auto-sync from this host AND fetch succeeds
+# AND origin/main points at HEAD, amend + force-with-lease. Otherwise a normal
+# new commit. If force-with-lease is rejected (remote advanced between fetch
+# and push), roll the amend back with `reset --soft HEAD@{1}` so the staged
+# changes are preserved for the next SessionEnd to commit fresh — never silently
+# drop work.
 (
   cd "$HOME/.claude"
   git add hooks/ skills/ rules/ scripts/ agents/ commands/ docs/ \
     memory/MEMORY.md memory/topics/ memory/metrics/ memory/skill-usage/ \
     settings.base.json CLAUDE.md .gitignore sync-data/ 2>/dev/null
   if ! git diff --cached --quiet 2>/dev/null; then
-    git commit -m "chore: auto-sync [$(hostname -s)] $(date +%Y-%m-%d)" 2>/dev/null
-    git -c http.lowSpeedLimit=1000 -c http.lowSpeedTime=5 push origin main 2>/dev/null || true
+    HOST_SHORT=$(hostname -s)
+    TODAY_STR=$(date +%Y-%m-%d)
+    EXPECTED_MSG="chore: auto-sync [${HOST_SHORT}] ${TODAY_STR}"
+    LAST_MSG=$(git log -1 --format=%s 2>/dev/null || echo "")
+
+    AMEND_SAFE=false
+    if [ "$LAST_MSG" = "$EXPECTED_MSG" ]; then
+      if git fetch origin main --quiet 2>/dev/null; then
+        HEAD_SHA=$(git rev-parse HEAD 2>/dev/null || echo "")
+        REMOTE_SHA=$(git rev-parse origin/main 2>/dev/null || echo "")
+        if [ -n "$HEAD_SHA" ] && [ "$HEAD_SHA" = "$REMOTE_SHA" ]; then
+          AMEND_SAFE=true
+        fi
+      fi
+    fi
+
+    if [ "$AMEND_SAFE" = true ] && git commit --amend --no-edit 2>/dev/null; then
+      if ! git -c http.lowSpeedLimit=1000 -c http.lowSpeedTime=5 push --force-with-lease origin main 2>/dev/null; then
+        git reset --soft 'HEAD@{1}' 2>/dev/null || true
+      fi
+    else
+      git commit -m "$EXPECTED_MSG" 2>/dev/null
+      git -c http.lowSpeedLimit=1000 -c http.lowSpeedTime=5 push origin main 2>/dev/null || true
+    fi
   fi
 ) &>/dev/null || true
 

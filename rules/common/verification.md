@@ -1,55 +1,38 @@
 # Verification Protocol
 
-## 자동 검증 위임 (Auto-Verification Delegation)
+## 핵심 원칙
 
-구현 작업이 완료되면 **사용자가 `/vc`를 호출하지 않아도** 아래 검증을 자동 실행한다.
+- 생산과 검증은 가능한 한 분리한다.
+- 검증 수준은 변경량보다도 리스크를 우선한다.
+- 완료 선언 전에는 실제로 검증을 실행하고 출력을 읽는다.
+- Codex/Claude 어느 런타임이든 특정 모델 티어를 전제하지 않는다.
 
-**핵심 원칙: 검증은 반드시 별도 Opus verifier 서브에이전트에 위임한다.**
-메인 세션이 직접 빌드/테스트를 실행하여 검증하지 않음. 구현자(executor/sonnet)보다 상위 모델(opus)이 독립적으로 검증해야 객관성이 보장됨.
+## 검증 수준
 
-### 트리거 조건
-- `executor` 또는 `deep-executor`가 SUCCESS로 완료 보고
-- 메인에서 직접 2개 이상 파일을 수정 완료
-- TDD 루프에서 모든 테스트 통과 후
-
-### 자동 검증 체인
-```
-구현 완료
-  → Agent(verifier, model=opus) 서브에이전트 위임 (빌드 + diff + 테스트 검증)
-  → 실패 시: build-fixer 자동 투입 → verifier(opus) 재검증
-  → 성공 시: 사용자에게 결과 보고
-```
-
-### 검증 수준 (규모별 자동 선택)
-| 변경 규모 | 검증 수준 | 수행 내용 |
+| 변경 범위 | 검증 수준 | 최소 기준 |
 |-----------|-----------|-----------|
-| 소규모 (≤2파일, <50줄) | **Light** | `compileKotlin`만 확인 |
-| 중규모 (3-5파일, 50-200줄) | **Standard** | 빌드 + 변경 모듈 테스트 |
-| 대규모 (6+파일, 200줄+) | **Full** | 빌드 + 테스트 + code-reviewer (§3 Verification Flow와 동일) |
+| 단일 파일 문서/저위험 수정 | **Light** | diff 확인, 문법/형식 sanity check |
+| 2-5파일 또는 동작 변경 | **Standard** | 관련 명령 실행 + reviewer 또는 verifier 2차 점검 |
+| 6+파일, 200줄+, 또는 민감 경로 | **Full** | build/lint equivalent + targeted tests + reviewer/verifier 분리 |
 
-### Re-Review 루프 (대규모 변경 전용)
+민감 경로 예시:
 
-Full 검증 수준(6+파일, 200줄+)에서 code-reviewer가 **CRITICAL 또는 HIGH** 이슈를 보고한 경우:
+- 인증/인가/보안
+- 배포 스크립트, 훅, 런타임 설정
+- DB 스키마/마이그레이션
+- 메모리/상태 계약 파일 (`.omx/*.json`, `.omx/notepad.md`)
+- 루트 규약 문서 (`AGENTS.md`, `CLAUDE.md`, `rules/common/*.md`)
 
-```
-code-reviewer 피드백 (CRITICAL/HIGH)
-  → executor가 피드백 반영
-  → verifier 빌드 확인
-  → 같은 code-reviewer에 SendMessage로 재확인 (해당 이슈만 focused review)
-```
+## 생산-검증 분리
 
-- **최대 1회** 재확인 (무한 루프 방지)
-- 소규모/중규모 변경에서는 적용하지 않음
-- re-review에서도 CRITICAL 잔존 시 → 사용자에게 보고 (자동 재시도 금지)
-
-### 생략 조건
-- 문서/설정 파일만 수정한 경우
-- 사용자가 "검증 스킵" 명시
-- 이미 `/vc` 또는 `/springboot-verification`을 수동 실행한 경우
+- 구현자가 빠른 sanity check를 직접 수행하는 것은 허용한다.
+- Standard 이상 변경은 별도 review 경로를 두는 것을 기본값으로 삼는다.
+- Full 변경은 `reviewer`/`verifier` 또는 그에 준하는 독립된 2차 검토를 요구한다.
+- 검증 실패 시 결과를 숨기지 말고 수정 후 다시 검증한다.
 
 ## Sprint Contract (executor 위임 시 완료 조건 사전 명시)
 
-executor/deep-executor에 작업을 위임할 때, 프롬프트에 아래 **완료 조건**을 포함한다:
+executor 계열에 작업을 위임할 때, 프롬프트에 아래 **완료 조건**을 포함한다:
 
 ```
 완료 조건:
@@ -62,26 +45,46 @@ executor/deep-executor에 작업을 위임할 때, 프롬프트에 아래 **완�
 - 의도 상태는 기능적 조건의 상위 개념. "API가 200 반환" (기능) vs "사용자가 상환 후 즉시 잔액 감소를 확인" (의도)
 - 소규모 작업(≤2파일)에서는 생략 가능
 
-- verifier는 이 완료 조건을 기준으로 SUCCESS/PARTIAL/FAILED를 판정한다
-- 완료 조건이 없는 위임은 verifier가 빌드+diff만 확인한다 (기존 동작 유지)
+- verifier/reviewer는 이 완료 조건을 기준으로 SUCCESS/PARTIAL/FAILED를 판정한다
+- 완료 조건이 없는 위임은 verifier가 diff와 실행 결과 중심으로 확인한다
 - 완료 조건은 **코딩 시작 전** 확정한다 (중간 변경 금지)
 
 > Structured Response Contract(아래)는 "결과 보고 형식(출력)"이고, Sprint Contract는 "완료 기준(입력)"이다. 두 가지를 함께 사용한다.
 
-## Sub-Agent 결과 검증 (Silent Failure Prevention)
+## 테스트 불변성 (Test Inviolability)
 
-### 검증 루프 (executor/deep-executor 완료 후 자동)
+> 외부 사례(Typia Go 포팅, 2026-05) 1건 기반. 자체 friction 4주 0건 지속 시 은퇴 후보 (eval-based harness evolution). `/review-week` 축 2 효과성 모니터링.
 
-`executor` 또는 `deep-executor`가 구현 완료를 보고하면, **반드시 `verifier`를 후속 실행**한다:
+테스트는 기능 명세다. "테스트 통과 못함"의 의미는 "코드가 명세를 못 맞춤"이지 "테스트가 잘못됐다"가 아니다. AI 작업 위임 시 단순 "테스트 통과" 지시가 우회 경로(테스트 삭제·하드코딩·외부 위임·기능 배제 스크립트)를 만들었던 외부 사례에 대응한다.
+
+- **금지 (skip·disable 동치 패턴 일체)**: 기존 테스트 삭제, `@Disabled`/`@Ignore` (JUnit), `xit`/`it.skip`/`test.todo`/`describe.skip` (JS/Vitest/Jest), `pytest.skip`/`pytest.mark.skip`/`pytest.mark.xfail`/`skipTest()` (Python), `t.Skip()` (Go), `#[ignore]` (Rust), `xshould`/`xdescribe` (Kotest) 등 **언어별 동치 패턴 일체**. "통과 못하는 케이스 배제" 우회 스크립트도 포함
+- **허용 분기 (a) 명세 오류**: 테스트가 잘못된 명세를 표현한다고 판단되면 → **사용자에게 사유와 함께 보고 후 승인**받고 수정. 자체 판단 금지
+- **허용 분기 (b) 환경 의존·flaky**: 외부 서비스 의존(`@Disabled("Requires Kafka")`), flaky 격리, CI 한정 통합 테스트는 → Sprint Contract `[제외 범위]`에 명시 후 skip 허용 (사용자 승인 불필요, 단 명시는 필수)
+- **허용 분기 (c) TDD 리팩토링**: red-green-refactor 사이클의 테스트 통합·deprecated API 제거에 따른 케이스 삭제는 → 새 테스트가 동등 이상으로 같은 명세를 커버하면 자율 허용 (commit 메시지에 근거 명시)
+- **executor 위임 시**: Sprint Contract `[기술적 조건]`에 "기존 테스트 변경 금지, 추가만 허용 (위 허용 분기 제외)" 명시. verifier는 diff에서 테스트 파일 삭제·skip/disable 키워드 추가 검출 시 FAILED 판정
+- **assertion 약화는 패턴 매칭 불가**: `assertEquals` → `assertNotNull` 같은 검증 약화는 grep/diff로 못 잡는다. verifier가 코드리뷰 수준에서 판단 (자동 차단 대신 review 책임)
+- **목표 오염 방어**: "테스트 통과"라는 단순 지표는 우회 동기를 만든다. 의도 상태(사용자 관점) + 프로세스 제약 + 테스트 불변성 3종 세트를 함께 명시해야 작동한다
+- **보안 테스트 추가 보호**: 인증/인가/입력 검증 테스트는 위 허용 분기 (a)/(b)/(c) **모두에서** 삭제·skip·약화 시 **사용자 승인 필수** (보안 불변식 — flaky로 보이는 보안 테스트 자동 skip 차단)
+
+## 검증 루프
+
+표준 이상 변경의 기본 흐름:
 
 ```
-executor 완료 → verifier 자동 실행 → 실패 시 executor 재투입
+구현 완료
+  → 결과 형식 확인
+  → reviewer/verifier 2차 점검
+  → 실패 시 수정
+  → 재검증 후 완료 보고
 ```
 
-verifier가 확인할 항목:
-- 변경된 파일이 실제로 존재하는지 (빈 결과/hallucination 감지)
-- 빌드가 통과하는지 (`./gradlew :<모듈>:compileKotlin`)
-- executor가 보고한 변경 사항과 실제 diff가 일치하는지
+reviewer/verifier가 확인할 항목:
+
+- 변경된 파일이 실제로 존재하는지
+- 보고한 변경 내용과 실제 diff가 일치하는지
+- 선언한 검증이 실제로 실행되었는지
+- 민감 경로 수정 시 필요한 추가 점검이 빠지지 않았는지
+- **테스트 파일 변조 검사** — 삭제·skip/disable 키워드 추가·assertion 약화 여부. 검출 시 § 테스트 불변성의 허용 분기 (a/b/c) 중 어디에 해당하는지 확인. 어디에도 해당 안 되면 FAILED
 
 ### 구조화된 응답 강제 (Structured Response Contract)
 
@@ -93,17 +96,34 @@ verifier가 확인할 항목:
 - **변경 파일**: [파일 경로 목록] (없으면 "없음")
 - **핵심 내용**: 1-3줄 요약
 - **미해결 사항**: 완료하지 못한 부분 (없으면 "없음")
+- **검증**: 실행한 확인 항목 (없으면 "없음")
 ```
 
 > 데이터와 결론 위주로 작성. 경위 설명, 시도한 대안, 일반론은 생략.
 
 이 형식이 없는 서브에이전트 응답은 **불완전한 결과로 간주**하고, 추가 확인 후 사용자에게 보고한다.
 
-### 적용 범위
+## 경계면 교차 검증
+
+리뷰/QA 시 아래 경계면 불일치를 확인한다.
+
+- API shape ↔ 클라이언트 타입/호출
+- DTO/Entity ↔ 스키마/마이그레이션
+- 상태 전이 설계 ↔ 실제 분기
+- 환경 설정 ↔ 코드 참조
+- 규약 문서 ↔ 훅/설정/메모리 파일
+
+## 생략 조건
+
+- 사용자가 "검증 스킵"을 명시
+- 단순 메모/문서 수정으로 실행 가능한 검증이 없는 경우
+- 이미 동등 이상의 검증을 직전에 수행한 경우
+
+## 적용 범위
 
 | 에이전트 | 검증 루프 | 구조화 응답 |
 |----------|-----------|------------|
-| `executor`, `deep-executor` | 필수 | 필수 |
+| `executor`, `deep-executor` | 표준 이상 변경에서 필수 | 필수 |
 | `build-fixer` | 필수 (빌드 재확인) | 필수 |
 | `debugger` | 권장 | 필수 |
 | `Explore`, `writer` | 불필요 | 권장 |

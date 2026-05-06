@@ -1,11 +1,11 @@
 ---
 name: notion-writer
-description: "Convert markdown content to Notion native blocks via Anthropic Notion MCP (primary) or CDP MCP (fallback). Supports headers, lists, tables, code blocks, dividers, rich text, inline images. Use when user says 'write to notion', 'create notion page', '노션에 작성', '노션 페이지 만들어'."
+description: "Convert markdown content to Notion native blocks via Notion MCP. Supports headers, lists, tables, code blocks, dividers, rich text, inline images. Use when user says 'write to notion', 'create notion page', '노션에 작성', '노션 페이지 만들어'."
 ---
 
 # Notion Writer — MCP 기반 Notion 페이지 생성
 
-Anthropic Notion MCP(`mcp__claude_ai_Notion__*`)를 우선 사용하고, 실패 시 CDP MCP(`notion-cdp`)로 폴백. 마크다운 → Notion 네이티브 블록 자동 변환.
+Notion MCP(`mcp__plugin_Notion_notion__*`)로 마크다운 → Notion 네이티브 블록 자동 변환.
 
 ## When to Apply
 
@@ -31,11 +31,7 @@ Anthropic Notion MCP(`mcp__claude_ai_Notion__*`)를 우선 사용하고, 실패 
 
 ## Prerequisites
 
-Notion Electron 앱이 CDP 포트로 실행 중이어야 함:
-
-```bash
-~/IdeaProjects/관리/launch-notion.sh
-```
+`/mcp` 명령으로 `plugin:Notion:notion` 서버가 연결되어 있어야 함 (OAuth 인증 필요).
 
 ## MCP Tools
 
@@ -47,39 +43,42 @@ ToolSearch("notion")  # 최초 1회
 
 ### 읽기
 ```
-mcp__notion-cdp__read_notion_page(page_id="URL 또는 ID")
-→ 정제된 마크다운 반환
+mcp__plugin_Notion_notion__notion-fetch(id="URL 또는 ID")
+→ 페이지 콘텐츠 + 메타데이터 반환
 ```
 
-### 쓰기
+### 페이지 생성 (콘텐츠 포함)
 ```
-mcp__notion-cdp__write_to_notion_page(page_id="URL 또는 ID", markdown="# 제목\n내용...")
-→ 블록 추가 완료 메시지
-```
-
-### 페이지 생성
-```
-mcp__notion-cdp__create_notion_page(parent_page_id="부모 ID", title="제목", content="마크다운")
+mcp__plugin_Notion_notion__notion-create-pages(
+  parent={"page_id": "부모ID"},
+  pages=[{"properties": {"title": "제목"}, "content": "마크다운..."}]
+)
 → 새 페이지 ID 반환
+```
+
+### 페이지 수정
+```
+mcp__plugin_Notion_notion__notion-update-page(
+  page_id="ID",
+  command="replace_content_range",
+  selection_with_ellipsis="시작 문자열...끝 문자열",
+  new_str="수정된 내용"
+)
+→ 지정 범위만 부분 교체 (블록 삭제 불필요)
 ```
 
 ### 검색
 ```
-mcp__notion-cdp__search_notion(query="검색어", limit=10)
+mcp__plugin_Notion_notion__notion-search(query="검색어")
 → 페이지 목록 반환
 ```
 
-### 삭제
-```
-mcp__notion-cdp__delete_notion_blocks(page_id="ID", block_count=5)
-→ 마지막 N개 블록 삭제 (0=전체)
-```
-
-### 하위 페이지 목록
-```
-mcp__notion-cdp__get_notion_page_list(page_id="부모 ID")
-→ 하위 페이지 목록
-```
+### 기타
+- `notion-duplicate-page`: 페이지 복제
+- `notion-move-pages`: 페이지 이동
+- `notion-create-database`, `notion-update-data-source`, `notion-create-view`, `notion-update-view`: DB/뷰 관리
+- `notion-create-comment`, `notion-get-comments`: 댓글
+- `notion-get-users`, `notion-get-teams`: 사용자/팀
 
 ## Supported Markdown
 
@@ -138,10 +137,3 @@ MCP 서버가 자동 변환하는 마크다운 문법:
 5. **표 형식 우선**: 비교/매핑 데이터는 마크다운 테이블 → 네이티브 table 블록 자동 변환
 6. **page_id 형식 유연**: URL 전체, 32자 hex, UUID 모두 지원 (자동 정규화)
 
-## Fallback: Legacy TypeScript CDP
-
-MCP 서버 장애 시에만 레거시 방식 사용:
-
-- 레퍼런스: `src/create-notion-page.ts`, `src/create-openclaw-analysis-page.ts`
-- 빌드: `cd ~/IdeaProjects/관리 && npx tsc`
-- 실행: `node dist/create-{name}-page.js`

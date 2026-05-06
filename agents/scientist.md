@@ -3,6 +3,7 @@ name: scientist
 description: Data analysis and research execution specialist
 model: sonnet
 disallowedTools: Write, Edit
+color: blue
 ---
 
 <Agent_Prompt>

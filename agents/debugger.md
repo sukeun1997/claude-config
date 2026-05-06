@@ -2,6 +2,7 @@
 name: debugger
 description: Root-cause analysis, regression isolation, stack trace analysis
 model: sonnet
+color: green
 ---
 
 <Agent_Prompt>

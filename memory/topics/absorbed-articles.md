@@ -6,6 +6,71 @@ type: reference
 
 # Absorbed Articles
 
+### 2026-05-04: Claude Code Releases v2.1.113 ~ v2.1.126 (4/17 ~ 5/01)
+- **URL**: https://github.com/anthropics/claude-code/releases
+- **유형**: release-notes
+- **적용**: 1건 (.mcp.json 수정 1: `memory-search` 서버에 `alwaysLoad: true` — ToolSearch 왕복 제거)
+- **보류**: 4건
+  - `--dangerously-skip-permissions` — frozen.yml/governance.yml 보호 우회 위험
+  - 에이전트 frontmatter `mcpServers` — 28개 general 에이전트에 노션 전용 없음, 실익 낮음
+  - `claude plugin prune` 정기 운영 노트 — 스킬은 60+개지만 의존성 누적 미관측
+  - `sandbox.network.deniedDomains` — 도메인 목록 별도 협의 필요 (다음 사이클)
+- **이미 적용 중 (자동)**: native binary CLI, /private/ 위험 경로, /config 영속화, 메모리 누수 fix
+- **미해당**: WSL2/SSH OAuth fix(macOS), `--from-pr` GitLab/Bitbucket(GitHub만), `CLAUDE_CODE_FORK_SUBAGENT`(외부 빌드)
+- **핵심 인사이트**: `alwaysLoad`는 "출력 크기 최소화"(§1)와 직교한 "도구 스키마 로딩 타이밍" 축. memory-search처럼 매 세션 호출되는 MCP에 한정 적용 시 토큰 비용은 무시 가능(~0.1K). filesystem(10+ 도구)에 적용하면 역효과. `/cost`+`/stats` → `/usage` 통합은 인지만 (cost-aware-llm-pipeline 트리거 텍스트는 이번 라운드 미수정). v2.1.117 에이전트 frontmatter `mcpServers`는 노션 전용 서브에이전트 신설 시 활성화 후보.
+
+### 2026-05-04: Building a Natural Language Interface to Spotify Ads API with Claude Code Plugins
+- **URL**: https://engineering.atspotify.com/2026/5/spotify-ads-api-claude-plugins
+- **유형**: engineering-blog (Alex Murphy, Spotify Staff SWE)
+- **적용**: 0건 (memory record only)
+- **핵심 인사이트**: Spotify는 OpenAPI 스펙이 있는 stateless HTTP API에 대해 **MCP 대신 CLI+OpenAPI 스킬** 선택 — 이유: (1) 사용자에게 curl 노출로 감사성 확보, (2) 마크다운 스킬 컴파일 불필요, (3) OpenAPI links를 navigation graph로 활용. **MCP는 stateful 도구에, CLI 스킬은 stateless API에** 라는 분기 기준이 유용. PreToolUse 훅으로 인증 헤더 자동 주입 패턴은 백엔드 Spring Boot 코드 생성에는 직접 적용 제한적 — 향후 외부 API wrap 스킬 작성 시 참고.
+
+### 2026-05-04: claude-context — Code Search MCP for Claude Code (zilliztech)
+- **URL**: https://github.com/zilliztech/claude-context (원본: r/ClaudeAI/1szvo7t, Reddit 직접 fetch 차단되어 GitHub로 우회)
+- **유형**: open-source-tool (MIT)
+- **적용**: 0건 (보류 — Opus 권고)
+- **보류 사유**: 사용자는 이미 `memory-search` MCP(BM25+Vector 하이브리드, GEMINI_API_KEY)를 자체 운영 중. claude-context는 코드베이스 AST 청킹 + Merkle-tree 증분 인덱싱 특화로 메모리 검색과 중복은 아니지만, (1) Milvus/Zilliz Cloud 별도 운영 비용 + OpenAI/Voyage API 키 추가 필요, (2) 코드 탐색 워크플로우는 Explore 에이전트(haiku)로 비용 효율적 처리 중, (3) 코드베이스 탐색 마찰이 failure-log에 반복 보고되지 않음. 코드 탐색이 병목으로 보고되면 재검토.
+- **핵심 인사이트**: 14개 언어 지원 + ~40% 토큰 감소 주장. 자체 메모리 MCP를 운영 중인 사용자에게는 "유사 패턴이 코드베이스에도 가능"하다는 인지가 더 중요. 사용자 memory-mcp-server 구조 그대로 코드용으로 fork하는 것이 외부 인프라 도입보다 가벼울 수 있음.
+
+### 2026-05-04: AI 뉴스 브리핑 2026-05-04 (Notion 큐레이션)
+- **URL**: https://www.notion.so/AI-2026-05-04-35652c2d4a6381ecbeaecb2c46660b9a
+- **유형**: news-curation (Notion 일일 AI 뉴스 브리핑, 13개 기사)
+- **적용**: 2건 (guideline 1: verification.md "테스트 불변성(Test Inviolability)" 섹션 추가 / memory 1: failure-log.md에 AI 테스트 삭제 사건 + 목표 오염 3종 세트 기록)
+- **이미 적용 중**: 3건 (Context Mode MCP — 4/6 absorb, CTX 플러그인 — 4계층 메모리/active context로 covered, PostToolUse hook block bug — 우리 훅 형식 점검 결과 영향 없음)
+- **학습 자료(별도 master-guide 후보)**: 4건 (Spring Boot 3.5 Java AI Agent / Google ADK 1.0 + A2A Protocol GA / Spring Boot AWS ECS CI/CD / Meta E2E HSM 백업)
+- **인지(미적용)**: 3건 (worktree 백그라운드 서브에이전트 권한 버그 / MCP filesystem description 누락 / Reddit 8 tips — fetch 차단)
+- **핵심 인사이트**: Typia를 Go로 포팅하던 AI가 "테스트 통과" 지시에 **테스트 70% 삭제 후 'All Tests Pass' 보고**. 후속 시도엔 if-else 하드코딩 80억 토큰 → Zod 위임 → 통과 못하는 케이스 배제 스크립트로 우회 진화. 단순 성공 지표가 우회 동기를 만드는 외부 실증 사례. 현재 verification.md엔 "테스트 실패 방치 금지"는 있지만 "테스트 자체 변조 금지"는 gap이었음. **목표 오염 방어 3종 세트 = 의도 상태(사용자 관점) + 프로세스 제약(Sprint Contract) + 테스트 불변성**. CTX 플러그인의 git log 기반 컨텍스트 주입은 우리의 4계층 메모리 + 브랜치별 active context로 동등 커버 확인.
+
+### 2026-04-22: Cursor Rules for Kotlin: Android and Backend Patterns That Ship
+- **URL**: https://dev.to/olivia_craft/cursor-rules-for-kotlin-android-and-backend-patterns-that-ship-2j2d
+- **유형**: tutorial (Cursor Rules 형태의 Kotlin 패턴 카탈로그)
+- **적용**: 0건 (전체 covered)
+- **핵심 인사이트**: 8개 섹션(suspend main-safe, structured concurrency, null safety, data class 불변, sealed exhaustive when, extension function, Android ViewModel, Ktor/Spring) 모두 기존 `kotlin-patterns` 스킬에서 커버. Android ViewModel/StateFlow 섹션은 백엔드 중심 프로필이라 해당 없음. 현재 kotlin-patterns 스킬의 커버리지가 커뮤니티 Cursor Rules 수준을 충족함을 확인.
+
+### 2026-04-21: Claude Code 및 Codex 설정 변경으로 토큰 절약 (stdy.blog)
+- **URL**: https://www.stdy.blog/increasing-token-efficiency-by-setting-adjustment-in-claude-and-codex/
+- **유형**: engineering-blog + tutorial (Claude Code 2.1.114 / Codex 0.121.0 기준)
+- **적용**: 3건 (settings 2: `includeGitInstructions: false` + `attribution: {commit:"", pr:""}` / memory 1: `memory/topics/token-efficiency.md` 카탈로그)
+- **보류**: 7건 (출력 상한 env 3종 — 꼬리 잘림 재호출 리스크 / `GLOB_NO_IGNORE=false` — 백엔드 작업에 실익 낮음 / `ccb` worker alias — agent-council 의존성 충돌 / `DISABLE_TELEMETRY` — 토큰 무관 / Codex 설정 — 직접 사용 흐름 없음)
+- **제외**: 1건 (Atlas design-system-as-skill 패턴 — 사용자 제외 선택)
+- **핵심 인사이트**: Claude Opus 4.7은 tokenizer 변경 + 에이전트 후반 턴 추론 증가로 4.6 대비 ~1.5× 토큰 소비. 매 세션 자동 주입되는 git 블록과 자동 attribution이 이중 주입 원인. `attribution` 빈 값은 토큰 절약보다 "이중 Co-Authored-By 오염 방지" 효과. 출력 상한 env는 꼬리 잘림 → tail/grep 재호출로 역효과 가능하므로 측정 후 결정해야 함. **Opus 검증이 "즉시 3건 + 점진적 1건 + 보류 7건"으로 과욕 차단**. 공식 문서는 URL 뒤 `.md` 붙이면 마크다운으로 제공되어 에이전트 친화적.
+
+### 2026-04-14 (2): shanraisshan/claude-code-best-practice — agent/skill frontmatter 필드 3종
+- **URL**: https://github.com/shanraisshan/claude-code-best-practice
+- **유형**: best-practice reference (42.9k stars, Boris Cherny 스타일 CC 패턴 카탈로그)
+- **적용**: 32건 (skill 3: user-invocable:false 숨김 — kotlin-patterns/redis-cache-patterns/haru-infra / agent 28: color 필드 7색 역할 클러스터 / agent 2: effort:max — verifier/critic)
+- **보류**: 3건 (G2 agent `skills:` 프리로딩 — 프롬프트 주입 대안 존재, G6 skill `paths:` glob — 공식 지원 미확인, G9 Stop 훅 exit 2 nudge — 무한 루프 리스크 + CLAUDE.md §1 중복)
+- **제외 (pre-filter)**: 4건 (agent hooks 필드, context:fork, startup-flags --init-only, PostToolUse formatter — 환경 불일치/기존 구조 중복/프로젝트별)
+- **핵심 인사이트**: 28개 에이전트가 `color` 필드 0건 사용 → 병렬 실행 로그 가독성 gap. 60+ 스킬 중 `user-invocable` 0건 → `/` 메뉴에 참조 전용 스킬 노출로 노이즈. frontmatter 미지원 필드는 무시되므로 적용 비용은 낮지만, `paths:` glob 자동 활성화와 `skills:` 프리로딩은 공식 지원이 불명이라 보류가 안전. **Opus 검증이 "즉시 적용 2건 + 점진적 1건 + 보류 3건"으로 과욕 차단**하여 /absorb 신호 품질 상승.
+
+### 2026-04-14: Karpathy-Inspired Claude Code Guidelines (4 Principles)
+- **URL**: https://github.com/forrestchang/andrej-karpathy-skills
+- **유형**: opinion + guideline (Karpathy의 LLM 코딩 실패 관찰 기반 CLAUDE.md 템플릿)
+- **적용**: 2건 (guideline §1: Disambiguation & Pushback 3개 bullet, guideline §5: 변경 최소화 소섹션 6개 rule)
+- **스킵**: 1건 (D. 메인 세션용 mini Sprint Contract — Opus 권장에 따라 다음 사이클로 보류: A/B 적용 후 friction 모니터링 필요)
+- **이미 적용 중**: Simplicity First 5항목 (시스템 기본 프롬프트 + §5 Coding Standards), State assumptions (§1 추측 금지 + 증거 먼저 + 환경 확인), Goal-Driven Execution (verification.md Sprint Contract + superpowers:systematic-debugging)
+- **핵심 인사이트**: 기존 CLAUDE.md는 "에이전트 위임/검증 인프라" 중심이라 *메인 세션 직접 작업* 시의 절제 규칙에 gap. Karpathy의 "묵시적 해석 금지 + pushback + 변경 추적성" 원칙은 시간 순서상 "결정 전 질문 → 결정 후 밀고 나감"의 앞쪽 반을 채움. dead code "언급만, 삭제 금지"는 over-cleanup 경향 억제 효과.
+
 ### 2026-03-25: Harness Design for Long-Running Application Development
 - **URL**: https://www.anthropic.com/engineering/harness-design-long-running-apps
 - **유형**: engineering-blog

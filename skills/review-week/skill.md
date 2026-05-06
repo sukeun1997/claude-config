@@ -15,6 +15,10 @@ description: "Claude Code 주간 활용 리뷰. 메모리에서 이번 주 작�
 ## Pipeline
 
 ```
+Phase 0: Failure-Log Gate (미분류·추정 점검)
+  → failure-log.md 스캔 → 3건 이상이면 리뷰 선행 분류 요구
+  → --skip-gate 플래그 시 우회
+
 Phase 1: Data Collection (메모리 검색)
   → memory_search로 이번 주 작업 패턴 수집
   → notepad, plans, project-memory 포함
@@ -33,6 +37,59 @@ Phase 4: Memory (핵심 발견 저장)
   → 반복되는 패턴을 auto memory에 기록
 ```
 
+## Phase 0: Failure-Log Gate
+
+미분류/추정 항목이 적체된 상태에서 KPI 분석을 하면 피드백 루프 단절 지점이 가려진다. 분석 전에 이 병목부터 해소한다.
+
+### 게이트 실행
+
+```bash
+python3 << 'EOF'
+import re
+from pathlib import Path
+p = Path.home() / '.claude/memory/topics/failure-log.md'
+if not p.exists(): exit(0)
+lines = p.read_text().splitlines()
+row_re = re.compile(r'^\|\s*\d{4}-\d{2}-\d{2}\s*\|')
+pending = []
+for i, line in enumerate(lines, 1):
+    if not row_re.match(line): continue
+    cells = [c.strip() for c in line.split('|')]
+    if len(cells) < 5: continue
+    if '[EXTERNAL]' in cells[2]:  # cells[2] = 증상 열 (날짜|증상|원인|해법 4열 테이블)
+        continue  # 외부 사례는 자체 friction 카운트에서 제외 (rules/common/verification.md § 테스트 불변성 4주 friction 0건 트리거 보호)
+    layer = cells[3]
+    if '미분류' in layer or '(추정)' in layer:
+        pending.append((i, cells[2], layer))
+print(f'PENDING_COUNT={len(pending)}')
+for row in pending[:10]:
+    print(f'  L{row[0]}: {row[1]} → {row[2]}')
+EOF
+```
+
+### 게이트 판단
+
+- **PENDING_COUNT < 3**: 게이트 통과, Phase 1로 진행
+- **PENDING_COUNT >= 3** AND `--skip-gate` 없음:
+  → 사용자에게 먼저 분류 요청
+  → "failure-log에 N건의 미분류/추정 항목이 있습니다. 리뷰 전에 분류하는 것이 피드백 루프 정확도를 높입니다."
+  → 표시된 행 리스트 제공
+  → 사용자 선택지:
+    (A) 지금 분류 (Read failure-log.md → 직접 수정 → /review-week 재호출)
+    (B) `--skip-gate`로 강제 진행
+    (C) 리뷰 취소
+
+### 게이트 스킵 조건
+
+- 사용자가 명시적으로 `/review-week --skip-gate` 호출
+- 이전 세션에서 스킵 합의가 있었음을 사용자가 언급
+
+### 근거
+
+"(추정)" 행은 모델이 경로/횟수 휴리스틱으로 pre-fill한 것 — 사용자 검증이 없으면 instinct confidence 부스팅 경로(failure-log-instinct-boost.py)가 작동하지 않아 자기진화 루프가 멈춘다. 이는 하네스 성숙도 L5 진입의 병목이다. KPI 분석(Phase 2 축 2)은 이 신호가 반영된 후에 해야 의미가 있다.
+
+---
+
 ## Phase 1: Data Collection
 
 ### 필수 검색 쿼리 (3개 병렬 실행)
@@ -50,6 +107,7 @@ memory_search("설정 구성 변경 디버깅 구현", top_k=10)
 - `project-memory.json` — 프로젝트별 컨텍스트
 - MEMORY.md — 영구 메모리
 - **Codex 세션**: 각 날짜에 대해 `python3 ~/.claude/scripts/codex-harvest.py --date {YYYY-MM-DD} --json` 실행 (주간 7일분)
+- **Friction 분석**: `python3 ~/.claude/scripts/friction-rule-scanner.py --write` 실행 → `memory/metrics/friction-YYYY-MM-DD.md` 생성. 원인 계층 분포 + 재발 파일 + 룰 방지 실패 횟수가 포함된다. Phase 2 축 2 근거로 직접 인용.
 
 ### 수집할 정보
 
@@ -94,6 +152,8 @@ memory_search("설정 구성 변경 디버깅 구현", top_k=10)
 - [ ] CLAUDE.md 무게 — 시스템 프롬프트가 과도하지 않은지
 - [ ] 자동화 가능한 반복 작업이 있는지
 - [ ] Convention Drift — 최근 커밋 diff에서 CLAUDE.md §5 위반 샘플링 (축약 변수명, 하드코딩, 50줄+ 함수, Read:Edit 비율 하락 추세)
+- [ ] Friction Rule Effectiveness — friction-rule-scanner.py 출력의 `§3. 규칙 효과` 섹션에서 3건+ 재등장 룰 식별. 해당 룰은 **방지 실패** 상태로 보고 (a) 룰 강도 상향, (b) 훅으로 자동화 전환, (c) 은퇴 중 하나를 축 4 액션 아이템에 반영
+- [ ] **Test Inviolability 효과성** — failure-log에서 `[EXTERNAL]` 태그를 제외한 자체 friction 중 "테스트 변조" 관련 행 개수. 4주 연속 0건이면 verification.md § 테스트 불변성 섹션을 **은퇴 후보**로 액션 아이템에 등록 (eval-based harness evolution). 카운트 시 외부 사례 행은 노이즈이므로 반드시 분리
 - [ ] Codex vs Claude 작업 분배 — Codex로 위임 가능한 작업을 Claude에서 직접 처리하지 않았는지
 - [ ] Codex 세션 효율 — tool_call_count=0 세션 비율, 같은 프로젝트 동시 작업 시 충돌 여부
 
@@ -209,4 +269,4 @@ memory_search("설정 구성 변경 디버깅 구현", top_k=10)
 ## Prerequisites
 
 - memory-search MCP 서버 활성화 (memory_search, memory_index)
-- Notion 기록 시: Notion CDP 모드 실행 (launch-notion.sh)
+- Notion 기록 시: `plugin:Notion:notion` MCP 서버 연결 확인 (`/mcp`)

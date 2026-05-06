@@ -31,7 +31,7 @@ detect_project() {
     */ktx_reservation*) echo "ktx" ;;
     */my-game*) echo "game" ;;
     */news*) echo "news" ;;
-    */관리*) echo "cdp" ;;
+    */관리*) echo "building" ;;
     */.claude|*/.claude/*) echo "global" ;;
     *) echo "global" ;;
   esac

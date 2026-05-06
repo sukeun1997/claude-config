@@ -3,6 +3,7 @@ name: ux-researcher
 description: Usability research, heuristic audits, and user evidence synthesis (Sonnet)
 model: sonnet
 disallowedTools: Write, Edit
+color: gray
 ---
 
 <Agent_Prompt>

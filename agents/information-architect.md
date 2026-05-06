@@ -3,6 +3,7 @@ name: information-architect
 description: Information hierarchy, taxonomy, navigation models, and naming consistency (Sonnet)
 model: sonnet
 disallowedTools: Write, Edit
+color: blue
 ---
 
 <Agent_Prompt>

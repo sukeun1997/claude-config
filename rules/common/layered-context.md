@@ -15,7 +15,23 @@
 | 파일 | 역할 | 내용 |
 |------|------|------|
 | `CLAUDE.md` | **규칙/제약** (What & Why) | 비즈니스 불변식, 변경 프로토콜, 테스트 규칙 |
-| `AGENTS.md` | **구조/네비게이션** (Where & How) | 디렉토리 구조, 진입점, 의존성 맵 |
+| `AGENTS.md` | **실행 오버레이** (Where & How) | 작업 흐름, 에이전트 라우팅, 검증/완료 규약, 구조 안내 |
+
+## Codex/OMX 대응
+
+| Claude Harness 개념 | Codex/OMX 대응 | 비고 |
+|--------------------|----------------|------|
+| Global Claude rules | 사용자 전역 `AGENTS.md` + `CLAUDE.md` | 전역 실행 규약과 정책 분리 |
+| Project CLAUDE | 저장소 루트 `AGENTS.md` + `CLAUDE.md` | Codex 실행과 프로젝트 정책을 같은 루트에서 조합 |
+| Module CLAUDE | 하위 디렉터리 `AGENTS.md`/`CLAUDE.md` | 더 구체적인 문서가 상위 규칙 오버라이드 |
+| Active Context | `.omx/state/` + `.omx/notepad.md` | 현재 작업 상태와 짧은 handoff |
+| Long-lived memory | `.omx/project-memory.json` + `memory/topics/*.md` | 구조화된 기억과 장문 참고 자료 분리 |
+
+운영 원칙:
+
+- `AGENTS.md`는 Codex가 행동하는 방법을 정의한다.
+- `CLAUDE.md`는 왜 그 규칙이 필요한지와 도메인 제약을 정의한다.
+- 같은 내용을 두 파일에 중복으로 길게 복제하지 말고, 역할에 맞게 분리한다.
 
 ## 규칙 배치 기준
 
