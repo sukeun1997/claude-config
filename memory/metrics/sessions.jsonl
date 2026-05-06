@@ -213,3 +213,4 @@
 {"date":"2026-05-05","project":"haru","duration_min":92,"total_edits":60,"total_reads":92,"unique_files":32,"friction_files":6,"log_lines":69}
 {"date":"2026-05-05","project":"haru","duration_min":29,"total_edits":25,"total_reads":36,"unique_files":13,"friction_files":3,"log_lines":95}
 {"date":"2026-05-06","project":"global","duration_min":9,"total_edits":0,"total_reads":2,"unique_files":0,"friction_files":0,"log_lines":1}
+{"date":"2026-05-06","project":"global","duration_min":178,"total_edits":11,"total_reads":96,"unique_files":8,"friction_files":1,"log_lines":1}
