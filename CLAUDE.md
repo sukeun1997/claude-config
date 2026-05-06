@@ -206,6 +206,12 @@ Agent 호출 시 `model` 파라미터 필수 지정.
 **커밋**: `<type>: <description>` (feat/fix/refactor/docs/test/chore/perf/ci)
 **PR**: 전체 커밋 히스토리 분석 → 종합 요약 → 테스트 플랜 포함
 
+### PR body 안전 입력 (필수)
+- `gh pr create` / `gh pr edit`로 본문을 전달할 때 **`--body-file`** 사용. 본문은 임시 파일(`/tmp/pr_body_<N>.md` 등)에 Write 도구로 작성 후 경로 전달.
+- `--body "$(cat <<'EOF' ... EOF)"` 패턴 금지 — 외부 큰따옴표 안의 명령 치환 때문에 `` ` ``, `\``, ` ``` ` 가 escape되어 그대로 본문에 들어가 코드블록/인라인 코드가 깨짐 (PR #17099 1차 시도에서 재현됨).
+- 작성 후 `gh pr view <num> --json body --jq .body | head`로 백틱 escape 여부 즉시 검증.
+- 코드 스니펫이 없는 단순 한두 줄 본문은 `--body "..."` 직접 전달 가능.
+
 ---
 
 ## 7. Security

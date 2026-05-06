@@ -473,6 +473,29 @@
 {"date": "2026-04-26", "time": "13:43", "agent": "explore", "model": "default", "description": "Drive puller 사전 탐색"}
 {"date": "2026-04-26", "time": "14:01", "agent": "debugger", "model": "sonnet", "description": "Apple/Google Sign In 버그 진단"}
 {"date": "2026-04-26", "time": "17:48", "agent": "explore", "model": "default", "description": "Toggle complete logic 탐색"}
+{"date": "2026-04-27", "time": "15:21", "agent": "critic", "model": "opus", "description": "Opus verify weekly review findings"}
+{"date": "2026-04-27", "time": "15:29", "agent": "verifier", "model": "opus", "description": "Opus verify all W17 fix changes"}
+{"date": "2026-04-27", "time": "15:35", "agent": "code-reviewer", "model": "opus", "description": "Code review W17 hook changes"}
+{"date": "2026-04-27", "time": "15:36", "agent": "critic", "model": "opus", "description": "Adversarial review of PR #1348 #1350"}
+{"date": "2026-04-27", "time": "15:37", "agent": "code-reviewer", "model": "opus", "description": "Code review PR #1348 and #1350"}
+{"date": "2026-04-27", "time": "17:52", "agent": "code-reviewer", "model": "opus", "description": "Code review for sale-loss step 1"}
+{"date": "2026-04-27", "time": "18:26", "agent": "code-reviewer", "model": "opus", "description": "매각 동기화 step1 코드 리뷰"}
+{"date": "2026-04-28", "time": "09:56", "agent": "explore", "model": "haiku", "description": "Slack 채널/에러 알림 구조 탐색"}
+{"date": "2026-04-28", "time": "10:41", "agent": "explore", "model": "haiku", "description": "inapi cms-withdrawals API 스펙 확인"}
+{"date": "2026-04-28", "time": "11:17", "agent": "code-reviewer", "model": "opus", "description": "streaming 변경 코드 리뷰"}
+{"date": "2026-04-28", "time": "11:39", "agent": "code-reviewer", "model": "opus", "description": "idempotency + 인덱스 추가 리뷰"}
+{"date": "2026-04-28", "time": "13:14", "agent": "explore", "model": "default", "description": "Find CB/연체 reporting in inapi"}
+{"date": "2026-04-28", "time": "13:14", "agent": "explore", "model": "default", "description": "Find CB/연체 reporting in banking-report"}
+{"date": "2026-04-28", "time": "13:20", "agent": "explore", "model": "haiku", "description": "RepaymentInvestorScheduleShowcase 정산이체 흐름 조사"}
+{"date": "2026-04-28", "time": "13:59", "agent": "general-purpose", "model": "haiku", "description": "Slack thread summarize for CB cancel pattern"}
+{"date": "2026-04-28", "time": "15:04", "agent": "Explore", "model": "default", "description": "Find scenario reset logic and repayment_account handling"}
+{"date": "2026-04-28", "time": "16:52", "agent": "explore", "model": "default", "description": "003000 전문 송수신 코드 탐색"}
+{"date": "2026-04-28", "time": "18:05", "agent": "explore", "model": "default", "description": "전북은행 100번/003000 전문 코드 탐색"}
+{"date": "2026-04-29", "time": "10:31", "agent": "explore", "model": "default", "description": "Explore ParentLoan and secured loan execution flow"}
+{"date": "2026-04-29", "time": "11:04", "agent": "verifier", "model": "opus", "description": "Opus verifier of loan-screening retry patch"}
+{"date": "2026-04-29", "time": "11:04", "agent": "code-reviewer", "model": "opus", "description": "Opus code review of loan-screening retry patch"}
+{"date": "2026-04-29", "time": "11:06", "agent": "code-reviewer", "model": "opus", "description": "Confirm CRITICAL fix with reviewer"}
+{"date": "2026-04-29", "time": "15:43", "agent": "explore", "model": "haiku", "description": "Settlement flow code trace"}
 {"date": "2026-04-28", "time": "20:18", "agent": "explore", "model": "haiku", "description": "Find unfinished phases/tiers"}
 {"date": "2026-04-28", "time": "20:19", "agent": "architect", "model": "opus", "description": "Infra/observability review"}
 {"date": "2026-04-28", "time": "20:19", "agent": "performance-reviewer", "model": "opus", "description": "Backend performance review"}

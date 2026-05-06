@@ -84,6 +84,38 @@ edit-tracker (3회+ 반복 편집 감지)
 | 2026-04-27 | ArsFacadeService.kt 5회 반복 편집 | Context | 의존 인터페이스(CooconApi) 선행 Read 미흡 |
 | 2026-04-27 | MockCooconApiTest.kt 3회 반복 편집 | Context | 테스트 대상 프로덕션 코드 선행 Read 미흡 |
 | 2026-04-27 | MockCooconApi.kt 3회 반복 편집 | Context | 구현 대상 인터페이스/스펙 선행 Read 미흡 |
+| 2026-04-27 | spec-sale-loss-v3.md 20회 반복 편집 | Prompt (추정·20회) | 접근법 오류 가능성 — 초기화 후 재설계 권장 |
+| 2026-04-27 | as-is-to-be-analysis.md 9회 반복 편집 | Prompt (추정·9회) | 접근법 오류 가능성 — 초기화 후 재설계 권장 |
+| 2026-04-27 | spec-sale-loss-v3.md 14회 반복 편집 | Prompt (추정·14회) | 접근법 오류 가능성 — 초기화 후 재설계 권장 |
+| 2026-04-27 | spec.md 4회 반복 편집 | 미분류 | 다음 세션에서 원인 분석 필요 |
+| 2026-04-27 | as-is-to-be-analysis.md 4회 반복 편집 | 미분류 | 다음 세션에서 원인 분석 필요 |
+| 2026-04-27 | spec-sale-loss-v3.md 6회 반복 편집 | 미분류 | 다음 세션에서 원인 분석 필요 |
+| 2026-04-27 | input-mortgage.json 4회 반복 편집 | Context (추정) | 설정/스타일 반복 — 기존 값과 원하는 값 명확화 |
+| 2026-04-27 | update_sale_bond_history.py 3회 반복 편집 | Context (추정) | 소스 반복 — 관련 파일/타입 정의 확인 필요 |
+| 2026-04-27 | test_update_sale_bond_history.py 3회 반복 편집 | Context (추정) | 소스 반복 — 관련 파일/타입 정의 확인 필요 |
+| 2026-04-27 | plan-step1-sync.md 7회 반복 편집 | Prompt (추정·7회) | 접근법 오류 가능성 — 초기화 후 재설계 권장 |
+| 2026-04-27 | interprete.py 3회 반복 편집 | Context (추정) | 소스 반복 — 관련 파일/타입 정의 확인 필요 |
+| 2026-04-27 | product.py 3회 반복 편집 | Context (추정) | 소스 반복 — 관련 파일/타입 정의 확인 필요 |
+| 2026-04-27 | test_sale_bond_sync.py 3회 반복 편집 | Context (추정) | 소스 반복 — 관련 파일/타입 정의 확인 필요 |
+| 2026-04-27 | plan-step1-sync.md 3회 반복 편집 | 미분류 | 다음 세션에서 원인 분석 필요 |
+| 2026-04-28 | sale_loan_history_request.py 5회 반복 편집 | Context (추정·강) | 소스 5회+ — 파일 전체 Read 후 재접근 권장 |
+| 2026-04-28 | test_sale_loan_history_request.py 4회 반복 편집 | Context (추정) | 소스 반복 — 관련 파일/타입 정의 확인 필요 |
+| 2026-04-28 | sale_bond_sync.py 4회 반복 편집 | Context (추정) | 소스 반복 — 관련 파일/타입 정의 확인 필요 |
+| 2026-04-28 | change_status.py 4회 반복 편집 | Context (추정) | 소스 반복 — 관련 파일/타입 정의 확인 필요 |
+| 2026-04-28 | settlement.py 4회 반복 편집 | Context (추정) | 소스 반복 — 관련 파일/타입 정의 확인 필요 |
+| 2026-04-28 | InapiClient.kt 3회 반복 편집 | Context (추정) | 소스 반복 — 관련 파일/타입 정의 확인 필요 |
+| 2026-04-28 | input.json 3회 반복 편집 | Context (추정) | 설정/스타일 반복 — 기존 값과 원하는 값 명확화 |
+| 2026-04-29 | investment.py 3회 반복 편집 | Context (추정) | 소스 반복 — 관련 파일/타입 정의 확인 필요 |
+| 2026-04-29 | test_loan_screening_retry.py 6회 반복 편집 | Context (추정·강) | 소스 6회+ — 파일 전체 Read 후 재접근 권장 |
+| 2026-04-29 | loan_screening.py 5회 반복 편집 | Context (추정·강) | 소스 5회+ — 파일 전체 Read 후 재접근 권장 |
+| 2026-04-29 | 정산관련 4회 반복 편집 | 미분류 | 다음 세션에서 원인 분석 필요 |
+| 2026-05-04 | dove.py 5회 반복 편집 | Context (추정·강) | 소스 5회+ — 파일 전체 Read 후 재접근 권장 |
+| 2026-05-04 | test_dove_v2.py 4회 반복 편집 | Context (추정) | 소스 반복 — 관련 파일/타입 정의 확인 필요 |
+| 2026-05-04 | spec-sentry-15491-kyc-jsondecodeerror-2026-05-04.md 3회 반복 편집 | 미분류 | 다음 세션에서 원인 분석 필요 |
+| 2026-05-04 | test_aml_tasks.py 3회 반복 편집 | Context (추정) | 소스 반복 — 관련 파일/타입 정의 확인 필요 |
+| 2026-05-04 | test_aml_tasks.py 4회 반복 편집 | Context (추정) | 소스 반복 — 관련 파일/타입 정의 확인 필요 |
+| 2026-05-04 | dove.py 3회 반복 편집 | Context (추정) | 소스 반복 — 관련 파일/타입 정의 확인 필요 |
+| 2026-05-04 | 정산.md 18회 반복 편집 | Prompt (추정·18회) | 접근법 오류 가능성 — 초기화 후 재설계 권장 |
 | 2026-05-04 | [EXTERNAL] AI가 테스트 70% 삭제 후 "All Tests Pass" 보고 (Typia Go 포팅) | Prompt | 단순 성공 지표("테스트 통과") = 우회 동기. 후속 시도에서도 if-else 하드코딩 80억 토큰 / 외부 라이브러리(Zod) 위임 / 통과 못하는 케이스 배제 스크립트로 발전. 대책: verification.md에 "테스트 불변성(Test Inviolability)" 섹션 추가 — 테스트 삭제/skip/disable 금지, 잘못된 명세는 사용자 승인 후 수정. Sprint Contract `[기술적 조건]`에 "기존 테스트 변경 금지" 명시. **목표 오염 3종 세트 = 의도 상태 + 프로세스 제약 + 테스트 불변성** |
 | 2026-05-05 | MacSidebarView.swift 5회 반복 편집 | 미분류 | 다음 세션에서 원인 분석 필요 |
 | 2026-05-05 | HaruApp.swift 3회 반복 편집 | 미분류 | 다음 세션에서 원인 분석 필요 |

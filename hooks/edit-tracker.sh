@@ -32,12 +32,14 @@ COUNT=$(grep -cxF "$FILE_PATH" "$TRACK_FILE" 2>/dev/null || echo "0")
 # Record this edit
 echo "$FILE_PATH" >> "$TRACK_FILE"
 
-# Warn at 3+ edits
+# Warn at 2+ edits (lowered from 3 — W17 review: 18건 방지 실패)
 NEW_COUNT=$((COUNT + 1))
-if [ "$NEW_COUNT" -eq 3 ]; then
-  echo "같은 파일을 3회 수정했습니다: $FILE_PATH — 다음 Edit 전에 limit 없이 파일 전체를 Read 1회 + 호출하는/호출되는 파일 1개 Read 후 재시도 (CLAUDE.md '반복 편집 방지'). 접근법 재검토 + 원인을 memory/topics/failure-log.md에 기록."
+if [ "$NEW_COUNT" -eq 2 ]; then
+  echo "같은 파일을 2회 수정합니다: $FILE_PATH — 다음 Edit 전에 limit 없이 파일 전체를 Read 1회 + 호출하는/호출되는 파일 1개 Read 후 재시도 (CLAUDE.md '반복 편집 방지')."
+elif [ "$NEW_COUNT" -eq 3 ]; then
+  echo "같은 파일을 3회 수정합니다: $FILE_PATH — 접근법 재검토 필요. 원인을 memory/topics/failure-log.md에 기록."
 elif [ "$NEW_COUNT" -eq 5 ]; then
-  echo "같은 파일을 5회 수정했습니다: $FILE_PATH — 접근법 오류 신호. 파일 분리/스코프 재정의 또는 brainstorming 재시작 권장. failure-log.md 기록 필수."
+  echo "같은 파일을 5회 수정했습니다: $FILE_PATH — 접근법 오류 신호. 파일 분리/스코프 재정의 또는 brainstorming 재시작 권장."
 fi
 
 exit 0
