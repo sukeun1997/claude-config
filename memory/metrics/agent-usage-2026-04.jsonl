@@ -496,3 +496,16 @@
 {"date": "2026-04-29", "time": "11:04", "agent": "code-reviewer", "model": "opus", "description": "Opus code review of loan-screening retry patch"}
 {"date": "2026-04-29", "time": "11:06", "agent": "code-reviewer", "model": "opus", "description": "Confirm CRITICAL fix with reviewer"}
 {"date": "2026-04-29", "time": "15:43", "agent": "explore", "model": "haiku", "description": "Settlement flow code trace"}
+{"date": "2026-04-28", "time": "20:18", "agent": "explore", "model": "haiku", "description": "Find unfinished phases/tiers"}
+{"date": "2026-04-28", "time": "20:19", "agent": "architect", "model": "opus", "description": "Infra/observability review"}
+{"date": "2026-04-28", "time": "20:19", "agent": "performance-reviewer", "model": "opus", "description": "Backend performance review"}
+{"date": "2026-04-28", "time": "20:20", "agent": "performance-reviewer", "model": "opus", "description": "iOS/macOS performance review"}
+{"date": "2026-04-28", "time": "20:23", "agent": "performance-reviewer", "model": "default", "description": "백엔드 성능 분석"}
+{"date": "2026-04-28", "time": "20:23", "agent": "performance-reviewer", "model": "default", "description": "프론트엔드 성능 분석"}
+{"date": "2026-04-28", "time": "20:24", "agent": "quality-reviewer", "model": "default", "description": "DB/아키텍처 품질 분석"}
+{"date": "2026-04-28", "time": "20:25", "agent": "critic", "model": "opus", "description": "Critic review of findings"}
+{"date": "2026-04-28", "time": "20:27", "agent": "executor", "model": "sonnet", "description": "Group A: backend data stability"}
+{"date": "2026-04-28", "time": "20:27", "agent": "executor", "model": "sonnet", "description": "Group B: ops stability"}
+{"date": "2026-04-28", "time": "20:28", "agent": "executor", "model": "sonnet", "description": "Group C: iOS render perf"}
+{"date": "2026-04-28", "time": "20:29", "agent": "verifier", "model": "default", "description": "발견 항목 교차 검증"}
+{"date": "2026-04-28", "time": "20:41", "agent": "verifier", "model": "opus", "description": "Pre-merge safety review"}

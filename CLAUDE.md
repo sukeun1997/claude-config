@@ -43,8 +43,21 @@
 - 강조 표현(MUST, CRITICAL, MANDATORY 등) 최소화 — 4.6은 일반 표현으로 충분히 따르며, 과도한 강조는 overtriggering 유발
 - 도구/스킬 트리거: "~할 때 사용" 형태의 조건부 안내. "반드시", "의심되면 사용" 등 이전 모델용 강제 표현 지양
 
+### 학습 모드 (Learning Mode)
+- **기본 ON** — 백엔드 학습/시야 확장을 전달 효율과 동등 비중으로 다룸
+- **ON 동작**: 구현 요청에 기술 선택이 포함되면 사용자가 단일 후보만 언급해도 §9 `tech-advisor` 트리거. 기존 코드/매니페스트에 이미 채택된 스택은 그대로 진행하되, **현 스택 안에서 더 적합한 라이브러리/패턴이 있으면 1줄 + 트레이드오프 1줄로 언급** (예: "JPA 쓰시면 동적 쿼리는 QueryDSL보다 JDSL이 Kotlin 친화적입니다 — 컴파일 안정성 ↑, 학습 곡선 ↑"). 사용자가 그대로 진행하라고 하면 즉시 진행
+- **OFF 동작**: §9 워크플로우 라우팅의 "미확정" 케이스만 tech-advisor 트리거 (기존 동작)
+- **전환**: 사용자가 "학습 모드 OFF/ON" 또는 "바로 해줘"(임시 OFF, 해당 요청만) 발화 시 즉시 반영. 세션 단위 적용
+- **스킵 조건**: 명백한 1-2줄 수정, 기존 패턴과 동일한 추가, 버그 픽스, 사용자가 이미 대안을 비교한 후 선택한 경우는 ON이어도 대안 제시 생략
+
 ### 코드 응답 원칙
 - **추측 금지**: 열지 않은 파일/코드에 대해 추측하지 않음. 참조된 파일은 Read 후 답변
+- **사실 vs 결정 분기 (정보 수집 라우팅)**: 정보가 필요할 때 출처별 4-경로로 라우팅 (Ouroboros Path Matrix 채택). 매번 "Kotlin 버전?", "프레임워크?" 묻던 마찰 제거
+  - **(a) 매니페스트 정확매치 → 자동 확정**: `pyproject.toml`/`package.json`/`build.gradle.kts`/`go.mod`/`Cargo.toml`/`Dockerfile`/`.env.example`에서 **단일 정확매치**(언어/버전/프레임워크/패키지매니저/CI 도구)는 1줄 알림만 하고 진행 — 예: `ℹ️ 자동 확정: Kotlin 1.9, Spring Boot 3.2 (build.gradle.kts)`. 사용자가 "그거 아냐" 시 즉시 정정
+  - **(b) 코드 추론 → 1-tap 확인**: 매니페스트 미매치/다중 후보/패턴 추론일 때, 발견 내용 + "맞나요?" 단일 확인 (AskUserQuestion 2-옵션: "맞음" / "정정")
+  - **(c) 신규 동작·AC·비즈니스 로직 → 항상 사용자**: 코드에서 답이 안 나오는 결정(목표/수용 기준/UX/트레이드오프)은 묵시적 선택 금지 (위 "복수 해석 처리"와 동일 톤)
+  - **(d) 외부 사실(API/버전/요금) → WebFetch 후 1-tap**: 라이브러리 호환성·레이트리밋·가격 등은 Context7/WebFetch 수집 후 (b) 패턴
+  - 핵심 구분: "X는 JWT를 쓴다"는 **사실** (a/b 자체 해결), "새 기능도 JWT를 써야 한다"는 **결정** (c 필수 사용자). 사실은 가능한 한 자체 확인, 결정은 항상 사용자
 - **반복 편집 방지**: 동일 파일을 2회+ 편집하려 할 때 → 파일 전체 Read(limit 없이) + 호출하는/호출되는 최소 1개 파일 Read 후 재시도. W16 주간 분석 1위 원인(Context 9건, 파일 Read 선행 미흡) 대응
 - **디버깅 증거 먼저**: 에러 로그, 스택 트레이스, 실제 출력을 먼저 확인 후 진단. 가설 기반 추측 진단 금지. 사용자가 "안 돼", "에러 나" 등만 보고해도 → 직접 로그/출력/상태를 수집하여 진단 (증거 요청 대신 자체 수집)
 - **환경 확인 우선**: DB/API 결과가 예상과 다를 때 → 환경(.env, 연결 정보, 마이그레이션 상태) 먼저 확인. 코드 원인만 의심하지 않음
@@ -85,7 +98,7 @@
 
 ### 작업 판단 플로우
 1. **단순 작업** (단일 파일, 100줄 이하) → 직접 실행
-2. **버그 수정** → `superpowers:systematic-debugging` 스킬 invoke → 재현 확인 → 원인 격리 → 최소 수정 → `superpowers:verification-before-completion`으로 검증. 재현 없이 수정 코드 작성 금지
+2. **버그 수정** → `/sdebug` (`superpowers:systematic-debugging`) invoke → Phase 1 증거 수집 → **가설 후보 2개+ 또는 원인 모호 시 `/triage` 분기 (5개 가설 병렬 발산 → 심판 수렴) → 결과 받아 sdebug Phase 2 복귀** → 원인 격리 → 최소 수정 → `superpowers:verification-before-completion` 검증. 재현 없이 수정 코드 작성 금지. Sentry URL/ID 제공 시 `sentry-debug` 우선
 3. **설계 결정 필요** → 인터뷰 먼저
 4. **구현 작업** (2개+ 파일) → Plan-First
    - planner의 plan이 6+파일, 200줄+ 변경을 포함하면: `critic`(opus)이 plan을 adversarial 검증 → user approval. critic REJECT 시 planner 1회 수정 → 재REJECT 시 사용자 보고
@@ -254,12 +267,12 @@ Agent 호출 시 `model` 파라미터 필수 지정.
 ### 워크플로우 기반
 | 트리거 | 스킬 |
 |--------|------|
-| 구현 요청에 **미확정** 기술/설계 선택이 포함된 경우 (기존 스택으로 자연스럽게 결정되면 스킵) | `tech-advisor` (대안 비교 → 사용자 선택 → 구현 진행) |
+| 구현 요청에 기술/설계 선택이 포함된 경우 — **학습 모드 ON(기본)**: 사용자가 단일 후보만 언급해도 트리거 (현 스택 내 라이브러리/패턴 대안 1-2개 + 트레이드오프 1줄). **학습 모드 OFF**: 미확정 케이스만 트리거 (기존 스택으로 자연 결정되면 스킵). 학습 모드 정의는 §1 참조 | `tech-advisor` (대안 비교 → 사용자 선택 → 구현 진행) |
 | 새 기능 구현 시작 | `feature` (tech-advisor → brainstorming → plans → execution) |
 | 기술 뉴스/동향 요청 | `daily-briefing` (quick/deep 모드) |
 | 테스트 코드 작성 | `everything-claude-code:springboot-tdd` (백엔드) / `everything-claude-code:swift-protocol-di-testing` (iOS) |
 | PR 전 최종 검증 | `everything-claude-code:springboot-verification` (백엔드) / `superpowers:verification-before-completion` |
-| 버그 수정/디버깅 시작 | `superpowers:systematic-debugging` (증거 기반 진단 후 debugger 에이전트) |
+| 버그 수정/디버깅 시작 | `/sdebug` (`superpowers:systematic-debugging`) — Phase 1 증거 수집 후 **가설 후보 2개+ 또는 원인 모호 시 `/triage` 분기** (병렬 발산 → 심판 수렴) → 결과 받아 sdebug Phase 2 복귀. 단일 가설로 명확하면 triage 스킵하고 직진 |
 | 버그 수정 코드 작성 완료 | `superpowers:verification-before-completion` (수정 결과 실행 확인) |
 | 빌드 실패 | `build-fixer` 에이전트 (스킬 아닌 에이전트) |
 | LLM API 비용/쿼터 관련 | `everything-claude-code:cost-aware-llm-pipeline` |
