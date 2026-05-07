@@ -57,6 +57,41 @@ else
 EOF
 fi
 
+# ── Long session detection (leaked session guard) ──
+# 4/24-5/7 리포트에서 14299m·17059m·8954m leaked 세션 다수 감지됨.
+# 워크트리/IDE 백그라운드에서 Claude가 살아있다 종료되는 패턴 방지.
+SESSION_START_FILE="$MEM_DIR/sessions/.session-start-ts"
+NOW_TS=$(date +%s)
+SESSION_START_TS=0
+if [ -f "$SESSION_START_FILE" ]; then
+  SESSION_START_TS=$(cat "$SESSION_START_FILE" 2>/dev/null || echo "0")
+fi
+
+# 처음 보거나 4시간+ 오래됐으면 새 세션으로 간주하고 갱신
+if [ "$SESSION_START_TS" -eq 0 ] || [ $((NOW_TS - SESSION_START_TS)) -gt 14400 ]; then
+  echo "$NOW_TS" > "$SESSION_START_FILE"
+  SESSION_START_TS=$NOW_TS
+fi
+
+DURATION_SEC=$((NOW_TS - SESSION_START_TS))
+DURATION_MIN=$((DURATION_SEC / 60))
+
+# 240분(4시간)+ → 강한 경고 (leaked 의심)
+if [ "$DURATION_MIN" -ge 240 ]; then
+  cat <<LEAKED_CRIT
+🚨 [Leaked Session 의심] 세션 duration ${DURATION_MIN}분 — 워크트리/IDE 백그라운드 leak 가능성
+- 즉시 /clear 또는 세션 종료 권장
+- daily log 강제 플러시 + Active Context handoff 작성 후 정리
+LEAKED_CRIT
+# 60분+ → 일반 경고
+elif [ "$DURATION_MIN" -ge 60 ]; then
+  cat <<LEAKED
+⚠️ [Long Session] 세션 duration ${DURATION_MIN}분 (60분+ 초과)
+- 주제 전환이 있었으면 /clear로 새 세션 시작 (1세션 1주제 원칙)
+- Active Context Handoff 갱신 권장
+LEAKED
+fi
+
 # ── Self-absorb: friction 감지 시 개선 제안 요청 ──
 # Read stable session ID (matches tool-tracker)
 _SID_FILE="$MEM_DIR/sessions/.current-session-id"
