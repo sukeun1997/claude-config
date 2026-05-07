@@ -138,3 +138,5 @@ edit-tracker (3회+ 반복 편집 감지)
 | 2026-05-06 | plan.md 12회 반복 편집 | Prompt (추정·12회) | 접근법 오류 가능성 — 초기화 후 재설계 권장 |
 | 2026-05-06 | update_sale_bond_history.py 5회 반복 편집 | Context (추정·강) | 소스 5회+ — 파일 전체 Read 후 재접근 권장 |
 | 2026-05-06 | SKILL.md 3회 반복 편집 | Prompt (추정) | 지시문/스킬 정의 반복 — description/triggers 모호성 점검 |
+| 2026-05-07 | SaleBondChangedEventMapperTest.kt 5회 반복 편집 | Context (추정·강) | 소스 5회+ — 파일 전체 Read 후 재접근 권장 |
+| 2026-05-07 | SaleSyncConsumer.kt 3회 반복 편집 | Context (추정) | 소스 반복 — 관련 파일/타입 정의 확인 필요 |
