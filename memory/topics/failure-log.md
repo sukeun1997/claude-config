@@ -147,3 +147,4 @@ edit-tracker (3회+ 반복 편집 감지)
 | 2026-05-07 | SaleBondChangedEventMapperTest.kt 3회 반복 편집 | Context (추정) | 소스 반복 — 관련 파일/타입 정의 확인 필요 |
 | 2026-05-07 | messagerule.py 4회 반복 편집 | Context (추정) | 소스 반복 — 관련 파일/타입 정의 확인 필요 |
 | 2026-05-07 | messagerule.py 3회 반복 편집 | Context (추정) | 소스 반복 — 관련 파일/타입 정의 확인 필요 |
+| 2026-05-07 | extra_status_transition.py 3회 반복 편집 | Context (추정) | 소스 반복 — 관련 파일/타입 정의 확인 필요 |
