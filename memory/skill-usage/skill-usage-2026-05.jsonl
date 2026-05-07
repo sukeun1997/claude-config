@@ -16,3 +16,6 @@
 {"timestamp": "2026-05-06T15:16:38.651716", "skill": "parallel-dev", "project": "global"}
 {"timestamp": "2026-05-06T16:24:12.970007", "skill": "sentry-debug", "project": "global"}
 {"timestamp": "2026-05-06T17:02:40.795142", "skill": "update-pr", "project": "global"}
+{"timestamp": "2026-05-07T13:00:32.255683", "skill": "docs-save", "project": "global"}
+{"timestamp": "2026-05-07T13:03:20.600803", "skill": "ecr", "project": "global"}
+{"timestamp": "2026-05-07T13:09:12.355518", "skill": "review", "project": "global"}

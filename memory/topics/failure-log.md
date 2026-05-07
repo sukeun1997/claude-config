@@ -140,3 +140,10 @@ edit-tracker (3회+ 반복 편집 감지)
 | 2026-05-06 | SKILL.md 3회 반복 편집 | Prompt (추정) | 지시문/스킬 정의 반복 — description/triggers 모호성 점검 |
 | 2026-05-07 | SaleBondChangedEventMapperTest.kt 5회 반복 편집 | Context (추정·강) | 소스 5회+ — 파일 전체 Read 후 재접근 권장 |
 | 2026-05-07 | SaleSyncConsumer.kt 3회 반복 편집 | Context (추정) | 소스 반복 — 관련 파일/타입 정의 확인 필요 |
+| 2026-05-07 | test_sale_bond_changed_event.py 3회 반복 편집 | Context (추정) | 소스 반복 — 관련 파일/타입 정의 확인 필요 |
+| 2026-05-07 | update_sale_bond_history.py 5회 반복 편집 | Context (추정·강) | 소스 5회+ — 파일 전체 Read 후 재접근 권장 |
+| 2026-05-07 | phase_b_check.py 3회 반복 편집 | Context (추정) | 소스 반복 — 관련 파일/타입 정의 확인 필요 |
+| 2026-05-07 | 정산.md 3회 반복 편집 | 미분류 | 다음 세션에서 원인 분석 필요 |
+| 2026-05-07 | SaleBondChangedEventMapperTest.kt 3회 반복 편집 | Context (추정) | 소스 반복 — 관련 파일/타입 정의 확인 필요 |
+| 2026-05-07 | messagerule.py 4회 반복 편집 | Context (추정) | 소스 반복 — 관련 파일/타입 정의 확인 필요 |
+| 2026-05-07 | messagerule.py 3회 반복 편집 | Context (추정) | 소스 반복 — 관련 파일/타입 정의 확인 필요 |
