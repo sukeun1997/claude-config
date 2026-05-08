@@ -11,3 +11,10 @@
 ## 진화 규칙
 - 4주 연속 이상값 달성 시 → 이상값 5%p 상향 (지속 개선)
 - baseline 측정 시작: 2026-04-04
+- baseline 종료: 2026-05-02 (4주 완료) → gap 분석 단계
+
+## 현재 갭 요약 (2026-05-08 갱신)
+- 삽질 없는 세션 비율: **53%** (목표 90%, 갭 -37pp) ❌
+- 주요 원인: Context reactive Read + Prompt brainstorming 미발동
+- 대응: 편집 전 Read 원칙 proactive 강화, spec 문서 feature 트리거 추가
+- 상세 추이 → [harness-kpi-weekly.md](harness-kpi-weekly.md)
