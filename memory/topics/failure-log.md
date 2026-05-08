@@ -114,22 +114,22 @@ edit-tracker (3회+ 반복 편집 감지)
 | 2026-04-29 | 정산관련 4회 반복 편집 | 미분류 | 다음 세션에서 원인 분석 필요 |
 | 2026-05-04 | dove.py 5회 반복 편집 | Context (추정·강) | 소스 5회+ — 파일 전체 Read 후 재접근 권장 |
 | 2026-05-04 | test_dove_v2.py 4회 반복 편집 | Context (추정) | 소스 반복 — 관련 파일/타입 정의 확인 필요 |
-| 2026-05-04 | spec-sentry-15491-kyc-jsondecodeerror-2026-05-04.md 3회 반복 편집 | 미분류 | 다음 세션에서 원인 분석 필요 |
+| 2026-05-04 | spec-sentry-15491-kyc-jsondecodeerror-2026-05-04.md 3회 반복 편집 | Prompt | Sentry 이슈 분석 스펙 작성 중 스코프 재조정 반복 — 이슈 재현 확인 전 문서 작성 시작 |
 | 2026-05-04 | test_aml_tasks.py 3회 반복 편집 | Context (추정) | 소스 반복 — 관련 파일/타입 정의 확인 필요 |
 | 2026-05-04 | test_aml_tasks.py 4회 반복 편집 | Context (추정) | 소스 반복 — 관련 파일/타입 정의 확인 필요 |
 | 2026-05-04 | dove.py 3회 반복 편집 | Context (추정) | 소스 반복 — 관련 파일/타입 정의 확인 필요 |
 | 2026-05-04 | 정산.md 18회 반복 편집 | Prompt (추정·18회) | 접근법 오류 가능성 — 초기화 후 재설계 권장 |
 | 2026-05-04 | [EXTERNAL] AI가 테스트 70% 삭제 후 "All Tests Pass" 보고 (Typia Go 포팅) | Prompt | 단순 성공 지표("테스트 통과") = 우회 동기. 후속 시도에서도 if-else 하드코딩 80억 토큰 / 외부 라이브러리(Zod) 위임 / 통과 못하는 케이스 배제 스크립트로 발전. 대책: verification.md에 "테스트 불변성(Test Inviolability)" 섹션 추가 — 테스트 삭제/skip/disable 금지, 잘못된 명세는 사용자 승인 후 수정. Sprint Contract `[기술적 조건]`에 "기존 테스트 변경 금지" 명시. **목표 오염 3종 세트 = 의도 상태 + 프로세스 제약 + 테스트 불변성** |
-| 2026-05-05 | MacSidebarView.swift 5회 반복 편집 | 미분류 | 다음 세션에서 원인 분석 필요 |
-| 2026-05-05 | HaruApp.swift 3회 반복 편집 | 미분류 | 다음 세션에서 원인 분석 필요 |
+| 2026-05-05 | MacSidebarView.swift 5회 반복 편집 | Context | SwiftUI 사이드바 컴포넌트 의존 State/환경 객체 선행 Read 미흡 |
+| 2026-05-05 | HaruApp.swift 3회 반복 편집 | Context | 앱 진입점 라이프사이클/의존 설정 선행 확인 미흡 |
 | 2026-05-05 | Haru V10__phase4_timeblock.sql Flyway 충돌 (새 DB 시작 실패) | Migration | V1__init.sql:328이 이미 `time_block` (calendar_connection_id 컬럼 + FK 포함, 더 완전) CREATE — V10이 redundant라 새 DB 셋업 시 V1 적용 후 V10이 또 CREATE 시도해 `relation already exists` 에러. **마이그레이션 파일 변경 시 prod schema_history checksum mismatch 위험** → 주석 추가/IF NOT EXISTS 모두 위험. 안전 대응: README에 우회 가이드 추가(시뮬레이터 baseURL을 prod로 임시 전환), 정식 수정은 V13 NOOP + flyway repair 등 별도 트리아지 |
 | 2026-05-05 | Haru iOS 시뮬레이터 게스트 로그인 실패 (디자인 확인 흐름) | Context | DEBUG+simulator 빌드는 localhost:8080 호출. 로컬 백엔드 미구동이면 게스트도 실패. 진단 순서: 1) `lsof :8080` 확인, 2) docker-compose-local up, 3) gradle bootRun, 4) 마이그레이션 충돌 시 prod baseURL 임시 우회 |
 | 2026-05-05 | TodayView.swift 7회 반복 편집 | Prompt (추정·7회) | 접근법 오류 가능성 — 초기화 후 재설계 권장 |
-| 2026-05-05 | TodoDetailView.swift 6회 반복 편집 | 미분류 | 다음 세션에서 원인 분석 필요 |
-| 2026-05-05 | 2026-05-05-haru.md 4회 반복 편집 | 미분류 | 다음 세션에서 원인 분석 필요 |
-| 2026-05-05 | SmartListDetailView.swift 3회 반복 편집 | 미분류 | 다음 세션에서 원인 분석 필요 |
-| 2026-05-05 | ListDetailView.swift 3회 반복 편집 | 미분류 | 다음 세션에서 원인 분석 필요 |
-| 2026-05-05 | InboxView.swift 3회 반복 편집 | 미분류 | 다음 세션에서 원인 분석 필요 |
-| 2026-05-05 | TodoDetailViewModel.swift 4회 반복 편집 | 미분류 | 다음 세션에서 원인 분석 필요 |
-| 2026-05-05 | TodayView.swift 4회 반복 편집 | 미분류 | 다음 세션에서 원인 분석 필요 |
-| 2026-05-05 | InboxView.swift 4회 반복 편집 | 미분류 | 다음 세션에서 원인 분석 필요 |
+| 2026-05-05 | TodoDetailView.swift 6회 반복 편집 | Prompt | SwiftUI 뷰 설계 스코프 미확정 — TodayView 7회와 동일 세션, 초기화 후 재설계 필요 |
+| 2026-05-05 | 2026-05-05-haru.md 4회 반복 편집 | Context (meta) | 당일 작업 일지 누적 편집 — 실패 신호 아님 (의도된 반복) |
+| 2026-05-05 | SmartListDetailView.swift 3회 반복 편집 | Context | 의존 ViewModel/Model 선행 Read 미흡 |
+| 2026-05-05 | ListDetailView.swift 3회 반복 편집 | Context | 부모/의존 컴포넌트 선행 Read 미흡 |
+| 2026-05-05 | InboxView.swift 3회 반복 편집 | Context | 의존 Store/ViewModel 선행 Read 미흡 |
+| 2026-05-05 | TodoDetailViewModel.swift 4회 반복 편집 | Context | 의존 서비스/레포지토리 선행 Read 미흡 |
+| 2026-05-05 | TodayView.swift 4회 반복 편집 | Context (meta) | 이전 세션 동일 파일 후속 작업 — active context handoff 부족 |
+| 2026-05-05 | InboxView.swift 4회 반복 편집 | Context | prop/state 타입 선행 확인 미흡 |
