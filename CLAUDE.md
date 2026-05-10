@@ -26,7 +26,7 @@
 - Insight 제공: 구현 전후 교육적 설명 포함
 - URL 제공 시 자동 WebFetch / SDK·API 구현 전 문서 조사 (Context7 MCP)
 - **배포**: `scripts/deploy.sh` 사용 필수 (없는 프로젝트는 예외)
-- **Plan/Spec 저장 경로**: `~/vault/{project}/{branch-slug}/` (superpowers 생성 파일은 vault-auto-save 훅이 자동 이동 + 원본 삭제)
+- **Plan/Spec 저장 경로**: `~/vault/project/{project}/{branch-slug}/` (superpowers 생성 파일은 vault-auto-save 훅이 자동 이동 + 원본 삭제)
 
 ### 컨텍스트 절약
 - 파일 3개+ 탐색 → Explore 서브에이전트 위임
@@ -100,6 +100,13 @@
 1. **단순 작업** (단일 파일, 100줄 이하) → 직접 실행
 2. **버그 수정** → `/sdebug` (`superpowers:systematic-debugging`) invoke → Phase 1 증거 수집 → **가설 후보 2개+ 또는 원인 모호 시 `/triage` 분기 (5개 가설 병렬 발산 → 심판 수렴) → 결과 받아 sdebug Phase 2 복귀** → 원인 격리 → 최소 수정 → `superpowers:verification-before-completion` 검증. 재현 없이 수정 코드 작성 금지. Sentry URL/ID 제공 시 `sentry-debug` 우선
 3. **설계 결정 필요** → 인터뷰 먼저
+   - **큰 아키텍처 변경 5축 게이트**: 데이터 흐름 변경(REST↔Kafka 등), 영속성 모델 변경, 외부 의존성 추가/제거, 동기/비동기 전환 시 → 결정 전에 5축 강제 체크 후 권장안 1줄 제시:
+     1. 직접 영향 (코드/테스트 변경 면적)
+     2. 운영 영향 (장애 복구 절차, 모니터링 지점 변화)
+     3. 데이터 영향 (스키마 호환성, 마이그레이션 필요 여부, 기록 보존 차이)
+     4. 롤백 시나리오
+     5. 동등 가치를 더 작은 변경으로 달성하는 대안 1개
+   - 5/6 매각 동기화 REST→Kafka 결정처럼 "영향없이/기록보존" 한 줄 근거로 끝나지 않도록 강제
 4. **구현 작업** (2개+ 파일) → Plan-First
    - planner의 plan이 6+파일, 200줄+ 변경을 포함하면: `critic`(opus)이 plan을 adversarial 검증 → user approval. critic REJECT 시 planner 1회 수정 → 재REJECT 시 사용자 보고
    - 소/중규모: 기존대로 바로 user approval
@@ -283,6 +290,8 @@ Agent 호출 시 `model` 파라미터 필수 지정.
 | 업무 기술 + "노션에 정리" (단순 리서치 의도) | 사용자에게 분기 질문 |
 | URL 분석 + 설정 적용 요청 | `absorb` (주 2회 배치 — 화/금 권장, 초과 시 북마크) |
 | Sentry URL 또는 이슈 ID 제공 시 | `sentry-debug` |
+| Slack URL (pfcoworkspace.slack.com) 제공 시 | `mcp__claude_ai_Slack__slack_read_thread`로 채널/스레드 우선 fetch (메시지 컨텍스트 확보 후 코드 추적) |
+| GitHub PR # 또는 PR URL 제공 + "리뷰" 의도 (4/24~5/7 리포트: 14회 리뷰 중 절반에서 "opus 검증" 명시 반복 → 디폴트 표준화) | Kotlin/Spring 프로젝트면 `/ecr`, 그 외는 `/review` 자동 invoke. verifier(opus) 디폴트 포함이므로 "opus로 검증" 별도 명시 불필요 |
 | plan/spec 저장, "docs에 저장", "옵시디언" | `docs-save` |
 
 > 프로젝트별 추가 라우팅은 각 프로젝트 CLAUDE.md에서 정의

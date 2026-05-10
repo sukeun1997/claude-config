@@ -134,7 +134,7 @@ brainstorming 스킬이 인터뷰 → 접근법 제안 → 스펙 문서 작성�
 
 brainstorming 완료 후 사용자에게 확인:
 
-> "설계 완료. 스펙: `~/vault/{project}/{branch}/spec.md`. 플랜 작성으로 넘어갈까요?"
+> "설계 완료. 스펙: `~/vault/project/{project}/{branch}/spec.md`. 플랜 작성으로 넘어갈까요?"
 
 - 사용자 OK → Phase 2 진행
 - 사용자 피드백 → brainstorming 내에서 수정 후 다시 Gate 1
@@ -144,7 +144,7 @@ brainstorming 완료 후 사용자에게 확인:
 `superpowers:writing-plans` 스킬을 아래 인자로 invoke한다:
 
 ```
-[스펙 경로] ~/vault/{project}/{branch-slug}/spec.md
+[스펙 경로] ~/vault/project/{project}/{branch-slug}/spec.md
 
 [저장 선호]
 - plan 파일 경로: ~/vault/project/{project}/{branch-slug}/plan.md
@@ -159,7 +159,7 @@ brainstorming 완료 후 사용자에게 확인:
 
 플랜 완료 후 사용자에게 확인:
 
-> "플랜 완료. `~/vault/{project}/{branch}/plan.md`. 구현 시작할까요? (1: Subagent-Driven / 2: Inline)"
+> "플랜 완료. `~/vault/project/{project}/{branch}/plan.md`. 구현 시작할까요? (1: Subagent-Driven / 2: Inline)"
 
 - 사용자 OK → Phase 3 진행
 - 사용자 피드백 → 플랜 수정 후 다시 Gate 2
