@@ -67,8 +67,9 @@ if [ -f "$SESSION_START_FILE" ]; then
   SESSION_START_TS=$(cat "$SESSION_START_FILE" 2>/dev/null || echo "0")
 fi
 
-# 처음 보거나 4시간+ 오래됐으면 새 세션으로 간주하고 갱신
-if [ "$SESSION_START_TS" -eq 0 ] || [ $((NOW_TS - SESSION_START_TS)) -gt 14400 ]; then
+# 처음 보거나 8시간+ 오래됐으면 새 세션으로 간주하고 갱신
+# (갱신 임계값을 240분 강한 경고보다 크게 두어 dead-code 방지)
+if [ "$SESSION_START_TS" -eq 0 ] || [ $((NOW_TS - SESSION_START_TS)) -gt 28800 ]; then
   echo "$NOW_TS" > "$SESSION_START_FILE"
   SESSION_START_TS=$NOW_TS
 fi
