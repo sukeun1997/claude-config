@@ -213,6 +213,12 @@ Agent 호출 시 `model` 파라미터 필수 지정.
 **커밋**: `<type>: <description>` (feat/fix/refactor/docs/test/chore/perf/ci)
 **PR**: 전체 커밋 히스토리 분석 → 종합 요약 → 테스트 플랜 포함
 
+### PR 코멘트/리뷰 응답 금지 (절대 규칙)
+- **PR 리뷰 코멘트에 절대 답글을 남기지 않는다.** `gh api .../comments/<id>/replies`, `gh pr review`, `gh pr comment`, 또는 동등한 호출 일체 금지
+- 코드 수정만 수행하고, 리뷰 답변은 **사용자가 직접 작성**한다
+- 사용자가 답변 초안을 요청하면 채팅창에 텍스트로만 제공 (PR에 게시 금지)
+- 예외 없음 — 사용자가 명시적으로 "PR에 댓글 달아라"라고 지시한 경우에만 게시
+
 ### PR body 안전 입력 (필수)
 - `gh pr create` / `gh pr edit`로 본문을 전달할 때 **`--body-file`** 사용. 본문은 임시 파일(`/tmp/pr_body_<N>.md` 등)에 Write 도구로 작성 후 경로 전달.
 - `--body "$(cat <<'EOF' ... EOF)"` 패턴 금지 — 외부 큰따옴표 안의 명령 치환 때문에 `` ` ``, `\``, ` ``` ` 가 escape되어 그대로 본문에 들어가 코드블록/인라인 코드가 깨짐 (PR #17099 1차 시도에서 재현됨).
