@@ -157,3 +157,5 @@ edit-tracker (3회+ 반복 편집 감지)
 | 2026-05-12 | execute_loan_action.py 3회 반복 편집 | Context (추정) | 소스 반복 — 관련 파일/타입 정의 확인 필요 |
 | 2026-05-12 | spec-sale-loss-v3.md 30회 반복 편집 | Prompt (추정·30회) | 접근법 오류 가능성 — 초기화 후 재설계 권장 |
 | 2026-05-12 | as-is-to-be-analysis.md 7회 반복 편집 | Prompt (추정·7회) | 접근법 오류 가능성 — 초기화 후 재설계 권장 |
+| 2026-05-13 | spec-sale-loss-v3.md 17회 반복 편집 | Prompt (추정·17회) | 접근법 오류 가능성 — 초기화 후 재설계 권장 |
+| 2026-05-13 | CLAUDE.md 4회 반복 편집 | Prompt (추정) | 지시문/스킬 정의 반복 — description/triggers 모호성 점검 |

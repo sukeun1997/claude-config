@@ -139,12 +139,29 @@ Agent 호출 시 `model` 파라미터 필수 지정.
 | 조건 | 리뷰 수준 | 에이전트 |
 |------|----------|---------|
 | Security/인증/인가, DB 스키마, 아키텍처 변경 | **전체** (자동) | `code-reviewer` + `security-reviewer` + `quality-reviewer` + `architect` |
-| `/review` 명시 호출 | **전체** | 위와 동일 |
+| **Python (`.py`) 파일 변경** | **전체+심층** (자동) | `python-deep-review` skill로 위임 (Phase 1: code/quality/style/architect 병렬 → Phase 3: verifier + critic 독립검증). 1줄 수정도 풀세트 (변경 규모 무관) |
+| `/review` 명시 호출 | **전체** | Kotlin/Spring → `/ecr`, Python → `python-deep-review`, 그 외 → `code-reviewer` + `security-reviewer` + `quality-reviewer` + `architect` |
 | 그 외 일반 수정 | **기본** (자동) | `code-reviewer` |
-| `--quick` | **최소** | `code-reviewer`만 |
+| `--quick` | **최소** | `code-reviewer`만 (python-deep-review도 우회) |
 
 > 고지 예시: "기본 리뷰를 실행합니다. 전체로 변경하시려면 알려주세요."
 > 전체 예시: "전체 리뷰를 실행합니다 (Security 변경 감지). 기본으로 변경하시려면 알려주세요."
+
+### 리뷰 필수 관점 (모든 리뷰 라우팅에 공통 적용)
+
+리뷰 에이전트(code-reviewer / quality-reviewer / 기타)를 호출할 때 프롬프트에 아래 4가지 관점을 명시적으로 포함한다. 단발 수정/스타일 리뷰가 아니라 PR 단위 리뷰일 때 모두 적용.
+
+1. **OOP / SOLID / 추상화 / 함수 중복 제거 리팩토링** (opus 권장)
+   - SRP/OCP 위반, 같은 책임 분산, helper 추출 가치, 단계 분리(validate→execute 등) 가능 여부
+   - "지금 작동하는가"가 아니라 "다음 사람이 고치기 좋게 짜여 있는가" 시각
+2. **네이밍** — 함수/변수/상수가 도메인 의미와 추상화 수준에 맞는지. 호출부 의도를 가리지 않는지
+3. **별도 컨텍스트 검증** — 작업 완료 후 컨텍스트 0인 별도 서브에이전트 두 개를 동시 호출 (같은 세션에서 생산-검증을 겸하면 동의 편향)
+   - `verifier` (opus): 변경 파일과 diff만 보고, 앞선 리뷰가 놓쳤을 항목을 fresh로 발굴
+   - `critic` (opus): 앞선 제안 목록만 보고(diff 없이), 과잉 추상화·YAGNI 위반·트레이드오프 누락을 adversarial하게 반박
+4. **현재 동작 너머의 설계 시각** — 즉시 동작/머지 가능성과 별개로, 동료가 PR 코멘트로 달 만한 OOP/SOLID/추상화/중복제거 의견을 능동적으로 발굴
+   - 예: 같은 mutation/함수 안에 인증/검증/실행/로그가 모두 인라인이면 validate→execute 단계 분리 제안. 같은 루프가 두 번 돌면 통합 가능 여부. 같은 분기 조건이 여러 곳에 등장하면 분기 dispatch 추상화 가능 여부
+
+라우팅 시 사용자에게 "전체 리뷰" 또는 "기본 리뷰" 고지 후, 위 4가지가 프롬프트에 반영됐는지 자기 점검 후 실행.
 
 ### 장기 작업 중간 검증
 - `deep-executor` 등 장기 에이전트 작업 시 구현과 검증을 분리
@@ -272,6 +289,7 @@ Agent 호출 시 `model` 파라미터 필수 지정.
 |--------|------|
 | `.kt` 파일 작성/수정 | `kotlin-patterns` |
 | `.swift` 파일 작성/수정 | `everything-claude-code:swiftui-patterns` |
+| **`.py` 파일 작성/수정 → 리뷰 단계**(구현 직후 §4 라우팅 시) | `python-deep-review` (Phase 1 병렬 4-agent + Phase 3 verifier+critic 독립 검증). 1줄 변경도 풀세트 발동 (Q2=a). 비용 부담 시 `--light` 또는 `--quick` |
 | JPA Entity / Repository 변경 | `everything-claude-code:jpa-patterns` |
 | `@Cacheable`, Redis 설정 변경 | `redis-cache-patterns` |
 | SQL 마이그레이션 / 스키마 변경 | `everything-claude-code:postgres-patterns` + `everything-claude-code:database-migrations` |
