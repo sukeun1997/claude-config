@@ -325,3 +325,4 @@ Agent 호출 시 `model` 파라미터 필수 지정.
   - friction 추이: sessions.jsonl 기반 마찰 빈도. friction=0 규칙 4주 지속 시 은퇴 후보
   - 이상 갭 분석: `memory/metrics/harness-kpi.md` 정의 KPI 대비 현재 달성률. 미달 KPI에 대해 원인 가설 + 개선 제안 생성
 - **Self-Absorb 루프**: Stop 훅이 삽질 감지 시 원인 분류 + 개선 제안 요청 → 다음 세션에서 제안 리뷰
+- **미분류 batch 처리**: 세션 시작 시 `failure-log.md`에 "미분류" 항목이 **5건 이상** 이면 → 사용자 요청 처리 중 첫 여유 시점에 batch 분류 완료 (사용자 명시 작업을 가로막지 않음)
