@@ -61,7 +61,8 @@
         "hooks": [
           {
             "type": "command",
-            "command": "node \"$HOME/.claude/hooks/prisma-auto-generate.mjs\""
+            "command": "node \"$HOME/.claude/hooks/prisma-auto-generate.mjs\"",
+            "timeout": 5
           },
           {
             "type": "command",
