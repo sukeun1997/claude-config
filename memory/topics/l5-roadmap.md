@@ -39,3 +39,6 @@ type: project
 | 2026-04-01 | 4.5 | 4.0 | agent-tracker 등록 + failure-log 7건 |
 | 2026-04-10 | 4.5 | 4.2 | Opus critic 조정: 오케스트레이션 4.7(5.0→), 자기진화 4.2(4.5→). evolved skill 미발동 + friction 은퇴 0건 |
 | 2026-04-12 | - | - | 주간 리뷰 적용: SessionEnd 레이스 수정, confidence bump log2 스케일링, review-week codex 통합, dead code 정리 |
+| 2026-04-18 | 4.7 | 4.6 | evolved skill 실적 + 관측 파이프 복구로 자기진화 4.2→4.6 |
+| 2026-04-25 | 4.7→5.0 작업중 | - | 공유 상태 가드 적용 (4.7→5.0 갭 작업) |
+| 2026-05-16 | 4.6 (8축) / L3.5 (L1-L5) | 4.3 | tool-tracker deprecated 후 captures fallback grep 패턴 불일치 → sessions.jsonl 5/8~5/15 공백 발견. 4건 패치 + 5건 backfill로 측정 파이프 복구. **이번 회차부터 8축 + L1-L5 양쪽 병기** (척도 혼동 방지). 자기진화 축 회귀(4.6→4.3) 후 패치 반영 시 4.6 복귀 예상 |
