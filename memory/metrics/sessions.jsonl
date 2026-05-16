@@ -235,3 +235,4 @@
 {"date": "2026-05-10", "project": "building", "duration_min": 26, "total_edits": 1, "total_reads": 0, "unique_files": 1, "friction_files": 0, "log_lines": 63, "backfilled": true}
 {"date": "2026-05-12", "project": "global", "duration_min": 0, "total_edits": 1, "total_reads": 0, "unique_files": 1, "friction_files": 0, "log_lines": 36, "backfilled": true}
 {"date": "2026-05-13", "project": "building", "duration_min": 356, "total_edits": 28, "total_reads": 0, "unique_files": 17, "friction_files": 1, "log_lines": 0, "backfilled": true}
+{"date":"2026-05-16","project":"global","duration_min":21,"total_edits":5,"total_reads":3,"unique_files":3,"friction_files":1,"log_lines":12}
