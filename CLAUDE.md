@@ -265,11 +265,8 @@ Agent 호출 시 `model` 파라미터 필수 지정.
 | 트리거 | 스킬 |
 |--------|------|
 | `.kt` 파일 작성/수정 | `kotlin-patterns` |
-| `.swift` 파일 작성/수정 | `everything-claude-code:swiftui-patterns` |
-| JPA Entity / Repository 변경 | `everything-claude-code:jpa-patterns` |
 | `@Cacheable`, Redis 설정 변경 | `redis-cache-patterns` |
-| SQL 마이그레이션 / 스키마 변경 | `everything-claude-code:postgres-patterns` + `everything-claude-code:database-migrations` |
-| Security 설정, 인증/인가 코드 | `everything-claude-code:springboot-security` + `everything-claude-code:security-review` |
+| Security 설정, 인증/인가 코드 | `security-fix` (글로벌, code/security 병렬 리뷰 → 수정 → 검증) |
 
 ### 워크플로우 기반
 | 트리거 | 스킬 |
@@ -277,12 +274,10 @@ Agent 호출 시 `model` 파라미터 필수 지정.
 | 구현 요청에 기술/설계 선택이 포함된 경우 — **학습 모드 ON(기본)**: 사용자가 단일 후보만 언급해도 트리거 (현 스택 내 라이브러리/패턴 대안 1-2개 + 트레이드오프 1줄). **학습 모드 OFF**: 미확정 케이스만 트리거 (기존 스택으로 자연 결정되면 스킵). 학습 모드 정의는 §1 참조 | `tech-advisor` (대안 비교 → 사용자 선택 → 구현 진행) |
 | 새 기능 구현 시작 | `feature` (tech-advisor → brainstorming → plans → execution) |
 | 기술 뉴스/동향 요청 | `daily-briefing` (quick/deep 모드) |
-| 테스트 코드 작성 | `everything-claude-code:springboot-tdd` (백엔드) / `everything-claude-code:swift-protocol-di-testing` (iOS) |
-| PR 전 최종 검증 | `everything-claude-code:springboot-verification` (백엔드) / `superpowers:verification-before-completion` |
+| PR 전 최종 검증 | `superpowers:verification-before-completion` |
 | 버그 수정/디버깅 시작 | `/sdebug` (`superpowers:systematic-debugging`) — Phase 1 증거 수집 후 **가설 후보 2개+ 또는 원인 모호 시 `/triage` 분기** (병렬 발산 → 심판 수렴) → 결과 받아 sdebug Phase 2 복귀. 단일 가설로 명확하면 triage 스킵하고 직진 |
 | 버그 수정 코드 작성 완료 | `superpowers:verification-before-completion` (수정 결과 실행 확인) |
 | 빌드 실패 | `build-fixer` 에이전트 (스킬 아닌 에이전트) |
-| LLM API 비용/쿼터 관련 | `everything-claude-code:cost-aware-llm-pipeline` |
 | 아키텍처 다이어그램 요청 | `arch-diagram` |
 | 업무 기술 + "가이드/학습/마스터/정리" | `master-guide` (심층 학습 가이드) |
 | 업무 기술 + "업데이트" | `master-guide` (update 모드) |
