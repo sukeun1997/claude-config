@@ -278,6 +278,7 @@ Agent 호출 시 `model` 파라미터 필수 지정.
 |--------|------|
 | 구현 요청에 기술/설계 선택이 포함된 경우 — **학습 모드 ON(기본)**: 사용자가 단일 후보만 언급해도 트리거 (현 스택 내 라이브러리/패턴 대안 1-2개 + 트레이드오프 1줄). **학습 모드 OFF**: 미확정 케이스만 트리거 (기존 스택으로 자연 결정되면 스킵). 학습 모드 정의는 §1 참조 | `tech-advisor` (대안 비교 → 사용자 선택 → 구현 진행) |
 | 새 기능 구현 시작 | `feature` (tech-advisor → brainstorming → plans → execution) |
+| 설계/분석 문서 **신규 생성** (spec/*.md, plan*.md, *-spec.md, *-analysis.md) — vault/.omx/active/sessions/daily 경로 제외, brainstorming 산출물·docs-save 결과는 스킵 | `feature` brainstorming 게이트 선행. 이미 brainstorming 완료 후 기록이면 스킵 |
 | 기술 뉴스/동향 요청 | `daily-briefing` (quick/deep 모드) |
 | PR 전 최종 검증 | `superpowers:verification-before-completion` |
 | 버그 수정/디버깅 시작 | `/sdebug` (`superpowers:systematic-debugging`) — Phase 1 증거 수집 후 **가설 후보 2개+ 또는 원인 모호 시 `/triage` 분기** (병렬 발산 → 심판 수렴) → 결과 받아 sdebug Phase 2 복귀. 단일 가설로 명확하면 triage 스킵하고 직진 |
@@ -324,3 +325,4 @@ Agent 호출 시 `model` 파라미터 필수 지정.
   - friction 추이: sessions.jsonl 기반 마찰 빈도. friction=0 규칙 4주 지속 시 은퇴 후보
   - 이상 갭 분석: `memory/metrics/harness-kpi.md` 정의 KPI 대비 현재 달성률. 미달 KPI에 대해 원인 가설 + 개선 제안 생성
 - **Self-Absorb 루프**: Stop 훅이 삽질 감지 시 원인 분류 + 개선 제안 요청 → 다음 세션에서 제안 리뷰
+- **미분류 batch 처리**: 세션 시작 시 `failure-log.md`에 "미분류" 항목이 **5건 이상** 이면 → 사용자 요청 처리 중 첫 여유 시점에 batch 분류 완료 (사용자 명시 작업을 가로막지 않음)
