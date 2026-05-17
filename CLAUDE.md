@@ -108,6 +108,11 @@
      5. 동등 가치를 더 작은 변경으로 달성하는 대안 1개
    - 5/6 매각 동기화 REST→Kafka 결정처럼 "영향없이/기록보존" 한 줄 근거로 끝나지 않도록 강제
 4. **구현 작업** (2개+ 파일) → Plan-First
+   - **3줄 룰 (spec/plan 본문 작성 전 강제)**: 문서 최상단(frontmatter 바로 아래)에 아래 3줄을 먼저 기록 후 본문 진행. 3줄이 모이지 않으면 명확화 인터뷰 추가, 본문 작성 금지
+     - **AC** (성공 기준, 동사 3개): "X가 Y 한다" 형태
+     - **Out-of-scope** (이번 미포함, 명사 3개): 다음 사이클로 미루는 항목
+     - **Done-when** (완료 판정 1줄): 어떻게 끝났음을 알 수 있는가
+     - 근거: failure-log spec 13~20회 / plan 16회 반복 편집은 모두 스코프 미확정 상태에서 본문 착수한 패턴. 이 게이트가 가장 큰 ROI
    - planner의 plan이 6+파일, 200줄+ 변경을 포함하면: `critic`(opus)이 plan을 adversarial 검증 → user approval. critic REJECT 시 planner 1회 수정 → 재REJECT 시 사용자 보고
    - 소/중규모: 기존대로 바로 user approval
 5. **기타** → 적절한 에이전트에 위임
