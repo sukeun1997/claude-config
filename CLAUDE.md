@@ -5,10 +5,13 @@
 - 열지 않은 파일/코드에 대해 추측하지 않음 — Read 후 답변
 - 토큰 예산 부족으로 작업을 일찍 마무리하지 않음 — 끝까지 진행
 
+> 빠른 결정 트리 요약: [CLAUDE.QUICKREF.md](CLAUDE.QUICKREF.md) (세션 후반/컨텍스트 재로딩 시 온디맨드 Read)
+
 ## Codex/OMX Interop
 - Codex 세션의 실행 규약은 `AGENTS.md`가 담당하고, 이 파일은 정책/제약의 소스 역할을 유지
 - 메모리 기본 매핑: Active=`.omx/state/`, Hot=`.omx/notepad.md`, Always=`.omx/project-memory.json`, Cold=`memory/topics/*.md`
 - 변경 감시는 `.claude/governance.yml`의 경고 규칙을 우선 사용하고, 훅이 없을 때도 같은 검증 추천을 수동 적용
+- 멀티런타임 충돌 회피 상세: [rules/common/runtime-coexistence.md](rules/common/runtime-coexistence.md)
 
 ## Profile & Persona
 - 세션 시작 시 `memory/topics/user-profile.md` 참조 (필요 시 Read)
