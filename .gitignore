@@ -63,6 +63,10 @@ memory/briefing-history.jsonl
 # MCP config (machine-specific)
 .mcp.json
 mcp-needs-auth-cache.json
+state/mcp-needs-auth-cache.json
+
+# Claude Code CLI managed (rewritten on every cleanup)
+.last-cleanup
 
 # Memory search index (machine-local)
 memory-search/

@@ -64,6 +64,15 @@ rules:
     recommend: ".mcp.json과 동일 — 평문 시크릿 금지, 환경변수 참조만"
     severity: warn
 
+  # 주의: memory/active/*.md 패턴은 의도적으로 제외 — Stop 훅이 세션마다 자동 갱신하므로
+  # PostToolUse Edit/Write 매칭이 false positive를 양산한다. 멀티런타임 충돌 가이드는
+  # rules/common/runtime-coexistence.md 본문이 담당하고, 여기서는 drift 감지 1개만 유지.
+
+  - pattern: "rules/common/runtime-coexistence.md"
+    message: "런타임 공존 규칙 변경 감지"
+    recommend: "AGENTS.md Shared Resource Inventory와 동기화 확인. 6개 자원 표가 두 문서에서 일치해야 함"
+    severity: warn
+
   # 아래 4개 패턴은 의도적으로 `**/` 접두 제거 — fnmatch는 `**`를 일반 `*`로 처리하여
   # root-level 파일이 매칭에서 빠진다 (`tests/test_foo.py`는 OK인데 `test_foo.py`는 미매칭).
   # governance-guard.sh가 basename도 매칭하므로 디렉토리 무관 단순 패턴이 더 정확하다.
