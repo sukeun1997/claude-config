@@ -159,3 +159,4 @@ edit-tracker (3회+ 반복 편집 감지)
 | 2026-05-12 | as-is-to-be-analysis.md 7회 반복 편집 | Prompt (추정·7회) | 접근법 오류 가능성 — 초기화 후 재설계 권장 |
 | 2026-05-13 | spec-sale-loss-v3.md 17회 반복 편집 | Prompt (추정·17회) | 접근법 오류 가능성 — 초기화 후 재설계 권장 |
 | 2026-05-13 | CLAUDE.md 4회 반복 편집 | Prompt (추정) | 지시문/스킬 정의 반복 — description/triggers 모호성 점검 |
+| 2026-05-18 | execute_loan_action.py 6회 반복 편집 | Context (추정·강) | 소스 6회+ — 파일 전체 Read 후 재접근 권장 |
