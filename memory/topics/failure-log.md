@@ -153,3 +153,7 @@ edit-tracker (3회+ 반복 편집 감지)
 | 2026-05-16 | KpiSection.tsx 3회 반복 편집 | Context (추정) | 소스 반복 — 관련 파일/타입 정의 확인 필요 |
 | 2026-05-16 | sessions.jsonl 5/8~5/15 8일 공백 | Harness | 원인: 4/12 commit 1eb6523 "dead code 정리"로 tool-tracker.sh를 deprecated/로 이동하면서 captures fallback에 의존. 그러나 fallback의 grep 패턴 `'"tool":"Edit'`(공백없음) vs 실제 포맷 `"tool": "Edit"`(공백있음) 불일치로 모든 fallback 카운트가 0 → 노이즈 필터에서 탈락. 해법: (a) 패턴을 `'"tool":[[:space:]]*"(Edit\|Write)'`로 수정 (b) reads/unique/friction도 captures fallback 보강 (c) SessionStart에 sessions.jsonl 3일+ 공백 자가진단 추가 (d) captures 데이터로 5건 backfill. 재발 방지: deprecated 정리 PR은 fallback 동작을 dry-run으로 검증 후 머지 |
 | 2026-05-16 | CLAUDE.md 3회 반복 편집 | Prompt (추정) | 지시문/스킬 정의 반복 — description/triggers 모호성 점검 |
+| 2026-05-19 | ActivityForm.tsx 4회 반복 편집 | Context (추정) | 소스 반복 — 관련 파일/타입 정의 확인 필요 |
+| 2026-05-19 | ManagementLogPage.tsx 3회 반복 편집 | Context (추정) | 소스 반복 — 관련 파일/타입 정의 확인 필요 |
+| 2026-05-19 | App.tsx 3회 반복 편집 | Context (추정) | 소스 반복 — 관련 파일/타입 정의 확인 필요 |
+| 2026-05-19 | management-log.service.ts 3회 반복 편집 | Context (추정) | 소스 반복 — 관련 파일/타입 정의 확인 필요 |
