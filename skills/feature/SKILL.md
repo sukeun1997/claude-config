@@ -126,6 +126,15 @@ brainstorming/writing-plans에 invoke 시 위 frontmatter를 본문 앞에 포�
 - 명확화 질문 → 접근법 2-3개 비교 → 사용자 선택 후 바로 spec 작성
 - spec 작성 후 self-review → Gate 1(사용자 spec 검토)에서 한 번에 피드백 받음
 - 이유: 결정 시점이 한 번으로 모이면 사용자 부담이 줄고, 섹션 발표 후 바로 spec에 동일 내용을 다시 적는 중복 제거
+
+[3줄 룰 — spec 본문 작성 전 필수 산출물]
+- frontmatter 바로 아래에 아래 블록을 먼저 작성한 다음 본문 진행:
+  ## Scope
+  - **AC** (성공 기준, 동사 3개): "X가 Y 한다" 형태
+  - **Out-of-scope** (이번 미포함, 명사 3개): 다음 사이클로 미루는 항목
+  - **Done-when** (완료 판정 1줄): 어떻게 끝났음을 알 수 있는가
+- AC 3개 / Out-of-scope 3개가 모이지 않으면 인터뷰 추가 진행, 본문 작성 금지
+- 출처: CLAUDE.md §2 #4 — failure-log의 spec 13~20회 반복 편집 차단용
 ```
 
 brainstorming 스킬이 인터뷰 → 접근법 제안 → 스펙 문서 작성까지 수행한다 (섹션 단위 발표는 건너뜀).

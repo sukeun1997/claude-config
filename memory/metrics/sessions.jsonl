@@ -243,3 +243,12 @@
 {"date":"2026-05-13","project":"global","duration_min":0,"total_edits":28,"total_reads":132,"unique_files":9,"friction_files":2,"log_lines":0}
 {"date":"2026-05-18","project":"global","duration_min":0,"total_edits":6,"total_reads":15,"unique_files":1,"friction_files":1,"log_lines":0}
 {"date":"2026-05-19","project":"global","duration_min":0,"total_edits":1,"total_reads":10,"unique_files":1,"friction_files":0,"log_lines":0}
+{"date":"2026-05-16","project":"global","duration_min":4586,"total_edits":50,"total_reads":65,"unique_files":17,"friction_files":8,"log_lines":0}
+{"date": "2026-05-08", "project": "building", "duration_min": 89, "total_edits": 17, "total_reads": 0, "unique_files": 16, "friction_files": 0, "log_lines": 43, "backfilled": true}
+{"date": "2026-05-09", "project": "global", "duration_min": 3, "total_edits": 2, "total_reads": 0, "unique_files": 2, "friction_files": 0, "log_lines": 43, "backfilled": true}
+{"date": "2026-05-10", "project": "building", "duration_min": 26, "total_edits": 1, "total_reads": 0, "unique_files": 1, "friction_files": 0, "log_lines": 63, "backfilled": true}
+{"date": "2026-05-12", "project": "global", "duration_min": 0, "total_edits": 1, "total_reads": 0, "unique_files": 1, "friction_files": 0, "log_lines": 36, "backfilled": true}
+{"date": "2026-05-13", "project": "building", "duration_min": 356, "total_edits": 28, "total_reads": 0, "unique_files": 17, "friction_files": 1, "log_lines": 0, "backfilled": true}
+{"date":"2026-05-16","project":"global","duration_min":21,"total_edits":5,"total_reads":3,"unique_files":3,"friction_files":1,"log_lines":12}
+{"date":"2026-05-18","project":"building","duration_min":1102,"total_edits":7,"total_reads":6,"unique_files":6,"friction_files":0,"log_lines":0}
+{"date":"2026-05-19","project":"global","duration_min":1158,"total_edits":29,"total_reads":49,"unique_files":15,"friction_files":4,"log_lines":0}

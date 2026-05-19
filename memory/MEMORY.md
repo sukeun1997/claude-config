@@ -167,3 +167,11 @@
 ### Promoted 2026-04-26
 - TestFlight 새 빌드 못 올라가는 가장 흔한 원인: CFBundleVersion 동일. xcodegen project.yml에 정적 빌드 번호 두지 말 것.
 - 클라이언트 에러를 LGTM에 흘리는 가장 단순한 패턴: SLF4J logger.warn(...) 한 줄. docker stdout → Alloy/Promtail이 자동 수집. 별도 HTTP push 코드 불필요.
+
+### Promoted 2026-05-16
+- **deprecated 정리 PR은 fallback 동작을 dry-run으로 검증 후 머지** — 1eb6523(4/12) 같은 silent regression 재발 방지
+- **평가 척도 일관성**: "성숙도" 단어 사용 시 척도(8축/L1-L5) 명시 — 같은 단어로 다른 측정값 혼용 금지
+
+### Promoted 2026-05-19
+- 삽질: `tsx watch`가 백그라운드에서 stale 코드로 돌고 있어 첫 UI 삭제 시도가 404 → 서버 재시작으로 해결. 검증 전 서버 PID 확인 또는 명시적 reload 필요
+- 패턴: 새 라우트가 안 잡힐 때 → ① 파일 grep으로 라우트 존재 확인 → ② lsof로 서버 PID + uptime 확인 → ③ stale이면 SIGTERM + 재시작

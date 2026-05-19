@@ -5,10 +5,13 @@
 - 열지 않은 파일/코드에 대해 추측하지 않음 — Read 후 답변
 - 토큰 예산 부족으로 작업을 일찍 마무리하지 않음 — 끝까지 진행
 
+> 빠른 결정 트리 요약: [CLAUDE.QUICKREF.md](CLAUDE.QUICKREF.md) (세션 후반/컨텍스트 재로딩 시 온디맨드 Read)
+
 ## Codex/OMX Interop
 - Codex 세션의 실행 규약은 `AGENTS.md`가 담당하고, 이 파일은 정책/제약의 소스 역할을 유지
 - 메모리 기본 매핑: Active=`.omx/state/`, Hot=`.omx/notepad.md`, Always=`.omx/project-memory.json`, Cold=`memory/topics/*.md`
 - 변경 감시는 `.claude/governance.yml`의 경고 규칙을 우선 사용하고, 훅이 없을 때도 같은 검증 추천을 수동 적용
+- 멀티런타임 충돌 회피 상세: [rules/common/runtime-coexistence.md](rules/common/runtime-coexistence.md)
 
 ## Profile & Persona
 - 세션 시작 시 `memory/topics/user-profile.md` 참조 (필요 시 Read)
@@ -108,6 +111,11 @@
      5. 동등 가치를 더 작은 변경으로 달성하는 대안 1개
    - 5/6 매각 동기화 REST→Kafka 결정처럼 "영향없이/기록보존" 한 줄 근거로 끝나지 않도록 강제
 4. **구현 작업** (2개+ 파일) → Plan-First
+   - **3줄 룰 (spec/plan 본문 작성 전 강제)**: 문서 최상단(frontmatter 바로 아래)에 아래 3줄을 먼저 기록 후 본문 진행. 3줄이 모이지 않으면 명확화 인터뷰 추가, 본문 작성 금지
+     - **AC** (성공 기준, 동사 3개): "X가 Y 한다" 형태
+     - **Out-of-scope** (이번 미포함, 명사 3개): 다음 사이클로 미루는 항목
+     - **Done-when** (완료 판정 1줄): 어떻게 끝났음을 알 수 있는가
+     - 근거: failure-log spec 13~20회 / plan 16회 반복 편집은 모두 스코프 미확정 상태에서 본문 착수한 패턴. 이 게이트가 가장 큰 ROI
    - planner의 plan이 6+파일, 200줄+ 변경을 포함하면: `critic`(opus)이 plan을 adversarial 검증 → user approval. critic REJECT 시 planner 1회 수정 → 재REJECT 시 사용자 보고
    - 소/중규모: 기존대로 바로 user approval
 5. **기타** → 적절한 에이전트에 위임
@@ -294,21 +302,19 @@ Agent 호출 시 `model` 파라미터 필수 지정.
 | **`.py` 파일 작성/수정 → 리뷰 단계**(구현 직후 §4 라우팅 시) | `python-deep-review` (Phase 1 병렬 4-agent + Phase 3 verifier+critic 독립 검증). 1줄 변경도 풀세트 발동 (Q2=a). 비용 부담 시 `--light` 또는 `--quick` |
 | JPA Entity / Repository 변경 | `everything-claude-code:jpa-patterns` |
 | `@Cacheable`, Redis 설정 변경 | `redis-cache-patterns` |
-| SQL 마이그레이션 / 스키마 변경 | `everything-claude-code:postgres-patterns` + `everything-claude-code:database-migrations` |
-| Security 설정, 인증/인가 코드 | `everything-claude-code:springboot-security` + `everything-claude-code:security-review` |
+| Security 설정, 인증/인가 코드 | `security-fix` (글로벌, code/security 병렬 리뷰 → 수정 → 검증) |
 
 ### 워크플로우 기반
 | 트리거 | 스킬 |
 |--------|------|
 | 구현 요청에 기술/설계 선택이 포함된 경우 — **학습 모드 ON(기본)**: 사용자가 단일 후보만 언급해도 트리거 (현 스택 내 라이브러리/패턴 대안 1-2개 + 트레이드오프 1줄). **학습 모드 OFF**: 미확정 케이스만 트리거 (기존 스택으로 자연 결정되면 스킵). 학습 모드 정의는 §1 참조 | `tech-advisor` (대안 비교 → 사용자 선택 → 구현 진행) |
 | 새 기능 구현 시작 | `feature` (tech-advisor → brainstorming → plans → execution) |
+| 설계/분석 문서 **신규 생성** (spec/*.md, plan*.md, *-spec.md, *-analysis.md) — vault/.omx/active/sessions/daily 경로 제외, brainstorming 산출물·docs-save 결과는 스킵 | `feature` brainstorming 게이트 선행. 이미 brainstorming 완료 후 기록이면 스킵 |
 | 기술 뉴스/동향 요청 | `daily-briefing` (quick/deep 모드) |
-| 테스트 코드 작성 | `everything-claude-code:springboot-tdd` (백엔드) / `everything-claude-code:swift-protocol-di-testing` (iOS) |
-| PR 전 최종 검증 | `everything-claude-code:springboot-verification` (백엔드) / `superpowers:verification-before-completion` |
+| PR 전 최종 검증 | `superpowers:verification-before-completion` |
 | 버그 수정/디버깅 시작 | `/sdebug` (`superpowers:systematic-debugging`) — Phase 1 증거 수집 후 **가설 후보 2개+ 또는 원인 모호 시 `/triage` 분기** (병렬 발산 → 심판 수렴) → 결과 받아 sdebug Phase 2 복귀. 단일 가설로 명확하면 triage 스킵하고 직진 |
 | 버그 수정 코드 작성 완료 | `superpowers:verification-before-completion` (수정 결과 실행 확인) |
 | 빌드 실패 | `build-fixer` 에이전트 (스킬 아닌 에이전트) |
-| LLM API 비용/쿼터 관련 | `everything-claude-code:cost-aware-llm-pipeline` |
 | 아키텍처 다이어그램 요청 | `arch-diagram` |
 | 업무 기술 + "가이드/학습/마스터/정리" | `master-guide` (심층 학습 가이드) |
 | 업무 기술 + "업데이트" | `master-guide` (update 모드) |
@@ -350,3 +356,4 @@ Agent 호출 시 `model` 파라미터 필수 지정.
   - friction 추이: sessions.jsonl 기반 마찰 빈도. friction=0 규칙 4주 지속 시 은퇴 후보
   - 이상 갭 분석: `memory/metrics/harness-kpi.md` 정의 KPI 대비 현재 달성률. 미달 KPI에 대해 원인 가설 + 개선 제안 생성
 - **Self-Absorb 루프**: Stop 훅이 삽질 감지 시 원인 분류 + 개선 제안 요청 → 다음 세션에서 제안 리뷰
+- **미분류 batch 처리**: 세션 시작 시 `failure-log.md`에 "미분류" 항목이 **5건 이상** 이면 → 사용자 요청 처리 중 첫 여유 시점에 batch 분류 완료 (사용자 명시 작업을 가로막지 않음)

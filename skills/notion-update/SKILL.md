@@ -162,9 +162,25 @@ Notion 업데이트 완료:
 4. 메인 페이지 업데이트 필요 시: `notion-fetch` main page ID → `replace_content_range`로 업데이트
 5. 결과 보고: 생성/수정한 페이지 목록 + 성공/실패
 
-### Phase 3: 메인 세션 — 결과 보고
+### Phase 3: 메인 세션 — 결과 보고 + Daily Log 백포팅
 
 서브에이전트 결과를 사용자에게 요약 보고.
+
+#### Phase 3.5: Daily Log 동기화 (필수)
+
+노션 작성 후 그날 daily log에 한 줄 추가 — review-week가 노션 작성 활동을 누락하지 않도록.
+
+1. `memory/daily/YYYY-MM-DD.md` 확인 (없으면 SessionStart 훅이 생성한 헤더만 있음)
+2. 아래 형식으로 append (이미 같은 노션 URL이 그날 로그에 있으면 skip — idempotent):
+   ```markdown
+   ### HH:MM - [Notion] {project_name} 업데이트
+   - 작업일지: <date-page-notion-url>
+   - 메인 페이지: {갱신 항목 1-2줄} (있을 때만)
+   ```
+3. 시각은 `date +%H:%M`로 KST 기준
+4. project가 "global"이면 이 단계 skip (글로벌 daily log에는 프로젝트별 노션 활동 기록 불필요)
+
+**이유**: 노션 작업 일지에 직접 입력한 내용은 sessions.jsonl과 daily log에 흔적이 남지 않아, /review-week 분석 시 "작업했지만 보이지 않는" 5/13~5/15 같은 공백이 발생함.
 
 ### 토큰 절약 핵심
 

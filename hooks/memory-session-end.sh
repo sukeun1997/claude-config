@@ -122,16 +122,26 @@ if [ -f "$TRACK_FILE_PATH" ]; then
   FRICTION_COUNT=$(sort "$TRACK_FILE_PATH" | uniq -c | awk '$1 >= 3' | wc -l | tr -d ' ')
 fi
 # Fallback: read from captures JSONL if tracker file missing/empty
-if [ "$TOTAL_EDITS" -eq 0 ]; then
-  CAPTURES_FILE="$MEM_DIR/daily/.captures-${DATE_STR}.jsonl"
-  if [ -f "$CAPTURES_FILE" ]; then
-    TOTAL_EDITS=$(grep -c '"tool":"Edit\|"tool":"Write' "$CAPTURES_FILE" 2>/dev/null || echo "0")
-    TOTAL_EDITS=$(echo "$TOTAL_EDITS" | tr -d '[:space:]')
-    TOTAL_EDITS="${TOTAL_EDITS:-0}"
-  fi
+# captures format: {"ts":"...", "date":"...", "tool": "Edit", "file": "..."}  (space after "tool":)
+CAPTURES_FILE="$MEM_DIR/daily/.captures-${DATE_STR}.jsonl"
+if [ "$TOTAL_EDITS" -eq 0 ] && [ -f "$CAPTURES_FILE" ]; then
+  TOTAL_EDITS=$(grep -cE '"tool":[[:space:]]*"(Edit|Write)' "$CAPTURES_FILE" 2>/dev/null) || TOTAL_EDITS=0
+  TOTAL_EDITS=$(echo "$TOTAL_EDITS" | tr -d '[:space:]'); TOTAL_EDITS="${TOTAL_EDITS:-0}"
+  # friction_files: same file edited 3+ times
+  FRICTION_COUNT=$(grep -E '"tool":[[:space:]]*"(Edit|Write)' "$CAPTURES_FILE" 2>/dev/null \
+    | grep -oE '"file":[[:space:]]*"[^"]+"' | sort | uniq -c | awk '$1 >= 3' | wc -l | tr -d ' ')
+  FRICTION_COUNT="${FRICTION_COUNT:-0}"
+  # unique_files: distinct files touched by Edit/Write
+  UNIQUE_FILES=$(grep -E '"tool":[[:space:]]*"(Edit|Write)' "$CAPTURES_FILE" 2>/dev/null \
+    | grep -oE '"file":[[:space:]]*"[^"]+"' | sort -u | wc -l | tr -d ' ')
+  UNIQUE_FILES="${UNIQUE_FILES:-0}"
 fi
 if [ -f "$READ_TRACK_FILE" ]; then
   TOTAL_READS=$(wc -l < "$READ_TRACK_FILE" | tr -d ' ')
+elif [ -f "$CAPTURES_FILE" ]; then
+  # Read fallback from captures
+  TOTAL_READS=$(grep -cE '"tool":[[:space:]]*"Read"' "$CAPTURES_FILE" 2>/dev/null) || TOTAL_READS=0
+  TOTAL_READS=$(echo "$TOTAL_READS" | tr -d '[:space:]'); TOTAL_READS="${TOTAL_READS:-0}"
 fi
 
 # Session duration estimate (from session marker)

@@ -35,6 +35,23 @@ if [ -f "$_LAST_MARKER" ]; then
     _HEALTH_WARNINGS+="NO_RECENT_CAPTURES: 최근 세션에서 도구 캡처 없음 — memory-post-tool.py 확인 필요\n"
   fi
 fi
+# sessions.jsonl recency check (gap >3 days = metrics pipeline likely broken)
+_METRICS_FILE="$MEM_DIR/metrics/sessions.jsonl"
+if [ -f "$_METRICS_FILE" ]; then
+  _LAST_METRIC_DATE=$(tail -100 "$_METRICS_FILE" 2>/dev/null | grep -oE '"date":"[0-9]{4}-[0-9]{2}-[0-9]{2}"' | tail -1 | grep -oE '[0-9]{4}-[0-9]{2}-[0-9]{2}')
+  if [ -n "$_LAST_METRIC_DATE" ]; then
+    if [ "$(uname)" = "Darwin" ]; then
+      _LAST_TS=$(date -j -f "%Y-%m-%d" "$_LAST_METRIC_DATE" "+%s" 2>/dev/null || echo 0)
+    else
+      _LAST_TS=$(date -d "$_LAST_METRIC_DATE" "+%s" 2>/dev/null || echo 0)
+    fi
+    _NOW_TS=$(date +%s)
+    _GAP_DAYS=$(( (_NOW_TS - _LAST_TS) / 86400 ))
+    if [ "$_GAP_DAYS" -ge 3 ]; then
+      _HEALTH_WARNINGS+="METRICS_STALE: sessions.jsonl 마지막 기록 ${_LAST_METRIC_DATE} (${_GAP_DAYS}일 경과) — captures→metrics 파이프 점검 필요\n"
+    fi
+  fi
+fi
 if [ -n "$_HEALTH_WARNINGS" ]; then
   CONTEXT+="⚠️ HOOK HEALTH CHECK:
 $(echo -e "$_HEALTH_WARNINGS")
@@ -90,7 +107,10 @@ if [ -d "$ACTIVE_DIR" ]; then
     file_lines=$(wc -l < "$ac_file" 2>/dev/null | tr -d ' ')
     file_lines="${file_lines:-0}"
     has_todos=$(grep -c '^\- \[ \]' "$ac_file" 2>/dev/null || echo "0")
-    if { [ "$age_days" -ge 7 ] && [ "$has_todos" -eq 0 ]; } || { [ "$changed_count" -eq 0 ] && [ "$age_days" -ge 5 ] && [ "$file_lines" -le 5 ]; }; then
+    has_todos=$(echo "$has_todos" | tr -d '[:space:]'); has_todos="${has_todos:-0}"
+    # Auto-archive: (7+d, no todos) OR (5+d, no changes, no todos)
+    # file_lines 제약 제거 — 변경 0개 + 5일+ + 미완료 todo 없음이면 dead context로 간주
+    if { [ "$age_days" -ge 7 ] && [ "$has_todos" -eq 0 ]; } || { [ "$changed_count" -eq 0 ] && [ "$age_days" -ge 5 ] && [ "$has_todos" -eq 0 ]; }; then
       mv "$ac_file" "$MONTH_DIR/" 2>/dev/null && AUTO_ARCHIVED=$((AUTO_ARCHIVED + 1)) || true
     elif [ "$changed_count" -eq 0 ] && [ "$age_days" -ge 3 ]; then
       HYGIENE_WARNINGS+="- ${ac_basename}: 변경 0개 + ${age_days}일 미갱신 (삭제 권장)\n"

@@ -1,0 +1,15 @@
+{
+  "schemaVersion": 1,
+  "kind": "policy-limits",
+  "updatedAt": "2026-04-27T06:23:11Z",
+  "data": {
+    "restrictions": {
+      "allow_quick_web_setup": {
+        "allowed": false
+      },
+      "enforce_web_search_mcp_isolation": {
+        "allowed": false
+      }
+    }
+  }
+}
