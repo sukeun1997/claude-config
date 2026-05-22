@@ -35,9 +35,9 @@ edit-tracker (3회+ 반복 편집 감지)
 | 2026-04-10 | sessions.jsonl total_edits 항상 0 (3/29~ 전수) | Harness | 원인: tool-tracker.sh의 `grep -cxF \|\| echo "0"` — grep count=0 시 exit 1 → echo "0" 추가 출력 → COUNT="0\n0" → arithmetic syntax error. 해법: `COUNT=$(...) \|\| COUNT=0` 패턴으로 수정 |
 | 2026-04-10 | agent-usage-tracker settings.json 미등록 (4/6 복구 시 누락) | Harness | 원인: hooks 복구 시 Agent matcher 미등록. 해법: PostToolUse Agent matcher 추가 |
 | 2026-04-10 | Active Context Changed Files 무제한 → 20줄 규칙 위반 (52줄) | Harness | 원인: memory-active-context.sh가 전체 파일 목록 덤프. 해법: Changed Files 블록 제거, 커밋 5개 + diff stat만 표시 |
-| 2026-04-10 | test-5x.txt 5회 반복 편집 | 미분류 — 다음 세션에서 원인 분석 필요 | - |
-| 2026-04-12 | index.ts 3회 반복 편집 | 미분류 — 다음 세션에서 원인 분석 필요 | - |
-| 2026-04-14 | spec-sale-loss-v2.md 7회 반복 편집 | 미분류 — 다음 세션에서 원인 분석 필요 | - |
+| 2026-04-10 | test-5x.txt 5회 반복 편집 | Harness (dedup) | L41 참조 — 트래커 테스트 픽스처 false-positive, 기분류 완료 |
+| 2026-04-12 | index.ts 3회 반복 편집 | Context (dedup) | L42 참조 — 타입 정의/의존 모듈 선행 Read 미흡, 기분류 완료 |
+| 2026-04-14 | spec-sale-loss-v2.md 7회 반복 편집 | Prompt | 스펙 스코프 미확정 — L46(04-13 6회)에 이어 다음날 재반복 |
 | 2026-04-10 | test-5x.txt 5회 반복 편집 | Harness (false-positive) | edit-tracker 테스트 픽스처 (파일명 "5x") — 트래커에서 제외 대상. 향후 `test-*` / `*-fixture.*` 제외 필터 추가 |
 | 2026-04-12 | index.ts 3회 반복 편집 | Context | 타입 정의/의존 모듈 선행 Read 없이 반복 수정 — Read:Edit 비율 관찰 필요 |
 | 2026-04-13 | MEMORY.md 4회 반복 편집 | Context (meta) | 메모리 시스템 개편 중 의도된 연속 수정 — 실패 신호 아님 (예상 패턴) |
@@ -89,7 +89,7 @@ edit-tracker (3회+ 반복 편집 감지)
 | 2026-04-27 | MockCooconApi.kt 3회 반복 편집 | Context | 구현 대상 인터페이스/스펙 선행 Read 미흡 |
 | 2026-04-27 | spec-sale-loss-v3.md 20회 반복 편집 | Prompt (추정·20회) | 접근법 오류 가능성 — 초기화 후 재설계 권장 |
 | 2026-04-27 | as-is-to-be-analysis.md 9회 반복 편집 | Prompt (추정·9회) | 접근법 오류 가능성 — 초기화 후 재설계 권장 |
-| 2026-04-27 | spec.md 4회 반복 편집 | 미분류 | 다음 세션에서 원인 분석 필요 |
+| 2026-04-27 | spec.md 4회 반복 편집 | Prompt | 스펙 스코프 미확정 — plan.md/spec-sale-loss 시리즈와 동일 패턴 |
 | 2026-04-27 | input-mortgage.json 4회 반복 편집 | Context (추정) | 설정/스타일 반복 — 기존 값과 원하는 값 명확화 |
 | 2026-04-27 | update_sale_bond_history.py 3회 반복 편집 | Context (추정) | 소스 반복 — 관련 파일/타입 정의 확인 필요 |
 | 2026-04-27 | test_update_sale_bond_history.py 3회 반복 편집 | Context (추정) | 소스 반복 — 관련 파일/타입 정의 확인 필요 |
@@ -107,28 +107,28 @@ edit-tracker (3회+ 반복 편집 감지)
 | 2026-04-29 | investment.py 3회 반복 편집 | Context (추정) | 소스 반복 — 관련 파일/타입 정의 확인 필요 |
 | 2026-04-29 | test_loan_screening_retry.py 6회 반복 편집 | Context (추정·강) | 소스 6회+ — 파일 전체 Read 후 재접근 권장 |
 | 2026-04-29 | loan_screening.py 5회 반복 편집 | Context (추정·강) | 소스 5회+ — 파일 전체 Read 후 재접근 권장 |
-| 2026-04-29 | 정산관련 4회 반복 편집 | 미분류 | 다음 세션에서 원인 분석 필요 |
+| 2026-04-29 | 정산관련 4회 반복 편집 | Context | 정산 스키마/관련 파일 선행 Read 미흡 |
 | 2026-05-04 | dove.py 5회 반복 편집 | Context (추정·강) | 소스 5회+ — 파일 전체 Read 후 재접근 권장 |
 | 2026-05-04 | test_dove_v2.py 4회 반복 편집 | Context (추정) | 소스 반복 — 관련 파일/타입 정의 확인 필요 |
-| 2026-05-04 | spec-sentry-15491-kyc-jsondecodeerror-2026-05-04.md 3회 반복 편집 | 미분류 | 다음 세션에서 원인 분석 필요 |
+| 2026-05-04 | spec-sentry-15491-kyc-jsondecodeerror-2026-05-04.md 3회 반복 편집 | Prompt | Sentry 분석 문서 스코프 모호 — 재현 증거 확보 후 단일 접근 권장 |
 | 2026-05-04 | test_aml_tasks.py 3회 반복 편집 | Context (추정) | 소스 반복 — 관련 파일/타입 정의 확인 필요 |
 | 2026-05-04 | test_aml_tasks.py 4회 반복 편집 | Context (추정) | 소스 반복 — 관련 파일/타입 정의 확인 필요 |
 | 2026-05-04 | dove.py 3회 반복 편집 | Context (추정) | 소스 반복 — 관련 파일/타입 정의 확인 필요 |
 | 2026-05-04 | 정산.md 18회 반복 편집 | Prompt (추정·18회) | 접근법 오류 가능성 — 초기화 후 재설계 권장 |
 | 2026-05-04 | [EXTERNAL] AI가 테스트 70% 삭제 후 "All Tests Pass" 보고 (Typia Go 포팅) | Prompt | 단순 성공 지표("테스트 통과") = 우회 동기. 후속 시도에서도 if-else 하드코딩 80억 토큰 / 외부 라이브러리(Zod) 위임 / 통과 못하는 케이스 배제 스크립트로 발전. 대책: verification.md에 "테스트 불변성(Test Inviolability)" 섹션 추가 — 테스트 삭제/skip/disable 금지, 잘못된 명세는 사용자 승인 후 수정. Sprint Contract `[기술적 조건]`에 "기존 테스트 변경 금지" 명시. **목표 오염 3종 세트 = 의도 상태 + 프로세스 제약 + 테스트 불변성** |
-| 2026-05-05 | MacSidebarView.swift 5회 반복 편집 | 미분류 | 다음 세션에서 원인 분석 필요 |
-| 2026-05-05 | HaruApp.swift 3회 반복 편집 | 미분류 | 다음 세션에서 원인 분석 필요 |
+| 2026-05-05 | MacSidebarView.swift 5회 반복 편집 | Context | Swift 뷰 계층구조/바인딩 선행 Read 미흡 |
+| 2026-05-05 | HaruApp.swift 3회 반복 편집 | Context | 앱 진입점/초기화 구조 선행 Read 미흡 |
 | 2026-05-05 | Haru V10__phase4_timeblock.sql Flyway 충돌 (새 DB 시작 실패) | Migration | V1__init.sql:328이 이미 `time_block` (calendar_connection_id 컬럼 + FK 포함, 더 완전) CREATE — V10이 redundant라 새 DB 셋업 시 V1 적용 후 V10이 또 CREATE 시도해 `relation already exists` 에러. **마이그레이션 파일 변경 시 prod schema_history checksum mismatch 위험** → 주석 추가/IF NOT EXISTS 모두 위험. 안전 대응: README에 우회 가이드 추가(시뮬레이터 baseURL을 prod로 임시 전환), 정식 수정은 V13 NOOP + flyway repair 등 별도 트리아지 |
 | 2026-05-05 | Haru iOS 시뮬레이터 게스트 로그인 실패 (디자인 확인 흐름) | Context | DEBUG+simulator 빌드는 localhost:8080 호출. 로컬 백엔드 미구동이면 게스트도 실패. 진단 순서: 1) `lsof :8080` 확인, 2) docker-compose-local up, 3) gradle bootRun, 4) 마이그레이션 충돌 시 prod baseURL 임시 우회 |
 | 2026-05-05 | TodayView.swift 7회 반복 편집 | Prompt (추정·7회) | 접근법 오류 가능성 — 초기화 후 재설계 권장 |
-| 2026-05-05 | TodoDetailView.swift 6회 반복 편집 | 미분류 | 다음 세션에서 원인 분석 필요 |
-| 2026-05-05 | 2026-05-05-haru.md 4회 반복 편집 | 미분류 | 다음 세션에서 원인 분석 필요 |
-| 2026-05-05 | SmartListDetailView.swift 3회 반복 편집 | 미분류 | 다음 세션에서 원인 분석 필요 |
-| 2026-05-05 | ListDetailView.swift 3회 반복 편집 | 미분류 | 다음 세션에서 원인 분석 필요 |
-| 2026-05-05 | InboxView.swift 3회 반복 편집 | 미분류 | 다음 세션에서 원인 분석 필요 |
-| 2026-05-05 | TodoDetailViewModel.swift 4회 반복 편집 | 미분류 | 다음 세션에서 원인 분석 필요 |
-| 2026-05-05 | TodayView.swift 4회 반복 편집 | 미분류 | 다음 세션에서 원인 분석 필요 |
-| 2026-05-05 | InboxView.swift 4회 반복 편집 | 미분류 | 다음 세션에서 원인 분석 필요 |
+| 2026-05-05 | TodoDetailView.swift 6회 반복 편집 | Context | ViewModel 바인딩/액션 구조 선행 Read 미흡 |
+| 2026-05-05 | 2026-05-05-haru.md 4회 반복 편집 | Prompt (meta) | Daily log 반복 갱신 — 세션 중 의도된 반복 (실패 신호 아님) |
+| 2026-05-05 | SmartListDetailView.swift 3회 반복 편집 | Context | Smart List 모델 구조 선행 Read 미흡 |
+| 2026-05-05 | ListDetailView.swift 3회 반복 편집 | Context | List 모델/액션 구조 선행 Read 미흡 |
+| 2026-05-05 | InboxView.swift 3회 반복 편집 | Context | Inbox 데이터 모델 선행 Read 미흡 |
+| 2026-05-05 | TodoDetailViewModel.swift 4회 반복 편집 | Context | ViewModel 의존 서비스/모델 선행 Read 미흡 |
+| 2026-05-05 | TodayView.swift 4회 반복 편집 | Context | TodayView 상태/바인딩 선행 Read 미흡 |
+| 2026-05-05 | InboxView.swift 4회 반복 편집 | Context | 세션 교차 동일 파일 재반복 — active context handoff 부족 (4/19 MobileListingV2 패턴) |
 | 2026-05-06 | test_sale_loan_history_request.py 3회 반복 편집 | Context (추정) | 소스 반복 — 관련 파일/타입 정의 확인 필요 |
 | 2026-05-06 | plan.md 16회 반복 편집 | Prompt (추정·16회) | 접근법 오류 가능성 — 초기화 후 재설계 권장 |
 | 2026-05-06 | plan.md 12회 반복 편집 | Prompt (추정·12회) | 접근법 오류 가능성 — 초기화 후 재설계 권장 |
@@ -139,7 +139,7 @@ edit-tracker (3회+ 반복 편집 감지)
 | 2026-05-07 | test_sale_bond_changed_event.py 3회 반복 편집 | Context (추정) | 소스 반복 — 관련 파일/타입 정의 확인 필요 |
 | 2026-05-07 | update_sale_bond_history.py 5회 반복 편집 | Context (추정·강) | 소스 5회+ — 파일 전체 Read 후 재접근 권장 |
 | 2026-05-07 | phase_b_check.py 3회 반복 편집 | Context (추정) | 소스 반복 — 관련 파일/타입 정의 확인 필요 |
-| 2026-05-07 | 정산.md 3회 반복 편집 | 미분류 | 다음 세션에서 원인 분석 필요 |
+| 2026-05-07 | 정산.md 3회 반복 편집 | Prompt | 정산 문서 스코프 미확정 — 2026-05-04 18회와 동일 파일 재반복 |
 | 2026-05-07 | SaleBondChangedEventMapperTest.kt 3회 반복 편집 | Context (추정) | 소스 반복 — 관련 파일/타입 정의 확인 필요 |
 | 2026-05-07 | messagerule.py 4회 반복 편집 | Context (추정) | 소스 반복 — 관련 파일/타입 정의 확인 필요 |
 | 2026-05-07 | messagerule.py 3회 반복 편집 | Context (추정) | 소스 반복 — 관련 파일/타입 정의 확인 필요 |
