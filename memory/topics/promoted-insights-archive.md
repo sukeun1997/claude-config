@@ -83,3 +83,8 @@ type: reference
 - Anthropic 공식 frontend-design 스킬은 짧다(200줄 미만). 단일 SKILL.md + lazy-load reference — 스킬 메인은 얇게, 상세는 references/로
 - 하네스 패턴: `@ts-expect-error + tsconfig.test.json` 계약 테스트가 반대 방향(복원)으로도 "의도된 변경 명시"용으로 재활용. "금지 계약"이 "정책 문서"로도 기능
 - 사용자 증상 보고 + 내 해석의 2-pass 조정: 자연어는 축약되므로 스크린샷으로 **표현과 의도 간극** 재확인. 증상 스크린샷이 의도 스크린샷보다 구체적
+
+### 세부 보존 (MEMORY.md 슬림화 시 핵심만 승격, 상세는 여기)
+- **(04-10) absorb 운영 메트릭**: 주 2회 제한(화/금 배치), 적용률 41%→70% 목표, Phase 0 사전 필터링 추가 (북마크 초과분 처리)
+- **(05-19) tsx watch stale 근본원인**: `tsx watch`가 백그라운드에서 stale 코드로 돌면 첫 UI 삭제 시도가 404 → 서버 재시작으로 해결. 검증 전 서버 PID 확인 또는 명시적 reload 필요 (절차는 MEMORY.md 05-19 항목)
+- (은퇴) "SessionEnd 훅 관측 갭 (진단 중, 4/16~17 sessions.jsonl 누락)" 항목은 2026-05-16 captures fallback grep 패턴 수정으로 해결되어 제거

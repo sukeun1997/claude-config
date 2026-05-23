@@ -39,6 +39,15 @@ def session_id():
         return None
 
 
+def norm(p: str) -> str:
+    """경로 정규화 — Read/Edit가 상대·절대 경로를 섞어 넘겨도 매치되도록.
+    read-tracker는 memory-post-tool.py가 raw로 기록하므로 비교 양쪽을 정규화한다."""
+    try:
+        return str(Path(p).resolve())
+    except Exception:
+        return p
+
+
 def main():
     try:
         data = json.load(sys.stdin)
@@ -58,18 +67,19 @@ def main():
 
     gate_tracker = Path(f"/tmp/claude-readeditgate-{sid}")
     read_tracker = Path(f"/tmp/claude-read-tracker-{sid}")
+    fp_n = norm(fp)
 
     edit_count = 0
     if gate_tracker.exists():
         try:
-            edit_count = sum(1 for ln in gate_tracker.read_text().splitlines() if ln == fp)
+            edit_count = sum(1 for ln in gate_tracker.read_text().splitlines() if norm(ln) == fp_n)
         except OSError:
             pass
 
     read_done = False
     if read_tracker.exists():
         try:
-            read_done = any(ln == fp for ln in read_tracker.read_text().splitlines())
+            read_done = any(norm(ln) == fp_n for ln in read_tracker.read_text().splitlines())
         except OSError:
             pass
 
@@ -82,10 +92,10 @@ def main():
         )
         return 2
 
-    # 통과: 이번 편집을 카운트에 기록
+    # 통과: 이번 편집을 카운트에 기록 (정규화 경로로 — 비교와 일관)
     try:
         with open(gate_tracker, "a") as f:
-            f.write(fp + "\n")
+            f.write(fp_n + "\n")
     except OSError:
         pass
     return 0
