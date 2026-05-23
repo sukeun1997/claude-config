@@ -151,3 +151,5 @@ edit-tracker (3회+ 반복 편집 감지)
 | 2026-05-19 | ManagementLogPage.tsx 3회 반복 편집 | Context | 관련 파일/타입 정의 선행 Read 미흡 |
 | 2026-05-19 | App.tsx 3회 반복 편집 | Context | 관련 파일/타입 정의 선행 Read 미흡 |
 | 2026-05-19 | management-log.service.ts 3회 반복 편집 | Context | 관련 파일/타입 정의 선행 Read 미흡 |
+| 2026-05-23 | failure-log-classify.py 6회 반복 편집 | Context (추정·강) | 소스 6회+ — 파일 전체 Read 후 재접근 권장 |
+| 2026-05-23 | read-edit-gate.py 4회 반복 편집 | Context | 관련 파일/타입 정의 선행 Read 미흡 |
