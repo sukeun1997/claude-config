@@ -42,3 +42,4 @@ type: project
 | 2026-04-18 | 4.7 | 4.6 | evolved skill 실적 + 관측 파이프 복구로 자기진화 4.2→4.6 |
 | 2026-04-25 | 4.7→5.0 작업중 | - | 공유 상태 가드 적용 (4.7→5.0 갭 작업) |
 | 2026-05-16 | 4.6 (8축) / L3.5 (L1-L5) | 4.3 | tool-tracker deprecated 후 captures fallback grep 패턴 불일치 → sessions.jsonl 5/8~5/15 공백 발견. 4건 패치 + 5건 backfill로 측정 파이프 복구. **이번 회차부터 8축 + L1-L5 양쪽 병기** (척도 혼동 방지). 자기진화 축 회귀(4.6→4.3) 후 패치 반영 시 4.6 복귀 예상 |
+| 2026-05-23 | 4.4→4.6 (8축) / L3.0→L3.5 | 4.0→4.5 | 주간 리뷰: failure-log 미분류/추정 52건 적체(자기진화 4.0/L3.0 회귀). Context 55% + Read:Edit 룰 34회·반복편집 룰 26회 방지실패 = 프롬프트 룰 한계 확인. **조치**: (1) failure-log-classify.py self-healing 자동분류 52→0 + observer-runner 조기배치(재적체 방지, L4 자동cleanup 진입), (2) read-edit-gate.py PreToolUse 차단(경고@2→차단@3) = **friction 룰 첫 코드 enforcement 승격**(로드맵 "friction 은퇴/승격 0건" 병목 해소), (3) MEMORY 177→43줄. instinct(sequence-repeated-edit)는 이미 0.95 cap → confidence 아닌 자동화/enforcement가 실제 레버였음 |
