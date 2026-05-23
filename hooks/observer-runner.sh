@@ -15,6 +15,13 @@ MIN_NEW_OBS=10  # Minimum new observations before triggering analysis (lowered f
 [ -f "$OBS_FILE" ] || exit 0
 mkdir -p "$INSTINCTS_DIR"
 
+# Self-healing: auto-classify failure-log (volume-independent — runs before the
+# MIN_NEW_OBS early-exit so "(추정)"/미분류 행이 매 세션 확정·dedup되어 재적체 방지).
+CLASSIFY_SCRIPT="$HOME/.claude/scripts/failure-log-classify.py"
+if [ -f "$CLASSIFY_SCRIPT" ]; then
+  python3 "$CLASSIFY_SCRIPT" --auto >/dev/null 2>&1 || true
+fi
+
 # Get current observation count
 TOTAL_LINES=$(wc -l < "$OBS_FILE" | tr -d ' ')
 

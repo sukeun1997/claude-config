@@ -83,6 +83,16 @@
             "timeout": 5
           }
         ]
+      },
+      {
+        "matcher": "Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"$HOME/.claude/hooks/read-edit-gate.py\"",
+            "timeout": 5
+          }
+        ]
       }
     ],
     "PreCompact": [
