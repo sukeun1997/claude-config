@@ -41,3 +41,11 @@
 - **(05-16)** deprecated 정리 PR은 fallback 동작 dry-run 검증 후 머지 (silent regression 방지) / "성숙도" 척도(8축 vs L1-L5) 명시 — 같은 단어로 다른 측정값 혼용 금지
 - **(05-19)** 새 라우트 안 잡힐 때: ① grep 라우트 존재 → ② lsof 서버 PID+uptime → ③ stale이면 SIGTERM+재시작 (tsx watch stale 코드 주의)
 - **(05-23)** Read-before-Edit를 PreToolUse 차단 훅으로 승격 (경고@2 → 차단@3, 소스 파일+Edit 한정). failure-log 자동 분류(self-healing)를 observer-runner 조기 배치 — friction 룰의 코드 enforcement 전환 첫 사례
+
+
+### Promoted 2026-05-25
+### Promoted 2026-05-25
+- friction 룰 60회 방지실패 → 코드 enforcement 승격 패턴: 프롬프트 룰이 N회 재등장하면 (a)강도상향 (b)훅 자동화 (c)은퇴 중 택1. read-edit-gate가 (b) 첫 사례
+- friction 룰 60회 방지실패 → 코드 enforcement 승격 패턴: 프롬프트 룰이 N회 재등장하면 (a)강도상향 (b)훅 자동화 (c)은퇴 중 택1. read-edit-gate가 (b) 첫 사례
+- 패턴: "KPI 카드 = 섹션과 별개". 공과금처럼 같은 도메인이 (a) 다운로드 섹션 (b) KPI 카드 두 곳에 분산될 수 있음. "X 숨겨줘" 요청 시 grep으로 모든 노출 지점 확인 필요
+- 패턴: "KPI 카드 = 섹션과 별개". 공과금처럼 같은 도메인이 (a) 다운로드 섹션 (b) KPI 카드 두 곳에 분산될 수 있음. "X 숨겨줘" 요청 시 grep으로 모든 노출 지점 확인 필요
