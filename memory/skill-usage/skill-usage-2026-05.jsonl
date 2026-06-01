@@ -26,3 +26,5 @@
 {"timestamp": "2026-05-25T21:22:59.197121", "skill": "superpowers:brainstorming", "project": "global"}
 {"timestamp": "2026-05-26T15:50:09.828762", "skill": "feature", "project": "building"}
 {"timestamp": "2026-05-29T08:41:35.702191", "skill": "code-trace", "project": "global"}
+{"timestamp": "2026-05-31T16:57:40.514555", "skill": "sdebug", "project": "building"}
+{"timestamp": "2026-05-31T16:57:44.334464", "skill": "superpowers:systematic-debugging", "project": "building"}

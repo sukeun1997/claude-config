@@ -240,3 +240,4 @@
 {"date":"2026-05-19","project":"global","duration_min":1158,"total_edits":29,"total_reads":49,"unique_files":15,"friction_files":4,"log_lines":0}
 {"date":"2026-05-23","project":"global","duration_min":0,"total_edits":16,"total_reads":9,"unique_files":7,"friction_files":2,"log_lines":12}
 {"date":"2026-05-26","project":"global","duration_min":1424,"total_edits":2,"total_reads":18,"unique_files":2,"friction_files":0,"log_lines":0}
+{"date":"2026-06-01","project":"building","duration_min":175,"total_edits":1,"total_reads":3,"unique_files":1,"friction_files":0,"log_lines":0}
