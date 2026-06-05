@@ -18,8 +18,21 @@
 |------|-------------|--------|------------|-----------|------|
 | 2026-04-27~05-07 | 47.4% | 57 | 30 | 2.47 | prev week |
 | 2026-05-01~05-07 | 51.6% | 31 | 15 | 2.86 | analysis week |
+| 2026-05-11~05-17 | 25.0% | 4 | 3 | 0.81 | ★소샘플·backfill포함(reads=0) |
+| 2026-05-18~05-24 | 33.3% | 3 | 2 | 1.23 | ★소샘플 |
+| 2026-05-25~05-31 | 100% | 1 | 0 | 9.00 | ★소샘플(1세션, 추세 판단 보류) |
+| 2026-06-01~06-07 | 33.3% | 3 | 2 | 2.38 | ★소샘플 |
 
 ## 트래커 유효성 진단
+
+### sessions.jsonl 공백 감지
 - sessions.jsonl 마지막 기록 일자가 **7일 이상** 오래되면 세션 트래커 중단 의심
 - /review-week 시 가장 먼저 확인: `tail -1 memory/metrics/sessions.jsonl | jq .date`
 - 공백 발견 시 hooks/tool-tracker.sh 또는 settings.json hooks 섹션 점검
+
+### Hot 레이어 (daily log) 미작성 감지
+- `memory/daily/` 디렉토리 부재 → SessionEnd 훅 미실행 의심 (즉시 확인)
+- 세션 데이터 `log_lines=0` 이 2주 이상 연속이면 daily log 미작성 중
+- 근본 원인: cloud 환경에서 SessionEnd 훅이 실행되지 않음 (로컬 환경 전용 훅)
+- **진단은 이 파일, 실제 수정은 settings.json/hooks 영역** — 이 파일이 훅 정책의 source가 되지 않음
+- `ls memory/daily/ 2>/dev/null | wc -l` 으로 확인 (0이면 즉시 점검)
