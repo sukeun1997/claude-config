@@ -155,3 +155,4 @@ edit-tracker (3회+ 반복 편집 감지)
 | 2026-05-23 | read-edit-gate.py 4회 반복 편집 | Context | 관련 파일/타입 정의 선행 Read 미흡 |
 | 2026-06-03 | ktx-context.md 3회 반복 편집 | Context | 반복 편집 — 관련 파일/타입 정의 선행 Read 필요 |
 | 2026-06-05 | srt_service.py 4회 반복 편집 | Context | 관련 파일/타입 정의 선행 Read 미흡 |
+| 2026-06-11 | tenant.service.ts 7회 반복 편집 | Prompt (추정·7회) | 접근법 오류 가능성 — 초기화 후 재설계 권장 |
