@@ -18,8 +18,10 @@
 |------|-------------|--------|------------|-----------|------|
 | 2026-04-27~05-07 | 47.4% | 57 | 30 | 2.47 | prev week |
 | 2026-05-01~05-07 | 51.6% | 31 | 15 | 2.86 | analysis week |
+| 2026-06-05~06-11 | 0% | 2 | 2 | 3.0 | ktx 프로젝트, duration_min=0×2, 세션 희박 |
 
 ## 트래커 유효성 진단
 - sessions.jsonl 마지막 기록 일자가 **7일 이상** 오래되면 세션 트래커 중단 의심
 - /review-week 시 가장 먼저 확인: `tail -1 memory/metrics/sessions.jsonl | jq .date`
 - 공백 발견 시 hooks/tool-tracker.sh 또는 settings.json hooks 섹션 점검
+- `duration_min=0` 연속 3회+ → `$HOME/.claude/memory/sessions/.session-start-ts` 마커 비정상 의심 — memory-stop-guard.sh (line 66-73) 확인
