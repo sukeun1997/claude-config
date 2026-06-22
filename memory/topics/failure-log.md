@@ -176,3 +176,4 @@ edit-tracker (3회+ 반복 편집 감지)
 | 2026-06-19 | SaleInvoiceService.kt 3회 반복 편집 | Context (추정) | 소스 반복 — 관련 파일/타입 정의 확인 필요 |
 | 2026-06-19 | bank_virtualaccount.py 4회 반복 편집 | Context (추정) | 소스 반복 — 관련 파일/타입 정의 확인 필요 |
 | 2026-06-22 | FEP_%EC%8B%A0%EB%A2%B0%EB%8F%84_%EB%B0%9C%ED%91%9C%EB%8D%B1.html 4회 반복 편집 | 미분류 | 다음 세션에서 원인 분석 필요 |
+| 2026-06-22 | FEP_%EC%8B%A0%EB%A2%B0%EB%8F%84_%EB%B0%9C%ED%91%9C%EB%8D%B1.html 6회 반복 편집 | 미분류 | 다음 세션에서 원인 분석 필요 |
