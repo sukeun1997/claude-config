@@ -175,3 +175,7 @@
 ### Promoted 2026-05-19
 - 삽질: `tsx watch`가 백그라운드에서 stale 코드로 돌고 있어 첫 UI 삭제 시도가 404 → 서버 재시작으로 해결. 검증 전 서버 PID 확인 또는 명시적 reload 필요
 - 패턴: 새 라우트가 안 잡힐 때 → ① 파일 grep으로 라우트 존재 확인 → ② lsof로 서버 PID + uptime 확인 → ③ stale이면 SIGTERM + 재시작
+
+### Promoted 2026-06-23
+- 다음 주 액션: ①66건 backlog batch 분류 ②동일파일 3회 Edit PreToolUse 경고 승격 ③SessionEnd stale active 자동 archive
+- **대형 PR 분할 전략**: "diff 크다" 호소 시 prod/test 라인 분포부터 확인. 테스트가 주범이면 도메인 분리(scaffolding)만으론 체감 안 줄어듦 → 관심사별 stacked PR로 테스트 덩어리까지 분리. 파일seam 깨끗하면 checkout-by-file + 각 단계 컴파일검증 + 최종 트리동일성 검증이 안전.
