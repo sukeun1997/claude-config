@@ -59,7 +59,7 @@ for i, line in enumerate(lines, 1):
     if '[EXTERNAL]' in cells[2]:  # cells[2] = 증상 열 (날짜|증상|원인|해법 4열 테이블)
         continue  # 외부 사례는 자체 friction 카운트에서 제외 (rules/common/verification.md § 테스트 불변성 4주 friction 0건 트리거 보호)
     layer = cells[3]
-    if '미분류' in layer or '(추정)' in layer:
+    if '미분류' in layer or '추정' in layer:  # '추정'(괄호 없이) — (추정)/(추정·강)/(추정·N회) 변형 모두 포착 (W26: 괄호 패턴이 ·강/·N회 누락하던 버그 수정)
         pending.append((i, cells[2], layer))
 print(f'PENDING_COUNT={len(pending)}')
 for row in pending[:10]:

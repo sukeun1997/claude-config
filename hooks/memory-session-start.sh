@@ -84,6 +84,14 @@ if [ -d "$ACTIVE_DIR" ]; then
   MONTH_DIR="$ARCHIVE_DIR/$(date +%Y-%m)"
   mkdir -p "$MONTH_DIR" 2>/dev/null || true
   AUTO_ARCHIVED=0
+  # Exempt the current branch's active context — never auto-archive the work
+  # you're about to resume, even if it went stale during a long break.
+  CURRENT_ACTIVE_FILE=""
+  _CUR_BRANCH=$(git rev-parse --abbrev-ref HEAD 2>/dev/null || echo "")
+  if [ -n "$_CUR_BRANCH" ] && [ "$_CUR_BRANCH" != "HEAD" ]; then
+    _CUR_SLUG=$(branch_slug "$_CUR_BRANCH" 2>/dev/null || echo "")
+    [ -n "$_CUR_SLUG" ] && CURRENT_ACTIVE_FILE="$ACTIVE_DIR/${_CUR_SLUG}.md"
+  fi
   for ac_file in "$ACTIVE_DIR"/*.md; do
     [ -f "$ac_file" ] || continue
     ac_basename=$(basename "$ac_file")
@@ -91,6 +99,8 @@ if [ -d "$ACTIVE_DIR" ]; then
     case "$ac_file" in
       */archive/*) continue ;;
     esac
+    # Skip the current branch's context — resuming work must not be archived.
+    [ -n "$CURRENT_ACTIVE_FILE" ] && [ "$ac_file" = "$CURRENT_ACTIVE_FILE" ] && continue
     # Check: empty Changed Files (no real changes)
     changed_count=$(sed -n '/^### Changed Files$/,/^```$/{/^```$/d; /^### Changed Files$/d; p;}' "$ac_file" | grep -cE '^[a-zA-Z]' 2>/dev/null || echo "0")
     changed_count=$(echo "$changed_count" | tr -d '[:space:]')
@@ -103,17 +113,20 @@ if [ -d "$ACTIVE_DIR" ]; then
     fi
     now_ts=$(date +%s)
     age_days=$(( (now_ts - file_mtime) / 86400 ))
-    # Auto-archive: 7+ days old (any state) or 5+ days with no changes AND content-light
+    # Auto-archive: 7+ days old (no todos) or 3+ days with no changes (no todos)
     file_lines=$(wc -l < "$ac_file" 2>/dev/null | tr -d ' ')
     file_lines="${file_lines:-0}"
     has_todos=$(grep -c '^\- \[ \]' "$ac_file" 2>/dev/null || echo "0")
     has_todos=$(echo "$has_todos" | tr -d '[:space:]'); has_todos="${has_todos:-0}"
-    # Auto-archive: (7+d, no todos) OR (5+d, no changes, no todos)
-    # file_lines 제약 제거 — 변경 0개 + 5일+ + 미완료 todo 없음이면 dead context로 간주
-    if { [ "$age_days" -ge 7 ] && [ "$has_todos" -eq 0 ]; } || { [ "$changed_count" -eq 0 ] && [ "$age_days" -ge 5 ] && [ "$has_todos" -eq 0 ]; }; then
+    # Auto-archive: (7+d, no todos) OR (3+d, no changes, no todos)
+    # W26 review: lowered 5→3d for the no-change clause. A context flagged
+    # "삭제 권장" at 3d previously sat 2 more days injecting dead tokens before
+    # auto-archive. "no todos" keeps WIP-with-open-checklist safe; the current
+    # branch is already exempted above. has_todos>0 contexts still only warn.
+    if { [ "$age_days" -ge 7 ] && [ "$has_todos" -eq 0 ]; } || { [ "$changed_count" -eq 0 ] && [ "$age_days" -ge 3 ] && [ "$has_todos" -eq 0 ]; }; then
       mv "$ac_file" "$MONTH_DIR/" 2>/dev/null && AUTO_ARCHIVED=$((AUTO_ARCHIVED + 1)) || true
     elif [ "$changed_count" -eq 0 ] && [ "$age_days" -ge 3 ]; then
-      HYGIENE_WARNINGS+="- ${ac_basename}: 변경 0개 + ${age_days}일 미갱신 (삭제 권장)\n"
+      HYGIENE_WARNINGS+="- ${ac_basename}: 변경 0개 + ${age_days}일 미갱신 + 미완료 todo 있음 (수동 정리 권장)\n"
     fi
   done
   # Count active contexts (top-level only, excluding archive/)

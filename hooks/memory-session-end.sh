@@ -57,7 +57,10 @@ fi
 # Exempt the current branch's active context so a long break doesn't archive
 # work-in-progress state right before resuming.
 ACTIVE_DIR="$MEM_DIR/active"
-ACTIVE_ARCHIVE_DIR="$ACTIVE_DIR/archive"
+# Unified with session-start's target (W26 review): both write to
+# archive/active/YYYY-MM so archived contexts live in one place, not split
+# across active/archive and archive/active.
+ACTIVE_ARCHIVE_DIR="$MEM_DIR/archive/active/$(date +%Y-%m)"
 if [ -d "$ACTIVE_DIR" ]; then
   STALE_COUNT=0
   mkdir -p "$ACTIVE_ARCHIVE_DIR"

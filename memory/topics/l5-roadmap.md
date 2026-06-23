@@ -42,3 +42,4 @@ type: project
 | 2026-04-18 | 4.7 | 4.6 | evolved skill 실적 + 관측 파이프 복구로 자기진화 4.2→4.6 |
 | 2026-04-25 | 4.7→5.0 작업중 | - | 공유 상태 가드 적용 (4.7→5.0 갭 작업) |
 | 2026-05-16 | 4.6 (8축) / L3.5 (L1-L5) | 4.3 | tool-tracker deprecated 후 captures fallback grep 패턴 불일치 → sessions.jsonl 5/8~5/15 공백 발견. 4건 패치 + 5건 backfill로 측정 파이프 복구. **이번 회차부터 8축 + L1-L5 양쪽 병기** (척도 혼동 방지). 자기진화 축 회귀(4.6→4.3) 후 패치 반영 시 4.6 복귀 예상 |
+| 2026-06-23 | 4.4 (8축) / L3.5 (L1-L5) | 4.2 | 위생 지표 후퇴: failure-log 66건 미분류/추정 적체(instinct 부스팅 정지) + 6/22 단일세션 compaction 23회(토큰효율 4.3→3.8) + active context 3개 stale 방치 + 수기 daily log 0건. 구현은 L2-855 worktree+verifier 모범(오케 4.7→4.8). **병목: 경고는 자동이나 cleanup은 수동 = L4 진입 유일 차단**. 액션: backlog 해소 + 3회 Edit 훅 + stale active 자동 archive |
