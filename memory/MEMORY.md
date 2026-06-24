@@ -182,3 +182,6 @@
 
 ### Promoted 2026-06-24
 - **stacked PR rebase 함정**: base를 amend(SHA 변경)한 뒤 calc에서 plain `git rebase base` 하면 merge-base가 develop으로 바뀌어 원본 base 커밋까지 재생→이미 제거한 변경(raw)이 도로 살아남. 반드시 `git rebase --onto <new-base> <old-base-sha>`로 old-base 이후 커밋만 재생. force-with-lease로 calc/orch 순차 갱신.
+
+### Promoted 2026-06-24
+- **Avro 빌드 검증 환경 제약**: 이 환경은 fetchAvroFromSR(Schema Registry) 접근 불가. -PskipFetchAvro 시 common:kafka가 corebanking Avro 클래스(InvoiceCreated/LoanExecuted/EventEnvelope 등) 미생성 → repayment의 glue 파일(InvoiceCreatedGluePublisher/AvroMapper/LoanCreationConsumer 등, **Step2 무관**) compile 실패. 우회: 메인 repo의 `common/kafka/build`(컴파일 산출물+jar) 통째 복사 후 -PskipFetchAvro.
