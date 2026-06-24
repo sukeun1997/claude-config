@@ -182,3 +182,10 @@ edit-tracker (3회+ 반복 편집 감지)
 | 2026-06-24 | bank_virtualaccount.py 3회 반복 편집 | Context (추정) | 소스 반복 — 관련 파일/타입 정의 확인 필요 |
 | 2026-06-24 | 10 5회 반복 편집 | 미분류 | 다음 세션에서 원인 분석 필요 |
 | 2026-06-24 | monitoring_utils.py 3회 반복 편집 | Context (추정) | 소스 반복 — 관련 파일/타입 정의 확인 필요 |
+| 2026-06-24 | borrower_info.py 8회 반복 편집 | Prompt (추정·8회) | 접근법 오류 가능성 — 초기화 후 재설계 권장 |
+| 2026-06-24 | settlement_mixin.py 7회 반복 편집 | Prompt (추정·7회) | 접근법 오류 가능성 — 초기화 후 재설계 권장 |
+| 2026-06-24 | withdraw.py 6회 반복 편집 | Context (추정·강) | 소스 6회+ — 파일 전체 Read 후 재접근 권장 |
+| 2026-06-24 | repayment_mixin.py 5회 반복 편집 | Context (추정·강) | 소스 5회+ — 파일 전체 Read 후 재접근 권장 |
+| 2026-06-24 | jb_send.py 4회 반복 편집 | Context (추정) | 소스 반복 — 관련 파일/타입 정의 확인 필요 |
+| 2026-06-24 | loan_execution_jb_1001.py 3회 반복 편집 | Context (추정) | 소스 반복 — 관련 파일/타입 정의 확인 필요 |
+| 2026-06-24 | borrower_info.py 3회 반복 편집 | Context (추정) | 소스 반복 — 관련 파일/타입 정의 확인 필요 |
