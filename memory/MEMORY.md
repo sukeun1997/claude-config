@@ -179,3 +179,6 @@
 ### Promoted 2026-06-23
 - 다음 주 액션: ①66건 backlog batch 분류 ②동일파일 3회 Edit PreToolUse 경고 승격 ③SessionEnd stale active 자동 archive
 - **대형 PR 분할 전략**: "diff 크다" 호소 시 prod/test 라인 분포부터 확인. 테스트가 주범이면 도메인 분리(scaffolding)만으론 체감 안 줄어듦 → 관심사별 stacked PR로 테스트 덩어리까지 분리. 파일seam 깨끗하면 checkout-by-file + 각 단계 컴파일검증 + 최종 트리동일성 검증이 안전.
+
+### Promoted 2026-06-24
+- **stacked PR rebase 함정**: base를 amend(SHA 변경)한 뒤 calc에서 plain `git rebase base` 하면 merge-base가 develop으로 바뀌어 원본 base 커밋까지 재생→이미 제거한 변경(raw)이 도로 살아남. 반드시 `git rebase --onto <new-base> <old-base-sha>`로 old-base 이후 커밋만 재생. force-with-lease로 calc/orch 순차 갱신.

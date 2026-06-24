@@ -29,7 +29,7 @@
 - Insight 제공: 구현 전후 교육적 설명 포함
 - URL 제공 시 자동 WebFetch / SDK·API 구현 전 문서 조사 (Context7 MCP)
 - **배포**: `scripts/deploy.sh` 사용 필수 (없는 프로젝트는 예외)
-- **Plan/Spec 저장 경로**: `~/vault/project/{project}/{branch-slug}/` (superpowers 생성 파일은 vault-auto-save 훅이 자동 이동 + 원본 삭제)
+- **Plan/Spec 저장 경로 (저장소 금지 — vault에 직접 Write)**: spec/plan/design 등 superpowers 산출물은 저장소(`docs/superpowers/**`)에 만들지 않고 vault에 직접 저장한다. 프로젝트 코드베이스 작업 → `~/vault/20 프로젝트/{project}/{branch-slug}/`, 프로젝트 무관 업무(설계논의·흐름정리 등) → `~/vault/10 업무/{category}/`. (vault-auto-save 훅은 deprecated — 자동 이동 없으므로 처음부터 vault 경로에 Write. 저장소엔 절대 커밋하지 않는다)
 
 ### 컨텍스트 절약
 - 파일 3개+ 탐색 → Explore 서브에이전트 위임
