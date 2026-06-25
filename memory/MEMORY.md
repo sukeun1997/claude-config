@@ -185,3 +185,6 @@
 
 ### Promoted 2026-06-24
 - **Avro 빌드 검증 환경 제약**: 이 환경은 fetchAvroFromSR(Schema Registry) 접근 불가. -PskipFetchAvro 시 common:kafka가 corebanking Avro 클래스(InvoiceCreated/LoanExecuted/EventEnvelope 등) 미생성 → repayment의 glue 파일(InvoiceCreatedGluePublisher/AvroMapper/LoanCreationConsumer 등, **Step2 무관**) compile 실패. 우회: 메인 repo의 `common/kafka/build`(컴파일 산출물+jar) 통째 복사 후 -PskipFetchAvro.
+
+### Promoted 2026-06-25
+- **stacked PR develop 재정착 레시피**: 토대 브랜치가 재분할 머지된 경우, 원본 서브브랜치들을 순차 rebase --onto로 develop 위 재구성하면 단계 경계·통계 보존. 단일커밋 단계의 마이그 버전상향은 git mv + --amend로 히스토리 클린. 최종 트리를 기검증 브랜치와 diff해 동일성 확인하면 재검증 불필요.

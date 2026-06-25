@@ -189,3 +189,10 @@ edit-tracker (3회+ 반복 편집 감지)
 | 2026-06-24 | jb_send.py 4회 반복 편집 | Context (추정) | 소스 반복 — 관련 파일/타입 정의 확인 필요 |
 | 2026-06-24 | loan_execution_jb_1001.py 3회 반복 편집 | Context (추정) | 소스 반복 — 관련 파일/타입 정의 확인 필요 |
 | 2026-06-24 | borrower_info.py 3회 반복 편집 | Context (추정) | 소스 반복 — 관련 파일/타입 정의 확인 필요 |
+| 2026-06-25 | banking_loan_client.py 3회 반복 편집 | Context (추정) | 소스 반복 — 관련 파일/타입 정의 확인 필요 |
+| 2026-06-25 | test_change_status.py 7회 반복 편집 | Prompt (추정·7회) | 접근법 오류 가능성 — 초기화 후 재설계 권장 |
+| 2026-06-25 | change_status.py 6회 반복 편집 | Context (추정·강) | 소스 6회+ — 파일 전체 Read 후 재접근 권장 |
+| 2026-06-25 | SKILL.md 6회 반복 편집 | Prompt (추정) | 지시문/스킬 정의 반복 — description/triggers 모호성 점검 |
+| 2026-06-25 | __init__.py 4회 반복 편집 | Context (추정) | 소스 반복 — 관련 파일/타입 정의 확인 필요 |
+| 2026-06-25 | sale_invoice_request.py 3회 반복 편집 | Context (추정) | 소스 반복 — 관련 파일/타입 정의 확인 필요 |
+| 2026-06-25 | statement_showcases.py 3회 반복 편집 | Context (추정) | 소스 반복 — 관련 파일/타입 정의 확인 필요 |
