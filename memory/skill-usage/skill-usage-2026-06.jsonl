@@ -46,3 +46,6 @@
 {"timestamp": "2026-06-25T15:56:53.307726", "skill": "sdebug", "project": "global"}
 {"timestamp": "2026-06-25T15:56:58.271982", "skill": "superpowers:systematic-debugging", "project": "global"}
 {"timestamp": "2026-06-25T16:01:52.100970", "skill": "parallel-dev", "project": "global"}
+{"timestamp": "2026-06-25T17:40:54.277903", "skill": "sentry-debug", "project": "global"}
+{"timestamp": "2026-06-26T10:02:21.693167", "skill": "sentry-debug", "project": "global"}
+{"timestamp": "2026-06-26T11:33:46.494604", "skill": "python-deep-review", "project": "global"}
