@@ -202,3 +202,5 @@ edit-tracker (3회+ 반복 편집 감지)
 | 2026-06-26 | ontu_serializers.py 3회 반복 편집 | Context (추정) | 소스 반복 — 관련 파일/타입 정의 확인 필요 |
 | 2026-06-30 | BorrowerNotificationJpaRepositoryTest.kt 3회 반복 편집 | Context (추정) | 소스 반복 — 관련 파일/타입 정의 확인 필요 |
 | 2026-06-30 | BorrowerNotificationFacade.kt 3회 반복 편집 | Context (추정) | 소스 반복 — 관련 파일/타입 정의 확인 필요 |
+| 2026-06-30 | BorrowerNotificationParameterService.kt 17회 반복 편집 | Prompt (추정·17회) | 접근법 오류 가능성 — 초기화 후 재설계 권장 |
+| 2026-06-30 | BorrowerNotificationService.kt 6회 반복 편집 | Context (추정·강) | 소스 6회+ — 파일 전체 Read 후 재접근 권장 |
