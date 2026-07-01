@@ -289,3 +289,6 @@
 {"date":"2026-06-30","project":"global","duration_min":88,"total_edits":9,"total_reads":17,"unique_files":6,"friction_files":0,"log_lines":0}
 {"date":"2026-06-30","project":"global","duration_min":31,"total_edits":31,"total_reads":16,"unique_files":9,"friction_files":2,"log_lines":0}
 {"date":"2026-06-30","project":"global","duration_min":0,"total_edits":3,"total_reads":12,"unique_files":2,"friction_files":0,"log_lines":6}
+{"date":"2026-06-30","project":"global","duration_min":60,"total_edits":5,"total_reads":11,"unique_files":4,"friction_files":0,"log_lines":22}
+{"date":"2026-06-30","project":"global","duration_min":50,"total_edits":12,"total_reads":25,"unique_files":7,"friction_files":1,"log_lines":22}
+{"date":"2026-07-01","project":"global","duration_min":944,"total_edits":26,"total_reads":57,"unique_files":12,"friction_files":3,"log_lines":0}
