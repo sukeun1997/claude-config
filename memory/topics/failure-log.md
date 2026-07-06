@@ -211,3 +211,5 @@ edit-tracker (3회+ 반복 편집 감지)
 | 2026-07-02 | 10 6회 반복 편집 | 미분류 | 다음 세션에서 원인 분석 필요 |
 | 2026-07-02 | fep-dashboard-v12.json 3회 반복 편집 | Context (추정) | 설정/스타일 반복 — 기존 값과 원하는 값 명확화 |
 | 2026-07-06 | get_disburse_type.py 4회 반복 편집 | Context (추정) | 소스 반복 — 관련 파일/타입 정의 확인 필요 |
+| 2026-07-06 | build_v13.py 7회 반복 편집 | Prompt (추정·7회) | 접근법 오류 가능성 — 초기화 후 재설계 권장 |
+| 2026-07-06 | BorrowerNotificationDailyRequestUseCaseTest.kt 3회 반복 편집 | Context (추정) | 소스 반복 — 관련 파일/타입 정의 확인 필요 |
