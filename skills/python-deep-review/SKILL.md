@@ -20,7 +20,7 @@ description: ".py 파일 변경 시 자동 발동되는 심층 리뷰 파이프�
 - `--strict`: 가드 무시하고 전체 풀세트 강제
 - `--skip-verify`: Phase 3 (verifier + critic) 생략
 
-## 4가지 필수 관점 (모든 Phase에 명시 주입)
+## 5가지 필수 관점 (모든 Phase에 명시 주입)
 
 1. **OOP / SOLID / 추상화 / 함수 중복 제거 리팩토링**
    - SRP/OCP 위반, 같은 책임 분산, helper 추출 가치, 단계 분리(validate → execute 등)
@@ -28,12 +28,19 @@ description: ".py 파일 변경 시 자동 발동되는 심층 리뷰 파이프�
 2. **네이밍**
    - 함수/변수/상수가 도메인 의미와 추상화 수준에 맞는지
    - 호출부 의도를 가리지 않는지, 약어/축약 일관성, 부울/predicate 명명
-3. **상위 관점 리팩토링 제안 (현재 동작 너머의 설계 시각)**
+   - side-effect(raise/mutate)를 가진 함수가 getter 네이밍(`get_*`)으로 부작용을 감추지 않는지
+3. **코드 퀄리티 · 가독성 · 파이썬 공식 컨벤션 (PEP 8)**
+   - PEP 8 준수: 네이밍 규약(snake_case/CONSTANT/CapWords), import 정렬, 줄 길이(pyproject 120), 공백
+   - Pythonic 관용구: 예외 raise는 인스턴스(`raise X()`)가 관용적, truthy 체크, comprehension, EAFP vs LBYL, context manager
+   - 가독성: 함수 50줄·중첩 4단계 이하, magic value 상수화, 조기 반환(guard clause), 따옴표/포맷 일관성
+   - 타입 힌트 유무·정확성, 미사용 import/변수, 명시적 에러 메시지 (조용한 무시 금지)
+   - 프로젝트 린트(`ruff check`, config: pyproject.toml E/W/F/UP/I) 위반 예상 지점
+4. **상위 관점 리팩토링 제안 (현재 동작 너머의 설계 시각)**
    - 즉시 머지 가능성과 별개로, PR 코멘트로 달 만한 OOP/SOLID/추상화 의견을 능동적으로 발굴
    - 예: 같은 mutation/함수 안에 인증/검증/실행/로그가 인라인이면 → validate → execute 단계 분리 제안
    - 예: 같은 루프가 두 번 돌면 → 통합 가능 여부
    - 예: 같은 분기 조건이 여러 곳에 등장하면 → 분기 dispatch / strategy 추상화 가능 여부
-4. **독립 컨텍스트 검증** — Phase 3에서 verifier + critic이 fresh로 재검토 (Phase 1·2 결과 모르는 상태)
+5. **독립 컨텍스트 검증** — Phase 3에서 verifier + critic이 fresh로 재검토 (Phase 1·2 결과 모르는 상태)
 
 ## Pipeline
 
@@ -45,10 +52,10 @@ Phase 0: Trivial Guard (default: OFF, --light에서만 활성)
     - 그 외 → Phase 1로
   ↓
 Phase 1: 병렬 1차 리뷰 (4 agents, 동시 실행)
-  → code-reviewer    (opus)   : 기본 코드 품질 + 버그
+  → code-reviewer    (opus)   : 기본 코드 품질 + 버그 + 경계조건
   → quality-reviewer (opus)   : OOP/SOLID/추상화/중복제거 — 관점 1
-  → style-reviewer   (sonnet) : 네이밍 + Pythonic 관용구 — 관점 2
-  → architect        (opus, READ-ONLY) : 상위 단계 추출/분리 제안 — 관점 3
+  → style-reviewer   (sonnet) : 네이밍 + PEP 8 공식 컨벤션 + 가독성 + Pythonic 관용구 — 관점 2·3
+  → architect        (opus, READ-ONLY) : 상위 단계 추출/분리 제안 — 관점 4
   ↓
 Phase 2: 사용자 1차 검토 (메인 세션이 결과 통합 + 사용자에게 요약 보고)
   → AUTO-FIX 후보 / ASK 후보 분리
@@ -76,8 +83,8 @@ Phase 5: 수정 (사용자 승인 시)
 |---|---|---|---|
 | code-reviewer | opus | 기본 품질·버그·경계조건 | 1 |
 | quality-reviewer | opus | OOP/SOLID/추상화/중복 (관점 1) | 1 |
-| style-reviewer | sonnet | 네이밍·Pythonic (관점 2) | 1 |
-| architect | opus | 상위 단계 추출·설계 시각 (관점 3) | 1 |
+| style-reviewer | sonnet | 네이밍·PEP 8·가독성·Pythonic (관점 2·3) | 1 |
+| architect | opus | 상위 단계 추출·설계 시각 (관점 4) | 1 |
 | verifier | opus | 독립 재검증, 빠진 것 잡기 | 3 |
 | critic | opus | 제안 약점·과잉 추상화 반박 | 3 |
 | executor | sonnet | 최소 diff 수정 | 5 |
@@ -95,8 +102,11 @@ Phase 5: 수정 (사용자 승인 시)
    - SRP/OCP 위반 지점, 책임 분산
    - validate → execute 같은 단계 추출 가능 여부
    - 같은 루프/분기 반복 → 통합/dispatch 추상화 여지
-2. 네이밍 — 도메인 의미와 추상화 수준 일치성
-3. "지금 동작하는가"가 아니라 "다음 사람이 고치기 좋은가" 시각
+2. 네이밍 — 도메인 의미와 추상화 수준 일치성, getter 네이밍이 side-effect 감추지 않는지
+3. 코드 퀄리티 · 가독성 · 파이썬 공식 컨벤션(PEP 8)
+   - PEP 8 준수(네이밍 규약/import/줄길이/공백), Pythonic 관용구(예외 인스턴스 raise, EAFP, comprehension)
+   - 가독성(함수 50줄·중첩 4단계, magic value 상수화, guard clause, 포맷 일관성), 타입 힌트, ruff 위반 예상 지점
+4. "지금 동작하는가"가 아니라 "다음 사람이 고치기 좋은가" 시각
 
 [응답 형식]
 - 결과: SUCCESS | PARTIAL | FAILED
@@ -144,9 +154,9 @@ Phase 5: 수정 (사용자 승인 시)
 ## Python Deep Review 결과
 
 ### Phase 1 1차 리뷰 (4-agent)
-- code-reviewer: <요약>
+- code-reviewer: <품질·버그·경계조건 요약>
 - quality-reviewer: <OOP/SOLID 이슈 N개>
-- style-reviewer: <네이밍 이슈 N개>
+- style-reviewer: <네이밍·PEP 8·가독성 이슈 N개>
 - architect: <상위 리팩토링 제안 N개>
 
 ### Phase 3 독립 검증 (fresh context)
@@ -176,7 +186,7 @@ Phase 5: 수정 (사용자 승인 시)
 
 ## 자가 점검 (skill 시작 시 메인이 확인)
 
-- [ ] Phase 1 호출 프롬프트에 4가지 관점 prefix 포함됐는가
+- [ ] Phase 1 호출 프롬프트에 5가지 관점 prefix 포함됐는가 (특히 관점 3 코드 퀄리티·가독성·PEP 8 누락 주의)
 - [ ] Phase 3 verifier/critic이 fresh context로 호출되는가 (앞선 결과 주입 금지)
 - [ ] architect는 READ-ONLY로 호출 (코드 수정 권한 없음)
 - [ ] 모든 opus 호출에 `model: "opus"` 명시
