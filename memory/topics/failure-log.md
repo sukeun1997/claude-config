@@ -222,3 +222,5 @@ edit-tracker (3회+ 반복 편집 감지)
 | 2026-07-07 | sender.py 9회 반복 편집 | Prompt (추정·9회) | 접근법 오류 가능성 — 초기화 후 재설계 권장 |
 | 2026-07-08 | SKILL.md 6회 반복 편집 | Prompt (추정) | 지시문/스킬 정의 반복 — description/triggers 모호성 점검 |
 | 2026-07-08 | investor_kyc_verification_api.py 3회 반복 편집 | Context (추정) | 소스 반복 — 관련 파일/타입 정의 확인 필요 |
+| 2026-07-08 | FEP-신뢰성-프로젝트-deck.html 18회 반복 편집 | Harness (확정) | 3MB HTML을 Edit로 직접 반복 수정한 것이 원인. 해법: 슬라이드 단위 분해→빌드 스크립트(build_deck_v2.py)로 재조립 — 7/9 재구성은 스크립트 3회 실행으로 완료 (Edit 스파이럴 0회) |
+| 2026-07-08 | FEP-신뢰성-프로젝트-deck.html 13회 반복 편집 | Harness (확정) | 위와 동일 — 대형 산출물은 "원본 백업 + 생성 스크립트" 패턴으로 idempotent 빌드 |

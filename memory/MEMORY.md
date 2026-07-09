@@ -194,3 +194,10 @@
 
 ### Promoted 2026-07-07
 - 교훈(FEP 재현): **로컬/DB 상태로는 전달 여부를 증명 못 한다. auto-resend는 재시도 로직이 아니라 "발송 경계의 멱등성"으로만 안전해진다.** 멱등 확보 전엔 at-most-once(감지+알림)가 기본값. 환경 함정: JAVA_HOME 미설정 시 JDK21로 잡혀 빌드 실패 → 이 repo는 Corretto 17 필요.
+
+### Promoted 2026-07-08
+- 야간 인덱스 대기 3개(DBSAFER): repayment_depositable(date), repayment_settleable(repayment_completed_datetime), repayment_settleable(post_settlement_completed_datetime). settlement_schedule 인덱스는 rs-driven 구조로 불필요해짐.
+- **설계 영향 발견**: 최다 집중 계좌 396건/10분 → 계좌 내 직렬 유지 시 그 계좌만 ~6.6분 = **계좌 병렬화만으로 max<60초 목표 수학적 불가**. 집중 계좌 대책(계좌 내 처리 개선·전북 동시전송 협의)을 P2 범위에 명시. 덱 P2 2/5 bullet + 4/5 "정직한 하한"으로 반영.
+
+### Promoted 2026-07-09
+- 대형 단일 HTML 산출물(3MB+)은 Edit 직접 수정 금지 — 백업본 + 빌드 스크립트(scratchpad/build_deck_v2.py, BAK에서 read→재조립)로 idempotent 빌드. 7/8 13~18회 Edit 스파이럴의 해법으로 검증됨(이번 재구성 스크립트 3회 실행으로 종료). failure-log 해당 엔트리 Harness(확정) 분류 완료.
