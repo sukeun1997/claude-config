@@ -252,3 +252,5 @@
 {"date":"2026-06-28","project":"haru","duration_min":163,"total_edits":3,"total_reads":25,"unique_files":2,"friction_files":0,"log_lines":0}
 {"date":"2026-06-30","project":"global","duration_min":2925,"total_edits":1,"total_reads":10,"unique_files":1,"friction_files":0,"log_lines":0}
 {"date":"2026-07-06","project":"building","duration_min":1555,"total_edits":34,"total_reads":46,"unique_files":5,"friction_files":3,"log_lines":0}
+{"date":"2026-07-11","project":"global","duration_min":956,"total_edits":3,"total_reads":31,"unique_files":3,"friction_files":0,"log_lines":0}
+{"date":"2026-07-11","project":"haru","duration_min":754,"total_edits":2,"total_reads":15,"unique_files":1,"friction_files":0,"log_lines":0}
