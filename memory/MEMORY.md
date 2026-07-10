@@ -204,3 +204,6 @@
 
 ### Promoted 2026-07-10
 - repayment_depositable은 "오늘 갚을 수 있는 모든 대출(연체 포함 매일 재등장)" — 유입 예측 소스로 쓰면 상한선만 나옴. 예측하려면 from_plan_date로 당일 약정분 분리 + 최근 28일 자기보정 이행률 필요
+
+### Promoted 2026-07-10
+- Grafana MySQL 타임존 규칙: $__timeFilter/$__timeGroupAlias 경유는 epoch 변환으로 정확하지만, raw datetime 컬럼을 직접 SELECT하면 UTC로 해석돼 +9h 표시됨. 해법 = 표시용은 DATE_FORMAT 문자열, time축은 UNIX_TIMESTAMP() epoch
