@@ -201,3 +201,6 @@
 
 ### Promoted 2026-07-09
 - 대형 단일 HTML 산출물(3MB+)은 Edit 직접 수정 금지 — 백업본 + 빌드 스크립트(scratchpad/build_deck_v2.py, BAK에서 read→재조립)로 idempotent 빌드. 7/8 13~18회 Edit 스파이럴의 해법으로 검증됨(이번 재구성 스크립트 3회 실행으로 종료). failure-log 해당 엔트리 Harness(확정) 분류 완료.
+
+### Promoted 2026-07-10
+- repayment_depositable은 "오늘 갚을 수 있는 모든 대출(연체 포함 매일 재등장)" — 유입 예측 소스로 쓰면 상한선만 나옴. 예측하려면 from_plan_date로 당일 약정분 분리 + 최근 28일 자기보정 이행률 필요
