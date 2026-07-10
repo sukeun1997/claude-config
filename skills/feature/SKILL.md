@@ -57,13 +57,14 @@ brainstorming/writing-plans 호출 **이전**에 저장 경로를 결정해 pref
 1. **Project 감지** (CWD 기반, `docs-save` skill과 동일 규칙):
    - `~/.claude` 또는 매칭 없음 → `global`
    - 그 외 → 디렉토리명 (예: `banking-loan`, `haru`, `rms`)
+   - **기존 폴더 근접 매칭**: 후보를 새 폴더로 만들기 전에 `ls "$HOME/vault/20 프로젝트/"`로 기존 폴더와 대조. 정확/근접(오타·하이픈·대소문자 차이) 폴더 있으면 재사용, 애매하면 1-tap 확인, 진짜 신규만 새로 생성
 2. **Branch 감지**:
    ```bash
    BRANCH=$(git rev-parse --abbrev-ref HEAD 2>/dev/null || echo "main")
    ```
    - `main`/`master`/`develop` → 브랜치 폴더 없음
    - 그 외 → 슬래시를 `--`로 치환 (`fix/avro-dlt` → `fix--avro-dlt`)
-3. **Target 디렉토리**: `~/vault/project/{project}/{branch-slug}/` (base 브랜치면 `~/vault/project/{project}/`)
+3. **Target 디렉토리**: `~/vault/20 프로젝트/{project}/{branch-slug}/` (base 브랜치면 `~/vault/20 프로젝트/{project}/`). 공백 포함 경로 — bash에서 `"$HOME/vault/20 프로젝트/..."` 인용 필수
 4. 디렉토리가 없으면 `mkdir -p`로 생성
 
 ### Frontmatter 규약 (MANDATORY)
@@ -115,7 +116,7 @@ brainstorming/writing-plans에 invoke 시 위 frontmatter를 본문 앞에 포�
 {설명}
 
 [저장 선호]
-- spec 파일 경로: ~/vault/project/{project}/{branch-slug}/spec.md
+- spec 파일 경로: ~/vault/20 프로젝트/{project}/{branch-slug}/spec.md
   (이미 같은 이름이 있으면 spec-{topic-slug}.md)
 - docs/superpowers/specs/ 에는 저장하지 않음 (vault가 정본)
 - 본문 최상단에 YAML frontmatter 필수 (위 "Frontmatter 규약" 섹션 참조)
@@ -143,7 +144,7 @@ brainstorming 스킬이 인터뷰 → 접근법 제안 → 스펙 문서 작성�
 
 brainstorming 완료 후 사용자에게 확인:
 
-> "설계 완료. 스펙: `~/vault/project/{project}/{branch}/spec.md`. 플랜 작성으로 넘어갈까요?"
+> "설계 완료. 스펙: `~/vault/20 프로젝트/{project}/{branch}/spec.md`. 플랜 작성으로 넘어갈까요?"
 
 - 사용자 OK → Phase 2 진행
 - 사용자 피드백 → brainstorming 내에서 수정 후 다시 Gate 1
@@ -153,10 +154,10 @@ brainstorming 완료 후 사용자에게 확인:
 `superpowers:writing-plans` 스킬을 아래 인자로 invoke한다:
 
 ```
-[스펙 경로] ~/vault/project/{project}/{branch-slug}/spec.md
+[스펙 경로] ~/vault/20 프로젝트/{project}/{branch-slug}/spec.md
 
 [저장 선호]
-- plan 파일 경로: ~/vault/project/{project}/{branch-slug}/plan.md
+- plan 파일 경로: ~/vault/20 프로젝트/{project}/{branch-slug}/plan.md
   (이미 같은 이름이 있으면 plan-{topic-slug}.md)
 - docs/superpowers/plans/ 에는 저장하지 않음 (vault가 정본)
 - 본문 최상단에 YAML frontmatter 필수 (위 "Frontmatter 규약" 섹션 참조)
@@ -168,7 +169,7 @@ brainstorming 완료 후 사용자에게 확인:
 
 플랜 완료 후 사용자에게 확인:
 
-> "플랜 완료. `~/vault/project/{project}/{branch}/plan.md`. 구현 시작할까요? (1: Subagent-Driven / 2: Inline)"
+> "플랜 완료. `~/vault/20 프로젝트/{project}/{branch}/plan.md`. 구현 시작할까요? (1: Subagent-Driven / 2: Inline)"
 
 - 사용자 OK → Phase 3 진행
 - 사용자 피드백 → 플랜 수정 후 다시 Gate 2

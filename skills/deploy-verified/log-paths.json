@@ -1,1 +1,8 @@
-{}
+{
+  "building-manager": {
+    "server": "ubuntu@158.179.165.211",
+    "log_path": "~/.pm2/logs/building-manager-out-*.log (stdout) / building-manager-error-*.log (stderr, SLOW QUERY 포함)",
+    "connect": "ssh ubuntu@158.179.165.211",
+    "note": "esbuild 번들(dist-server/index.js)은 한글을 대문자 hex \\uXXXX로 이스케이프 — 시그니처 grep 시 이스케이프 필요"
+  }
+}

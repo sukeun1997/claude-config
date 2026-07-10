@@ -49,3 +49,9 @@
 - friction 룰 60회 방지실패 → 코드 enforcement 승격 패턴: 프롬프트 룰이 N회 재등장하면 (a)강도상향 (b)훅 자동화 (c)은퇴 중 택1. read-edit-gate가 (b) 첫 사례
 - 패턴: "KPI 카드 = 섹션과 별개". 공과금처럼 같은 도메인이 (a) 다운로드 섹션 (b) KPI 카드 두 곳에 분산될 수 있음. "X 숨겨줘" 요청 시 grep으로 모든 노출 지점 확인 필요
 - 패턴: "KPI 카드 = 섹션과 별개". 공과금처럼 같은 도메인이 (a) 다운로드 섹션 (b) KPI 카드 두 곳에 분산될 수 있음. "X 숨겨줘" 요청 시 grep으로 모든 노출 지점 확인 필요
+
+### Promoted 2026-07-11
+- JPA N+1(@BatchSize/@EntityGraph), DB 인덱스, Redis 캐시, iOS @Observable 구조는 이미 최적화 완료 상태 — 재분석 불필요
+
+### Promoted 2026-07-11
+- worktree 병렬 패턴: 백엔드 main 수정 + 테스트 작성을 동시 진행할 때 "public 시그니처 유지 계약 + 테스트 레인 worktree 격리 + 완료 후 파일 복사·통합 재검증"이 잘 작동함
