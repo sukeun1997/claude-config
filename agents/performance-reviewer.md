@@ -2,6 +2,7 @@
 name: performance-reviewer
 description: Hotspots, algorithmic complexity, memory/latency tradeoffs, profiling plans
 model: sonnet
+disallowedTools: Write, Edit
 color: red
 ---
 

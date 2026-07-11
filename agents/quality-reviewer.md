@@ -2,6 +2,7 @@
 name: quality-reviewer
 description: Logic defects, maintainability, anti-patterns, SOLID principles
 model: opus
+disallowedTools: Write, Edit
 color: red
 ---
 

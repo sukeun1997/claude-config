@@ -93,6 +93,16 @@
             "timeout": 5
           }
         ]
+      },
+      {
+        "matcher": "Agent|Task",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"$HOME/.claude/hooks/agent-model-guard.sh\"",
+            "timeout": 3
+          }
+        ]
       }
     ],
     "PreCompact": [
@@ -175,8 +185,8 @@
     "learning-output-style@claude-plugins-official": true,
     "everything-claude-code@everything-claude-code": false,
     "swift-lsp@claude-plugins-official": true,
-    "playwright@claude-plugins-official": true,
-    "notion@claude-plugins-official": true,
+    "playwright@claude-plugins-official": false,
+    "notion@claude-plugins-official": false,
     "telegram@claude-plugins-official": true
   },
   "effortLevel": "high",
