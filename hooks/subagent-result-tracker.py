@@ -97,8 +97,8 @@ def main():
             f.seek(0)
             f.truncate()
             f.write("\n".join(rows) + "\n")
-    except OSError:
-        return
+    except (OSError, ValueError, UnicodeError):
+        return  # 어떤 실패에도 조용히 종료 — 서브에이전트 흐름 차단 금지
 
 
 if __name__ == "__main__":
