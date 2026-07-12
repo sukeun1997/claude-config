@@ -21,6 +21,7 @@ Skipped (noise):
 
 import json
 import os
+import re
 import sys
 import time
 from datetime import datetime
@@ -405,12 +406,19 @@ def cmd_capture():
         entry["description"] = description[:100]
         if check_dedup(dedup_file, f"Agent:{agent_type}:{description[:40]}"):
             return
+        # Structured Response Contract 결과 추출 (verification.md) — executor 1차 성공률 KPI 측정용
+        agent_result = ""
+        if tool_output:
+            m = re.search(r"결과\**\s*[:：]\s*\**\s*(SUCCESS|PARTIAL|FAILED)", tool_output)
+            if m:
+                agent_result = m.group(1)
         # Monthly agent usage tracking (replaces agent-usage-tracker.sh)
         track_monthly_usage("agent", {
             "date": datetime.now().strftime("%Y-%m-%d"),
             "time": datetime.now().strftime("%H:%M"),
             "agent": agent_type,
             "model": model or "default",
+            "result": agent_result,
             "description": description[:80].replace("\n", " ").strip(),
         })
 
