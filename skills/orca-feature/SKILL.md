@@ -83,6 +83,20 @@ orca terminal read --terminal term_xxx                        # 상세 출력/RE
 
 worker_done 수신 → 본문에서 결과 파싱. 5분+ 무응답이면 `terminal read`로 상태 직접 확인 (승인 대기·에러 멈춤 감지).
 
+### 워커 상호작용 (완료 외 메시지 타입)
+
+워커는 블랙박스가 아니다 — check 폴링에서 타입별로 분기한다:
+
+| 타입 | 의미 | 오케스트레이터 대응 |
+|------|------|------|
+| `worker_done` | 작업 완료 + 결과 | 결과 파싱 → Phase 5 진입 |
+| `ask` | 워커가 질문 | 사실 질문이면 직접 `reply`. 결정(AC/스코프/트레이드오프)이면 사용자에게 AskUserQuestion 후 답 전달 |
+| `decision_gate` | 태스크 블로킹 결정 대기 | `gate-list`로 확인 → 사용자 확인 → `gate-resolve` |
+| `escalation` | 범위/권한/장애 보고 | 작업 중단 판단 + 사용자 보고 |
+| `heartbeat` | 진행 상태 | 대응 불필요 (무응답 타이머만 리셋) |
+
+워커가 사용자 UI(AskUserQuestion 등)를 직접 띄울 수는 없다 — 질문은 항상 이 메시지 경로를 경유한다.
+
 ## Phase 5 — 검증 (Claude)
 
 1. `git diff` — 보고된 변경과 실제 diff 대조, scope 이탈 플래그
@@ -93,7 +107,7 @@ worker_done 수신 → 본문에서 결과 파싱. 5분+ 무응답이면 `termin
 ## Phase 6 — 종료
 
 1. 검증 통과 → 워커에 `orchestration reply`로 ACK → 커밋 제안
-2. `orca terminal close --terminal term_xxx` — 워커 정리
+2. `orca terminal close --terminal term_xxx` — 워커 정리. 단 **후속 작업이 예정되어 있으면 close하지 않고 warm 재사용** — 실비용은 dispatch가 아니라 세션 초기화(터미널 부팅·MCP/훅 로딩)이므로 워커 재사용이 하이브리드 손익분기점을 크게 낮춘다
 3. daily log 기록
 
 ## Quick Reference
@@ -116,5 +130,6 @@ worker_done 수신 → 본문에서 결과 파싱. 5분+ 무응답이면 `termin
 | 워커 자가보고(SUCCESS)를 그대로 신뢰 | 집계 오류·scope 이탈 통과 | git diff + 독립 리뷰로 대조 |
 | plan/impl을 다른 터미널에 dispatch | plan 컨텍스트 유실 | 같은 term_xxx 재사용 |
 | Sprint Contract 누락 | Codex가 verification.md 규약을 모름 | 태스크 spec에 완료 조건 4항목 명시 |
-| 워커 터미널 방치 | Orca에 좀비 에이전트 누적 | Phase 6에서 close |
+| 워커 터미널 방치 | Orca에 좀비 에이전트 누적 | Phase 6에서 close (후속 작업 있으면 warm 재사용) |
+| ask/decision_gate 메시지 방치 | 워커 무한 블로킹 | check 폴링에서 타입별 분기 (워커 상호작용 표) |
 | `terminal stop --worktree` 사용 | 같은 워크트리의 내 세션도 종료됨 | 개별 handle로 close |
