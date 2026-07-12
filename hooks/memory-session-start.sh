@@ -52,6 +52,23 @@ if [ -f "$_METRICS_FILE" ]; then
     fi
   fi
 fi
+# review-week staleness check (gap >=7 days = self-improvement loop stalled)
+# 2026-07-12: review-week 7주 정지 사례 대응 — 루프 정지를 감지해 알리는 최소 장치
+_LATEST_FRICTION_MD=$(ls -1 "$MEM_DIR/metrics"/friction-*.md 2>/dev/null | sort | tail -1)
+if [ -n "$_LATEST_FRICTION_MD" ]; then
+  _FR_DATE=$(basename "$_LATEST_FRICTION_MD" .md | sed 's/^friction-//')
+  if [ "$(uname)" = "Darwin" ]; then
+    _FR_TS=$(date -j -f "%Y-%m-%d" "$_FR_DATE" "+%s" 2>/dev/null || echo 0)
+  else
+    _FR_TS=$(date -d "$_FR_DATE" "+%s" 2>/dev/null || echo 0)
+  fi
+  if [ "$_FR_TS" != "0" ]; then
+    _FR_GAP=$(( ($(date +%s) - _FR_TS) / 86400 ))
+    if [ "$_FR_GAP" -ge 7 ]; then
+      _HEALTH_WARNINGS+="REVIEW_STALE: 마지막 주간 리뷰 ${_FR_DATE} (${_FR_GAP}일 경과) — /review-week 실행 권장 (KPI/friction 루프 재가동)\n"
+    fi
+  fi
+fi
 if [ -n "$_HEALTH_WARNINGS" ]; then
   CONTEXT+="⚠️ HOOK HEALTH CHECK:
 $(echo -e "$_HEALTH_WARNINGS")

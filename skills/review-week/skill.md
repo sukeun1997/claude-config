@@ -31,6 +31,7 @@ Phase 2: Analysis (4개 축 분석)
 
 Phase 3: Output (결과 출력)
   → 대화에 전체 리뷰 표시
+  → vault에 자동 저장 (Codex 리포트 컨벤션 미러)
   → 사용자 요청 시 Notion에 기록
 
 Phase 4: Memory (핵심 발견 저장)
@@ -59,7 +60,7 @@ for i, line in enumerate(lines, 1):
     if '[EXTERNAL]' in cells[2]:  # cells[2] = 증상 열 (날짜|증상|원인|해법 4열 테이블)
         continue  # 외부 사례는 자체 friction 카운트에서 제외 (rules/common/verification.md § 테스트 불변성 4주 friction 0건 트리거 보호)
     layer = cells[3]
-    if '미분류' in layer or '(추정)' in layer:
+    if '미분류' in layer or '(추정' in layer:  # '(추정·N회)' pre-fill 포맷 포함 매칭 (2026-07-12 게이트 거짓 통과 수정)
         pending.append((i, cells[2], layer))
 print(f'PENDING_COUNT={len(pending)}')
 for row in pending[:10]:
@@ -283,6 +284,19 @@ memory_search("설정 구성 변경 디버깅 구현", top_k=10)
 
 > **핵심 한 줄**: ...
 ```
+
+### Vault 저장 (자동 — Codex 리포트 컨벤션 미러)
+
+대화 출력 후, 리뷰 전문을 아래 경로에 저장한다 (디렉토리 없으면 생성):
+
+```
+~/vault/30 학습/개념/하네스 개선/Claude/{YYYY-MM-DD}-claude-weekly-review.md
+```
+
+- 파일 헤더: `# Claude Weekly Review` + Generated/Window/Score 요약 (Codex `self-improvement/reports/*-codex-weekly-review.md` 형식과 통일)
+- `## Summary`에 Score(8축/L1-L5), Main pattern, Biggest wasted loop, Best leverage 4줄 포함
+- 경로에 공백 포함 — bash 사용 시 `"$HOME/vault/30 학습/..."` 인용 필수
+- 저장은 사용자 요청 불필요 (Notion 기록과 달리 기본 동작)
 
 ### Notion 기록 (사용자 요청 시)
 
