@@ -283,6 +283,7 @@ Agent 호출 시 `model` 파라미터 필수 지정.
 |--------|------|
 | 구현 요청에 기술/설계 선택이 포함된 경우 — **학습 모드 ON(기본)**: 사용자가 단일 후보만 언급해도 트리거 (현 스택 내 라이브러리/패턴 대안 1-2개 + 트레이드오프 1줄). **학습 모드 OFF**: 미확정 케이스만 트리거 (기존 스택으로 자연 결정되면 스킵). 학습 모드 정의는 §1 참조 | `tech-advisor` (대안 비교 → 사용자 선택 → 구현 진행) |
 | 새 기능 구현 시작 | `feature` (tech-advisor → brainstorming → plans → execution) |
+| 구현을 Codex에 위임 — "codex로 구현", "sol로 작업", "orca로 위임" | `orca-feature` (Claude 오케스트레이터: spec/리뷰, Codex sol 워커: plan/구현. Orca 앱 필요) |
 | 설계/분석 문서 **신규 생성** (spec/*.md, plan*.md, *-spec.md, *-analysis.md) — vault/.omx/active/sessions/daily 경로 제외, brainstorming 산출물·docs-save 결과는 스킵 | `feature` brainstorming 게이트 선행. 이미 brainstorming 완료 후 기록이면 스킵 |
 | 기술 뉴스/동향 요청 | `daily-briefing` (quick/deep 모드) |
 | PR 전 최종 검증 | `superpowers:verification-before-completion` |
