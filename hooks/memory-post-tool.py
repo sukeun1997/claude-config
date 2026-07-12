@@ -19,6 +19,7 @@ Skipped (noise):
   Read, Grep, Glob, ToolSearch, and trivial Bash commands
 """
 
+import fcntl
 import json
 import os
 import re
@@ -127,6 +128,8 @@ def track_monthly_usage(category: str, record: dict):
     month_file = metrics_dir / f"{category}-usage-{datetime.now().strftime('%Y-%m')}.jsonl"
     try:
         with open(month_file, "a") as f:
+            # subagent-result-tracker.py의 rewrite(flock)와 상호 배제 — append 유실 방지
+            fcntl.flock(f, fcntl.LOCK_EX)
             f.write(json.dumps(record, ensure_ascii=False) + "\n")
     except OSError:
         pass
