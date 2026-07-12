@@ -65,3 +65,9 @@
 
 ### Promoted 2026-07-12
 - review-week 수동 트리거 의존이 구조적 약점 — 리마인더 자동화 필요
+
+### Promoted 2026-07-12
+- macOS에서 `find /tmp -maxdepth 1`은 무동작 — /tmp이 symlink라 하강 안 함, trailing slash(`find /tmp/`) 필수
+
+### Promoted 2026-07-12
+- Codex 위임 시 가시성 필요하면 codex-bridge(tmux) 대신 orca CLI 경로 사용: terminal create → task-create → dispatch --inject → terminal wait/read. 완료 감지는 tui-idle이 조기 반환될 수 있어 terminal read로 RESULT_JSON 확인이 확실
