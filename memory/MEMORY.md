@@ -55,3 +55,13 @@
 
 ### Promoted 2026-07-11
 - worktree 병렬 패턴: 백엔드 main 수정 + 테스트 작성을 동시 진행할 때 "public 시그니처 유지 계약 + 테스트 레인 worktree 격리 + 완료 후 파일 복사·통합 재검증"이 잘 작동함
+
+### Promoted 2026-07-11
+- 투자자 겹침 비율이 높으면 목적계좌 직렬화 때문에 6100 c=2 이득 급감 — Phase 3 go/no-go 핵심 입력
+
+### Promoted 2026-07-11
+- 6100 동시성 재개 시 전용 controller보다 006000 계좌 lane 모델 통합 우선 (busy_accounts에 6100 계좌 집합 포함) — 단 계좌 lock은 중복 이체를 못 막으므로 durable claim은 여전히 선행
+- 보안: .mcp.json memory-search에 GEMINI_API_KEY 평문 노출 발견 — ${ENV_VAR} 참조로 전환 필요 (사용자 조치 대기)
+
+### Promoted 2026-07-12
+- review-week 수동 트리거 의존이 구조적 약점 — 리마인더 자동화 필요
