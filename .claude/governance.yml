@@ -51,7 +51,7 @@ rules:
 
   - pattern: "**/.env"
     message: ".env 변경 감지 (공유 상태 — Codex/Claude 양 런타임이 같은 값 참조)"
-    recommend: "DATABASE_URL/API_KEY 등 운영 자원 변경 시 사용자 명시 승인. LOCAL_*/PROD_* 접두사 분리 패턴(rules/mcp/mysql-setup.md) 준수"
+    recommend: "DATABASE_URL/API_KEY 등 운영 자원 변경 시 사용자 명시 승인. LOCAL_*/PROD_* 접두사 분리 패턴(docs/mcp/mysql-setup.md) 준수"
     severity: warn
 
   - pattern: "**/.mcp.json"
