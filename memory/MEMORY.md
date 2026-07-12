@@ -11,7 +11,7 @@
 
 ## 글로벌 설정 구조 (~/.claude/)
 - `CLAUDE.md`: 글로벌 에이전트 운영 매뉴얼 (Core Rules + Profile + 9섹션)
-- `hooks/`: 20개 — memory-lib, session-start/end, precompact, stop-guard, edit-tracker, read-edit-gate, session-digest, post-tool, promote-analyzer, active-context, governance-guard, skill-usage-tracker, observer-runner, pre-clear-handoff, memory-sync, instinct-evolve, memory-search, memory-system-portable, prisma-auto-generate, telegram-notify
+- `hooks/`: 활성 21개 (2026-07-12 기준, 정확 목록은 `ls hooks/`) — 메모리 계열(memory-lib, session-start/end, precompact, stop-guard, post-tool, active-context, search, system-portable, pre-clear-handoff), 가드 계열(agent-model-guard, read-edit-gate, governance-guard, settings-integrity-guard), 관측 계열(session-digest, observer-runner/analyzer, subagent-result-tracker, failure-log-instinct-boost), 기타(instinct-evolve, prisma-auto-generate). 은퇴 훅은 `hooks/deprecated/`
 - `scripts/`: failure-log-classify (self-healing 분류), sync-settings, deploy 등
 - `memory-search MCP`: ~/IdeaProjects/관리/memory-mcp-server (BM25+Vector 하이브리드)
 
@@ -29,6 +29,9 @@
 - [평가 교정](topics/evaluation-calibration-pattern.md) — 리뷰어 평가 기준
 - [L5 로드맵](topics/l5-roadmap.md) — 4.5→5.0 단계별 액션, 점수 이력
 - [Promoted 인사이트 아카이브](topics/promoted-insights-archive.md) — 프로젝트별/CSS/Prisma/배포 상세 (2026-03~04, 온디맨드)
+- [haru 프로젝트 이력](topics/haru-project-history.md) — haru 앱/인프라 결정 이력
+- [토큰 효율](topics/token-efficiency.md) — 컨텍스트 절약 패턴 상세
+- [학습 계획 2026-05](topics/learning-plan-2026-05.md) — 백엔드 학습 로드맵
 
 ## Promoted 인사이트 (메타/프로세스 — Always)
 > 프로젝트별 상세는 위 아카이브. 여기엔 하네스/프로세스 교훈만 유지.
@@ -44,10 +47,7 @@
 
 
 ### Promoted 2026-05-25
-### Promoted 2026-05-25
 - friction 룰 60회 방지실패 → 코드 enforcement 승격 패턴: 프롬프트 룰이 N회 재등장하면 (a)강도상향 (b)훅 자동화 (c)은퇴 중 택1. read-edit-gate가 (b) 첫 사례
-- friction 룰 60회 방지실패 → 코드 enforcement 승격 패턴: 프롬프트 룰이 N회 재등장하면 (a)강도상향 (b)훅 자동화 (c)은퇴 중 택1. read-edit-gate가 (b) 첫 사례
-- 패턴: "KPI 카드 = 섹션과 별개". 공과금처럼 같은 도메인이 (a) 다운로드 섹션 (b) KPI 카드 두 곳에 분산될 수 있음. "X 숨겨줘" 요청 시 grep으로 모든 노출 지점 확인 필요
 - 패턴: "KPI 카드 = 섹션과 별개". 공과금처럼 같은 도메인이 (a) 다운로드 섹션 (b) KPI 카드 두 곳에 분산될 수 있음. "X 숨겨줘" 요청 시 grep으로 모든 노출 지점 확인 필요
 
 ### Promoted 2026-07-11
@@ -61,7 +61,7 @@
 
 ### Promoted 2026-07-11
 - 6100 동시성 재개 시 전용 controller보다 006000 계좌 lane 모델 통합 우선 (busy_accounts에 6100 계좌 집합 포함) — 단 계좌 lock은 중복 이체를 못 막으므로 durable claim은 여전히 선행
-- 보안: .mcp.json memory-search에 GEMINI_API_KEY 평문 노출 발견 — ${ENV_VAR} 참조로 전환 필요 (사용자 조치 대기)
+- 보안: .mcp.json memory-search GEMINI_API_KEY 평문 노출 → ~/.zshrc export + ${GEMINI_API_KEY} 참조로 이관 완료 (2026-07-12). .mcp.json에는 항상 ${ENV_VAR} 참조만
 
 ### Promoted 2026-07-12
 - review-week 수동 트리거 의존이 구조적 약점 — 리마인더 자동화 필요

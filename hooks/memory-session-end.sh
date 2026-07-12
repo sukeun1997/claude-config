@@ -53,6 +53,28 @@ if [ "$ARCHIVED" -gt 0 ]; then
   echo "Archived $ARCHIVED daily log(s) older than 14 days."
 fi
 
+# Archive old captures JSONL — dotfiles are not matched by the *.md glob above,
+# so without this they accumulate in daily/ forever (29 found on 2026-07-12)
+CAPTURES_ARCHIVED=0
+for cap_file in "$DAILY_DIR"/.captures-*.jsonl; do
+  [ -f "$cap_file" ] || continue
+  cap_name=$(basename "$cap_file")
+  cap_date="${cap_name#.captures-}"
+  cap_date="${cap_date%.jsonl}"
+  if ! echo "$cap_date" | grep -qE '^[0-9]{4}-[0-9]{2}-[0-9]{2}$'; then
+    continue
+  fi
+  if [[ "$cap_date" < "$CUTOFF" ]]; then
+    target_dir="$ARCHIVE_DIR/${cap_date:0:7}"
+    mkdir -p "$target_dir"
+    mv "$cap_file" "$target_dir/"
+    CAPTURES_ARCHIVED=$((CAPTURES_ARCHIVED + 1))
+  fi
+done
+if [ "$CAPTURES_ARCHIVED" -gt 0 ]; then
+  echo "Archived $CAPTURES_ARCHIVED captures file(s) older than 14 days."
+fi
+
 # ── Archive stale active context files (7+ day mtime, untracked only) ──
 # Exempt the current branch's active context so a long break doesn't archive
 # work-in-progress state right before resuming.
@@ -226,6 +248,13 @@ if [ -f "$TRACK_FILE" ]; then
   rm -f "$TRACK_FILE"
 fi
 
+# Read tracker was consumed above but never removed → /tmp accumulation (75 found on 2026-07-12)
+rm -f "$READ_TRACK_FILE" 2>/dev/null || true
+# Crashed sessions never reach SessionEnd — sweep their tracker files after 1 day
+# trailing slash: macOS /tmp is a symlink — find won't descend without it
+find /tmp/ -maxdepth 1 \( -name 'claude-edit-tracker-*' -o -name 'claude-read-tracker-*' \) \
+  -user "$(id -un)" -mtime +1 -delete 2>/dev/null || true
+
 # ── Clean up empty daily logs (header-only files) ──
 for log_file in "$DAILY_DIR"/*.md; do
   [ -f "$log_file" ] || continue
@@ -239,7 +268,9 @@ done
 # (관리 레포 sync 블록 제거 — auto-sync가 claude-config 레포로 직접 push)
 
 # ── Save current session JSONL path for next session's digest ──
-PROJ_JSONL_DIR=$(find_project_jsonl_dir)
+# || true: 함수가 빈 결과로 status 1을 반환하면 set -e가 여기서 스크립트를 죽여
+# 아래 auto-sync 블록까지 도달하지 못함 (projects 디렉토리 없는 신규 머신에서 재현)
+PROJ_JSONL_DIR=$(find_project_jsonl_dir) || PROJ_JSONL_DIR=""
 if [ -n "$PROJ_JSONL_DIR" ]; then
   # Most recently modified JSONL = current session (actively being written)
   CURRENT_JSONL=$(ls -t "$PROJ_JSONL_DIR"/*.jsonl 2>/dev/null | head -1)
