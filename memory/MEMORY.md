@@ -207,3 +207,6 @@
 
 ### Promoted 2026-07-10
 - Grafana MySQL 타임존 규칙: $__timeFilter/$__timeGroupAlias 경유는 epoch 변환으로 정확하지만, raw datetime 컬럼을 직접 SELECT하면 UTC로 해석돼 +9h 표시됨. 해법 = 표시용은 DATE_FORMAT 문자열, time축은 UNIX_TIMESTAMP() epoch
+
+### Promoted 2026-07-13
+- fep.JB_SEND 금액: 전용 컬럼 없음, MSG_SEND(LONGBLOB) 고정폭 파싱 — 공통부 164B(messagerule.py HEADER REQ: 5+3+3+3+4+6+10+8+8+10+4+100), 006000 이체금액 = SUBSTRING(MSG_SEND,224,13) (업무부 offset 59), 006100 총이체금액 = SUBSTRING(MSG_SEND,187,13). optional 헤더 3필드 생략 시 헤더 50B → 006000 금액 위치 110 (검증 쿼리로 판별)
