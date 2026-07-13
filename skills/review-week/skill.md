@@ -31,6 +31,7 @@ Phase 2: Analysis (4개 축 분석)
 
 Phase 3: Output (결과 출력)
   → 대화에 전체 리뷰 표시
+  → vault에 자동 저장 (Codex 리포트 컨벤션 미러)
   → 사용자 요청 시 Notion에 기록
 
 Phase 4: Memory (핵심 발견 저장)
@@ -283,6 +284,19 @@ memory_search("설정 구성 변경 디버깅 구현", top_k=10)
 
 > **핵심 한 줄**: ...
 ```
+
+### Vault 저장 (자동 — Codex 리포트 컨벤션 미러)
+
+대화 출력 후, 리뷰 전문을 아래 경로에 저장한다 (디렉토리 없으면 생성):
+
+```
+~/vault/30 학습/개념/하네스 개선/Claude/{YYYY-MM-DD}-claude-weekly-review.md
+```
+
+- 파일 헤더: `# Claude Weekly Review` + Generated/Window/Score 요약 (Codex `self-improvement/reports/*-codex-weekly-review.md` 형식과 통일)
+- `## Summary`에 Score(8축/L1-L5), Main pattern, Biggest wasted loop, Best leverage 4줄 포함
+- 경로에 공백 포함 — bash 사용 시 `"$HOME/vault/30 학습/..."` 인용 필수
+- 저장은 사용자 요청 불필요 (Notion 기록과 달리 기본 동작)
 
 ### Notion 기록 (사용자 요청 시)
 

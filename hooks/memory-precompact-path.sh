@@ -67,7 +67,7 @@ if [ -f "$CONTEXT_FILE" ] && is_context_fresh "$CONTEXT_FILE" 1; then
   echo "STATUS: active context 존재 (fresh). compaction 진행."
   # exit 0 (implicit) — compaction 허용
 else
-  echo "STATUS: active context 없음 또는 stale. 아래 템플릿으로 작성 후 compaction이 재시도됩니다."
+  echo "STATUS: active context 없음 또는 stale (경고). compaction은 진행되며, 세션 재개 후 아래 템플릿으로 갱신을 권장합니다."
   cat << TMPL
 
 ---
@@ -88,6 +88,8 @@ updated: $(date +%Y-%m-%dT%H:%M+09:00)
 - 다음 파일: {파일 경로}
 - 남은 위험: {이슈}
 TMPL
-  # exit 2 — compaction 차단. 모델이 active context를 먼저 갱신하도록 강제.
-  exit 2
+  # 경고만 출력하고 compaction 허용 (exit 0).
+  # 이전에는 exit 2로 차단했으나, PreCompact의 exit 2 stderr는 사용자에게만 표시되고
+  # 모델에 전달되지 않아 자가 갱신이 불가능 — 매번 수동 개입이 필요한 마찰만 발생 (2026-07-12 완화).
+  # 컨텍스트 보존은 위의 re-inject 블록과 daily log 체크포인트가 담당.
 fi

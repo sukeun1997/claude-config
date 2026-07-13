@@ -29,7 +29,7 @@
 - Insight 제공: 구현 전후 교육적 설명 포함
 - URL 제공 시 자동 WebFetch / SDK·API 구현 전 문서 조사 (Context7 MCP)
 - **배포**: `scripts/deploy.sh` 사용 필수 (없는 프로젝트는 예외)
-- **Plan/Spec 저장 경로 (저장소 금지 — vault에 직접 Write)**: spec/plan/design 등 superpowers 산출물은 저장소(`docs/superpowers/**`)에 만들지 않고 vault에 직접 저장한다. 프로젝트 코드베이스 작업 → `~/vault/20 프로젝트/{project}/{branch-slug}/`, 프로젝트 무관 업무(설계논의·흐름정리 등) → `~/vault/10 업무/{category}/`. (vault-auto-save 훅은 deprecated — 자동 이동 없으므로 처음부터 vault 경로에 Write. 저장소엔 절대 커밋하지 않는다)
+- **Plan/Spec 저장 경로 (저장소 금지 — vault에 직접 Write)**: spec/plan/design 등 superpowers 산출물은 저장소(`docs/superpowers/**`)에 만들지 않고 vault에 직접 저장한다. 프로젝트 코드베이스 작업 → `~/vault/20 프로젝트/{project}/{branch-slug}/`, 프로젝트 무관 업무(설계논의·흐름정리 등) → `~/vault/10 업무/{category}/`. 공백 포함 경로 — bash에서 `"$HOME/vault/20 프로젝트/..."` 인용 필수. `{project}`는 새로 만들지 말고 `20 프로젝트` 기존 폴더에서 근접 매칭하여 재사용 (애매하면 1-tap 확인). (vault-auto-save 훅은 deprecated — 자동 이동 없으므로 처음부터 vault 경로에 Write. 저장소엔 절대 커밋하지 않는다)
 
 ### 컨텍스트 절약
 - 파일 3개+ 탐색 → Explore 서브에이전트 위임
@@ -42,9 +42,10 @@
 - **Notion I/O 서브에이전트 위임**: Notion MCP 호출(fetch/update/create)은 서브에이전트에 위임. 메인에서는 마크다운 콘텐츠만 준비하고, page ID(`projects.json` 캐시)와 함께 전달. search 대신 캐시된 ID 직접 사용. 단순 append 1건은 메인에서 직접 가능
 - **에이전트 결과 크기 제한**: Explore/코드 트레이스 에이전트에 "report in under 3000 characters" 지시. 핵심(파일 경로 + 호출 체인 + 1줄 요약)만 요청하고, 상세는 필요 시 직접 Read
 
-### 프롬프팅 톤 (4.6 최적화)
-- 강조 표현(MUST, CRITICAL, MANDATORY 등) 최소화 — 4.6은 일반 표현으로 충분히 따르며, 과도한 강조는 overtriggering 유발
-- 도구/스킬 트리거: "~할 때 사용" 형태의 조건부 안내. "반드시", "의심되면 사용" 등 이전 모델용 강제 표현 지양
+### 프롬프팅 톤
+- 강조 표현(MUST, CRITICAL, MANDATORY 등) 최소화 — 현행 모델은 일반 표현으로 충분히 따르며, 과도한 강조는 overtriggering 유발
+- 도구/스킬 트리거: "~할 때 사용" 형태의 조건부 안내. "반드시", "의심되면 사용" 등 구형 모델용 강제 표현 지양
+- 모델 업그레이드 시 이 섹션 포함 전체 규칙 재검토 (§운영 "하네스 진화 검토")
 
 ### 학습 모드 (Learning Mode)
 - **기본 ON** — 백엔드 학습/시야 확장을 전달 효율과 동등 비중으로 다룸
@@ -305,12 +306,14 @@ Agent 호출 시 `model` 파라미터 필수 지정.
 | JPA Entity / Repository 변경 | `everything-claude-code:jpa-patterns` |
 | `@Cacheable`, Redis 설정 변경 | `redis-cache-patterns` |
 | Security 설정, 인증/인가 코드 | `security-fix` (글로벌, code/security 병렬 리뷰 → 수정 → 검증) |
+| haru 프로젝트 배포/Docker Compose/Nginx/OCI 서버 작업 | `haru-infra` (OCI Always Free 배포 패턴) |
 
 ### 워크플로우 기반
 | 트리거 | 스킬 |
 |--------|------|
 | 구현 요청에 기술/설계 선택이 포함된 경우 — **학습 모드 ON(기본)**: 사용자가 단일 후보만 언급해도 트리거 (현 스택 내 라이브러리/패턴 대안 1-2개 + 트레이드오프 1줄). **학습 모드 OFF**: 미확정 케이스만 트리거 (기존 스택으로 자연 결정되면 스킵). 학습 모드 정의는 §1 참조 | `tech-advisor` (대안 비교 → 사용자 선택 → 구현 진행) |
 | 새 기능 구현 시작 | `feature` (tech-advisor → brainstorming → plans → execution) |
+| 구현을 Codex에 위임 — "codex로 구현", "sol로 작업", "orca로 위임" | `orca-feature` (Claude 오케스트레이터: spec/리뷰, Codex sol 워커: plan/구현. Orca 앱 필요) |
 | 설계/분석 문서 **신규 생성** (spec/*.md, plan*.md, *-spec.md, *-analysis.md) — vault/.omx/active/sessions/daily 경로 제외, brainstorming 산출물·docs-save 결과는 스킵 | `feature` brainstorming 게이트 선행. 이미 brainstorming 완료 후 기록이면 스킵 |
 | 기술 뉴스/동향 요청 | `daily-briefing` (quick/deep 모드) |
 | PR 전 최종 검증 | `superpowers:verification-before-completion` |
@@ -345,6 +348,7 @@ Agent 호출 시 `model` 파라미터 필수 지정.
 1. 프로젝트별 CLAUDE.md 스킬 > 글로벌 CLAUDE.md 스킬
 2. 워크플로우 기반 > 파일/언어 기반
 3. 좁은 범위 (jpa-patterns) > 넓은 범위 (kotlin-patterns)
+4. 특정 문구/산출물 명시 트리거 > 범용 키워드 트리거 — 예: "아키텍처 다이어그램" 요청은 `arch-diagram` (tech-advisor의 "아키텍처" 키워드보다 우선)
 
 ## 운영
 - 테스트 실패 방치 금지: 즉시 수정 또는 이슈 등록

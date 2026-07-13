@@ -115,7 +115,7 @@ Codex/OMX에서는 아래를 기본 메모리 계층으로 사용한다.
 | 자원 | 위치 | 공유 위험 | 작업 규칙 |
 |------|------|----------|----------|
 | 운영 DB | DATABASE_URL이 가리키는 host | `pnpm prisma migrate dev`가 pending 마이그 전부 적용 (4/24 사고 직접 원인) | 마이그레이션은 메인 세션 직접 실행. 서브에이전트 위임 금지. 두 런타임이 동시에 같은 운영 DB에 마이그 시도 금지 |
-| `.env` (DATABASE_URL, API_KEY) | 프로젝트 루트 | 한 런타임의 .env 수정이 다른 런타임에 즉시 반영 | LOCAL_*/PROD_* 접두사 분리 (`rules/mcp/mysql-setup.md`). 실행 전 `echo $DATABASE_URL` 출력 |
+| `.env` (DATABASE_URL, API_KEY) | 프로젝트 루트 | 한 런타임의 .env 수정이 다른 런타임에 즉시 반영 | LOCAL_*/PROD_* 접두사 분리 (`docs/mcp/mysql-setup.md`). 실행 전 `echo $DATABASE_URL` 출력 |
 | `.mcp.json` | `~/.claude/.mcp.json` | 평문 시크릿 노출 시 git push로 공개 노출 | env 값은 `${ENV_VAR}` 참조만. `~/.zshrc`에 export |
 | `_prisma_migrations` 테이블 | DB | "applied" 기록만 남고 DDL 미실행 사례 (4/21 P2022 사고) | deploy.sh smoke test 필수 (`/api/...` 200 확인) |
 | Active Context | `memory/active/{branch}.md` | 두 런타임이 같은 브랜치에서 작업 시 덮어쓰기 | 한 브랜치 = 한 런타임. 다른 런타임은 별도 워크트리 |

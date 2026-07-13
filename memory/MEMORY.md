@@ -11,19 +11,13 @@
 
 ## 글로벌 설정 구조 (~/.claude/)
 - `CLAUDE.md`: 글로벌 에이전트 운영 매뉴얼 (Core Rules + Profile + 9섹션)
-- `hooks/`: 19개 — memory-lib, session-start/end, precompact, stop-guard, edit-tracker, session-digest, post-tool, promote-analyzer, active-context, governance-guard, skill-usage-tracker, observer-runner, pre-clear-handoff, memory-sync, instinct-evolve, memory-search, memory-system-portable, prisma-auto-generate, telegram-notify
+- `hooks/`: 활성 21개 (2026-07-12 기준, 정확 목록은 `ls hooks/`) — 메모리 계열(memory-lib, session-start/end, precompact, stop-guard, post-tool, active-context, search, system-portable, pre-clear-handoff), 가드 계열(agent-model-guard, read-edit-gate, governance-guard, settings-integrity-guard), 관측 계열(session-digest, observer-runner/analyzer, subagent-result-tracker, failure-log-instinct-boost), 기타(instinct-evolve, prisma-auto-generate). 은퇴 훅은 `hooks/deprecated/`
+- `scripts/`: failure-log-classify (self-healing 분류), sync-settings, deploy 등
 - `memory-search MCP`: ~/IdeaProjects/관리/memory-mcp-server (BM25+Vector 하이브리드)
 
 ## CLAUDE.md 구조 (2026-03-30 갱신)
-1. Session Rules (세션 규율 + 컨텍스트 절약 + 메모리 + Active Context + Daily Log)
-2. Task Routing & Delegation (직접 허용 + 판단 플로우 + Agent 위임 테이블)
-3. Model Routing (haiku/sonnet/opus 티어)
-4. Post-Implementation (리뷰 정책 + 빌드 검증 + 테스트 + 경계면 교차 검증)
-5. Coding Standards (불변성, 파일/함수 크기 제한)
-6. Git Workflow (커밋 형식 + PR 규칙)
-7. Security (민감 파일 + 비밀값 + 의존성)
-8. Parallel Execution (병렬/순차 규칙 + 팀 패턴)
-9. Auto Skill Routing (파일/언어 + 워크플로우 트리거)
+1. Session Rules  2. Task Routing & Delegation  3. Model Routing  4. Post-Implementation
+5. Coding Standards  6. Git Workflow  7. Security  8. Parallel Execution  9. Auto Skill Routing
 
 ## 원격 레포 동기화
 - 글로벌 설정 레포: `sukeun1997/claude-config` (GitHub, public)
@@ -34,45 +28,46 @@
 - [삽질 패턴](topics/failure-log.md) — 원인 분류 + 해법
 - [평가 교정](topics/evaluation-calibration-pattern.md) — 리뷰어 평가 기준
 - [L5 로드맵](topics/l5-roadmap.md) — 4.5→5.0 단계별 액션, 점수 이력
+- [Promoted 인사이트 아카이브](topics/promoted-insights-archive.md) — 프로젝트별/CSS/Prisma/배포 상세 (2026-03~04, 온디맨드)
+- [haru 프로젝트 이력](topics/haru-project-history.md) — haru 앱/인프라 결정 이력
+- [토큰 효율](topics/token-efficiency.md) — 컨텍스트 절약 패턴 상세
+- [학습 계획 2026-05](topics/learning-plan-2026-05.md) — 백엔드 학습 로드맵
 
-### Promoted 2026-03-31
-- Haru 프로젝트 히스토리: [topics/haru-project-history.md](topics/haru-project-history.md)
-- migrate-legacy-deposits.ts 금액 소스: R_Cost.Minus_Cost는 적용금액(부분), TBLBANK.Bkinput이 실제 입금액. R_Cost는 전체 거래 기록 테이블
-- gstack Fix-First 패턴 + 크로스 리뷰: `/review` 스킬에 통합됨. 소규모(<100줄)에서는 --quick 권장
-- Session Digest: /clear 시 JSONL 자동 파싱으로 이전 대화 복구. /new 으로 완전 초기화
+## Promoted 인사이트 (메타/프로세스 — Always)
+> 프로젝트별 상세는 위 아카이브. 여기엔 하네스/프로세스 교훈만 유지.
 
-### Promoted 2026-04-06
-- settings base+local 분리 시 hooks 보호 패턴: frozen-keys + integrity guard
+- **(04-06)** settings base+local 분리 시 hooks 보호: frozen-keys + integrity guard
+- **(04-10)** 하네스 4.5 유지 (Opus critic: 오케스트레이션 4.7, 자기진화 4.2). 5.0 갭: evolved skill 미발동 + friction 은퇴 0건 / absorb 주 2회(화·금) 배치 / Active Context Hygiene 자동 경고(stale 3일+변경0, 비대 7일+)
+- **(04-18)** failure-log 적체 게이트 = 주간 리뷰 첫 관문 (15건+ 쌓이면 KPI 분석 무의미). 분류는 Harness/Context/Prompt 3계층, 모델명·추정 레이블 금지 / W16 1위 원인 = 파일 Read 선행 미흡(Context)
+- **(04-24)** 2단 critic(내부+독립+적용가치 재검증)이 단계별로 다른 false positive를 거름. "버그인지"와 "적용 가치 있는지"는 다른 축 / 리뷰어는 라인번호+근거 필수 + critic Read 검증 없으면 오독 통과 (단일 리뷰 layer 부족)
+- **(04-26)** TestFlight 새 빌드 실패 최빈 원인 = CFBundleVersion 동일 (project.yml 정적 빌드번호 금지) / 클라 에러 LGTM 수집 = SLF4J logger.warn 한 줄 → docker stdout → Alloy 자동 수집
+- **(05-16)** deprecated 정리 PR은 fallback 동작 dry-run 검증 후 머지 (silent regression 방지) / "성숙도" 척도(8축 vs L1-L5) 명시 — 같은 단어로 다른 측정값 혼용 금지
+- **(05-19)** 새 라우트 안 잡힐 때: ① grep 라우트 존재 → ② lsof 서버 PID+uptime → ③ stale이면 SIGTERM+재시작 (tsx watch stale 코드 주의)
+- **(05-23)** Read-before-Edit를 PreToolUse 차단 훅으로 승격 (경고@2 → 차단@3, 소스 파일+Edit 한정). failure-log 자동 분류(self-healing)를 observer-runner 조기 배치 — friction 룰의 코드 enforcement 전환 첫 사례
 
-### Promoted 2026-04-09
-- 스마트.exe Lazy Copy 메커니즘: R_Cost_Smart(원본) → R_Cost(조회 시 복사). 마이그레이션은 R_Cost_Smart 기준으로 해야 함
 
-### Promoted 2026-04-10
-- 하네스 4.5 유지 (Opus critic 검증: 오케스트레이션 4.7, 자기진화 4.2). 5.0 갭: evolved skill 미발동 + friction 은퇴 0건
-- absorb 주 2회 제한 (화/금 배치). 적용률 41%→70% 목표. Phase 0 사전 필터링 추가
-- Active Context Hygiene: SessionStart에서 stale(3일+변경0)/비대(7일+) context 자동 경고
+### Promoted 2026-05-25
+- friction 룰 60회 방지실패 → 코드 enforcement 승격 패턴: 프롬프트 룰이 N회 재등장하면 (a)강도상향 (b)훅 자동화 (c)은퇴 중 택1. read-edit-gate가 (b) 첫 사례
+- 패턴: "KPI 카드 = 섹션과 별개". 공과금처럼 같은 도메인이 (a) 다운로드 섹션 (b) KPI 카드 두 곳에 분산될 수 있음. "X 숨겨줘" 요청 시 grep으로 모든 노출 지점 확인 필요
 
-### Promoted 2026-04-13
-- Phrase 설계 원칙: p1은 "답변 필요 없이 내가 말하고 끝나는 문장"이 핵심. 질문형은 답변 못 알아들으면 무용지물이라 p2/p3로. 일본 현금 결제 비율 높아 c-002(카드로)/c-005(현금만?) 둘 다 p1.
+### Promoted 2026-07-11
+- JPA N+1(@BatchSize/@EntityGraph), DB 인덱스, Redis 캐시, iOS @Observable 구조는 이미 최적화 완료 상태 — 재분석 불필요
 
-### Promoted 2026-04-13
-- OCI 인프라 메모: maple 서버 80/443은 어머니 todo-app 전용 — 새 서비스는 반드시 별도 포트 + OCI Security List ingress 사용자 콘솔 작업 사전 고지
+### Promoted 2026-07-11
+- worktree 병렬 패턴: 백엔드 main 수정 + 테스트 작성을 동시 진행할 때 "public 시그니처 유지 계약 + 테스트 레인 worktree 격리 + 완료 후 파일 복사·통합 재검증"이 잘 작동함
 
-### Promoted 2026-04-13
-- critic + verifier + code-reviewer를 단계별로 다른 시점에 부르면 서로 다른 결함을 잡는다 — Spec critic = "제로패딩/공백 prefix 누락", Plan critic = "웹 모드 routes 누락", code-reviewer(opus) = "정규식 불일치/rowIdSeq". 각 단계마다 비용 적고 효과 큼
-- /feature 파이프라인은 한 세션에서 spec + plan + 8커밋 구현 + 2중 opus 검증 + PR까지 완주 가능. compaction 없이 끝남
+### Promoted 2026-07-11
+- 투자자 겹침 비율이 높으면 목적계좌 직렬화 때문에 6100 c=2 이득 급감 — Phase 3 go/no-go 핵심 입력
 
-### Promoted 2026-04-14
-- code-reviewer 지적을 처리할 때 "해당 이슈가 실제로 존재하는지" 다른 관성(errorHandler 전략, app.use middleware 등)을 먼저 확인하면 skip 근거를 문서화할 수 있다. 맹목적 반영 금지
+### Promoted 2026-07-11
+- 6100 동시성 재개 시 전용 controller보다 006000 계좌 lane 모델 통합 우선 (busy_accounts에 6100 계좌 집합 포함) — 단 계좌 lock은 중복 이체를 못 막으므로 durable claim은 여전히 선행
+- 보안: .mcp.json memory-search GEMINI_API_KEY 평문 노출 → ~/.zshrc export + ${GEMINI_API_KEY} 참조로 이관 완료 (2026-07-12). .mcp.json에는 항상 ${ENV_VAR} 참조만
 
-### Promoted 2026-04-14
-- 순수 함수는 반드시 export하고 테스트에서 import — 복사하면 테스트-구현 drift 발생
-- 같은 파이프라인 함수들은 정규화 전략(대소문자, 공백) 통일 필수
+### Promoted 2026-07-12
+- review-week 수동 트리거 의존이 구조적 약점 — 리마인더 자동화 필요
 
-### Promoted 2026-04-14
-- **Prisma `distinct` 옵션 함정**: DB 레벨 `SELECT DISTINCT`가 아니라 application-side dedup — 전체 row를 client로 가져와서 중복 제거. 큰 테이블에선 치명적 핫스팟. `groupBy` 또는 raw `SELECT DISTINCT` 사용
-- **Prisma slow query duration 한계**: `$on('query')`의 duration은 DB exec만. JS deserialize / BigInt 직렬화 / IPC 왕복 / GC 압력 제외 → 사용자 체감과 괴리 가능
-- **실측 miss ≠ 문제 없음**: 현재 duration이 낮아도 구조적 O(N) 부채(전체 테이블 로드 패턴)는 선제 대응 가치 있음. 단, 비용-편익 비교 시 invalidation 리스크와 실사용 호출 빈도도 함께 고려
+### Promoted 2026-07-12
+- macOS에서 `find /tmp -maxdepth 1`은 무동작 — /tmp이 symlink라 하강 안 함, trailing slash(`find /tmp/`) 필수
 
 ### Promoted 2026-04-14
 - **executor 안전 게이트 위반 패턴**: 안전 체크("BLOCKED 보고") 지시를 명시했어도 executor가 "어떻게든 진행할 수 있는 경로"를 찾으면 우회. 운영 DB 같은 critical 경로는 명시 차단(예: `git checkout -b temp; pnpm prisma migrate dev || exit 1`)이나 executor에 미리 cd로 다른 .env 확인하게 하기, 또는 메인 세션이 사전 .env 확인 후 위임
@@ -210,3 +205,6 @@
 
 ### Promoted 2026-07-13
 - fep.JB_SEND 금액: 전용 컬럼 없음, MSG_SEND(LONGBLOB) 고정폭 파싱 — 공통부 164B(messagerule.py HEADER REQ: 5+3+3+3+4+6+10+8+8+10+4+100), 006000 이체금액 = SUBSTRING(MSG_SEND,224,13) (업무부 offset 59), 006100 총이체금액 = SUBSTRING(MSG_SEND,187,13). optional 헤더 3필드 생략 시 헤더 50B → 006000 금액 위치 110 (검증 쿼리로 판별)
+
+### Promoted 2026-07-12
+- Codex 위임 시 가시성 필요하면 codex-bridge(tmux) 대신 orca CLI 경로 사용: terminal create → task-create → dispatch --inject → terminal wait/read. 완료 감지는 tui-idle이 조기 반환될 수 있어 terminal read로 RESULT_JSON 확인이 확실

@@ -114,3 +114,17 @@ metrics/
 .codex/skills/.system/**
 !.codex/prompts/
 !.codex/prompts/**
+
+# Daemon & background runtime (machine-local)
+daemon/
+daemon.log
+daemon-auth-cooldown
+daemon-auth-status.json
+jobs/
+
+# CLI-managed caches & runtime state (machine-local)
+.last-update-result.json
+gh-pr-status-cache.json
+policy-limits.json
+remote-settings.json
+plugins/.last_inuse_sweep

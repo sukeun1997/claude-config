@@ -19,8 +19,10 @@ Skipped (noise):
   Read, Grep, Glob, ToolSearch, and trivial Bash commands
 """
 
+import fcntl
 import json
 import os
+import re
 import sys
 import time
 from datetime import datetime
@@ -126,6 +128,8 @@ def track_monthly_usage(category: str, record: dict):
     month_file = metrics_dir / f"{category}-usage-{datetime.now().strftime('%Y-%m')}.jsonl"
     try:
         with open(month_file, "a") as f:
+            # subagent-result-tracker.py의 rewrite(flock)와 상호 배제 — append 유실 방지
+            fcntl.flock(f, fcntl.LOCK_EX)
             f.write(json.dumps(record, ensure_ascii=False) + "\n")
     except OSError:
         pass
@@ -405,12 +409,19 @@ def cmd_capture():
         entry["description"] = description[:100]
         if check_dedup(dedup_file, f"Agent:{agent_type}:{description[:40]}"):
             return
+        # Structured Response Contract 결과 추출 (verification.md) — executor 1차 성공률 KPI 측정용
+        agent_result = ""
+        if tool_output:
+            m = re.search(r"결과\**\s*[:：]\s*\**\s*(SUCCESS|PARTIAL|FAILED)", tool_output)
+            if m:
+                agent_result = m.group(1)
         # Monthly agent usage tracking (replaces agent-usage-tracker.sh)
         track_monthly_usage("agent", {
             "date": datetime.now().strftime("%Y-%m-%d"),
             "time": datetime.now().strftime("%H:%M"),
             "agent": agent_type,
             "model": model or "default",
+            "result": agent_result,
             "description": description[:80].replace("\n", " ").strip(),
         })
 
