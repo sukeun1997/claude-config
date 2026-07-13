@@ -214,3 +214,6 @@
 
 ### Promoted 2026-07-13
 - **회사노트북 auto-sync push 조용한 실패**: memory-session-end.sh의 `git push || true`가 403 숨김 — 활성 gh 계정 sukeun8은 sukeun1997/claude-config push 권한 없음. 커밋 30+개 로컬 적체 원인. 수동 해결은 `gh auth switch -u sukeun1997 && git push && gh auth switch -u sukeun8`. 훅 수정 필요
+
+### Promoted 2026-07-13
+- **session-start health 경고 유실 버그**: _HEALTH_WARNINGS를 CONTEXT에 붙인 뒤 CONTEXT=""로 재초기화 → REVIEW_STALE 등 모든 경고가 조용히 버려지고 있었음 (PR #24의 REVIEW_STALE 리마인더가 사실상 미작동). 초기화 이후로 이동 수정, 가짜 마커 테스트로 REVIEW_STALE+AUTOSYNC_PUSH_FAILED 노출 확인
