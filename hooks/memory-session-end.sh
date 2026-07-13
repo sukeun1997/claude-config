@@ -300,6 +300,28 @@ fi
 # drop work.
 (
   cd "$HOME/.claude"
+
+  # push 자격: 기본 credential(활성 gh 계정) 실패 시 레포 소유 계정(sukeun1997) 토큰으로
+  # 재시도 — gh auth token -u는 활성 계정 전환 없이 토큰만 조회하므로 레이스 없음.
+  # 최종 실패는 마커에 기록 (session-start가 AUTOSYNC_PUSH_FAILED 경고로 노출).
+  # 배경: 회사노트북 활성 계정(sukeun8)이 push 권한 없어 30+ 커밋이 조용히 적체된 사고.
+  PUSH_FAIL_MARKER="$HOME/.claude/memory/.auto-sync-push-failed"
+  do_push() {
+    if git -c http.lowSpeedLimit=1000 -c http.lowSpeedTime=5 push "$@" 2>/dev/null; then
+      rm -f "$PUSH_FAIL_MARKER" 2>/dev/null || true
+      return 0
+    fi
+    if git -c http.lowSpeedLimit=1000 -c http.lowSpeedTime=5 \
+         -c credential.helper= \
+         -c 'credential.helper=!f() { echo username=sukeun1997; echo "password=$(gh auth token -u sukeun1997 2>/dev/null)"; }; f' \
+         push "$@" 2>/dev/null; then
+      rm -f "$PUSH_FAIL_MARKER" 2>/dev/null || true
+      return 0
+    fi
+    echo "$(date '+%Y-%m-%d %H:%M:%S') push $* failed" >> "$PUSH_FAIL_MARKER" 2>/dev/null || true
+    return 1
+  }
+
   git add hooks/ skills/ rules/ scripts/ agents/ commands/ docs/ \
     memory/MEMORY.md memory/topics/ memory/metrics/ memory/skill-usage/ \
     settings.base.json CLAUDE.md .gitignore sync-data/ 2>/dev/null
@@ -321,12 +343,12 @@ fi
     fi
 
     if [ "$AMEND_SAFE" = true ] && git commit --amend --no-edit 2>/dev/null; then
-      if ! git -c http.lowSpeedLimit=1000 -c http.lowSpeedTime=5 push --force-with-lease origin main 2>/dev/null; then
+      if ! do_push --force-with-lease origin main; then
         git reset --soft 'HEAD@{1}' 2>/dev/null || true
       fi
     else
       git commit -m "$EXPECTED_MSG" 2>/dev/null
-      git -c http.lowSpeedLimit=1000 -c http.lowSpeedTime=5 push origin main 2>/dev/null || true
+      do_push origin main || true
     fi
   fi
 ) &>/dev/null || true

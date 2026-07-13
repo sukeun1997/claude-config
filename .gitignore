@@ -59,6 +59,7 @@ memory/daily/
 memory/archive/
 memory/active/
 memory/briefing-history.jsonl
+memory/.auto-sync-push-failed
 
 # MCP config (machine-specific)
 .mcp.json

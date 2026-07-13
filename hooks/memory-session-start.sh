@@ -69,10 +69,12 @@ if [ -n "$_LATEST_FRICTION_MD" ]; then
     fi
   fi
 fi
-if [ -n "$_HEALTH_WARNINGS" ]; then
-  CONTEXT+="⚠️ HOOK HEALTH CHECK:
-$(echo -e "$_HEALTH_WARNINGS")
-"
+# auto-sync push 실패 마커 (memory-session-end.sh do_push가 기록 — 커밋 로컬 적체 감지)
+_PUSH_FAIL_MARKER="$HOME/.claude/memory/.auto-sync-push-failed"
+if [ -f "$_PUSH_FAIL_MARKER" ]; then
+  _PF_COUNT=$(wc -l < "$_PUSH_FAIL_MARKER" 2>/dev/null | tr -d ' ')
+  _PF_LAST=$(tail -1 "$_PUSH_FAIL_MARKER" 2>/dev/null)
+  _HEALTH_WARNINGS+="AUTOSYNC_PUSH_FAILED: ${_PF_COUNT}회 (최근: ${_PF_LAST}) — 커밋이 로컬에만 적체 중. gh auth 계정/네트워크 확인 필요\n"
 fi
 
 TODAY=$(today)
@@ -91,6 +93,14 @@ if [ ! -f "$TODAY_LOG_FILE" ]; then
 fi
 
 CONTEXT=""
+
+# health 경고는 CONTEXT 초기화 이후에 붙여야 유실 안 됨 (2026-07-13: 초기화 앞에 붙여
+# 경고 전체가 조용히 버려지던 버그 수정)
+if [ -n "$_HEALTH_WARNINGS" ]; then
+  CONTEXT+="⚠️ HOOK HEALTH CHECK:
+$(echo -e "$_HEALTH_WARNINGS")
+"
+fi
 
 # --- Active Context Hygiene (stale/empty detection) ---
 ACTIVE_DIR="$MEM_DIR/active"
