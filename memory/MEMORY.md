@@ -210,4 +210,7 @@
 - Codex 위임 시 가시성 필요하면 codex-bridge(tmux) 대신 orca CLI 경로 사용: terminal create → task-create → dispatch --inject → terminal wait/read. 완료 감지는 tui-idle이 조기 반환될 수 있어 terminal read로 RESULT_JSON 확인이 확실
 
 ### Promoted 2026-07-13
+- **침묵 허용(`|| true`)과 실패 관측은 항상 세트**: 백그라운드 자동화가 에러를 삼키면 실패 마커 + 다음 세션 노출 짝이 없을 때 몇 주간 안 보임 (auto-sync push 30+ 커밋 적체, session-start health 경고 유실 — REVIEW_STALE 설치만 되고 미작동). "설치했다 ≠ 작동한다" — 기전 설치 후 가짜 입력으로 발화 테스트 1회 필수
+
+### Promoted 2026-07-13
 - **회사노트북 auto-sync push 조용한 실패**: memory-session-end.sh의 `git push || true`가 403 숨김 — 활성 gh 계정 sukeun8은 sukeun1997/claude-config push 권한 없음. 커밋 30+개 로컬 적체 원인. 수동 해결은 `gh auth switch -u sukeun1997 && git push && gh auth switch -u sukeun8`. 훅 수정 필요
