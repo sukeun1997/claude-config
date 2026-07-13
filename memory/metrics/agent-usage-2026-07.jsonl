@@ -1,0 +1,202 @@
+{"date": "2026-07-01", "time": "10:37", "agent": "Explore", "model": "default", "description": "Find Loan baker test patterns"}
+{"date": "2026-07-01", "time": "13:23", "agent": "general-purpose", "model": "sonnet", "description": "Aggregate June moneyflow error alerts"}
+{"date": "2026-07-01", "time": "13:29", "agent": "executor", "model": "sonnet", "description": "Strip code refs, fix mermaid in 3 docs"}
+{"date": "2026-07-01", "time": "13:30", "agent": "general-purpose", "model": "sonnet", "description": "Re-aggregate June 2026 alerts (correct year)"}
+{"date": "2026-07-01", "time": "15:35", "agent": "code-reviewer", "model": "sonnet", "description": "Code review PR #1441 domain"}
+{"date": "2026-07-01", "time": "15:35", "agent": "quality-reviewer", "model": "sonnet", "description": "Quality review PR #1441 domain"}
+{"date": "2026-07-01", "time": "15:38", "agent": "critic", "model": "opus", "description": "Cross-verify PR1441 HIGH issues"}
+{"date": "2026-07-02", "time": "11:18", "agent": "code-reviewer", "model": "sonnet", "description": "Code review PR 1458"}
+{"date": "2026-07-02", "time": "11:18", "agent": "security-reviewer", "model": "sonnet", "description": "Security review PR 1458"}
+{"date": "2026-07-02", "time": "11:18", "agent": "api-reviewer", "model": "sonnet", "description": "API review PR 1458"}
+{"date": "2026-07-02", "time": "11:23", "agent": "critic", "model": "opus", "description": "Critic cross-verify HIGH issues"}
+{"date": "2026-07-02", "time": "17:19", "agent": "explore", "model": "haiku", "description": "Trace disburse_type & account lifecycle"}
+{"date": "2026-07-06", "time": "13:20", "agent": "code-reviewer", "model": "opus", "description": "Code review - correctness & behavior"}
+{"date": "2026-07-06", "time": "13:20", "agent": "quality-reviewer", "model": "opus", "description": "Quality review - OOP/SOLID"}
+{"date": "2026-07-06", "time": "13:20", "agent": "style-reviewer", "model": "sonnet", "description": "Style review - naming/pythonic"}
+{"date": "2026-07-06", "time": "13:21", "agent": "architect", "model": "opus", "description": "Architect - design perspective"}
+{"date": "2026-07-06", "time": "13:21", "agent": "explore", "model": "default", "description": "Investigate invariant checks and settlement sync for PR review"}
+{"date": "2026-07-06", "time": "13:27", "agent": "verifier", "model": "opus", "description": "Verifier - fresh independent review"}
+{"date": "2026-07-06", "time": "13:27", "agent": "critic", "model": "opus", "description": "Critic - adversarial on proposals"}
+{"date": "2026-07-06", "time": "14:08", "agent": "verifier", "model": "fable", "description": "Fable readiness review of #934"}
+{"date": "2026-07-06", "time": "16:17", "agent": "code-reviewer", "model": "opus", "description": "Phase1 code-reviewer"}
+{"date": "2026-07-06", "time": "16:17", "agent": "quality-reviewer", "model": "opus", "description": "Phase1 quality-reviewer"}
+{"date": "2026-07-06", "time": "16:17", "agent": "style-reviewer", "model": "sonnet", "description": "Phase1 style-reviewer"}
+{"date": "2026-07-06", "time": "16:17", "agent": "architect", "model": "opus", "description": "Phase1 architect"}
+{"date": "2026-07-06", "time": "16:18", "agent": "general-purpose", "model": "default", "description": "Angle A: line-by-line diff scan"}
+{"date": "2026-07-06", "time": "16:18", "agent": "general-purpose", "model": "default", "description": "Angle B: removed-behavior auditor"}
+{"date": "2026-07-06", "time": "16:18", "agent": "general-purpose", "model": "default", "description": "Angle C: cross-file tracer"}
+{"date": "2026-07-06", "time": "16:18", "agent": "general-purpose", "model": "default", "description": "Angle D: reuse - find existing patterns"}
+{"date": "2026-07-06", "time": "16:19", "agent": "general-purpose", "model": "default", "description": "Angle E: simplification"}
+{"date": "2026-07-06", "time": "16:19", "agent": "general-purpose", "model": "default", "description": "Angle F: efficiency"}
+{"date": "2026-07-06", "time": "16:19", "agent": "general-purpose", "model": "default", "description": "Angle G: altitude check"}
+{"date": "2026-07-06", "time": "16:19", "agent": "general-purpose", "model": "default", "description": "Angle H: CLAUDE.md conventions check"}
+{"date": "2026-07-06", "time": "16:21", "agent": "general-purpose", "model": "default", "description": "Phase 2 verify all candidates"}
+{"date": "2026-07-06", "time": "16:23", "agent": "verifier", "model": "opus", "description": "Phase3 verifier fresh"}
+{"date": "2026-07-06", "time": "16:23", "agent": "critic", "model": "opus", "description": "Phase3 critic adversarial"}
+{"date": "2026-07-06", "time": "16:56", "agent": "Explore", "model": "default", "description": "Investigate borrower notification send-time restrictions"}
+{"date": "2026-07-06", "time": "17:03", "agent": "Explore", "model": "haiku", "description": "jb-fep JOBTYPE 전문 종류 탐색"}
+{"date": "2026-07-06", "time": "17:13", "agent": "verifier", "model": "fable", "description": "Regression audit of #934 on existing flows"}
+{"date": "2026-07-06", "time": "17:17", "agent": "verifier", "model": "opus", "description": "v13 대시보드 독립 검증"}
+{"date": "2026-07-06", "time": "18:31", "agent": "code-reviewer", "model": "opus", "description": "money-flow 로직 회귀 리뷰"}
+{"date": "2026-07-06", "time": "18:31", "agent": "verifier", "model": "opus", "description": "독립 배포 안전성 검증"}
+{"date": "2026-07-06", "time": "18:41", "agent": "code-reviewer", "model": "opus", "description": "code-reviewer PR 17360"}
+{"date": "2026-07-06", "time": "18:41", "agent": "quality-reviewer", "model": "opus", "description": "quality-reviewer PR 17360"}
+{"date": "2026-07-06", "time": "18:41", "agent": "style-reviewer", "model": "sonnet", "description": "style-reviewer PR 17360"}
+{"date": "2026-07-06", "time": "18:41", "agent": "architect", "model": "opus", "description": "architect PR 17360"}
+{"date": "2026-07-06", "time": "18:43", "agent": "code-reviewer", "model": "opus", "description": "code-reviewer PR17366"}
+{"date": "2026-07-06", "time": "18:44", "agent": "quality-reviewer", "model": "opus", "description": "quality-reviewer PR17366"}
+{"date": "2026-07-06", "time": "18:44", "agent": "style-reviewer", "model": "sonnet", "description": "style-reviewer PR17366"}
+{"date": "2026-07-06", "time": "18:44", "agent": "architect", "model": "opus", "description": "architect PR17366"}
+{"date": "2026-07-06", "time": "18:45", "agent": "verifier", "model": "opus", "description": "verifier fresh PR 17360"}
+{"date": "2026-07-06", "time": "18:45", "agent": "critic", "model": "opus", "description": "critic adversarial PR 17360"}
+{"date": "2026-07-06", "time": "18:48", "agent": "verifier", "model": "opus", "description": "verifier fresh PR17366"}
+{"date": "2026-07-06", "time": "18:48", "agent": "critic", "model": "opus", "description": "critic proposals PR17366"}
+{"date": "2026-07-06", "time": "20:57", "agent": "Explore", "model": "default", "description": "FEP 자료 요약 수집"}
+{"date": "2026-07-06", "time": "21:18", "agent": "quality-reviewer", "model": "opus", "description": "Senior Python review"}
+{"date": "2026-07-06", "time": "21:18", "agent": "architect", "model": "opus", "description": "CTO-level review"}
+{"date": "2026-07-06", "time": "21:35", "agent": "Explore", "model": "default", "description": "장애대응 문서 발표용 추출"}
+{"date": "2026-07-06", "time": "21:35", "agent": "Explore", "model": "default", "description": "jb-fep 스키마·SQL 조사"}
+{"date": "2026-07-07", "time": "10:33", "agent": "code-reviewer", "model": "opus", "description": "code-reviewer 1차 리뷰"}
+{"date": "2026-07-07", "time": "10:33", "agent": "quality-reviewer", "model": "opus", "description": "quality-reviewer OOP/SOLID 리뷰"}
+{"date": "2026-07-07", "time": "10:33", "agent": "style-reviewer", "model": "sonnet", "description": "style-reviewer 네이밍 리뷰"}
+{"date": "2026-07-07", "time": "10:33", "agent": "architect", "model": "opus", "description": "architect 상위 설계 리뷰"}
+{"date": "2026-07-07", "time": "10:38", "agent": "verifier", "model": "opus", "description": "verifier 독립 재검증"}
+{"date": "2026-07-07", "time": "10:38", "agent": "critic", "model": "opus", "description": "critic 제안 반박"}
+{"date": "2026-07-07", "time": "10:55", "agent": "verifier", "model": "opus", "description": "PR #25 독립 검증"}
+{"date": "2026-07-07", "time": "10:55", "agent": "critic", "model": "opus", "description": "PR #25 adversarial critic"}
+{"date": "2026-07-07", "time": "12:54", "agent": "code-reviewer", "model": "opus", "description": "deploy.sh 기본 리뷰"}
+{"date": "2026-07-07", "time": "13:13", "agent": "critic", "model": "opus", "description": "발표 구성안 적대적 리뷰"}
+{"date": "2026-07-07", "time": "13:46", "agent": "code-reviewer", "model": "opus", "description": "code-reviewer Phase1"}
+{"date": "2026-07-07", "time": "13:46", "agent": "quality-reviewer", "model": "opus", "description": "quality-reviewer Phase1"}
+{"date": "2026-07-07", "time": "13:46", "agent": "style-reviewer", "model": "sonnet", "description": "style-reviewer Phase1"}
+{"date": "2026-07-07", "time": "13:47", "agent": "architect", "model": "opus", "description": "architect Phase1"}
+{"date": "2026-07-07", "time": "13:48", "agent": "Explore", "model": "default", "description": "Investigate Dove dedup behavior"}
+{"date": "2026-07-07", "time": "13:49", "agent": "verifier", "model": "opus", "description": "verifier Phase3 fresh"}
+{"date": "2026-07-07", "time": "13:50", "agent": "critic", "model": "opus", "description": "critic Phase3 adversarial"}
+{"date": "2026-07-07", "time": "15:17", "agent": "designer", "model": "fable", "description": "FEP dashboard C-level redesign"}
+{"date": "2026-07-07", "time": "15:20", "agent": "general-purpose", "model": "fable", "description": "FEP dashboard C-level redesign"}
+{"date": "2026-07-07", "time": "15:24", "agent": "Explore", "model": "haiku", "description": "Trace banking-loan CMS EB13 flow"}
+{"date": "2026-07-07", "time": "15:30", "agent": "code-reviewer", "model": "opus", "description": "Phase1 code-reviewer PR40"}
+{"date": "2026-07-07", "time": "15:30", "agent": "quality-reviewer", "model": "opus", "description": "Phase1 quality-reviewer PR40"}
+{"date": "2026-07-07", "time": "15:30", "agent": "style-reviewer", "model": "sonnet", "description": "Phase1 style-reviewer PR40"}
+{"date": "2026-07-07", "time": "15:30", "agent": "architect", "model": "opus", "description": "Phase1 architect PR40"}
+{"date": "2026-07-07", "time": "15:33", "agent": "Explore", "model": "haiku", "description": "Find loan + CMS EB13 table schemas"}
+{"date": "2026-07-07", "time": "15:34", "agent": "verifier", "model": "opus", "description": "Phase3 verifier PR40 fresh"}
+{"date": "2026-07-07", "time": "15:34", "agent": "critic", "model": "opus", "description": "Phase3 critic PR40 adversarial"}
+{"date": "2026-07-07", "time": "15:50", "agent": "executor", "model": "sonnet", "description": "Phase5 executor PR40 fixes"}
+{"date": "2026-07-07", "time": "16:06", "agent": "verifier", "model": "opus", "description": "Final merge-readiness verify PR40"}
+{"date": "2026-07-07", "time": "17:27", "agent": "code-reviewer", "model": "sonnet", "description": "Code review PR 1477"}
+{"date": "2026-07-07", "time": "17:27", "agent": "quality-reviewer", "model": "sonnet", "description": "Quality review PR 1477"}
+{"date": "2026-07-07", "time": "17:27", "agent": "api-reviewer", "model": "sonnet", "description": "API contract review PR 1477"}
+{"date": "2026-07-07", "time": "17:36", "agent": "critic", "model": "opus", "description": "Critic adjudicate disputed finding"}
+{"date": "2026-07-07", "time": "17:48", "agent": "Explore", "model": "haiku", "description": "CMS ARS 1원검증 로직 탐색"}
+{"date": "2026-07-07", "time": "18:33", "agent": "Explore", "model": "haiku", "description": "Explore JB_SEND 6000 classify"}
+{"date": "2026-07-07", "time": "18:33", "agent": "Explore", "model": "haiku", "description": "Explore inapi transfer states"}
+{"date": "2026-07-07", "time": "19:01", "agent": "Explore", "model": "haiku", "description": "Explore investment 양수도 models"}
+{"date": "2026-07-07", "time": "19:01", "agent": "Explore", "model": "haiku", "description": "Explore inapi 양수도 lifecycle"}
+{"date": "2026-07-08", "time": "10:02", "agent": "executor", "model": "sonnet", "description": "Implement Task 1 아이엠뱅크"}
+{"date": "2026-07-08", "time": "10:04", "agent": "executor", "model": "sonnet", "description": "Implement Task 2 부국증권"}
+{"date": "2026-07-08", "time": "10:04", "agent": "code-reviewer", "model": "opus", "description": "Review Task 1 아이엠뱅크"}
+{"date": "2026-07-08", "time": "10:06", "agent": "executor", "model": "sonnet", "description": "Implement Task 3 registry alias"}
+{"date": "2026-07-08", "time": "10:06", "agent": "code-reviewer", "model": "opus", "description": "Review Task 2 부국증권"}
+{"date": "2026-07-08", "time": "10:08", "agent": "code-reviewer", "model": "opus", "description": "Review Task 3 registry alias"}
+{"date": "2026-07-08", "time": "10:09", "agent": "code-reviewer", "model": "opus", "description": "code-reviewer Phase1"}
+{"date": "2026-07-08", "time": "10:09", "agent": "quality-reviewer", "model": "opus", "description": "quality-reviewer Phase1"}
+{"date": "2026-07-08", "time": "10:09", "agent": "style-reviewer", "model": "sonnet", "description": "style-reviewer Phase1"}
+{"date": "2026-07-08", "time": "10:10", "agent": "architect", "model": "opus", "description": "architect Phase1"}
+{"date": "2026-07-08", "time": "10:10", "agent": "verifier", "model": "opus", "description": "Final verifier full diff"}
+{"date": "2026-07-08", "time": "10:11", "agent": "critic", "model": "opus", "description": "Final critic adversarial"}
+{"date": "2026-07-08", "time": "10:12", "agent": "verifier", "model": "opus", "description": "verifier Phase3 fresh"}
+{"date": "2026-07-08", "time": "10:13", "agent": "critic", "model": "opus", "description": "critic Phase3 adversarial"}
+{"date": "2026-07-08", "time": "10:39", "agent": "code-reviewer", "model": "sonnet", "description": "Code review PR 1478 persistence"}
+{"date": "2026-07-08", "time": "10:40", "agent": "quality-reviewer", "model": "sonnet", "description": "Quality review PR 1478 persistence"}
+{"date": "2026-07-08", "time": "10:45", "agent": "critic", "model": "opus", "description": "Critic adjudicate loan_id unique HIGH"}
+{"date": "2026-07-08", "time": "11:10", "agent": "Explore", "model": "default", "description": "Trace inapi 1원계좌인증 usage"}
+{"date": "2026-07-08", "time": "12:43", "agent": "Explore", "model": "haiku", "description": "Explore daily forecast sources"}
+{"date": "2026-07-08", "time": "14:18", "agent": "critic", "model": "opus", "description": "발표 덱 독립 critic 검증"}
+{"date": "2026-07-08", "time": "14:24", "agent": "architect", "model": "opus", "description": "정산 건수 데이터 경로 조사"}
+{"date": "2026-07-08", "time": "14:24", "agent": "general-purpose", "model": "sonnet", "description": "Grafana 임계치 선 메커니즘 조사"}
+{"date": "2026-07-08", "time": "14:30", "agent": "Explore", "model": "haiku", "description": "006000 전문 계좌필드 오프셋 탐색"}
+{"date": "2026-07-08", "time": "16:51", "agent": "critic", "model": "opus", "description": "비즈니스 청중 렌즈 덱 검증"}
+{"date": "2026-07-09", "time": "10:13", "agent": "general-purpose", "model": "default", "description": "Slack 사건 상세 수집"}
+{"date": "2026-07-09", "time": "10:22", "agent": "code-reviewer", "model": "opus", "description": "Phase1 code review"}
+{"date": "2026-07-09", "time": "10:22", "agent": "quality-reviewer", "model": "opus", "description": "Phase1 quality review"}
+{"date": "2026-07-09", "time": "10:22", "agent": "style-reviewer", "model": "sonnet", "description": "Phase1 style review"}
+{"date": "2026-07-09", "time": "10:22", "agent": "architect", "model": "opus", "description": "Phase1 architect review"}
+{"date": "2026-07-09", "time": "10:25", "agent": "verifier", "model": "opus", "description": "Phase3 verifier"}
+{"date": "2026-07-09", "time": "10:26", "agent": "critic", "model": "opus", "description": "Phase3 critic"}
+{"date": "2026-07-09", "time": "10:35", "agent": "general-purpose", "model": "default", "description": "진돗개 대형 사건 심층 스윕"}
+{"date": "2026-07-09", "time": "10:40", "agent": "code-reviewer", "model": "opus", "description": "code-reviewer Phase1"}
+{"date": "2026-07-09", "time": "10:40", "agent": "quality-reviewer", "model": "opus", "description": "quality-reviewer Phase1"}
+{"date": "2026-07-09", "time": "10:40", "agent": "style-reviewer", "model": "sonnet", "description": "style-reviewer Phase1"}
+{"date": "2026-07-09", "time": "10:40", "agent": "architect", "model": "opus", "description": "architect Phase1"}
+{"date": "2026-07-09", "time": "10:41", "agent": "verifier", "model": "opus", "description": "verifier Phase3 fresh"}
+{"date": "2026-07-09", "time": "10:44", "agent": "general-purpose", "model": "default", "description": "2026 FEP 사건 한정 검색"}
+{"date": "2026-07-09", "time": "10:45", "agent": "critic", "model": "opus", "description": "critic Phase3 adversarial"}
+{"date": "2026-07-09", "time": "13:07", "agent": "general-purpose", "model": "sonnet", "description": "녹음 전사 피드백 체크리스트 추출"}
+{"date": "2026-07-09", "time": "14:18", "agent": "Explore", "model": "haiku", "description": "CMS 환급 로직 탐색"}
+{"date": "2026-07-09", "time": "14:55", "agent": "verifier", "model": "opus", "description": "Independent diff verification"}
+{"date": "2026-07-09", "time": "14:55", "agent": "critic", "model": "opus", "description": "Adversarial critique of approach"}
+{"date": "2026-07-09", "time": "15:16", "agent": "general-purpose", "model": "sonnet", "description": "Slack 성장·성과 메시지 수집"}
+{"date": "2026-07-09", "time": "15:22", "agent": "code-reviewer", "model": "opus", "description": "Phase1 code-reviewer"}
+{"date": "2026-07-09", "time": "15:22", "agent": "quality-reviewer", "model": "opus", "description": "Phase1 quality-reviewer"}
+{"date": "2026-07-09", "time": "15:22", "agent": "style-reviewer", "model": "sonnet", "description": "Phase1 style-reviewer"}
+{"date": "2026-07-09", "time": "15:23", "agent": "architect", "model": "opus", "description": "Phase1 architect READ-ONLY"}
+{"date": "2026-07-09", "time": "15:27", "agent": "code-reviewer", "model": "opus", "description": "Phase1 code-reviewer retry"}
+{"date": "2026-07-09", "time": "15:27", "agent": "architect", "model": "opus", "description": "Phase1 architect retry"}
+{"date": "2026-07-09", "time": "15:31", "agent": "critic", "model": "opus", "description": "Phase3 critic on suggestions"}
+{"date": "2026-07-09", "time": "15:52", "agent": "general-purpose", "model": "fable", "description": "Trace loan execution delay path"}
+{"date": "2026-07-09", "time": "16:00", "agent": "general-purpose", "model": "fable", "description": "Re-verify loan exec code order"}
+{"date": "2026-07-09", "time": "17:08", "agent": "code-reviewer", "model": "opus", "description": "code-reviewer: 품질·버그·경계조건"}
+{"date": "2026-07-09", "time": "17:08", "agent": "quality-reviewer", "model": "opus", "description": "quality-reviewer: OOP/SOLID"}
+{"date": "2026-07-09", "time": "17:09", "agent": "style-reviewer", "model": "sonnet", "description": "style-reviewer: 네이밍·PEP8"}
+{"date": "2026-07-09", "time": "17:09", "agent": "explore", "model": "haiku", "description": "Find transfer_1_to_1, idempotency check, decorator"}
+{"date": "2026-07-09", "time": "17:09", "agent": "architect", "model": "opus", "description": "architect: 상위 설계 시각"}
+{"date": "2026-07-09", "time": "17:10", "agent": "explore", "model": "haiku", "description": "Verify existence of separate CMS refund monitoring batch"}
+{"date": "2026-07-09", "time": "17:11", "agent": "general-purpose", "model": "default", "description": "Find CMS refund monitoring batch job"}
+{"date": "2026-07-09", "time": "17:14", "agent": "verifier", "model": "opus", "description": "verifier: 독립 재검증"}
+{"date": "2026-07-09", "time": "17:14", "agent": "critic", "model": "opus", "description": "critic: 제안 adversarial 반박"}
+{"date": "2026-07-10", "time": "11:43", "agent": "code-reviewer", "model": "opus", "description": "code-reviewer Phase1"}
+{"date": "2026-07-10", "time": "11:43", "agent": "quality-reviewer", "model": "opus", "description": "quality-reviewer Phase1"}
+{"date": "2026-07-10", "time": "11:43", "agent": "style-reviewer", "model": "sonnet", "description": "style-reviewer Phase1"}
+{"date": "2026-07-10", "time": "11:44", "agent": "architect", "model": "opus", "description": "architect Phase1"}
+{"date": "2026-07-10", "time": "11:47", "agent": "verifier", "model": "opus", "description": "verifier Phase3 fresh"}
+{"date": "2026-07-10", "time": "11:48", "agent": "critic", "model": "opus", "description": "critic Phase3 adversarial"}
+{"date": "2026-07-10", "time": "13:13", "agent": "code-reviewer", "model": "opus", "description": "code-reviewer: 버그·경계조건"}
+{"date": "2026-07-10", "time": "13:13", "agent": "quality-reviewer", "model": "opus", "description": "quality-reviewer: OOP/SOLID"}
+{"date": "2026-07-10", "time": "13:14", "agent": "style-reviewer", "model": "sonnet", "description": "style-reviewer: 네이밍·PEP8"}
+{"date": "2026-07-10", "time": "13:14", "agent": "architect", "model": "opus", "description": "architect: 설계 시각"}
+{"date": "2026-07-10", "time": "13:14", "agent": "verifier", "model": "opus", "description": "verifier: 독립 재검증"}
+{"date": "2026-07-10", "time": "13:26", "agent": "critic", "model": "opus", "description": "critic: 제안 반박"}
+{"date": "2026-07-10", "time": "13:38", "agent": "architect", "model": "opus", "description": "architect async design review"}
+{"date": "2026-07-10", "time": "13:38", "agent": "code-reviewer", "model": "opus", "description": "code-reviewer correctness"}
+{"date": "2026-07-10", "time": "13:38", "agent": "verifier", "model": "opus", "description": "verifier fresh eyes"}
+{"date": "2026-07-10", "time": "14:26", "agent": "explore", "model": "sonnet", "description": "녹음 전사에서 발표 피드백 추출"}
+{"date": "2026-07-13", "time": "11:28", "agent": "Explore", "model": "default", "description": "Trace JbobpErrorResponseDto and callers"}
+{"date": "2026-07-13", "time": "11:29", "agent": "code-reviewer", "model": "sonnet", "description": "Code review PR 536 JbobpService"}
+{"date": "2026-07-13", "time": "11:30", "agent": "verifier", "model": "opus", "description": "Fresh verification of PR 535"}
+{"date": "2026-07-13", "time": "11:31", "agent": "critic", "model": "opus", "description": "Adversarial critique of PR 535"}
+{"date": "2026-07-13", "time": "11:35", "agent": "Explore", "model": "default", "description": "투자자 상환스케줄 코드 탐색"}
+{"date": "2026-07-13", "time": "11:37", "agent": "Explore", "model": "default", "description": "상환스케줄 API 체인 역추적"}
+{"date": "2026-07-13", "time": "13:29", "agent": "code-reviewer", "model": "opus", "description": "Phase1 code review"}
+{"date": "2026-07-13", "time": "13:29", "agent": "quality-reviewer", "model": "opus", "description": "Phase1 quality review OOP/SOLID"}
+{"date": "2026-07-13", "time": "13:29", "agent": "style-reviewer", "model": "sonnet", "description": "Phase1 style/naming/PEP8"}
+{"date": "2026-07-13", "time": "13:30", "agent": "architect", "model": "opus", "description": "Phase1 architect design view"}
+{"date": "2026-07-13", "time": "13:33", "agent": "verifier", "model": "opus", "description": "Phase3 verifier fresh"}
+{"date": "2026-07-13", "time": "13:33", "agent": "critic", "model": "opus", "description": "Phase3 critic adversarial"}
+{"date": "2026-07-13", "time": "13:37", "agent": "code-reviewer", "model": "opus", "description": "inapi #17316 PR 리뷰"}
+{"date": "2026-07-13", "time": "13:37", "agent": "code-reviewer", "model": "opus", "description": "admin #4446 PR 리뷰"}
+{"date": "2026-07-13", "time": "17:51", "agent": "code-reviewer", "model": "opus", "result": "SUCCESS", "description": "code-reviewer Phase 1"}
+{"date": "2026-07-13", "time": "17:51", "agent": "quality-reviewer", "model": "opus", "result": "SUCCESS", "description": "quality-reviewer Phase 1"}
+{"date": "2026-07-13", "time": "17:52", "agent": "architect", "model": "opus", "result": "SUCCESS", "description": "architect Phase 1"}
+{"date": "2026-07-13", "time": "17:52", "agent": "style-reviewer", "model": "haiku", "result": "", "description": "style-reviewer Phase 1"}
+{"date": "2026-07-13", "time": "17:55", "agent": "verifier", "model": "opus", "result": "PARTIAL", "description": "verifier Phase 3 fresh"}
+{"date": "2026-07-13", "time": "17:55", "agent": "critic", "model": "opus", "result": "SUCCESS", "description": "critic Phase 3 rebuttal"}
+{"date": "2026-07-13", "time": "18:20", "agent": "code-reviewer", "model": "sonnet", "result": "PARTIAL", "description": "PR27 code-reviewer 리뷰"}
+{"date": "2026-07-13", "time": "18:20", "agent": "security-reviewer", "model": "sonnet", "result": "SUCCESS", "description": "PR27 security-reviewer 리뷰"}
+{"date": "2026-07-13", "time": "18:21", "agent": "api-reviewer", "model": "sonnet", "result": "PARTIAL", "description": "PR27 경계면/대안 리뷰"}
+{"date": "2026-07-13", "time": "18:28", "agent": "critic", "model": "opus", "result": "", "description": "PR27 HIGH 이슈 critic 검증"}
+{"date": "2026-07-13", "time": "18:30", "agent": "Explore", "model": "haiku", "result": "", "description": "Trace inapi priority=99 and 006000 timeout"}
+{"date": "2026-07-13", "time": "18:36", "agent": "code-reviewer", "model": "opus", "result": "SUCCESS", "description": "테스트 파일 code-review"}
+{"date": "2026-07-13", "time": "18:37", "agent": "style-reviewer", "model": "haiku", "result": "PARTIAL", "description": "테스트 파일 style-review"}
+{"date": "2026-07-13", "time": "18:39", "agent": "critic", "model": "opus", "result": "", "description": "리뷰 제안 critic 반박"}

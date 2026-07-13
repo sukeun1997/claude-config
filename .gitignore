@@ -92,7 +92,8 @@ hooks/telegram-notify.sh
 session-env/
 bash-commands.log
 cost-tracker.log
-metrics/
+# 루트 metrics/만 제외 — 앵커 없으면 memory/metrics/(주간 리뷰 friction/KPI, git 동기화 대상)까지 매칭됨
+/metrics/
 
 # Nested .claude (project-level)
 .claude/
