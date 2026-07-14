@@ -200,3 +200,16 @@
 {"date": "2026-07-13", "time": "18:36", "agent": "code-reviewer", "model": "opus", "result": "SUCCESS", "description": "테스트 파일 code-review"}
 {"date": "2026-07-13", "time": "18:37", "agent": "style-reviewer", "model": "haiku", "result": "PARTIAL", "description": "테스트 파일 style-review"}
 {"date": "2026-07-13", "time": "18:39", "agent": "critic", "model": "opus", "result": "", "description": "리뷰 제안 critic 반박"}
+{"date": "2026-07-14", "time": "20:17", "agent": "Explore", "model": "haiku", "result": "", "description": "inapi 이벤트 발행부 탐색"}
+{"date": "2026-07-14", "time": "20:17", "agent": "Explore", "model": "haiku", "result": "", "description": "banking-loan 소비부 탐색"}
+{"date": "2026-07-14", "time": "21:29", "agent": "Explore", "model": "haiku", "result": "", "description": "해오름/대납분 코드 탐색"}
+{"date": "2026-07-14", "time": "21:51", "agent": "planner", "model": "opus", "result": "SUCCESS", "description": "구현 계획 작성 (Opus)"}
+{"date": "2026-07-14", "time": "21:52", "agent": "Explore", "model": "haiku", "result": "", "description": "해오름 그리드 분기 지점 조사"}
+{"date": "2026-07-14", "time": "21:52", "agent": "Explore", "model": "haiku", "result": "", "description": "대납분 편집 코드 조사"}
+{"date": "2026-07-14", "time": "21:52", "agent": "Explore", "model": "haiku", "result": "", "description": "자동매칭 제외 지점 조사"}
+{"date": "2026-07-14", "time": "21:52", "agent": "Explore", "model": "haiku", "result": "", "description": "IPC/HTTP 이중 라우팅 조사"}
+{"date": "2026-07-14", "time": "21:58", "agent": "executor", "model": "sonnet", "result": "", "description": "Phase 0: 스키마+seed 스크립트"}
+{"date": "2026-07-14", "time": "22:25", "agent": "executor", "model": "sonnet", "result": "", "description": "Phase 1: 자동매칭 해오름 제외"}
+{"date": "2026-07-14", "time": "22:26", "agent": "executor", "model": "sonnet", "result": "", "description": "Phase 2: 해오름 전용 화면+API"}
+{"date": "2026-07-14", "time": "22:38", "agent": "executor", "model": "sonnet", "result": "", "description": "Phase 3: 대납분 자유 그리드"}
+{"date": "2026-07-14", "time": "22:53", "agent": "executor", "model": "sonnet", "result": "", "description": "Phase 4: 가독성 강화"}
