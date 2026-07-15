@@ -220,3 +220,6 @@
 
 ### Promoted 2026-07-14
 - inapi jb_6000_transaction은 fep 충돌검사에 사용 불가: default DB(≠bankdb) / send_jb_6000 8경로 중 2경로만 기록 / AES 암호화 / jb_send_id 사후 채움 레이스. Phase 2는 JB_SEND generated column이 정답
+
+### Promoted 2026-07-15
+- JB_SEND 금액 쿼리 시 대기 조건은 커버링 인덱스(JOBTYPE,CREATE_TIME,SEND_TIME)로 필터 후 blob 파싱 — 풀블롭 스캔 회피

@@ -236,3 +236,4 @@ edit-tracker (3회+ 반복 편집 감지)
 | 2026-07-06 | 2026-07-05-deposit-matching-improvements-design.md 7회 반복 편집 | Prompt | design 문서 스코프 미확정 상태 본문 착수 — 3줄 룰(AC/Out-of-scope/Done-when) 게이트 미적용 |
 | 2026-07-06 | 2026-07-05-deposit-matching-improvements.md 7회 반복 편집 | Prompt | plan 문서 스코프 미확정 상태 본문 착수 — 3줄 룰 게이트 미적용 |
 - 2026-07-11 | PR #12 구현이 plan 명시 청크 크기 50 대신 20으로 들어갔는데 코드리뷰+verifier 모두 미검출 (후속 PR #13에서 정정) | 검증 계층: 리뷰 프롬프트가 "동작 보존"만 강조하고 spec 수치 대조 항목이 없었음 | 해법: spec 기반 구현 리뷰 시 "spec의 수치/상수 파라미터 대조" 체크 항목을 리뷰 프롬프트에 명시
+| 2026-07-15 | cms_refund_transfer.py 6회 반복 편집 | Context (추정·강) | 소스 6회+ — 파일 전체 Read 후 재접근 권장 |
