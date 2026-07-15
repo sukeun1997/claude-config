@@ -217,3 +217,6 @@
 
 ### Promoted 2026-07-13
 - **session-start health 경고 유실 버그**: _HEALTH_WARNINGS를 CONTEXT에 붙인 뒤 CONTEXT=""로 재초기화 → REVIEW_STALE 등 모든 경고가 조용히 버려지고 있었음 (PR #24의 REVIEW_STALE 리마인더가 사실상 미작동). 초기화 이후로 이동 수정, 가짜 마커 테스트로 REVIEW_STALE+AUTOSYNC_PUSH_FAILED 노출 확인
+
+### Promoted 2026-07-14
+- inapi jb_6000_transaction은 fep 충돌검사에 사용 불가: default DB(≠bankdb) / send_jb_6000 8경로 중 2경로만 기록 / AES 암호화 / jb_send_id 사후 채움 레이스. Phase 2는 JB_SEND generated column이 정답
