@@ -230,3 +230,8 @@
 {"date": "2026-07-14", "time": "15:28", "agent": "style-reviewer", "model": "haiku", "result": "", "description": "Phase1 style-reviewer"}
 {"date": "2026-07-14", "time": "15:32", "agent": "verifier", "model": "opus", "result": "", "description": "Phase3 verifier 독립검증"}
 {"date": "2026-07-14", "time": "15:33", "agent": "critic", "model": "opus", "result": "", "description": "Phase3 critic 반박"}
+{"date": "2026-07-15", "time": "13:22", "agent": "code-reviewer", "model": "opus", "result": "", "description": "Phase 1 code-reviewer"}
+{"date": "2026-07-15", "time": "13:22", "agent": "quality-reviewer", "model": "opus", "result": "", "description": "Phase 1 quality-reviewer OOP/SOLID"}
+{"date": "2026-07-15", "time": "13:23", "agent": "architect", "model": "opus", "result": "", "description": "Phase 1 architect 설계"}
+{"date": "2026-07-15", "time": "13:23", "agent": "style-reviewer", "model": "haiku", "result": "", "description": "Phase 1 style-reviewer 네이밍/PEP8"}
+{"date": "2026-07-15", "time": "13:23", "agent": "explore", "model": "haiku", "result": "", "description": "Explore CMS refund related context"}
