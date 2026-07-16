@@ -223,3 +223,8 @@
 
 ### Promoted 2026-07-15
 - JB_SEND 금액 쿼리 시 대기 조건은 커버링 인덱스(JOBTYPE,CREATE_TIME,SEND_TIME)로 필터 후 blob 파싱 — 풀블롭 스캔 회피
+
+### Promoted 2026-07-16
+- pfproduct.holiday = 매일 1행 캘린더 테이블 (DT yyyymmdd int PK, HOLIDAY 1=주말+공휴일, 0=영업일). 영업일 roll-forward = `MIN(DT) WHERE DT>=x AND HOLIDAY=0` 한 줄 — 재귀 CTE 불필요. Grafana 휴일 밴드 = HOLIDAY=1 행을 time/timeend(epoch ms) annotation으로
+- 610/611 baseline 일관성: 두 패널이 동일 bizdays CTE(같은 요일·HOLIDAY=0·최근 28일) 공유 → 절대 어긋나지 않음. 610 툴팁 "오늘 5"는 자정값(hour0)이지 현재값 아님(오독 주의)
+- -100% 원인: base.c=0(기준일 진입 0)+comp>0. anchor=DATE(FROM_UNIXTIME(${__to:date:seconds}))가 MySQL 서버세션 tz로 해석돼 빈 날짜 가능성 → tz-safe 문자열 anchor STR_TO_DATE('${__to:date:YYYY-MM-DD}','%Y-%m-%d')로 교체(dashboard timezone=browser=KST). + base=0시 "집계 전" 가드(오전 배치 전 오탐 방지). Grafana MySQL raw datetime tz 함정의 재발
