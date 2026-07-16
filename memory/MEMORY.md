@@ -228,3 +228,13 @@
 - pfproduct.holiday = 매일 1행 캘린더 테이블 (DT yyyymmdd int PK, HOLIDAY 1=주말+공휴일, 0=영업일). 영업일 roll-forward = `MIN(DT) WHERE DT>=x AND HOLIDAY=0` 한 줄 — 재귀 CTE 불필요. Grafana 휴일 밴드 = HOLIDAY=1 행을 time/timeend(epoch ms) annotation으로
 - 610/611 baseline 일관성: 두 패널이 동일 bizdays CTE(같은 요일·HOLIDAY=0·최근 28일) 공유 → 절대 어긋나지 않음. 610 툴팁 "오늘 5"는 자정값(hour0)이지 현재값 아님(오독 주의)
 - -100% 원인: base.c=0(기준일 진입 0)+comp>0. anchor=DATE(FROM_UNIXTIME(${__to:date:seconds}))가 MySQL 서버세션 tz로 해석돼 빈 날짜 가능성 → tz-safe 문자열 anchor STR_TO_DATE('${__to:date:YYYY-MM-DD}','%Y-%m-%d')로 교체(dashboard timezone=browser=KST). + base=0시 "집계 전" 가드(오전 배치 전 오탐 방지). Grafana MySQL raw datetime tz 함정의 재발
+
+### Promoted 2026-07-16
+- Grafana stat 다중필드 표시: reduceOptions.fields는 "/.*/"(전체 정규식)이어야 모든 필드 표시. ""는 첫 필드만. 문자열 캡션 필드가 안 보이면 이 설정 의심
+- v43 정산일(settlement-day) 경계: 정산일 D 창 = [전영업일 23:00, D 23:00). 전영업일=holiday MAX(DT) WHERE DT<D AND HOLIDAY=0. 전영업일밤 CMS확정분 + 당일 가상계좌 직접입금이 함께 오늘 정산으로 집계. 402·611·526·527·610 전부 적용(사용자 확정: 전영업일23시·5개 전부)
+
+### Promoted 2026-07-16
+- #106 610 seed 실패 교훈: 전영업일 CMS 배치(~2000) + 당일 직접입금(~200)을 한 누적곡선에 얹으면 배치가 압도해 평평·정보소실. 게다가 CMS 배치가 22~23시 걸쳐 seed창[23:00~00:00]과 어긋나 파란 평소선 seed 미반영. → seed 제거, 610=당일 유입 pace(평소 대비) 전용 2선(00:00~), CMS 총계는 402/611(정산일 총계)에 분리. 큰 배치+작은 흐름은 한 축에 얹지 말 것
+
+### Promoted 2026-07-16
+- CMS 확정 배치 = 23:00~23:59 확정. 정산일 창 [전영업일 23:00, 오늘 23:00)이 전영업일 23시 배치+오늘 0시 스필오버를 정확히 오늘로 포함, 오늘 23시 배치는 내일로. → 23:00 경계 정확, 402/611/526/527 조정 불필요
