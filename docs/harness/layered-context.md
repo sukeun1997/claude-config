@@ -33,7 +33,7 @@
 - `CLAUDE.md`는 왜 그 규칙이 필요한지와 도메인 제약을 정의한다.
 - 같은 내용을 두 파일에 중복으로 길게 복제하지 말고, 역할에 맞게 분리한다.
 
-> 멀티런타임 공유 자원과 충돌 회피는 [runtime-coexistence.md](runtime-coexistence.md) 참조.
+> 멀티런타임 공유 자원과 충돌 회피는 [runtime-coexistence.md](../../rules/common/runtime-coexistence.md) 참조.
 
 ## 규칙 배치 기준
 

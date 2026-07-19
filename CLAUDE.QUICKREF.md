@@ -6,9 +6,7 @@
 ## Operating Principles
 
 - 한국어 우선, 코드/기술 용어는 영어 원문 유지
-- 열지 않은 파일/코드에 대해 추측 금지 — Read 후 답변
 - 작고 가역적인 변경은 직접 처리, 표준 이상은 생산-검증 분리
-- 토큰 부족으로 조기 종료 금지 — 끝까지 진행
 - 차단보다 경고와 검증 추천을 우선
 - Filler 금지 — 모든 줄/함수/파일은 자기 자리값을 함
 
@@ -20,8 +18,7 @@
 | 버그 수정 | `/sdebug` → 가설 2+개 시 `/triage` → 최소 수정 → `vc` |
 | 설계 결정 필요 | 인터뷰 먼저 (모호 부분 지목 후 질문) |
 | 2+파일 구현 | Plan-First. 6+파일·200줄+은 critic 검증 후 user approval |
-| 복수 해석 가능 | 묵시적 선택 금지, 후보 제시 후 사용자 선택 |
-| 사실 확인 | 매니페스트 정확매치 자동 / 코드 추론 1-tap / 외부 사실 WebFetch |
+| 사실 확인 | 매니페스트 정확매치 자동 / 코드 추론 1-tap / 외부 사실 WebFetch. 결정은 항상 사용자 |
 
 ## Verification Levels
 
@@ -67,7 +64,7 @@
 | Sentry URL 또는 issue ID | `sentry-debug` |
 | `.kt` / `.swift` 작성·수정 | `kotlin-patterns` / `everything-claude-code:swiftui-patterns` |
 | JPA Entity·Repository | `everything-claude-code:jpa-patterns` |
-| SQL 마이그레이션·스키마 | `postgres-patterns` + `database-migrations` |
+| DB 마이그레이션 | §4 마이그 가드 4항목 + 메인 세션 직접 실행 |
 | 기술 선택 포함 (학습 모드 ON) | `tech-advisor` (현 스택 내 라이브러리/패턴 대안 1-2개 제시) |
 | URL 분석 + 설정 적용 | `absorb` (주 2회 배치) |
 | plan/spec 저장 | `docs-save` (vault) |

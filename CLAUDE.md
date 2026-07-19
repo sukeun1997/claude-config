@@ -1,16 +1,14 @@
 # Global Claude Code Configuration
 
-## Core Rules (앵커링 — primacy bias 활용)
+## Core Rules
 - 한국어 우선, 코드/기술 용어는 영어 원문 유지
-- 열지 않은 파일/코드에 대해 추측하지 않음 — Read 후 답변
-- 토큰 예산 부족으로 작업을 일찍 마무리하지 않음 — 끝까지 진행
 
 > 빠른 결정 트리 요약: [CLAUDE.QUICKREF.md](CLAUDE.QUICKREF.md) (세션 후반/컨텍스트 재로딩 시 온디맨드 Read)
 
 ## Codex/OMX Interop
 - Codex 세션의 실행 규약은 `AGENTS.md`가 담당하고, 이 파일은 정책/제약의 소스 역할을 유지
 - 메모리 기본 매핑: Active=`.omx/state/`, Hot=`.omx/notepad.md`, Always=`.omx/project-memory.json`, Cold=`memory/topics/*.md`
-- 변경 감시는 `.claude/governance.yml`의 경고 규칙을 우선 사용하고, 훅이 없을 때도 같은 검증 추천을 수동 적용
+- 변경 감시는 `.claude/governance.yml`의 경고 규칙을 우선 사용 (설계 배경: [docs/harness/governance-hooks.md](docs/harness/governance-hooks.md))
 - 멀티런타임 충돌 회피 상세: [rules/common/runtime-coexistence.md](rules/common/runtime-coexistence.md)
 
 ## Profile & Persona
@@ -20,222 +18,124 @@
 
 ## 1. Session Rules
 
-- **1세션 = 1주제**. 주제 전환 시 `/clear` 안내
-- `/clear` 제안 기준:
-  - 도구 30회+ / 대화 20턴+
-  - 같은 방향 수정이 2회 이상 빗나감 (접근법 재검토 신호)
-  - 원래 작업과 무관한 설명이 늘어남 (문맥 오염 신호)
-  - 핵심 판단이 흐려지거나 이전 결정을 잊음 (compaction 한계 신호)
-- Insight 제공: 구현 전후 교육적 설명 포함
+- **1세션 = 1주제**. 주제 전환 시 `/clear` 안내. 제안 기준: 도구 30회+/대화 20턴+, 같은 방향 수정 2회+ 빗나감, 문맥 오염/핵심 판단 흐려짐
+- Insight 제공: 구현 전후 교육적 설명 간결히 포함
 - URL 제공 시 자동 WebFetch / SDK·API 구현 전 문서 조사 (Context7 MCP)
 - **배포**: `scripts/deploy.sh` 사용 필수 (없는 프로젝트는 예외)
-- **Plan/Spec 저장 경로 (저장소 금지 — vault에 직접 Write)**: spec/plan/design 등 superpowers 산출물은 저장소(`docs/superpowers/**`)에 만들지 않고 vault에 직접 저장한다. 프로젝트 코드베이스 작업 → `~/vault/20 프로젝트/{project}/{branch-slug}/`, 프로젝트 무관 업무(설계논의·흐름정리 등) → `~/vault/10 업무/{category}/`. 공백 포함 경로 — bash에서 `"$HOME/vault/20 프로젝트/..."` 인용 필수. `{project}`는 새로 만들지 말고 `20 프로젝트` 기존 폴더에서 근접 매칭하여 재사용 (애매하면 1-tap 확인). (vault-auto-save 훅은 deprecated — 자동 이동 없으므로 처음부터 vault 경로에 Write. 저장소엔 절대 커밋하지 않는다)
+- **Plan/Spec 저장 경로 (저장소 금지 — vault에 직접 Write)**: spec/plan/design 등 superpowers 산출물은 저장소(`docs/superpowers/**`)에 만들지 않고 vault에 직접 저장한다. 프로젝트 코드베이스 작업 → `~/vault/20 프로젝트/{project}/{branch-slug}/`, 프로젝트 무관 업무 → `~/vault/10 업무/{category}/`. 공백 포함 경로 — bash에서 `"$HOME/vault/20 프로젝트/..."` 인용 필수. `{project}`는 새로 만들지 말고 기존 폴더에서 근접 매칭하여 재사용 (애매하면 1-tap 확인). 저장소엔 절대 커밋하지 않는다
 
 ### 컨텍스트 절약
-- 파일 3개+ 탐색 → Explore 서브에이전트 위임
-- 직접 Read: 1-2개 파일, 경로 확정 시만
-- 이미 아는 내용 재확인 금지
-- **탐색/계획 상한**: 탐색·계획 도구 호출이 연속 5회 초과 시 → 즉시 구현 착수. 추가 정보는 구현 중 점진적으로 수집. 단, 버그 수정 시(§2 #2) 증거 수집 및 critic 검증(§2 #4) 진행 중일 때 예외
-- **조기 중단 금지**: 토큰 예산 부족으로 작업을 일찍 마무리하지 않음 — compaction이 자동 처리하므로 끝까지 진행. 한계 접근 시 진행 상태를 메모리에 저장
-  - 금지 표현: "should I continue?", "good stopping point", "continue in a new session", "not caused by my changes", "known limitation". 이러한 자가 중단/책임 회피 표현 대신 작업을 계속 진행하거나, 실제 블로커가 있으면 구체적으로 보고
-- **MCP 출력 최소화**: MCP 도구 호출 시 필요한 필드/범위를 한정하여 요청. 목록 조회는 limit 파라미터 사용, 결과에서 필요한 속성만 추출하여 후속 작업에 전달. 원시 JSON 전체를 컨텍스트에 유지하지 않음
-- **Notion I/O 서브에이전트 위임**: Notion MCP 호출(fetch/update/create)은 서브에이전트에 위임. 메인에서는 마크다운 콘텐츠만 준비하고, page ID(`projects.json` 캐시)와 함께 전달. search 대신 캐시된 ID 직접 사용. 단순 append 1건은 메인에서 직접 가능
-- **에이전트 결과 크기 제한**: Explore/코드 트레이스 에이전트에 "report in under 3000 characters" 지시. 핵심(파일 경로 + 호출 체인 + 1줄 요약)만 요청하고, 상세는 필요 시 직접 Read
+- 파일 3개+ 탐색 → Explore 서브에이전트 위임 (직접 Read는 1-2개 파일, 경로 확정 시)
+- **MCP 출력 최소화**: 필요한 필드/범위 한정 요청, 목록은 limit 사용, 원시 JSON 전체를 컨텍스트에 유지하지 않음
+- **Notion I/O 서브에이전트 위임**: Notion MCP 호출(fetch/update/create)은 서브에이전트에 위임. 메인은 마크다운 준비 + page ID(`projects.json` 캐시) 전달. 단순 append 1건은 메인 직접 가능
+- **에이전트 결과 크기 제한**: Explore/트레이스 에이전트에 "report in under 3000 characters" 지시. 핵심(경로+호출체인+1줄 요약)만
 
-### 프롬프팅 톤
-- 강조 표현(MUST, CRITICAL, MANDATORY 등) 최소화 — 현행 모델은 일반 표현으로 충분히 따르며, 과도한 강조는 overtriggering 유발
-- 도구/스킬 트리거: "~할 때 사용" 형태의 조건부 안내. "반드시", "의심되면 사용" 등 구형 모델용 강제 표현 지양
-- 모델 업그레이드 시 이 섹션 포함 전체 규칙 재검토 (§운영 "하네스 진화 검토")
+### 프롬프팅 톤 (하네스/스킬 작성 시)
+- 강조 표현(MUST, CRITICAL 등) 최소화 — 과도한 강조는 overtriggering 유발. 트리거는 "~할 때 사용" 조건부 안내
+- 모델 업그레이드 시 전체 규칙 재검토 (§운영 "하네스 진화 검토")
 
 ### 학습 모드 (Learning Mode)
-- **기본 ON** — 백엔드 학습/시야 확장을 전달 효율과 동등 비중으로 다룸
-- **ON 동작**: 구현 요청에 기술 선택이 포함되면 사용자가 단일 후보만 언급해도 §9 `tech-advisor` 트리거. 기존 코드/매니페스트에 이미 채택된 스택은 그대로 진행하되, **현 스택 안에서 더 적합한 라이브러리/패턴이 있으면 1줄 + 트레이드오프 1줄로 언급** (예: "JPA 쓰시면 동적 쿼리는 QueryDSL보다 JDSL이 Kotlin 친화적입니다 — 컴파일 안정성 ↑, 학습 곡선 ↑"). 사용자가 그대로 진행하라고 하면 즉시 진행
-- **OFF 동작**: §9 워크플로우 라우팅의 "미확정" 케이스만 tech-advisor 트리거 (기존 동작)
-- **전환**: 사용자가 "학습 모드 OFF/ON" 또는 "바로 해줘"(임시 OFF, 해당 요청만) 발화 시 즉시 반영. 세션 단위 적용
-- **스킵 조건**: 명백한 1-2줄 수정, 기존 패턴과 동일한 추가, 버그 픽스, 사용자가 이미 대안을 비교한 후 선택한 경우는 ON이어도 대안 제시 생략
+- **기본 ON**: 구현 요청에 기술 선택이 포함되면 단일 후보 언급이어도 `tech-advisor` 트리거. 기존 스택은 그대로 진행하되 현 스택 내 더 적합한 라이브러리/패턴이 있으면 1줄 + 트레이드오프 1줄 언급
+- **OFF**: §9 라우팅의 "미확정" 케이스만 tech-advisor 트리거
+- **전환**: "학습 모드 OFF/ON", "바로 해줘"(해당 요청만 임시 OFF). 스킵: 1-2줄 수정, 기존 패턴 동일 추가, 버그 픽스, 사용자가 이미 대안 비교 후 선택
 
 ### 코드 응답 원칙
-- **추측 금지**: 열지 않은 파일/코드에 대해 추측하지 않음. 참조된 파일은 Read 후 답변
-- **사실 vs 결정 분기 (정보 수집 라우팅)**: 정보가 필요할 때 출처별 4-경로로 라우팅 (Ouroboros Path Matrix 채택). 매번 "Kotlin 버전?", "프레임워크?" 묻던 마찰 제거
-  - **(a) 매니페스트 정확매치 → 자동 확정**: `pyproject.toml`/`package.json`/`build.gradle.kts`/`go.mod`/`Cargo.toml`/`Dockerfile`/`.env.example`에서 **단일 정확매치**(언어/버전/프레임워크/패키지매니저/CI 도구)는 1줄 알림만 하고 진행 — 예: `ℹ️ 자동 확정: Kotlin 1.9, Spring Boot 3.2 (build.gradle.kts)`. 사용자가 "그거 아냐" 시 즉시 정정
-  - **(b) 코드 추론 → 1-tap 확인**: 매니페스트 미매치/다중 후보/패턴 추론일 때, 발견 내용 + "맞나요?" 단일 확인 (AskUserQuestion 2-옵션: "맞음" / "정정")
-  - **(c) 신규 동작·AC·비즈니스 로직 → 항상 사용자**: 코드에서 답이 안 나오는 결정(목표/수용 기준/UX/트레이드오프)은 묵시적 선택 금지 (위 "복수 해석 처리"와 동일 톤)
-  - **(d) 외부 사실(API/버전/요금) → WebFetch 후 1-tap**: 라이브러리 호환성·레이트리밋·가격 등은 Context7/WebFetch 수집 후 (b) 패턴
-  - 핵심 구분: "X는 JWT를 쓴다"는 **사실** (a/b 자체 해결), "새 기능도 JWT를 써야 한다"는 **결정** (c 필수 사용자). 사실은 가능한 한 자체 확인, 결정은 항상 사용자
-- **반복 편집 방지**: 동일 파일을 2회+ 편집하려 할 때 → 파일 전체 Read(limit 없이) + 호출하는/호출되는 최소 1개 파일 Read 후 재시도. W16 주간 분석 1위 원인(Context 9건, 파일 Read 선행 미흡) 대응
-- **대형 산출물(1MB+ 단일 HTML/생성 파일) 직접 Edit 금지**: 원본 백업(BAK) + 빌드 스크립트(read→재조립, idempotent)로만 수정. 빌드 스크립트는 버전 파일 증식(build_v13.py→v26.py) 대신 **단일 파일 유지 + git으로 이력 관리**. (W27~28 덱 Edit 스파이럴 11~26회 → 스크립트 패턴 전환 후 3회로 종결된 실증 기반)
-- **재수집 비용 큰 자산은 vault에 저장**: 발표 캡처·이미지 등은 scratchpad(세션 휘발)나 임시 디렉터리에 두지 않고 vault 산출물 폴더에 저장. (7/13 slack-captures 20장 유실 → base64 역추출 복구 사례)
-- **디버깅 증거 먼저**: 에러 로그, 스택 트레이스, 실제 출력을 먼저 확인 후 진단. 가설 기반 추측 진단 금지. 사용자가 "안 돼", "에러 나" 등만 보고해도 → 직접 로그/출력/상태를 수집하여 진단 (증거 요청 대신 자체 수집)
-- **환경 확인 우선**: DB/API 결과가 예상과 다를 때 → 환경(.env, 연결 정보, 마이그레이션 상태) 먼저 확인. 코드 원인만 의심하지 않음
-- **모호한 요구사항 명시**: 요구사항이 모호할 때 → 모호한 부분을 구체적으로 지목하여 질문 (예: "X는 A인가 B인가?"). "알아서 처리" 금지. (증거/환경 부족 → 자체 수집. 요구사항/의도 모호 → 질문. 두 축 혼동 금지)
-- **복수 해석 처리**: 요청에 2개 이상 해석 가능할 때 → 묵시적 선택 금지, 후보 제시 후 사용자 선택
-- **간단한 길 pushback**: 요청한 접근법보다 코드량/의존성/단계 수가 절반 이하로 줄어드는 방법이 있을 때 → 구현 전 1-2문장으로 제안 (트레이드오프 포함)
-- 접근법 결정 후 밀고 나감 — 새 정보가 기존 판단을 직접 부정하지 않는 한 재검토 않음 (결정 전에는 묻고, 결정 후에는 밀고 나감)
+- **사실 vs 결정**: 사실은 자체 확인, 결정은 항상 사용자
+  - 매니페스트(package.json/build.gradle.kts 등) **단일 정확매치**는 1줄 알림 후 자동 확정 — 예: `ℹ️ 자동 확정: Kotlin 1.9 (build.gradle.kts)`
+  - 코드 추론/다중 후보/외부 사실(API·버전·요금)은 수집(WebFetch/Context7) 후 1-tap 확인
+  - 목표/AC/UX/트레이드오프 등 **결정**은 묵시적 선택 금지, 후보 제시 후 사용자 선택
+- **반복 편집 방지**: 동일 파일 2회+ 편집 시도 시 → 파일 전체 Read + 호출/피호출 파일 1개+ Read 후 재시도
+- **대형 산출물(1MB+ 단일 HTML/생성 파일) 직접 Edit 금지**: 원본 백업 + 빌드 스크립트(read→재조립, idempotent)로만 수정. 스크립트는 버전 파일 증식 대신 단일 파일 + git 이력 관리
+- **재수집 비용 큰 자산은 vault에 저장**: 발표 캡처·이미지 등은 scratchpad(휘발)가 아닌 vault 산출물 폴더에
+- **간단한 길 pushback**: 코드량/의존성/단계가 절반 이하로 줄어드는 방법이 있으면 구현 전 1-2문장 제안 (트레이드오프 포함)
+- 결정 전에는 묻고, 결정 후에는 밀고 나감 — 새 정보가 기존 판단을 직접 부정하지 않는 한 재검토 않음
 
 ### 메모리
 - compaction 후 / 이전 작업 이어갈 때 → memory_search 먼저
-- 4계층: Active(`active/` + `sessions/`) → Hot(`daily/`) → Always(`MEMORY.md`) → Cold(`topics/`)
-- `[PROMOTE]` 태그 → MEMORY.md 승격, 상세는 topics/로
-
-### Active Context (세션 연속성 핵심)
-- subtask 완료 시 Status 갱신, `/clear`·PreCompact 시 즉시 갱신
-- 20줄 이하 유지, 완전 종료 시 파일 삭제
-- Handoff 필수: 바뀐 것 / 안 된 것 / 다음 파일 / 남은 위험
-- 경로·포맷·자동화 상세 → `rules/common/memory.md`
-
-### Daily Log
-- 세션 종료 전 1회 배치 기록, 메인 세션이 직접 수행 (위임 금지)
-- `/clear` 전: active context 갱신 → daily log 작성 (이 순서)
-- 경로·포맷·작성 시점 상세 → `rules/common/memory.md`
+- 4계층: Active(`active/`) → Hot(`daily/`) → Always(`MEMORY.md`) → Cold(`topics/`). `[PROMOTE]` → MEMORY.md 승격
+- Active Context: subtask 완료·`/clear`·PreCompact 시 갱신, 20줄 이하, Handoff(바뀐 것/안 된 것/다음 파일/남은 위험) 필수
+- Daily Log: 세션 종료 전 1회 배치 기록, 메인 세션 직접 수행. `/clear` 전: active context → daily log 순
+- 경로·포맷 상세 → `rules/common/memory.md`
 
 ---
 
 ## 2. Task Routing & Delegation
 
-### 메인 세션 = 오케스트레이터
-멀티파일 작업이나 복잡한 탐색은 서브에이전트에 위임.
+메인 세션 = 오케스트레이터. 멀티파일 작업/복잡한 탐색은 서브에이전트에 위임.
 
 ### 직접 허용
-- `~/.claude/**` 설정 파일 읽기/수정, daily log 작성
-- 경로 확정된 파일 1-2개 Read
-- git status/log 등 상태 확인
-- **단일 파일 100줄 이하 수정** (사용자 명시 "바로 해줘" 포함)
-- Agent 도구로 서브에이전트 위임
+`~/.claude/**` 설정 파일, daily log, 경로 확정 1-2개 파일 Read, git 상태 확인, 단일 파일 100줄 이하 수정
 
 ### 작업 판단 플로우
 1. **단순 작업** (단일 파일, 100줄 이하) → 직접 실행
-2. **버그 수정** → `/sdebug` (`superpowers:systematic-debugging`) invoke → Phase 1 증거 수집 → **가설 후보 2개+ 또는 원인 모호 시 `/triage` 분기 (5개 가설 병렬 발산 → 심판 수렴) → 결과 받아 sdebug Phase 2 복귀** → 원인 격리 → 최소 수정 → `superpowers:verification-before-completion` 검증. 재현 없이 수정 코드 작성 금지. Sentry URL/ID 제공 시 `sentry-debug` 우선
+2. **버그 수정** → `/sdebug` invoke → Phase 1 증거 수집 → **가설 2개+ 또는 원인 모호 시 `/triage` 분기** (병렬 발산 → 심판 수렴) → sdebug Phase 2 복귀 → 원인 격리 → 최소 수정 → `superpowers:verification-before-completion`. 재현 없이 수정 코드 작성 금지. Sentry URL/ID 시 `sentry-debug` 우선
 3. **설계 결정 필요** → 인터뷰 먼저
-   - **큰 아키텍처 변경 5축 게이트**: 데이터 흐름 변경(REST↔Kafka 등), 영속성 모델 변경, 외부 의존성 추가/제거, 동기/비동기 전환 시 → 결정 전에 5축 강제 체크 후 권장안 1줄 제시:
-     1. 직접 영향 (코드/테스트 변경 면적)
-     2. 운영 영향 (장애 복구 절차, 모니터링 지점 변화)
-     3. 데이터 영향 (스키마 호환성, 마이그레이션 필요 여부, 기록 보존 차이)
-     4. 롤백 시나리오
-     5. 동등 가치를 더 작은 변경으로 달성하는 대안 1개
-   - 5/6 매각 동기화 REST→Kafka 결정처럼 "영향없이/기록보존" 한 줄 근거로 끝나지 않도록 강제
+   - **큰 아키텍처 변경 5축 게이트** (데이터 흐름/영속성 모델/외부 의존성/동기·비동기 전환): ①직접 영향 ②운영 영향(장애 복구·모니터링) ③데이터 영향(스키마 호환·마이그레이션·기록 보존) ④롤백 시나리오 ⑤더 작은 변경 대안 1개 — 체크 후 권장안 1줄 제시
 4. **구현 작업** (2개+ 파일) → Plan-First
-   - **3줄 룰 (spec/plan 본문 작성 전 강제)**: 문서 최상단(frontmatter 바로 아래)에 아래 3줄을 먼저 기록 후 본문 진행. 3줄이 모이지 않으면 명확화 인터뷰 추가, 본문 작성 금지
-     - **AC** (성공 기준, 동사 3개): "X가 Y 한다" 형태
-     - **Out-of-scope** (이번 미포함, 명사 3개): 다음 사이클로 미루는 항목
-     - **Done-when** (완료 판정 1줄): 어떻게 끝났음을 알 수 있는가
-     - 근거: failure-log spec 13~20회 / plan 16회 반복 편집은 모두 스코프 미확정 상태에서 본문 착수한 패턴. 이 게이트가 가장 큰 ROI
-   - planner의 plan이 6+파일, 200줄+ 변경을 포함하면: `critic`(opus)이 plan을 adversarial 검증 → user approval. critic REJECT 시 planner 1회 수정 → 재REJECT 시 사용자 보고
-   - 소/중규모: 기존대로 바로 user approval
-5. **기타** → 적절한 에이전트에 위임
-
-에이전트 선택·실패 처리·검증 루프 → `rules/common/agents.md` 참조
+   - **3줄 룰 (spec/plan 본문 작성 전 강제)**: frontmatter 바로 아래 **AC**(동사 3개) / **Out-of-scope**(명사 3개) / **Done-when**(1줄)을 먼저 기록. 안 모이면 명확화 인터뷰, 본문 작성 금지
+   - plan이 6+파일/200줄+ 변경 포함 시: `critic`이 adversarial 검증 → user approval. REJECT 시 planner 1회 수정 → 재REJECT 시 사용자 보고. 소/중규모는 바로 user approval
+5. **기타** → 적절한 에이전트에 위임 (`rules/common/agents.md`)
 
 ---
 
 ## 3. Model Routing
 
-Agent 호출 시 `model` 파라미터 필수 지정.
-
-| 티어 | 에이전트 |
-|------|---------|
-| **haiku** | `explore`, `writer`, `style-reviewer` |
-| **sonnet** | `executor`, `debugger`, `build-fixer`, `test-engineer`, `designer`, `qa-tester`, `document-specialist`, `git-master`, `information-architect`, `api-reviewer`, `performance-reviewer`, `product-analyst`, `product-manager`, `scientist`, `ux-researcher`, `vision` |
-| **opus** | `architect`, `planner`, `analyst`, `critic`, `deep-executor`, `quality-reviewer`, `security-reviewer`, `code-reviewer`, `verifier` |
-
-미등록 에이전트: 판단/설계→opus, 실행/구현→sonnet, 검색/수집→haiku
+- Agent 호출 시 `model`은 **기본 생략** (세션 모델 상속 — 대부분 정답)
+- 예외만 지정: 기계적 검색/수집 → haiku, 대량 병렬 실행 등 비용 민감한 단순 구현 → sonnet
+- 판단/설계/리뷰 계열은 상속 유지 (다운그레이드 금지)
 
 ---
 
 ## 4. Post-Implementation (코드 구현 완료 후)
 
-### 리뷰 정책 (자동 판단 + 고지)
-
-구현 완료 후 **자동으로 리뷰 수준을 판단**하고 고지:
+구현 완료 후 자동으로 리뷰 수준 판단 + 고지 (예: "기본 리뷰를 실행합니다. 전체로 변경하시려면 알려주세요."):
 
 | 조건 | 리뷰 수준 | 에이전트 |
 |------|----------|---------|
-| Security/인증/인가, DB 스키마, 아키텍처 변경 | **전체** (자동) | `code-reviewer` + `security-reviewer` + `quality-reviewer` + `architect` |
-| **Python (`.py`) 파일 변경** | **전체+심층** (자동) | `python-deep-review` skill로 위임 (Phase 1: code/quality/style/architect 병렬 → Phase 3: verifier + critic 독립검증). 1줄 수정도 풀세트 (변경 규모 무관) |
-| `/review` 명시 호출 | **전체** | Kotlin/Spring → `/ecr`, Python → `python-deep-review`, 그 외 → `code-reviewer` + `security-reviewer` + `quality-reviewer` + `architect` |
-| 그 외 일반 수정 | **기본** (자동) | `code-reviewer` |
-| `--quick` | **최소** | `code-reviewer`만 (python-deep-review도 우회) |
+| Security/인증/인가, DB 스키마, 아키텍처 변경 | 전체 | `code-reviewer` + `security-reviewer` + `quality-reviewer` + `architect` |
+| Python 변경 3파일+ 또는 동작 변경 | 전체+심층 | `python-deep-review` |
+| Python 소규모 수정 (1-2파일 단순 변경) | 기본 | `code-reviewer` |
+| `/review` 명시 호출 | 전체 | Kotlin/Spring → `/ecr`, Python → `python-deep-review`, 그 외 전체 세트 |
+| 그 외 일반 수정 | 기본 | `code-reviewer` |
+| `--quick` | 최소 | `code-reviewer`만 |
 
-> 고지 예시: "기본 리뷰를 실행합니다. 전체로 변경하시려면 알려주세요."
-> 전체 예시: "전체 리뷰를 실행합니다 (Security 변경 감지). 기본으로 변경하시려면 알려주세요."
-
-### 리뷰 필수 관점 (모든 리뷰 라우팅에 공통 적용)
-
-리뷰 에이전트(code-reviewer / quality-reviewer / 기타)를 호출할 때 프롬프트에 아래 4가지 관점을 명시적으로 포함한다. 단발 수정/스타일 리뷰가 아니라 PR 단위 리뷰일 때 모두 적용.
-
-1. **OOP / SOLID / 추상화 / 함수 중복 제거 리팩토링** (opus 권장)
-   - SRP/OCP 위반, 같은 책임 분산, helper 추출 가치, 단계 분리(validate→execute 등) 가능 여부
-   - "지금 작동하는가"가 아니라 "다음 사람이 고치기 좋게 짜여 있는가" 시각
-2. **네이밍** — 함수/변수/상수가 도메인 의미와 추상화 수준에 맞는지. 호출부 의도를 가리지 않는지
-3. **별도 컨텍스트 검증** — 작업 완료 후 컨텍스트 0인 별도 서브에이전트 두 개를 동시 호출 (같은 세션에서 생산-검증을 겸하면 동의 편향)
-   - `verifier` (opus): 변경 파일과 diff만 보고, 앞선 리뷰가 놓쳤을 항목을 fresh로 발굴
-   - `critic` (opus): 앞선 제안 목록만 보고(diff 없이), 과잉 추상화·YAGNI 위반·트레이드오프 누락을 adversarial하게 반박
-4. **현재 동작 너머의 설계 시각** — 즉시 동작/머지 가능성과 별개로, 동료가 PR 코멘트로 달 만한 OOP/SOLID/추상화/중복제거 의견을 능동적으로 발굴
-   - 예: 같은 mutation/함수 안에 인증/검증/실행/로그가 모두 인라인이면 validate→execute 단계 분리 제안. 같은 루프가 두 번 돌면 통합 가능 여부. 같은 분기 조건이 여러 곳에 등장하면 분기 dispatch 추상화 가능 여부
-
-라우팅 시 사용자에게 "전체 리뷰" 또는 "기본 리뷰" 고지 후, 위 4가지가 프롬프트에 반영됐는지 자기 점검 후 실행.
-
-### 장기 작업 중간 검증
-- `deep-executor` 등 장기 에이전트 작업 시 구현과 검증을 분리
-- 자체 평가에 의존하지 않음 — 별도 검증 단계(코드 리뷰 에이전트 또는 실행 테스트)로 품질 확인
-- 중간 마일스톤마다 검증 후 다음 단계 진행
-- **생산-검증 분리 원칙**: 메인 세션이 직접 리뷰/검증하지 않음. 같은 컨텍스트에서 생산과 검증을 겸하면 동의 편향 발생. 리뷰/평가는 별도 Opus 서브에이전트에 위임하여 독립적으로 판단
-
-### 빌드 검증
-프로젝트 빌드 명령 → 실패 시 build-fixer 자동 투입
-
-### 테스트
-변경 범위 테스트 → 커버리지 80% 미달 시 보완
-
-### 검증 기준 사전 합의
-- Plan/스펙에 **완료 기준**과 **검증 방법**을 포함 — 구현 전에 "무엇이 성공인지" 정의
-- 리뷰어는 Plan에 명시된 기준으로 평가 (구현자의 자체 판단이 아닌 사전 합의 기준)
-
-### 경계면 교차 검증
-리뷰/QA 시 경계면 불일치를 확인 (각 리뷰어의 단일 관점 검증을 보완):
-- API 응답 shape ↔ 클라이언트 호출 타입 (래핑, camelCase/snake_case)
-- Entity/DTO ↔ DB 스키마/마이그레이션
-- 상태 전이 설계 ↔ 실제 분기 로직
-- 환경 설정(.env) ↔ 코드 참조
+- **리뷰 필수 관점 + 검증 루프 + 경계면 교차 검증** → `rules/common/verification.md` (PR 단위 리뷰 시 4관점 프롬프트 포함 필수)
+- **생산-검증 분리**: 메인 세션이 직접 리뷰/검증하지 않음 — 별도 서브에이전트(verifier/critic)에 위임. 장기 작업은 중간 마일스톤마다 검증
+- 빌드 실패 → `build-fixer` 자동 투입. 변경 범위 테스트 커버리지 80% 미달 시 보완
+- Plan/스펙에 완료 기준·검증 방법 포함 — 리뷰어는 사전 합의 기준으로 평가
 
 ### 배포 검증 (Deployment Verification)
 
-`deploy.sh`가 exit 0으로 끝나도 배포 **성공이 아님**. 아래 3단계를 모두 확인해야 "수정이 라이브"임을 선언할 수 있다. `/deploy-verified` 스킬이 자동화한다.
+`deploy.sh` exit 0 ≠ 배포 성공. `/deploy-verified`가 자동화하는 3단계를 모두 확인해야 "수정이 라이브":
+1. **아티팩트 포함 확인**: JAR/번들 빌드 타임스탬프가 현재 커밋 이후인지, 수정 시그니처가 바이너리에 존재하는지 (`unzip -p <jar> | grep <signature>`)
+2. **로그 경로 선확인 후 tail**: 디버깅 전 실제 로그 파일 경로 먼저 확인
+3. **시그니처 grep**: 새 코드 실행을 증명하는 고유 로그 라인을 라이브 로그에서 발견해야 통과
 
-1. **아티팩트 포함 확인**: 배포된 JAR/번들의 빌드 타임스탬프가 현재 커밋 이후인지, 수정한 메서드/문자열 시그니처가 바이너리에 존재하는지 (`unzip -p <jar> | grep <signature>` 또는 `strings`)
-2. **로그 경로 선확인 후 tail**: 디버깅 전에 서버의 실제 로그 파일 경로를 먼저 확인. 잘못된 로그를 tail하여 "수정이 안 들어간 줄 알았지만 다른 로그였던" 루프 방지
-3. **시그니처 grep**: 새 코드 실행을 증명하는 고유 로그 라인(수정된 메서드명, 새 버전 태그, 추가한 DEBUG 로그)을 라이브 로그에서 발견해야 통과
+**DB 마이그레이션 추가 가드** (4/21·4/24 운영 사고 대응):
+- 실행 전 `.env` DB host/name 출력해 타겟(로컬 vs 서버) 확인
+- 건드릴 모든 테이블 `DESCRIBE`로 실제 컬럼 확인 (컬럼명 가정 금지)
+- dry-run 먼저 실행, 예상 행 수 보고 후 사용자 승인
+- idempotency 키/체크섬으로 중복 실행 방지
+- **서브에이전트 위임 금지** (불가피하면 가드 4항목 + "prisma migrate dev는 pending 전부 적용" 프롬프트에 prepend). 메인 세션 직접 실행 우선
 
-**DB 마이그레이션 전용 추가 가드** (reporter.html이 식별한 4회 반복 마찰 + 4/21·4/24 운영 사고 2회 대응):
-- 실행 전 `.env`의 DB host/name을 출력해 의도한 타겟(로컬 vs 서버) 확인
-- 건드릴 모든 테이블을 `DESCRIBE`로 실제 컬럼 확인 (컬럼명 가정 금지)
-- dry-run을 먼저 실행하여 예상 행 수 보고 후 사용자 승인
-- idempotency 키 또는 체크섬으로 중복 실행 방지
-- **서브에이전트 위임 금지 (또는 가드 prepend 필수)**: 마이그레이션 실행을 executor/deep-executor에 위임할 경우, 이 가드 4항목 + `pnpm prisma migrate dev`는 pending 마이그 전부 적용한다는 사실을 프롬프트에 반드시 포함. governance.yml `prisma/migrations/**` 경고가 PostToolUse에서 트리거되지만 사후 알림이므로, 메인 세션이 직접 실행하는 것을 우선
-
-**생략**: 문서/설정만 수정, 사용자 "검증 스킵" 요청
+생략: 문서/설정만 수정, 사용자 "검증 스킵" 요청
 
 ---
 
 ## 5. Coding Standards
 
-- **불변성 우선**: DTO/값 객체/응답 객체는 불변. ORM Entity 등 프레임워크가 요구하는 경우 예외 (변경 범위 최소화)
-- **파일 크기**: 200-400줄 적정, 800줄 최대
-- **함수 크기**: 50줄 이하, 중첩 4단계 이하
+- **불변성 우선**: DTO/값 객체/응답 객체는 불변. ORM Entity 등 프레임워크 요구 시 예외
+- **파일 크기**: 200-400줄 적정, 800줄 최대 / **함수**: 50줄 이하, 중첩 4단계 이하
 - **에러 처리**: 명시적 처리, 사용자 친화적 메시지, 조용한 무시 금지
-- **입력 검증**: 시스템 경계에서 반드시 검증
-- **하드코딩 금지**: 상수 또는 설정 사용
-- **주석은 WHY만 (docstring 포함)**: 함수 docstring 과 inline 주석 모두 **WHAT (code-evident)** 대신 **WHY (의도·불변식·호출 위치 제약·사고 컨텍스트)** 중심. 분기 조건/반환값/파라미터 의미를 나열하는 docstring 금지 — 코드와 시그니처가 정답. 좋은 docstring 예: "호출 위치 불변식: X 보다 앞에서 호출. 이유는 …(과거 사고/제약)"
-- **주석은 핵심 WHY만 짧게 — 휘발성 데이터·장황함 금지**: 주석에 수치·메트릭·운영 측정값(예: "최대 232건", "N×timeout", 벤치마크 결과)을 박지 않는다. 이런 데이터는 바뀌면 주석이 거짓이 되므로 PR description·커밋 메시지에 남기고, 코드 주석엔 **변하지 않는 이유**(왜 비동기인가, 왜 이 순서인가)만 1줄 수준으로. 결정 배경·대안 비교·측정 과정은 주석이 아니라 PR/커밋에 쓴다. 같은 이유를 여러 줄로 풀어 쓰지 말 것
-- **docstring 1-2줄 상한 (강제)**: 함수/클래스 docstring은 **한 줄 요약 기본, 최대 2줄**. 메서드가 무엇을 어떻게 하는지, 데이터 흐름·소스 일치·불변식 근거를 문장으로 풀어 설명하지 말 것 — 한 줄 핵심 WHY만 두고 나머지(메커니즘·배경·"~해야 ~가 성립한다"식 논증)는 PR/커밋 메시지로. 3줄 이상 설명형 docstring은 리뷰에서 축약 대상. (반복 위반 패턴: 함수 위 3~6줄 docstring으로 설계 의도를 장황하게 서술)
-- **기존 주석 보존**: 기능 추출·이동 시 원본 주석을 함께 옮긴다. 사용자 요청과 무관하게 기존 주석을 영문화/재작성/삭제 금지
+- **입력 검증**: 시스템 경계에서 반드시 검증 / **하드코딩 금지**: 상수 또는 설정 사용
+- **주석/docstring은 핵심 WHY만 짧게**: WHAT(code-evident) 서술 금지. 수치·메트릭·벤치마크 등 휘발성 데이터 금지 — 결정 배경·측정은 PR/커밋 메시지에. docstring은 **한 줄 기본, 최대 2줄** — 3줄+ 설명형은 축약 대상. 좋은 예: "호출 위치 불변식: X보다 앞에서 호출 (과거 사고/제약)"
+- **기존 주석 보존**: 기능 추출·이동 시 원본 주석 함께 이동. 요청과 무관한 영문화/재작성/삭제 금지
 
 ### 변경 최소화 (Surgical Changes)
-- **Filler 금지 (1000 no's for every yes)**: 모든 줄/함수/파일은 자기 자리값을 해야 함. 빈 공간은 레이아웃·구성으로 풀고, 추측성 helper·placeholder·"혹시 모를" 에러 핸들링·dummy 섹션으로 채우지 않음. Less is more
-- 인접 코드/주석/포맷 "개선" 금지 — 사용자 요청과 무관하면 손대지 않음
-- 미파손 코드 리팩토링 금지 — "더 나은 구조"는 사용자 요청 시에만 (보안/데이터 손상 위험은 §7에 따라 즉시 보고)
-- 기존 파일 스타일 매치 — 내 취향 강제 금지. 단 §5 다른 규칙(빈 catch, 거대 함수 등) 위반 스타일은 매치 대상이 아님
-- 관련 없는 dead code: **언급만 하고 삭제하지 않음** (사용자 판단 위임)
-- 내 변경이 고아로 만든 import/변수/함수만 제거, 기존 dead code는 그대로
+- **Filler 금지**: 추측성 helper·placeholder·"혹시 모를" 에러 핸들링·dummy 섹션으로 채우지 않음. Less is more
+- 인접 코드/주석/포맷 "개선" 금지, 미파손 코드 리팩토링 금지 (사용자 요청 시에만. 보안/데이터 손상 위험은 §7)
+- 기존 파일 스타일 매치 (단 §5 위반 스타일은 매치 대상 아님)
+- 무관한 dead code: 언급만, 삭제하지 않음. 내 변경이 고아로 만든 import/변수만 제거
 - 자가 테스트: 변경된 모든 줄이 사용자 요청으로 직접 추적 가능한가?
 
 ---
@@ -246,16 +146,15 @@ Agent 호출 시 `model` 파라미터 필수 지정.
 **PR**: 전체 커밋 히스토리 분석 → 종합 요약 → 테스트 플랜 포함
 
 ### PR 코멘트/리뷰 응답 금지 (절대 규칙)
-- **PR 리뷰 코멘트에 절대 답글을 남기지 않는다.** `gh api .../comments/<id>/replies`, `gh pr review`, `gh pr comment`, 또는 동등한 호출 일체 금지
-- 코드 수정만 수행하고, 리뷰 답변은 **사용자가 직접 작성**한다
-- 사용자가 답변 초안을 요청하면 채팅창에 텍스트로만 제공 (PR에 게시 금지)
-- 예외 없음 — 사용자가 명시적으로 "PR에 댓글 달아라"라고 지시한 경우에만 게시
+- **PR 리뷰 코멘트에 절대 답글을 남기지 않는다.** `gh api .../replies`, `gh pr review`, `gh pr comment` 등 일체 금지
+- 코드 수정만 수행, 리뷰 답변은 사용자가 직접 작성. 초안 요청 시 채팅으로만 제공
+- 예외: 사용자가 명시적으로 "PR에 댓글 달아라" 지시한 경우만
 
 ### PR body 안전 입력 (필수)
-- `gh pr create` / `gh pr edit`로 본문을 전달할 때 **`--body-file`** 사용. 본문은 임시 파일(`/tmp/pr_body_<N>.md` 등)에 Write 도구로 작성 후 경로 전달.
-- `--body "$(cat <<'EOF' ... EOF)"` 패턴 금지 — 외부 큰따옴표 안의 명령 치환 때문에 `` ` ``, `\``, ` ``` ` 가 escape되어 그대로 본문에 들어가 코드블록/인라인 코드가 깨짐 (PR #17099 1차 시도에서 재현됨).
-- 작성 후 `gh pr view <num> --json body --jq .body | head`로 백틱 escape 여부 즉시 검증.
-- 코드 스니펫이 없는 단순 한두 줄 본문은 `--body "..."` 직접 전달 가능.
+- `gh pr create`/`edit` 본문은 **`--body-file`** 사용 — 임시 파일에 Write 후 경로 전달
+- `--body "$(cat <<'EOF' ...)"` 패턴 금지 — 백틱 escape로 코드블록 깨짐 (PR #17099 재현)
+- 작성 후 `gh pr view <num> --json body --jq .body | head`로 escape 여부 검증
+- 코드 스니펫 없는 한두 줄 본문은 `--body "..."` 직접 전달 가능
 
 ---
 
@@ -263,105 +162,59 @@ Agent 호출 시 `model` 파라미터 필수 지정.
 
 - **민감 파일**: `.env`, `credentials.json`, `*.pem`, `*.key` — 존재 확인만, 내용은 사용자가 직접 관리
 - **Git/DB 명령**: push는 일반 모드만, reset은 `--soft`만, 삭제는 대상 파일 명시하여 실행
-- **비밀값**: API 키, 토큰, 비밀번호는 환경변수 또는 시크릿 매니저로 참조
+- **비밀값**: 환경변수 또는 시크릿 매니저로 참조
 - **의존성 변경**: 새 패키지/메이저 업그레이드 시 사용자 확인 필수
-- 보안 이슈 발견 시 즉시 중단 → `security-reviewer` 에이전트
+- 보안 이슈 발견 시 즉시 중단 → `security-reviewer`
 
 ---
 
 ## 8. Parallel Execution
 
-| 조건 | 실행 방식 |
-|------|-----------|
-| 독립 작업 2개+ | 병렬 Task |
-| 순차 필수 | 파일 쓰기→읽기, 빌드→테스트, git add→commit→push |
-
-### 팀 아키텍처 패턴
-새 워크플로우/스킬 설계 시 참조:
-
-| 패턴 | 적합 상황 | 현재 사용처 |
-|------|----------|------------|
-| Pipeline | 순차 단계, 게이트 필요 | `/review`, `/feature` |
-| Fan-out | 독립 태스크 병렬 실행 | `subagent-driven-development` |
-| Producer-Reviewer | 구현 후 검증 루프 | 리뷰 Phase 3→4 |
-| Expert Pool | 조건별 전문가 선택 | §4 리뷰 수준 자동 판단 |
-| Supervisor | 위임+모니터링 | `deep-executor` |
-| Hierarchical | 3계층+ 대규모 작업 | Team → 서브에이전트 |
+- 독립 작업 2개+ → 병렬 Task. 순차 필수: 파일 쓰기→읽기, 빌드→테스트, git add→commit→push
+- 팀 아키텍처 패턴 (Pipeline/Fan-out/Producer-Reviewer 등) → 워크플로우/스킬 설계 시 [docs/harness/team-patterns.md](docs/harness/team-patterns.md) 참조
 
 ### 서브에이전트 가드레일
 - 단일 서브에이전트 도구 15회+ 호출 → 중간 결과 보고 후 계속 여부 판단
-- 재귀 위임 (서브에이전트→서브에이전트) → 1단계까지만 허용
-- 같은 에러/패턴 3회 반복 → 자동 종료 + 원인 보고 + 필요 시 architect 에스컬레이션
+- 재귀 위임은 1단계까지만. 같은 에러/패턴 3회 반복 → 자동 종료 + 원인 보고
 
 ---
 
 ## 9. Auto Skill Routing
 
-작업 컨텍스트에 따라 관련 스킬을 **자동으로 invoke** (사용자 요청 불필요).
+작업 컨텍스트에 따라 관련 스킬을 자동 invoke. 각 스킬의 description 트리거가 1차이고, 아래는 description만으로 판단이 어려운 라우팅.
 
-### 파일/언어 기반 (프로젝트 공통)
+### 파일/언어 기반
 | 트리거 | 스킬 |
 |--------|------|
-| `.kt` 파일 작성/수정 | `kotlin-patterns` |
-| `.swift` 파일 작성/수정 | `everything-claude-code:swiftui-patterns` |
-| **`.py` 파일 작성/수정 → 리뷰 단계**(구현 직후 §4 라우팅 시) | `python-deep-review` (Phase 1 병렬 4-agent + Phase 3 verifier+critic 독립 검증). 1줄 변경도 풀세트 발동 (Q2=a). 비용 부담 시 `--light` 또는 `--quick` |
-| JPA Entity / Repository 변경 | `everything-claude-code:jpa-patterns` |
+| `.kt` 작성/수정 | `kotlin-patterns` |
+| `.swift` 작성/수정 | `everything-claude-code:swiftui-patterns` |
+| `.py` 변경 → 리뷰 단계 | §4 표 기준 (`python-deep-review`는 3파일+/동작 변경 시) |
+| JPA Entity/Repository 변경 | `everything-claude-code:jpa-patterns` |
 | `@Cacheable`, Redis 설정 변경 | `redis-cache-patterns` |
-| Security 설정, 인증/인가 코드 | `security-fix` (글로벌, code/security 병렬 리뷰 → 수정 → 검증) |
-| haru 프로젝트 배포/Docker Compose/Nginx/OCI 서버 작업 | `haru-infra` (OCI Always Free 배포 패턴) |
+| Security 설정, 인증/인가 코드 | `security-fix` |
+| haru 프로젝트 배포/Docker/Nginx/OCI | `haru-infra` |
 
-### 워크플로우 기반
-| 트리거 | 스킬 |
+### 워크플로우 기반 (비자명 라우팅만)
+| 트리거 | 처리 |
 |--------|------|
-| 구현 요청에 기술/설계 선택이 포함된 경우 — **학습 모드 ON(기본)**: 사용자가 단일 후보만 언급해도 트리거 (현 스택 내 라이브러리/패턴 대안 1-2개 + 트레이드오프 1줄). **학습 모드 OFF**: 미확정 케이스만 트리거 (기존 스택으로 자연 결정되면 스킵). 학습 모드 정의는 §1 참조 | `tech-advisor` (대안 비교 → 사용자 선택 → 구현 진행) |
 | 새 기능 구현 시작 | `feature` (tech-advisor → brainstorming → plans → execution) |
-| 구현을 Codex에 위임 — "codex로 구현", "sol로 작업", "orca로 위임" | `orca-feature` (Claude 오케스트레이터: spec/리뷰, Codex sol 워커: plan/구현. Orca 앱 필요) |
-| 설계/분석 문서 **신규 생성** (spec/*.md, plan*.md, *-spec.md, *-analysis.md) — vault/.omx/active/sessions/daily 경로 제외, brainstorming 산출물·docs-save 결과는 스킵 | `feature` brainstorming 게이트 선행. 이미 brainstorming 완료 후 기록이면 스킵 |
-| 기술 뉴스/동향 요청 | `daily-briefing` (quick/deep 모드) |
-| PR 전 최종 검증 | `superpowers:verification-before-completion` |
-| 버그 수정/디버깅 시작 | `/sdebug` (`superpowers:systematic-debugging`) — Phase 1 증거 수집 후 **가설 후보 2개+ 또는 원인 모호 시 `/triage` 분기** (병렬 발산 → 심판 수렴) → 결과 받아 sdebug Phase 2 복귀. 단일 가설로 명확하면 triage 스킵하고 직진 |
-| 버그 수정 코드 작성 완료 | `superpowers:verification-before-completion` (수정 결과 실행 확인) |
-| 빌드 실패 | `build-fixer` 에이전트 (스킬 아닌 에이전트) |
-| 아키텍처 다이어그램 요청 | `arch-diagram` |
-| 업무 기술 + "가이드/학습/마스터/정리" | `master-guide` (심층 학습 가이드) |
-| 업무 기술 + "업데이트" | `master-guide` (update 모드) |
-| 일반 주제 + "노션에 정리/분석" | `research-to-notion` (일반 리서치) |
-| 업무 기술 + "노션에 정리" (단순 리서치 의도) | 사용자에게 분기 질문 |
-| URL 분석 + 설정 적용 요청 | `absorb` (주 2회 배치 — 화/금 권장, 초과 시 북마크) |
-| Sentry URL 또는 이슈 ID 제공 시 | `sentry-debug` |
-| Slack URL (pfcoworkspace.slack.com) 제공 시 | `mcp__claude_ai_Slack__slack_read_thread`로 채널/스레드 우선 fetch (메시지 컨텍스트 확보 후 코드 추적) |
-| GitHub PR # 또는 PR URL 제공 + "리뷰" 의도 (4/24~5/7 리포트: 14회 리뷰 중 절반에서 "opus 검증" 명시 반복 → 디폴트 표준화) | Kotlin/Spring 프로젝트면 `/ecr`, 그 외는 `/review` 자동 invoke. verifier(opus) 디폴트 포함이므로 "opus로 검증" 별도 명시 불필요 |
+| "codex로 구현", "sol로 작업", "orca로 위임" | `orca-feature` |
+| 설계/분석 문서 **신규 생성** (spec/plan/analysis) — vault/.omx/active/daily 경로·brainstorming 산출물 제외 | `feature` brainstorming 게이트 선행 |
+| 업무 기술(Spring/Kafka 등) + "가이드/학습/정리" | `master-guide` / 일반 주제 + "노션에 정리" → `research-to-notion` / 업무 기술 + "노션에 정리"(단순 리서치 의도)는 분기 질문 |
+| Slack URL (pfcoworkspace) | `slack_read_thread`로 컨텍스트 확보 후 코드 추적 |
+| GitHub PR + "리뷰" 의도 | Kotlin/Spring → `/ecr`, 그 외 → `/review`. verifier 디폴트 포함 ("opus 검증" 별도 명시 불필요) |
 | plan/spec 저장, "docs에 저장", "옵시디언" | `docs-save` |
 
-> 프로젝트별 추가 라우팅은 각 프로젝트 CLAUDE.md에서 정의
-
 ### Plan 모드 라우팅
-- Plan 모드 진입 전, 작업이 "새 기능 구현"에 해당하면 → `feature` 스킬을 먼저 invoke (Plan 모드 대신)
-- Plan 모드는 `feature`에 해당하지 않는 작업(리팩토링, 마이그레이션, 설정 변경 등)에만 직접 사용
-- `PreToolUse` 훅이 `EnterPlanMode` 시 리마인드를 제공하므로, 이를 참고하여 판단
+- "새 기능 구현"이면 Plan 모드 대신 `feature` 스킬 먼저. Plan 모드는 리팩토링/마이그레이션/설정 변경 등에만
 
 ### 규칙
-- 스킬은 **참고 자료로 로드**. 작업 흐름을 방해하지 않도록 간결히 적용
-- 동시에 2개+ 스킬이 해당되면 아래 우선순위로 1개만 invoke
-- 사용자가 "스킬 스킵" 또는 "바로 해줘" 시 생략 가능
-- **스킬 description 작성**: `"Use when user says '<trigger1>', '<trigger2>'"` 패턴 포함. 한/영 키워드 모두 기재하여 트리거 확률 확보
-
-### 스킬 우선순위 (충돌 시)
-1. 프로젝트별 CLAUDE.md 스킬 > 글로벌 CLAUDE.md 스킬
-2. 워크플로우 기반 > 파일/언어 기반
-3. 좁은 범위 (jpa-patterns) > 넓은 범위 (kotlin-patterns)
-4. 특정 문구/산출물 명시 트리거 > 범용 키워드 트리거 — 예: "아키텍처 다이어그램" 요청은 `arch-diagram` (tech-advisor의 "아키텍처" 키워드보다 우선)
+- 스킬은 참고 자료로 로드, 간결히 적용. "스킬 스킵"/"바로 해줘" 시 생략
+- 충돌 시 우선순위: 프로젝트 > 글로벌 / 워크플로우 > 파일·언어 / 좁은 범위 > 넓은 범위 / 특정 문구 명시 > 범용 키워드
 
 ## 운영
 - 테스트 실패 방치 금지: 즉시 수정 또는 이슈 등록
-- **삽질 감지 시 자동 기록**: 같은 파일 3회+ 수정, 접근법 변경, 예상과 다른 결과 반복 → 원인 파악 후 `memory/topics/failure-log.md`에 1줄 추가 (날짜/증상/원인 계층/해법)
-- **반복 작업 자동화 감지**: 세션 내 유사 작업(같은 구조 파일 생성, 같은 유형 수정 등) 3회+ 반복 인식 시 → daily log에 `[AUTOMATE]` 태그로 기록. /review-week 축 2에서 분석
-- **MCP 도구 감사**: /review-week 시 활성 MCP 서버의 도구 수와 중복을 점검. 중복 도구(동일 기능의 다른 MCP 서버)는 하나만 유지. 비활성 서버의 도구가 다른 플러그인을 통해 로드되는지 확인
-- Notion: MCP 우선
-- 노션 작업일지: 메인 페이지에 일일 로그 금지, 작업 일지 페이지에 기록
-- **하네스 진화 검토**: 모델 업그레이드 시 기존 규칙이 아직 필요한지 재검토. 모든 규칙은 "모델이 못하는 것"에 대한 가정
-- **Eval 기반 하네스 진화**: /review-week 시 아래 2가지를 분석
-  - friction 추이: sessions.jsonl 기반 마찰 빈도. friction=0 규칙 4주 지속 시 은퇴 후보
-  - 이상 갭 분석: `memory/metrics/harness-kpi.md` 정의 KPI 대비 현재 달성률. 미달 KPI에 대해 원인 가설 + 개선 제안 생성
-- **Self-Absorb 루프**: Stop 훅이 삽질 감지 시 원인 분류 + 개선 제안 요청 → 다음 세션에서 제안 리뷰
-- **미분류 batch 처리**: 세션 시작 시 `failure-log.md`에 "미분류" 항목이 **5건 이상** 이면 → 사용자 요청 처리 중 첫 여유 시점에 batch 분류 완료 (사용자 명시 작업을 가로막지 않음)
+- **삽질 감지 시 기록**: 같은 파일 3회+ 수정, 접근법 변경 반복 → `memory/topics/failure-log.md`에 1줄 (날짜/증상/원인/해법). 미분류 5건+ 누적 시 첫 여유 시점에 batch 분류
+- **반복 작업 자동화 감지**: 세션 내 유사 작업 3회+ → daily log에 `[AUTOMATE]` 태그
+- Notion: MCP 우선. 작업일지는 메인 페이지가 아닌 작업 일지 페이지에
+- **하네스 진화**: 모델 업그레이드 시 전체 규칙 재검토 (모든 규칙은 "모델이 못하는 것"에 대한 가정). /review-week에서 friction 추이(0인 규칙 4주 지속 → 은퇴)·KPI 갭·MCP 도구 중복 점검
