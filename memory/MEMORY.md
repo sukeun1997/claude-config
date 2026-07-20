@@ -55,3 +55,6 @@
 - **(07-13)** 침묵 허용(`|| true`)과 실패 관측은 항상 세트. "설치했다 ≠ 작동한다" — 기전 설치 후 가짜 입력 발화 테스트 1회 필수
 - **(07-13)** auto-sync push 조용한 실패: 활성 gh 계정 sukeun8은 claude-config push 권한 없음 → `gh auth switch -u sukeun1997 && git push && gh auth switch -u sukeun8`. 훅 수정 필요 (2026-07-19 현재도 19회 실패 적체)
 - **(07-13)** session-start health 경고 유실 버그 수정: _HEALTH_WARNINGS를 CONTEXT 초기화 이후로 이동, 가짜 마커 테스트로 확인
+
+### Promoted 2026-07-20
+- 하네스 진화 원칙 실증: 규칙 감축 기준 = "시스템 프롬프트 중복 / 구형 모델 가정 / 상호 충돌" 3분류. 다음 모델 업그레이드 시 동일 절차 재적용
