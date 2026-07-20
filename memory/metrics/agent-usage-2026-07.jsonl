@@ -259,3 +259,6 @@
 {"date": "2026-07-20", "time": "18:07", "agent": "Explore", "model": "haiku", "result": "PARTIAL", "description": "가상계좌 입금 상환 매칭 추적"}
 {"date": "2026-07-20", "time": "19:05", "agent": "general-purpose", "model": "default", "result": "SUCCESS", "description": "밤새 스케줄 소비자 전수 스캔"}
 {"date": "2026-07-20", "time": "19:06", "agent": "general-purpose", "model": "default", "result": "SUCCESS", "description": "조치 플랜 adversarial 검증"}
+{"date": "2026-07-20", "time": "22:35", "agent": "code-reviewer", "model": "sonnet", "result": "", "description": "Review PR #949 observability"}
+{"date": "2026-07-20", "time": "22:35", "agent": "code-reviewer", "model": "sonnet", "result": "", "description": "Review PR #950 cache"}
+{"date": "2026-07-20", "time": "22:36", "agent": "quality-reviewer", "model": "sonnet", "result": "", "description": "Quality review PR #950"}
