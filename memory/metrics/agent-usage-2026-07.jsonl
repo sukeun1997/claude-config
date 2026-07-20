@@ -252,4 +252,4 @@
 {"date": "2026-07-20", "time": "13:51", "agent": "Explore", "model": "haiku", "result": "", "description": "KFTC 실패 응답코드 원인 분류"}
 {"date": "2026-07-20", "time": "13:54", "agent": "Explore", "model": "haiku", "result": "", "description": "상환 알림톡 코드 구조 탐색"}
 {"date": "2026-07-20", "time": "16:07", "agent": "Explore", "model": "haiku", "result": "", "description": "Dove/inapi/DB 풀 제약 조사"}
-{"date": "2026-07-20", "time": "16:07", "agent": "general-purpose", "model": "haiku", "result": "", "description": "Slack 배치 베이스라인/Dove 제약 조사"}
+{"date": "2026-07-20", "time": "16:07", "agent": "general-purpose", "model": "haiku", "result": "PARTIAL", "description": "Slack 배치 베이스라인/Dove 제약 조사"}
