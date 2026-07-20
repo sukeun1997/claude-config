@@ -253,3 +253,9 @@
 {"date": "2026-07-20", "time": "13:54", "agent": "Explore", "model": "haiku", "result": "", "description": "상환 알림톡 코드 구조 탐색"}
 {"date": "2026-07-20", "time": "16:07", "agent": "Explore", "model": "haiku", "result": "", "description": "Dove/inapi/DB 풀 제약 조사"}
 {"date": "2026-07-20", "time": "16:07", "agent": "general-purpose", "model": "haiku", "result": "PARTIAL", "description": "Slack 배치 베이스라인/Dove 제약 조사"}
+{"date": "2026-07-20", "time": "17:03", "agent": "Explore", "model": "haiku", "result": "SUCCESS", "description": "Trace repayment schedule regeneration"}
+{"date": "2026-07-20", "time": "17:04", "agent": "Explore", "model": "haiku", "result": "SUCCESS", "description": "CMS발 정산 구분 컬럼 탐색"}
+{"date": "2026-07-20", "time": "18:07", "agent": "Explore", "model": "haiku", "result": "SUCCESS", "description": "CMS 출금·집금 입금 경로 추적"}
+{"date": "2026-07-20", "time": "18:07", "agent": "Explore", "model": "haiku", "result": "PARTIAL", "description": "가상계좌 입금 상환 매칭 추적"}
+{"date": "2026-07-20", "time": "19:05", "agent": "general-purpose", "model": "default", "result": "SUCCESS", "description": "밤새 스케줄 소비자 전수 스캔"}
+{"date": "2026-07-20", "time": "19:06", "agent": "general-purpose", "model": "default", "result": "SUCCESS", "description": "조치 플랜 adversarial 검증"}
