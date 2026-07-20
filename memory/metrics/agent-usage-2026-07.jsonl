@@ -245,3 +245,11 @@
 {"date": "2026-07-15", "time": "18:49", "agent": "general-purpose", "model": "fable", "result": "PARTIAL", "description": "fable 동작 검증"}
 {"date": "2026-07-16", "time": "10:23", "agent": "verifier", "model": "opus", "result": "SUCCESS", "description": "PR27 최종 불변식 검증"}
 {"date": "2026-07-16", "time": "15:10", "agent": "explore", "model": "haiku", "result": "", "description": "Investigate CMS repayment recording"}
+{"date": "2026-07-20", "time": "13:38", "agent": "Explore", "model": "haiku", "result": "", "description": "Trace KFTC 원리금지급 기록 오류"}
+{"date": "2026-07-20", "time": "13:38", "agent": "Explore", "model": "haiku", "result": "", "description": "Trace settlement sync_lpn task 오류"}
+{"date": "2026-07-20", "time": "13:38", "agent": "Explore", "model": "haiku", "result": "", "description": "Trace SBI 투자금 출금 실패"}
+{"date": "2026-07-20", "time": "13:50", "agent": "Explore", "model": "haiku", "result": "", "description": "Find daily 8:05 KFTC retry batch"}
+{"date": "2026-07-20", "time": "13:51", "agent": "Explore", "model": "haiku", "result": "", "description": "KFTC 실패 응답코드 원인 분류"}
+{"date": "2026-07-20", "time": "13:54", "agent": "Explore", "model": "haiku", "result": "", "description": "상환 알림톡 코드 구조 탐색"}
+{"date": "2026-07-20", "time": "16:07", "agent": "Explore", "model": "haiku", "result": "", "description": "Dove/inapi/DB 풀 제약 조사"}
+{"date": "2026-07-20", "time": "16:07", "agent": "general-purpose", "model": "haiku", "result": "", "description": "Slack 배치 베이스라인/Dove 제약 조사"}
