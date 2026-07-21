@@ -61,3 +61,6 @@
 
 ### Promoted 2026-07-20
 - Slack 캡처 이름 모자이크 = 색기반 @멘션 자동검출 + 아바타열∩타임스탬프 conjunction 헤더검출. OCR 없이 재사용 가능
+
+### Promoted 2026-07-21
+- CMS 배분이체 착지 계좌 = get_repayment_service_account_number(가상계좌) = **상환예치계좌** (차입자수납 아님, cms_repayment_transfer_process.py:64). 완제 트리거(action_repayment_task)는 차입자수납 잔액 기준 — CMS 수납금을 완제에 쓰려면 상환예치→차입자수납 수동 이관 필요
