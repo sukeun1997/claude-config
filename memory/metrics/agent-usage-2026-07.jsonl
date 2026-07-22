@@ -277,3 +277,10 @@
 {"date": "2026-07-21", "time": "16:53", "agent": "code-reviewer", "model": "sonnet", "result": "", "description": "Review PR #961 candidate TX split"}
 {"date": "2026-07-21", "time": "17:05", "agent": "code-reviewer", "model": "default", "result": "PARTIAL", "description": "Code review C31 shortage fix"}
 {"date": "2026-07-21", "time": "17:05", "agent": "verifier", "model": "default", "result": "SUCCESS", "description": "Verify C31 fix correctness"}
+{"date": "2026-07-22", "time": "10:19", "agent": "Explore", "model": "haiku", "result": "", "description": "KFTC 양수도 보고 순서 탐색"}
+{"date": "2026-07-22", "time": "10:19", "agent": "Explore", "model": "haiku", "result": "", "description": "원리금지급 취소/롤백 보고 탐색"}
+{"date": "2026-07-22", "time": "10:26", "agent": "Explore", "model": "haiku", "result": "", "description": "inapi kftc-transfer 흐름 분석"}
+{"date": "2026-07-22", "time": "10:26", "agent": "Explore", "model": "haiku", "result": "", "description": "investment 양수도 step 흐름 분석"}
+{"date": "2026-07-22", "time": "10:26", "agent": "Explore", "model": "haiku", "result": "", "description": "금결원 전문 규격 문서 탐색"}
+{"date": "2026-07-22", "time": "10:32", "agent": "general-purpose", "model": "default", "result": "SUCCESS", "description": "금결원 전산설계서 PDF 섹션 추출"}
+{"date": "2026-07-22", "time": "10:32", "agent": "general-purpose", "model": "haiku", "result": "SUCCESS", "description": "Notion 양수도 문서 요약"}
