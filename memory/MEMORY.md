@@ -64,3 +64,6 @@
 
 ### Promoted 2026-07-21
 - CMS 배분이체 착지 계좌 = get_repayment_service_account_number(가상계좌) = **상환예치계좌** (차입자수납 아님, cms_repayment_transfer_process.py:64). 완제 트리거(action_repayment_task)는 차입자수납 잔액 기준 — CMS 수납금을 완제에 쓰려면 상환예치→차입자수납 수동 이관 필요
+
+### Promoted 2026-07-21
+- transfer_1_to_1 예외 계약: BankTimeOut=무보상 전파(원장 차감 잔존), BankFailure/BankError/일반=내장 보상 후 재전파, 보상 자체 실패 시 원예외 소실·비Bank예외 전파 — 호출자가 Bank계열 예외만 "보상 확정"으로 신뢰 가능

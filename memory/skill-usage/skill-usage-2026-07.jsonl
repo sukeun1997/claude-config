@@ -72,3 +72,9 @@
 {"timestamp": "2026-07-20T13:52:45.826574", "skill": "bs", "project": "global"}
 {"timestamp": "2026-07-20T13:52:52.451600", "skill": "superpowers:brainstorming", "project": "global"}
 {"timestamp": "2026-07-20T22:33:18.800704", "skill": "ecr", "project": "global"}
+{"timestamp": "2026-07-21T14:22:26.807848", "skill": "sdebug", "project": "global"}
+{"timestamp": "2026-07-21T15:09:13.983505", "skill": "sdebug", "project": "global"}
+{"timestamp": "2026-07-21T15:09:16.644868", "skill": "superpowers:systematic-debugging", "project": "global"}
+{"timestamp": "2026-07-21T16:08:32.524489", "skill": "python-deep-review", "project": "global"}
+{"timestamp": "2026-07-21T16:34:11.380611", "skill": "update-pr", "project": "global"}
+{"timestamp": "2026-07-21T16:57:40.749179", "skill": "parallel-dev", "project": "global"}

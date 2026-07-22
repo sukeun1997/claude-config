@@ -262,3 +262,18 @@
 {"date": "2026-07-20", "time": "22:35", "agent": "code-reviewer", "model": "sonnet", "result": "SUCCESS", "description": "Review PR #949 observability"}
 {"date": "2026-07-20", "time": "22:35", "agent": "code-reviewer", "model": "sonnet", "result": "SUCCESS", "description": "Review PR #950 cache"}
 {"date": "2026-07-20", "time": "22:36", "agent": "quality-reviewer", "model": "sonnet", "result": "SUCCESS", "description": "Quality review PR #950"}
+{"date": "2026-07-21", "time": "13:38", "agent": "Explore", "model": "haiku", "result": "", "description": "Trace transfer-data-sync KeyError"}
+{"date": "2026-07-21", "time": "14:30", "agent": "Explore", "model": "haiku", "result": "", "description": "Find showcase sync batch/task"}
+{"date": "2026-07-21", "time": "16:09", "agent": "code-reviewer", "model": "opus", "result": "PARTIAL", "description": "code-reviewer 1차 리뷰"}
+{"date": "2026-07-21", "time": "16:09", "agent": "quality-reviewer", "model": "opus", "result": "PARTIAL", "description": "quality-reviewer 1차 리뷰"}
+{"date": "2026-07-21", "time": "16:09", "agent": "architect", "model": "opus", "result": "SUCCESS", "description": "architect 상위 설계 리뷰"}
+{"date": "2026-07-21", "time": "16:10", "agent": "style-reviewer", "model": "haiku", "result": "SUCCESS", "description": "style-reviewer 1차 리뷰"}
+{"date": "2026-07-21", "time": "16:10", "agent": "general-purpose", "model": "default", "result": "", "description": "transfer_1_to_1 exception contract 확인"}
+{"date": "2026-07-21", "time": "16:10", "agent": "general-purpose", "model": "default", "result": "", "description": "repayment_transfer_task 유사 이체 플로우 비교"}
+{"date": "2026-07-21", "time": "16:17", "agent": "verifier", "model": "opus", "result": "SUCCESS", "description": "verifier 독립 재검증"}
+{"date": "2026-07-21", "time": "16:17", "agent": "critic", "model": "opus", "result": "SUCCESS", "description": "critic adversarial 반박"}
+{"date": "2026-07-21", "time": "16:53", "agent": "quality-reviewer", "model": "default", "result": "SUCCESS", "description": "Concurrency review PR #959"}
+{"date": "2026-07-21", "time": "16:53", "agent": "code-reviewer", "model": "sonnet", "result": "SUCCESS", "description": "Review PR #957 param TX split"}
+{"date": "2026-07-21", "time": "16:53", "agent": "code-reviewer", "model": "sonnet", "result": "", "description": "Review PR #961 candidate TX split"}
+{"date": "2026-07-21", "time": "17:05", "agent": "code-reviewer", "model": "default", "result": "PARTIAL", "description": "Code review C31 shortage fix"}
+{"date": "2026-07-21", "time": "17:05", "agent": "verifier", "model": "default", "result": "SUCCESS", "description": "Verify C31 fix correctness"}
