@@ -67,3 +67,6 @@
 
 ### Promoted 2026-07-21
 - transfer_1_to_1 예외 계약: BankTimeOut=무보상 전파(원장 차감 잔존), BankFailure/BankError/일반=내장 보상 후 재전파, 보상 자체 실패 시 원예외 소실·비Bank예외 전파 — 호출자가 Bank계열 예외만 "보상 확정"으로 신뢰 가능
+
+### Promoted 2026-07-22
+- KFTC 정산보고(원리금지급)는 banking-report 경유 아님 — inapi kftc_client v1이 금결원 직행 (utils/tasks/kftc.py:224,297 → settlement_mixin POST /investments/payment). 보고 상태 원장이 RISS/RIS.kftc_report_status 컬럼 → 목표1(보고 이관)과 목표3(레거시 제거) 강결합. 7/12 문서의 "complete_process→banking_report_client 중계" 서술은 코드에서 미확인(정정)

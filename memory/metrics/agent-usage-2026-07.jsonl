@@ -284,3 +284,16 @@
 {"date": "2026-07-22", "time": "10:26", "agent": "Explore", "model": "haiku", "result": "", "description": "금결원 전문 규격 문서 탐색"}
 {"date": "2026-07-22", "time": "10:32", "agent": "general-purpose", "model": "default", "result": "SUCCESS", "description": "금결원 전산설계서 PDF 섹션 추출"}
 {"date": "2026-07-22", "time": "10:32", "agent": "general-purpose", "model": "haiku", "result": "SUCCESS", "description": "Notion 양수도 문서 요약"}
+{"date": "2026-07-22", "time": "13:14", "agent": "Explore", "model": "haiku", "result": "", "description": "inapi 정산 흐름 탐색"}
+{"date": "2026-07-22", "time": "13:14", "agent": "Explore", "model": "haiku", "result": "", "description": "banking-loan settlement 탐색"}
+{"date": "2026-07-22", "time": "13:14", "agent": "fork", "model": "default", "result": "", "description": "inapi 정산 흐름 thorough 추적"}
+{"date": "2026-07-22", "time": "13:14", "agent": "Explore", "model": "haiku", "result": "", "description": "KFTC 정산보고 경로 탐색"}
+{"date": "2026-07-22", "time": "13:15", "agent": "Explore", "model": "haiku", "result": "", "description": "showcase 레거시 사용처 전수"}
+{"date": "2026-07-22", "time": "13:15", "agent": "general-purpose", "model": "default", "result": "", "description": "KFTC 정산보고 경로 탐색 (inapi + banking-report)"}
+{"date": "2026-07-22", "time": "13:15", "agent": "Explore", "model": "haiku", "result": "", "description": "unsecured 레거시 사용처 전수"}
+{"date": "2026-07-22", "time": "13:15", "agent": "explore", "model": "haiku", "result": "", "description": "banking-loan settlement 모듈 코드 조사"}
+{"date": "2026-07-22", "time": "13:15", "agent": "fork", "model": "default", "result": "", "description": "showcase 레거시 모델 사용처 전수 조사"}
+{"date": "2026-07-22", "time": "13:15", "agent": "Explore", "model": "haiku", "result": "", "description": "레거시 정산 모델 사용처 전수 조사"}
+{"date": "2026-07-22", "time": "13:56", "agent": "Explore", "model": "haiku", "result": "", "description": "2세대 정산 모델 사용처 조사"}
+{"date": "2026-07-22", "time": "17:03", "agent": "Explore", "model": "haiku", "result": "", "description": "jb-fep 송신 루프 검증"}
+{"date": "2026-07-22", "time": "17:03", "agent": "general-purpose", "model": "haiku", "result": "", "description": "전문코드 스프레드시트 확인"}
