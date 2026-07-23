@@ -297,3 +297,18 @@
 {"date": "2026-07-22", "time": "13:56", "agent": "Explore", "model": "haiku", "result": "", "description": "2세대 정산 모델 사용처 조사"}
 {"date": "2026-07-22", "time": "17:03", "agent": "Explore", "model": "haiku", "result": "", "description": "jb-fep 송신 루프 검증"}
 {"date": "2026-07-22", "time": "17:03", "agent": "general-purpose", "model": "haiku", "result": "", "description": "전문코드 스프레드시트 확인"}
+{"date": "2026-07-22", "time": "17:41", "agent": "general-purpose", "model": "haiku", "result": "", "description": "Slack 오류채널 대출전문 빈도 확인"}
+{"date": "2026-07-22", "time": "17:49", "agent": "Explore", "model": "haiku", "result": "", "description": "LegalAction manager usage sweep"}
+{"date": "2026-07-22", "time": "17:49", "agent": "Explore", "model": "haiku", "result": "", "description": "Special status & charging flow check"}
+{"date": "2026-07-22", "time": "17:49", "agent": "Explore", "model": "haiku", "result": "", "description": "Mutation transaction correctness check"}
+{"date": "2026-07-23", "time": "13:07", "agent": "code-reviewer", "model": "sonnet", "result": "SUCCESS", "description": "Review PR #957 param TX split"}
+{"date": "2026-07-23", "time": "13:07", "agent": "code-reviewer", "model": "sonnet", "result": "SUCCESS", "description": "Review PR #959 send lifecycle TX"}
+{"date": "2026-07-23", "time": "13:08", "agent": "code-reviewer", "model": "sonnet", "result": "", "description": "Review PR #961 candidate TX split"}
+{"date": "2026-07-23", "time": "13:08", "agent": "architect", "model": "default", "result": "", "description": "Senior/CTO structural review"}
+{"date": "2026-07-23", "time": "13:08", "agent": "Explore", "model": "haiku", "result": "", "description": "모듈 구조/의존성 조사"}
+{"date": "2026-07-23", "time": "13:09", "agent": "Explore", "model": "haiku", "result": "", "description": "알림 도메인 결합 조사"}
+{"date": "2026-07-23", "time": "13:09", "agent": "Explore", "model": "haiku", "result": "", "description": "코드 품질 패턴 조사"}
+{"date": "2026-07-23", "time": "13:12", "agent": "Explore", "model": "haiku", "result": "", "description": "발송 루프 코드 구조 탐색"}
+{"date": "2026-07-23", "time": "13:13", "agent": "critic", "model": "default", "result": "", "description": "Critic cross-verify HIGH issues"}
+{"date": "2026-07-23", "time": "13:20", "agent": "critic", "model": "default", "result": "", "description": "설계 문서 critic 검증"}
+{"date": "2026-07-23", "time": "13:32", "agent": "Explore", "model": "haiku", "result": "", "description": "Trace settlement EOD status flow"}
