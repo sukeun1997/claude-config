@@ -73,3 +73,9 @@
 
 ### Promoted 2026-07-22
 - 정산 모델은 3세대: 1세대 showcase(RISS/RIS 등, 제거 대상) / 2세대 inapi moneyflow(SettlementSchedule·LPNS·LPN, projection 강등) / 3세대 pfct-settlement(정본). InvestmentNote는 투자 포지션 원장으로 별개 존치
+
+
+### Promoted 2026-07-23
+- repayment_process.py create_legal_expense_repayment: remain = charging - legacy - repaid 계산 후 `if remain == 0: continue` — **음수 미방어**. remain<0이면 음수 LegalExpenseRepayment 생성 + `repaid_expense_amount -= 음수`로 금액 부풀어 말미 ValueError. 상환이력 있는 법조치의 charging_amount 0원 처리(PR안)는 이 상태를 양산함 → 리뷰 피드백(상환 존재 시 삭제 차단) 타당
+### Promoted 2026-07-23
+- repayment_process.py create_legal_expense_repayment: remain = charging - legacy - repaid 계산 후 `if remain == 0: continue` — **음수 미방어**. remain<0이면 음수 LegalExpenseRepayment 생성 + `repaid_expense_amount -= 음수`로 금액 부풀어 말미 ValueError. 상환이력 있는 법조치의 charging_amount 0원 처리(PR안)는 이 상태를 양산함 → 리뷰 피드백(상환 존재 시 삭제 차단) 타당

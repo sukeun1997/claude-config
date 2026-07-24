@@ -85,3 +85,5 @@
 {"timestamp": "2026-07-22T17:45:56.810246", "skill": "sentry-debug", "project": "global"}
 {"timestamp": "2026-07-23T13:05:51.476594", "skill": "ecr", "project": "global"}
 {"timestamp": "2026-07-23T13:11:03.725433", "skill": "superpowers:brainstorming", "project": "global"}
+{"timestamp": "2026-07-23T16:55:06.629308", "skill": "recc", "project": "global"}
+{"timestamp": "2026-07-23T16:55:11.545308", "skill": "superpowers:receiving-code-review", "project": "global"}

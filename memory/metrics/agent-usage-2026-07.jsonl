@@ -312,3 +312,8 @@
 {"date": "2026-07-23", "time": "13:13", "agent": "critic", "model": "default", "result": "", "description": "Critic cross-verify HIGH issues"}
 {"date": "2026-07-23", "time": "13:20", "agent": "critic", "model": "default", "result": "", "description": "설계 문서 critic 검증"}
 {"date": "2026-07-23", "time": "13:32", "agent": "Explore", "model": "haiku", "result": "", "description": "Trace settlement EOD status flow"}
+{"date": "2026-07-23", "time": "16:04", "agent": "explore", "model": "haiku", "result": "", "description": "Find 00100 new investor protocol sending code"}
+{"date": "2026-07-23", "time": "16:37", "agent": "Explore", "model": "haiku", "result": "", "description": "Find deposit verification models"}
+{"date": "2026-07-23", "time": "16:55", "agent": "Explore", "model": "haiku", "result": "", "description": "Legal expense charging flow trace"}
+{"date": "2026-07-23", "time": "17:54", "agent": "code-reviewer", "model": "sonnet", "result": "SUCCESS", "description": "Re-review PR #950 caching"}
+{"date": "2026-07-23", "time": "18:20", "agent": "general-purpose", "model": "default", "result": "SUCCESS", "description": "Extract KFTC 원리금지급 보고 기한/양수도 검증"}
