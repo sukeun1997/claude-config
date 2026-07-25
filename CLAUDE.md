@@ -99,6 +99,7 @@
 | 그 외 일반 수정 | 기본 | `code-reviewer` |
 | `--quick` | 최소 | `code-reviewer`만 |
 
+- **백엔드(Python/Django·Kotlin/Spring) 리뷰는 `backend-code-quality-review`를 함께 로드**하고, 그 Perspective Ladder·Rich Domain Decision Bar·Senior/CTO blind spots 섹션을 리뷰 에이전트 프롬프트에 주입한다. 업무 용어·불변식·상태 전이·결정 소유권이 쟁점이면 `domain-modeling-gate`를 추가한다
 - **리뷰 필수 관점 + 검증 루프 + 경계면 교차 검증** → `rules/common/verification.md` (PR 단위 리뷰 시 4관점 프롬프트 포함 필수)
 - **생산-검증 분리**: 메인 세션이 직접 리뷰/검증하지 않음 — 별도 서브에이전트(verifier/critic)에 위임. 장기 작업은 중간 마일스톤마다 검증
 - 빌드 실패 → `build-fixer` 자동 투입. 변경 범위 테스트 커버리지 80% 미달 시 보완
@@ -202,7 +203,10 @@
 | 설계/분석 문서 **신규 생성** (spec/plan/analysis) — vault/.omx/active/daily 경로·brainstorming 산출물 제외 | `feature` brainstorming 게이트 선행 |
 | 업무 기술(Spring/Kafka 등) + "가이드/학습/정리" | `master-guide` / 일반 주제 + "노션에 정리" → `research-to-notion` / 업무 기술 + "노션에 정리"(단순 리서치 의도)는 분기 질문 |
 | Slack URL (pfcoworkspace) | `slack_read_thread`로 컨텍스트 확보 후 코드 추적 |
-| GitHub PR + "리뷰" 의도 | Kotlin/Spring → `/ecr`, 그 외 → `/review`. verifier 디폴트 포함 ("opus 검증" 별도 명시 불필요) |
+| GitHub PR + "리뷰" 의도 | Kotlin/Spring → `/ecr`, 그 외 → `/review`. 백엔드면 `backend-code-quality-review` 동반 로드. verifier 디폴트 포함 ("opus 검증" 별도 명시 불필요) |
+| 장애/RCA/원인 분석 (Sentry 아님) | `incident-analysis` |
+| Sentry URL·ID + 흐름/원인/재발/확인 SQL만 (수정 X) | `sentry-flow-rca` / 진단 후 코드 수정까지 → `sentry-debug` |
+| 업무 용어·불변식·상태 전이·결정 소유권이 쟁점 | `domain-modeling-gate` (완전한 도메인 스케치는 여기서만 작성) |
 | plan/spec 저장, "docs에 저장", "옵시디언" | `docs-save` |
 
 ### Plan 모드 라우팅

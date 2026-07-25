@@ -22,6 +22,10 @@
 - DB 스키마/마이그레이션
 - 메모리/상태 계약 파일 (`.omx/*.json`, `.omx/notepad.md`)
 - 루트 규약 문서 (`AGENTS.md`, `CLAUDE.md`, `rules/common/*.md`)
+- 두 하네스가 공유하는 스킬 — 한쪽만 고치면 조용히 표류한다. 변경 후
+  `scripts/check-skill-parity.py`를 실행해 exit 0을 확인한다
+  (`sync-codex-skills.py`는 `omc-shared/`만 덮으므로 `omc-learned/` 스킬은
+  잡지 못한다)
 
 ## 생산-검증 분리
 

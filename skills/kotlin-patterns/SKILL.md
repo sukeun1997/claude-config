@@ -41,6 +41,69 @@ Before suggesting a pattern:
   the receiver and does not need hidden dependencies. Keep domain policy on its
   owner rather than disguising it as a generic extension.
 
+## Writing Kotlin
+
+Defaults for new code. Override any of these when the repository already does
+something else consistently; Evidence First wins.
+
+Scope function selection:
+
+```
+let   → nullable chain: value?.let { ... }
+run   → initialize, then return a result
+apply → configure the receiver and return it
+also  → side effect (log, validate) that must not change the value
+with  → several accesses to one already non-null receiver
+```
+
+Validate an external contract once at the boundary, then carry a non-null type
+inward:
+
+```kotlin
+val amount = response.amount
+    ?: throw ExternalContractViolation("amount missing: ${response.id}")
+```
+
+Structured concurrency for concurrent I/O:
+
+```kotlin
+suspend fun load(id: UserId): Dashboard = coroutineScope {
+    val profile = async { profileClient.fetch(id) }
+    val balance = async { balanceClient.fetch(id) }
+    Dashboard(profile.await(), balance.await())
+}
+```
+
+`Dispatchers.IO` for blocking I/O, `Dispatchers.Default` for CPU-bound work, and
+never `GlobalScope`. Do not fan out repository calls with `async` inside one JPA
+transaction; the connection is bound to the calling thread.
+
+JPA entity shape:
+
+```kotlin
+@Entity
+@Table(name = "loans")
+class Loan(
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    val id: Long = 0,
+
+    @Column(nullable = false)
+    var status: LoanStatus,
+) {
+    fun settle(at: Instant) {
+        require(status == LoanStatus.ACTIVE) { "cannot settle from $status" }
+        status = LoanStatus.SETTLED
+    }
+}
+```
+
+`val` for identity, `var` only for fields the domain actually transitions, the
+transition guarded by the entity that owns it. No `data class` for entities, no
+`lateinit var`; rely on the `allOpen`/`noArg` compiler plugins.
+
+Model domain failures as a closed hierarchy the boundary maps exhaustively.
+Do not throw transport or framework exceptions from domain code.
+
 ## Spring and Transaction Boundaries
 
 - Prefer constructor injection and explicit immutable dependencies.

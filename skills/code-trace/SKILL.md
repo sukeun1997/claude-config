@@ -108,16 +108,17 @@ flow에 맞는 "만약 ~하면?" 질문 3-5개를 제안하여 능동적 탐색 
 - [ ] 항목 2
 ```
 
-## Phase 4: 정확성 검증 (Opus Sub-Agent)
+## Phase 4: 정확성 검증 (Fresh Verifier)
 
-워크스루 완료 후, 별도 Opus 서브에이전트로 트레이스 결과의 정확성을 독립 검증한다.
+워크스루 완료 후, 별도 verifier에게 원본 워크스루와 저장소 경로만
+전달하여 트레이스 결과의 정확성을 독립 검증한다. 의도한 결론이나
+수정 방향은 전달하지 않는다.
 
 ### 검증 에이전트 실행
 
 ```
 Agent(
-  subagent_type: "architect",
-  model: "opus",
+  subagent_type: "verifier",
   prompt: """
   아래 code-trace 워크스루 결과의 정확성을 검증해주세요.
 
@@ -147,7 +148,7 @@ Agent(
 
 | 검증 결과 | 처리 |
 |-----------|------|
-| VERIFIED | "✅ Opus 검증 통과" 표시 후 Phase 5로 진행 |
+| VERIFIED | "✅ fresh verifier 검증 통과" 표시 후 Phase 5로 진행 |
 | ISSUES_FOUND | 수정 사항을 워크스루에 인라인 반영 (`⚠️ 검증 수정` 마커) 후 사용자에게 변경 내용 고지 |
 
 ### 검증 범위 제한
