@@ -1,6 +1,6 @@
 ---
 name: lecture-review-lens
-description: Dynamically turn the user's current and future Markdown lecture notes into evidence-backed code and design review questions. Use for Python/Django or Kotlin/Spring reviews involving domain language, naming, responsibility ownership, state transitions, relationships or cardinality, DDD, Rich Domain, application services, hexagonal boundaries, architecture, or when the user wants learned material applied without recalling it manually.
+description: Turn the user's Markdown lecture notes into review questions when a change introduces or redefines a domain concept, state transition, or relationship cardinality. Use only on request, or when a backend review is already questioning what a business term means or who owns a rule. Not for routine review, naming cleanups, or mechanical changes.
 ---
 
 # Lecture Review Lens
@@ -32,15 +32,17 @@ review. Do not turn a local learning dependency into a blocker.
 
 ### 1. Decide Whether the Diff Carries Domain Meaning
 
-Apply this lens when the change affects at least one of:
+Apply this lens only when the change does one of these:
 
-- a business term, type, method, state, or responsibility;
-- a relationship, lifecycle, cardinality, invariant, or calculation;
-- an application-service versus domain-model boundary;
-- a web, event, persistence, or external-system translation boundary;
-- a proposed DDD, Rich Domain, or hexagonal abstraction.
+- introduces a new business concept, or redefines what an existing term means;
+- adds or changes a state transition, lifecycle, or relationship cardinality;
+- moves who owns a business decision across a layer or service boundary;
+- proposes a DDD, Rich Domain, or hexagonal abstraction that does not exist yet.
 
-Skip it for a purely mechanical change with no domain or architectural judgment.
+Skip it otherwise, including for naming cleanups, bug fixes, refactors inside an
+existing model, and any mechanical change. Reviewing an unchanged domain with
+lecture notes costs context and returns nothing. When in doubt, skip; the review
+skills already carry their own domain lens.
 
 ### 2. Build a Focused Query
 

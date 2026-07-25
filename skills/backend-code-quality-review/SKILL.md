@@ -242,6 +242,11 @@ Senior / CTO architecture watch:
 검증:
 ```
 
+Delete every `Senior / CTO architecture watch` line where you cannot name a
+concrete failure or change cost, and drop the heading when all four go. Write
+`없음` for `Junior blind spots caught` rather than inventing one. An unfilled
+slot is signal; a filled empty slot buries the findings that matter.
+
 ## Comment Template
 
 ```md

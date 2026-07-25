@@ -204,7 +204,10 @@ critic이 DISMISSED 판정한 이슈를 여기에 기록한다 (투명성).
 - [제안 2]: ...
 
 ### Senior / CTO View
-- Junior blind spots caught:
+구체적 실패나 변경 비용을 말할 수 있는 항목만 남기고 나머지 줄은 지운다.
+넷 다 없으면 이 섹션을 통째로 생략한다. 빈 슬롯을 채운 문장은 진짜 finding을
+가린다.
+- Junior blind spots caught: (없으면 `없음`)
 - Ownership / domain boundary:
 - Operability / recovery:
 - Compatibility / rollout:

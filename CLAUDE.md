@@ -99,7 +99,7 @@
 | 그 외 일반 수정 | 기본 | `code-reviewer` |
 | `--quick` | 최소 | `code-reviewer`만 |
 
-- **백엔드(Python/Django·Kotlin/Spring) 리뷰는 `backend-code-quality-review`를 함께 로드**하고, 그 Perspective Ladder·Rich Domain Decision Bar·Senior/CTO blind spots 섹션을 리뷰 에이전트 프롬프트에 주입한다. 업무 용어·불변식·상태 전이·결정 소유권이 쟁점이면 `domain-modeling-gate`를 추가한다
+- **백엔드(Python/Django·Kotlin/Spring) 리뷰는 리뷰 에이전트에게 `backend-code-quality-review`를 직접 로드하라고 지시**한다 (메인이 읽어서 프롬프트에 옮기지 않는다 — 생산-검증 분리 유지 + 메인 컨텍스트 절약). 업무 용어·불변식·상태 전이·결정 소유권이 쟁점이면 `domain-modeling-gate`도 같이 지시한다
 - **리뷰 필수 관점 + 검증 루프 + 경계면 교차 검증** → `rules/common/verification.md` (PR 단위 리뷰 시 4관점 프롬프트 포함 필수)
 - **생산-검증 분리**: 메인 세션이 직접 리뷰/검증하지 않음 — 별도 서브에이전트(verifier/critic)에 위임. 장기 작업은 중간 마일스톤마다 검증
 - 빌드 실패 → `build-fixer` 자동 투입. 변경 범위 테스트 커버리지 80% 미달 시 보완
