@@ -321,3 +321,5 @@
 {"date": "2026-07-24", "time": "16:32", "agent": "quality-reviewer", "model": "opus", "result": "SUCCESS", "description": "quality-reviewer DDD PR17481"}
 {"date": "2026-07-24", "time": "16:33", "agent": "architect", "model": "opus", "result": "SUCCESS", "description": "architect DDD PR17481"}
 {"date": "2026-07-24", "time": "16:33", "agent": "style-reviewer", "model": "haiku", "result": "", "description": "style-reviewer PR17481"}
+{"date": "2026-07-25", "time": "16:49", "agent": "architect", "model": "default", "result": "SUCCESS", "description": "Absorb 항목 architect 검증"}
+{"date": "2026-07-25", "time": "16:51", "agent": "general-purpose", "model": "sonnet", "result": "", "description": "Extract native rules-file spec from binary"}
