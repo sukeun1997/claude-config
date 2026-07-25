@@ -6,6 +6,9 @@ Kotlin + Spring Boot 프로젝트에 특화된 종합 코드 리뷰 오케스트
 리뷰 전에 `kotlin-patterns`와 `backend-code-quality-review`를 읽는다.
 업무 용어, 불변식, 상태 전이, Rich Domain 배치가 중요하면 완전한 모델
 스케치는 `domain-modeling-gate`에서만 작성한다.
+도메인 의미가 바뀌는 리뷰는 `lecture-review-lens`로 현재 강의 노트에서
+관련 질문을 먼저 고른다. 새 강의 문서도 live scan으로 포함하되 강의
+패턴 자체를 Kotlin/Spring 요구사항이나 finding 근거로 사용하지 않는다.
 
 ## 1. 입력 모드 감지
 

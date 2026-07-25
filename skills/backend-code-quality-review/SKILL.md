@@ -41,6 +41,11 @@ invariants, state transitions, aggregate boundaries, or Rich Domain placement
 are material. Other review skills should apply only the relevant lens instead
 of duplicating the full sketch.
 
+When the change carries domain meaning, use `lecture-review-lens` to select
+relevant current lecture notes and turn them into review questions before
+forming findings. A lecture claim is a hypothesis source, not evidence, and the
+lens must not make a mechanical or infrastructure-only review broader.
+
 ## Perspective Ladder
 
 Review every change at the lowest relevant level and climb only while evidence

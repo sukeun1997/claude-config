@@ -14,6 +14,12 @@ Force business language and invariants to be explicit before code design.
 - Any domain spec that has already been rewritten several times.
 - Before changing aggregate boundaries, event contracts, or workflow state.
 
+Before completing the sketch, use `lecture-review-lens` when local lecture
+notes can sharpen questions about language, responsibility, cardinality,
+lifecycle, or boundaries. Select notes live so future documents participate.
+Do not copy a course conclusion into the model without code, data, policy, or
+domain-expert evidence.
+
 ## Required Sketch
 
 ```markdown
