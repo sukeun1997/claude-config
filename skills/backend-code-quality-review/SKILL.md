@@ -41,12 +41,12 @@ of duplicating the full sketch.
 Use `/ecr` for Kotlin/Spring behavior/security/API review and
 `python-deep-review` for Python/Django deep review when those language-specific
 pipelines are explicitly requested.
+<!-- harness-specific:end -->
 
 When the change carries domain meaning, use `lecture-review-lens` to select
 relevant current lecture notes and turn them into review questions before
 forming findings. A lecture claim is a hypothesis source, not evidence, and the
 lens must not make a mechanical or infrastructure-only review broader.
-<!-- harness-specific:end -->
 
 ## Perspective Ladder
 

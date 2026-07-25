@@ -282,7 +282,11 @@ def main() -> int:
     args = parse_args()
     root = args.root.expanduser().resolve()
     if not root.is_dir():
-        raise SystemExit(f"lecture root not found: {root}")
+        # A missing local note collection must not block the review that asked
+        # for it, so report and succeed with no matches.
+        print(f"lecture root not found: {root}")
+        print("no lecture notes selected; continue the normal review")
+        return 0
     scanned, results = find_notes(root, args.query, args.course, args.limit)
 
     if args.format == "json":
