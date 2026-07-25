@@ -26,12 +26,14 @@ IDENTICAL: list[tuple[str, str]] = [
     ("domain-modeling-gate", "omc-learned/domain-modeling-gate"),
     ("incident-analysis", "omc-learned/incident-analysis"),
     ("sentry-flow-rca", "sentry-flow-rca"),
+    ("lecture-review-lens", "lecture-review-lens"),
 ]
 
 # Harness-specific mechanics (subagent syntax, save paths). Presence is checked,
 # content is not.
 ADAPTED: list[tuple[str, str, str]] = [
     ("code-trace", "omc-shared/code-trace", "subagent 호출 문법이 다름"),
+    ("python-deep-review", "python-deep-review", "codex 쪽에 하드코딩 경로가 있음"),
 ]
 
 
