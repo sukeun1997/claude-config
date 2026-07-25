@@ -1,132 +1,118 @@
 ---
 name: kotlin-patterns
-description: Kotlin 관용구, 코루틴, Spring Boot 통합 패턴. Kotlin 백엔드 코드 작성/리뷰 시 자동 적용.
-triggers:
-  - "*.kt 파일 작성/수정"
-  - "Spring Boot 백엔드 구현"
-  - "코루틴, 확장함수, DSL 관련 작업"
-user-invocable: false
+description: Evidence-first Kotlin/Spring backend patterns for implementation and review. Use when writing or reviewing .kt files, Spring Boot services, JPA transactions, coroutines, domain logic, Rich Domain, or architecture-sensitive Kotlin changes.
 ---
 
-# Kotlin Patterns — Haru 프로젝트 가이드
+# Kotlin / Spring Patterns
 
-## 1. Kotlin 관용구
+Apply Kotlin idioms only after reading the repository's build, nearby code,
+tests, and local rules. This skill supports the user's company Kotlin/Spring
+work; it does not impose Haru, Kotest, MockK, WebFlux, or a particular layered
+architecture on every repository.
 
-### Scope Functions 선택 기준
-```
-let   → nullable 체인 (.let { })
-run   → 객체 초기화 + 결과 반환
-apply → 객체 설정 (빌더 패턴 대체)
-also  → 사이드 이펙트 (로깅, 검증)
-with  → 이미 non-null인 객체 다수 접근
-```
+## Evidence First
 
-### Data Class 활용
-- DTO는 항상 `data class` + suffix `Request`/`Response`
-- `copy()` 로 불변 업데이트 (기존 객체 변경 금지)
-- Destructuring은 2-3 필드까지만 (가독성)
+Before suggesting a pattern:
 
-### Sealed Class / Sealed Interface
-- API 응답 분기: `sealed interface ApiResult<out T>`
-- 도메인 이벤트: `sealed class DomainEvent`
-- `when` 절에서 `else` 없이 exhaustive 매칭 강제
+1. Inspect `build.gradle.kts`, version catalogs, compiler plugins, and the
+   Spring/Kotlin/JDK versions actually used.
+2. Sample nearby production code and tests for established conventions.
+3. Distinguish an objective correctness/operability risk from a stylistic
+   preference.
+4. Preserve a transaction script when it is the smaller correct design. Apply
+   `domain-modeling-gate` only when business ownership, invariants, states, or
+   Rich Domain placement are material.
 
-### Extension Functions
-- 유틸 함수는 extension으로 (StringUtils 같은 클래스 금지)
-- 범위 제한: `internal` 또는 패키지 내 사용
-- 기존 라이브러리 클래스 확장 시 접두사로 네이밍 충돌 방지
+## Kotlin Idioms
 
-### Null Safety
-- `!!` 사용 금지 (테스트 코드 예외)
-- `?.let { }` 또는 `?: return` / `?: throw` 패턴
-- 외부 API 응답은 항상 nullable로 수신 후 검증
+- Prefer immutable references and values. Use `var` when lifecycle or framework
+  behavior requires controlled mutation.
+- Use nullable types to represent a real absence, not an unvalidated external
+  contract. Translate and validate platform types at the boundary.
+- Avoid `!!` in production code unless a proven invariant is documented at the
+  same boundary; prefer an explicit guard or domain error.
+- Choose scope functions for readability, not density. Nested `let`/`run` chains
+  that hide control flow should be expanded.
+- Use `data class` for value-like DTOs when generated equality/copy semantics are
+  correct. Do not use it automatically for JPA entities or identity objects.
+- Use sealed types when the state set is deliberately closed and exhaustive
+  handling is valuable. Do not create a hierarchy for one branch.
+- Use extension functions for behavior that reads naturally as an operation on
+  the receiver and does not need hidden dependencies. Keep domain policy on its
+  owner rather than disguising it as a generic extension.
 
-## 2. 코루틴 패턴
+## Spring and Transaction Boundaries
 
-### 구조적 동시성
-```kotlin
-// ✅ 올바른 패턴: coroutineScope로 구조적 동시성
-suspend fun loadDashboard(userId: UUID): Dashboard = coroutineScope {
-    val todos = async { todoService.findByUser(userId) }
-    val stats = async { statsService.calculate(userId) }
-    Dashboard(todos.await(), stats.await())
-}
+- Prefer constructor injection and explicit immutable dependencies.
+- Verify `@Transactional` placement, proxy/self-invocation, propagation,
+  isolation, `readOnly`, and exception rollback behavior from actual call sites.
+- Align event publication, `on_commit`/`afterCommit`, outbox writes, and external
+  calls with the failure semantics. A successful method return is not proof that
+  every async side effect committed.
+- Keep network calls and long-running work out of DB transactions unless the
+  consistency tradeoff is intentional and tested.
+- Treat retries as repeated executions: require idempotency, uniqueness, or a
+  state guard where duplicate effects matter.
 
-// ❌ 금지: GlobalScope
-GlobalScope.launch { ... }
-```
+## JPA and Persistence
 
-### Dispatcher 선택
-```
-Dispatchers.IO     → DB 쿼리, 파일 I/O, HTTP 호출
-Dispatchers.Default → CPU 집약 (AI 응답 파싱, 대량 데이터 처리)
-Dispatchers.Main   → 사용하지 않음 (서버 사이드)
-```
+- Treat JPA relationships as persistence mappings, not automatic aggregate
+  boundaries.
+- Review entity equality/hash code, lazy loading, N+1 queries, cascade,
+  `orphanRemoval`, collection mutation, and flush timing.
+- Put object-owned invariants close to the entity/value object when they can be
+  evaluated without infrastructure orchestration.
+- Keep repository coordination, authorization orchestration, external adapters,
+  and transaction sequencing in an application service/use case.
+- Use DB constraints, locks, or optimistic versioning when an invariant must
+  survive concurrency; an in-memory `if` check alone is insufficient.
 
-### Spring Boot + 코루틴
-- `suspend fun` 컨트롤러 메서드 → Spring WebFlux 불필요, MVC에서 지원
-- `@Transactional` + `suspend` → 주의: JPA는 코루틴 직접 지원 안함
-- 트랜잭션 내부에서 `async` 금지 → 별도 스레드에서 커넥션 공유 불가
+## Rich Domain and Architecture
 
-## 3. Spring Boot + Kotlin 통합
+Apply `domain-modeling-gate` for the complete model. In Kotlin code, check:
 
-### 생성자 주입 (val 사용)
-```kotlin
-// ✅ Kotlin 스타일
-@Service
-class TodoService(
-    private val todoRepository: TodoRepository,
-    private val cacheManager: CacheManager,
-)
+- whether a service conditional is actually a decision owned by an entity,
+  value object, or domain policy;
+- whether moving behavior into the domain makes the invariant easier to test
+  without hiding I/O or transaction boundaries;
+- whether web/client/event DTOs are translated before entering domain language;
+- whether domain facts and integration/technical events are distinguished;
+- whether the proposed port, aggregate, strategy, or value object protects a
+  named invariant or only adds ceremony.
 
-// ❌ @Autowired field injection 금지
-```
+Prefer a small boundary repair over a broad "clean architecture" rewrite.
 
-### JPA Entity
-```kotlin
-@Entity
-@Table(name = "todos")
-class Todo(
-    @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    val id: UUID = UUID.randomUUID(),
+## Coroutines
 
-    @Column(nullable = false)
-    var title: String,
+- Use structured concurrency; do not use `GlobalScope`.
+- Do not assume blocking JPA work becomes safe or non-blocking inside a
+  coroutine. Verify dispatcher and transaction-context behavior.
+- Avoid parallel repository calls inside one JPA transaction unless connection
+  and transaction propagation are explicitly supported.
+- Propagate cancellation and preserve timeout/error meaning at external
+  boundaries.
 
-    // ... mutable 필드는 var, 식별자는 val
-) : BaseTimeEntity()
-```
-- `data class`를 Entity로 사용 금지 (equals/hashCode 문제)
-- `open class` 또는 `allOpen` 플러그인 사용
-- `lateinit var` 지양 → 생성자 파라미터 우선
+## Senior / CTO Blind Spots
 
-### 에러 처리
-```kotlin
-// 도메인 예외: sealed class 계층
-sealed class HaruException(message: String) : RuntimeException(message) {
-    class NotFound(resource: String, id: Any) : HaruException("$resource not found: $id")
-    class Forbidden(message: String = "접근 권한이 없습니다") : HaruException(message)
-    class QuotaExceeded(limit: Int) : HaruException("일일 쿼터 초과: $limit")
-}
+For architecture-sensitive changes, ask:
 
-// @RestControllerAdvice에서 매핑
-@ExceptionHandler(HaruException.NotFound::class)
-fun handleNotFound(e: HaruException.NotFound) = ResponseEntity.status(404).body(ErrorResponse(e))
-```
+1. What happens on duplicate execution, concurrent requests, partial failure,
+   and retry?
+2. Can operators detect, audit, replay, or repair the failed state?
+3. What database/event/API compatibility and rollout/rollback work is required?
+4. Which service and team own the business rule and its next likely change?
+5. Does the local abstraction reduce change amplification, or move coupling
+   across a network/transaction boundary?
 
-### 테스트
-- Kotest 5 + MockK (JUnit 5 + Mockito 대신)
-- `StringSpec` 또는 `FunSpec` 스타일
-- `every { }` / `coEvery { }` 로 모킹
-- `verify(exactly = 1) { }` / `coVerify { }` 로 검증
+## Verification
 
-## 4. Gradle Kotlin DSL
-- `plugins { }` 블록에 버전 명시 (version catalog 권장)
-- `dependencies { }` 에서 `implementation()` / `testImplementation()`
-- `kotlin("jvm")`, `kotlin("plugin.spring")`, `kotlin("plugin.jpa")` 필수
+- Prefer focused module compilation and targeted tests from the repository's
+  existing commands.
+- Test business state transitions and invariants with business-language names.
+- Add an integration test when risk crosses Spring/JPA/serialization/event
+  boundaries.
+- Report commands, outputs, environment constraints, and unverified runtime
+  behavior.
 
-## 적용 시점
-- Kotlin 파일(.kt) 작성 또는 수정 시 이 패턴 참고
-- 코드 리뷰 시 위 컨벤션 위반 체크
-- 새 서비스/컨트롤러 생성 시 템플릿으로 활용
+Do not recommend a rewrite when the current code is correct, locally consistent,
+and the proposed abstraction protects no concrete invariant or future change.

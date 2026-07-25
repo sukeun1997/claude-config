@@ -3,6 +3,10 @@
 Kotlin + Spring Boot 프로젝트에 특화된 종합 코드 리뷰 오케스트레이터.
 기존 에이전트(`code-reviewer`, `security-reviewer`, `api-reviewer`, `verifier`)를 활용하여 병렬 리뷰를 수행한다.
 
+리뷰 전에 `kotlin-patterns`와 `backend-code-quality-review`를 읽는다.
+업무 용어, 불변식, 상태 전이, Rich Domain 배치가 중요하면 완전한 모델
+스케치는 `domain-modeling-gate`에서만 작성한다.
+
 ## 1. 입력 모드 감지
 
 `$ARGUMENTS`를 분석하여 모드를 결정한다:
@@ -18,7 +22,9 @@ Kotlin + Spring Boot 프로젝트에 특화된 종합 코드 리뷰 오케스트
 
 ## 2. 규모별 에이전트 배정
 
-변경 규모를 파악한 후 에이전트를 배정한다. **모든 에이전트는 model: sonnet으로 오버라이드** (비용 절감).
+변경 규모를 파악한 후 에이전트를 배정한다. 모델은 기본적으로 현재
+세션을 상속한다. 판단·설계·리뷰 에이전트를 비용 절감 목적으로
+하위 모델에 고정하지 않는다.
 
 ### 소규모 (≤2파일, <100줄 변경)
 → `code-reviewer` **1개만** 실행. 아래 보완 체크리스트를 프롬프트에 추가 주입.
@@ -58,6 +64,20 @@ Kotlin + Spring Boot 프로젝트에 특화된 종합 코드 리뷰 오케스트
 - 설정/프로퍼티 변경이 필요한데 누락된 경우
 - 로깅이 충분한가 (에러 경로에 log 없음)
 - Sentry에 전달해야 할 예외가 누락되었는가
+
+[Domain / Rich Domain]
+- 업무 결정 owner와 orchestration owner를 구분
+- JPA association을 aggregate 경계로 자동 간주하지 않음
+- entity/value object/domain policy로 옮길 로직은 named invariant를 보호하는지 증명
+- 외부 DTO/event/framework 상태가 domain language로 번역되는 경계 확인
+- invariant가 없거나 I/O/transaction을 숨기면 transaction script 유지
+
+[Senior / CTO Blind Spots]
+- 중복 실행, 동시성, retry, partial failure에서 invariant가 유지되는가
+- 운영자가 탐지·감사·재처리·복구할 수 있는가
+- API/event/schema 호환성과 rollout/rollback이 준비됐는가
+- 서비스·팀 ownership과 다음 변경 비용이 명확한가
+- 현재 PR blocker와 별도 architecture follow-up을 분리했는가
 
 [Strengths]
 - 반드시 잘한 부분을 2-3개 구체적으로 언급 (file:line 포함)
@@ -179,6 +199,13 @@ critic이 DISMISSED 판정한 이슈를 여기에 기록한다 (투명성).
 ### Architecture Direction (설계 개선 제안)
 - [제안 1]: 현재 → 개선안 + 이유
 - [제안 2]: ...
+
+### Senior / CTO View
+- Junior blind spots caught:
+- Ownership / domain boundary:
+- Operability / recovery:
+- Compatibility / rollout:
+- Next-change cost:
 
 ### Build & Test Verification (로컬 모드만)
 - Build: PASS/FAIL (exit code, 모듈명)
