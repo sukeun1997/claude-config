@@ -82,3 +82,6 @@
 
 ### Promoted 2026-07-25
 - 하네스 감축은 "규칙 문구 수술"보다 "로드 스위치(claudeMdExcludes)" 우선 — 롤백 비용 0, InstructionsLoaded 훅으로 상시 계측
+
+### Promoted 2026-07-25
+- banking-report는 이미 corebanking.settlement_completed.v1 구독 중(CashBillForInvestorSettlementConsumer, payload=loanId+repaymentSettleableId) — KFTC 원리금지급 보고는 같은 토픽에 consumer 추가 구조. 전송 코드도 기존(KFTCClientImpl.kt:583 createInvestmentPayment/:597 update, 현재 HTTP 직접호출만·미사용에 가까움)
