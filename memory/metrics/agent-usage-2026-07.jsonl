@@ -323,3 +323,5 @@
 {"date": "2026-07-24", "time": "16:33", "agent": "style-reviewer", "model": "haiku", "result": "", "description": "style-reviewer PR17481"}
 {"date": "2026-07-25", "time": "16:49", "agent": "architect", "model": "default", "result": "SUCCESS", "description": "Absorb 항목 architect 검증"}
 {"date": "2026-07-25", "time": "16:51", "agent": "general-purpose", "model": "sonnet", "result": "", "description": "Extract native rules-file spec from binary"}
+{"date": "2026-07-25", "time": "17:21", "agent": "Explore", "model": "haiku", "result": "", "description": "banking-report 보고 인프라 조사"}
+{"date": "2026-07-25", "time": "17:21", "agent": "Explore", "model": "haiku", "result": "", "description": "banking-report KFTC 보고 인프라 광범위 조사"}

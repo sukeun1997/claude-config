@@ -8,6 +8,10 @@ description: "Sentry 이슈 URL/ID → API 데이터 수집 → 원인 분석 �
 Sentry 이슈를 입력하면 API로 데이터를 수집하고, systematic-debugging 방법론 기반으로
 근본 원인을 분석한 뒤, 사용자 승인 후 코드를 수정한다.
 
+사용자가 RCA, 전체 흐름, 최근 PR/재발 여부, 확인 SQL만 요청하면 코드 수정
+파이프라인으로 넓히지 말고 `sentry-flow-rca`를 사용한다. 이 스킬은
+진단 후 실제 수정까지 요청된 경우에 사용한다.
+
 ## Arguments
 
 - `<URL|이슈ID>` (required): Sentry 이슈 URL 또는 숫자 ID

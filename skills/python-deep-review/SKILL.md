@@ -1,6 +1,6 @@
 ---
 name: python-deep-review
-description: ".py 파일 변경 시 자동 발동되는 심층 리뷰 파이프라인. OOP/SOLID/추상화/중복제거 + 네이밍 + 상위 관점 리팩토링 제안 + 독립 컨텍스트 검증(verifier + critic). Use when user modifies .py files, says '/python-deep-review', '파이썬 리뷰', 'django 리뷰'."
+description: "Python/Django deep review for modified .py files with behavior, OOP/SOLID, naming, DDD/Rich Domain ownership, transaction/task boundaries, and senior/CTO architecture blind spots. Use when user modifies Python code, says '/python-deep-review', '파이썬 리뷰', 'django 리뷰', or asks for clean-code or architecture review."
 ---
 
 # /python-deep-review — Python/Django 심층 리뷰 파이프라인
@@ -41,6 +41,25 @@ description: ".py 파일 변경 시 자동 발동되는 심층 리뷰 파이프�
    - 예: 같은 루프가 두 번 돌면 → 통합 가능 여부
    - 예: 같은 분기 조건이 여러 곳에 등장하면 → 분기 dispatch / strategy 추상화 가능 여부
 5. **독립 컨텍스트 검증** — Phase 3에서 verifier + critic이 fresh로 재검토 (Phase 1·2 결과 모르는 상태)
+
+## 공통 Senior / CTO 게이트
+
+Phase 1·3은 `backend-code-quality-review`의 관점 사다리를 함께 적용한다.
+업무 용어, 불변식, 상태 전이, Rich Domain 배치가 중요하면 완전한 스케치는
+`domain-modeling-gate`에서만 작성하고 이 스킬은 Python/Django 렌즈만 더한다.
+
+- Django model 한 행을 업무 개념 하나로 자동 간주하지 않고 1:1/1:N을
+  schema/query/call site로 확인한다.
+- object-owned decision과 multi-model/external orchestration을 구분한다.
+  전자는 model/value/policy, 후자는 application service/use case 후보이다.
+- `transaction.atomic`, `on_commit`, signal, Celery enqueue/retry,
+  idempotency를 하나의 실패 모델로 검토한다.
+- serializer/view/admin/task가 업무 정책을 소유하거나 우회하지 않는지 본다.
+- 중복 실행, 동시성, 부분 실패 후 운영자가 탐지·감사·복구할 수 있는지 본다.
+- API/event/schema 호환성, rollout/rollback, 서비스·팀 ownership과 다음
+  변경 비용을 현재 PR과 후속 과제로 분리한다.
+- Rich Domain은 명명된 불변식이나 중복된 의사결정을 한곳에서 보호할 때만
+  제안한다. I/O와 트랜잭션을 숨기면 transaction script를 유지한다.
 
 ## Pipeline
 
@@ -108,6 +127,13 @@ Phase 5: 수정 (사용자 승인 시)
    - 가독성(함수 50줄·중첩 4단계, magic value 상수화, guard clause, 포맷 일관성), 타입 힌트, ruff 위반 예상 지점
 4. "지금 동작하는가"가 아니라 "다음 사람이 고치기 좋은가" 시각
 
+[Senior / CTO 렌즈]
+- 업무 결정의 owner와 orchestration owner 구분
+- ORM 행 단위와 업무 개념의 1:1/1:N 확인
+- transaction/on_commit/signal/Celery retry의 부분 실패와 중복 실행
+- 운영 탐지·감사·복구, 호환성·rollout/rollback, 서비스·팀 ownership
+- 명명된 invariant 없는 Rich Domain/헥사고날 추상화는 REJECTED
+
 [응답 형식]
 - 결과: SUCCESS | PARTIAL | FAILED
 - AUTO-FIX (메인이 바로 적용해도 안전한 항목)
@@ -167,6 +193,13 @@ Phase 5: 수정 (사용자 승인 시)
 - AUTO-FIX (M개): ...
 - ASK (K개, 트레이드오프 있음): ...
 - 상위 PR 후보 (L개, 별도 PR로 추천): ...
+
+### Senior / CTO 관점
+- Junior blind spots caught:
+- Ownership / domain boundary:
+- Operability / recovery:
+- Compatibility / rollout:
+- Next-change cost:
 
 다음 단계 결정해주세요:
   (1) AUTO-FIX 전부 적용
