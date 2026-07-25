@@ -35,11 +35,32 @@ ADAPTED: list[tuple[str, str, str]] = [
 ]
 
 
+START, END = "<!-- harness-specific:start -->", "<!-- harness-specific:end -->"
+
+
 def read(path: Path) -> list[str] | None:
+    """Return the policy text: everything outside harness-specific blocks.
+
+    Each harness names its own skills (`$ecr` vs `/ecr`, `analyze` and
+    `multi-option-feedback` exist only in Codex, `lecture-review-lens` only in
+    Claude). Wrap those lines in the markers so the surrounding policy stays
+    under drift protection instead of exempting the whole file.
+    """
     try:
-        return path.read_text(encoding="utf-8").splitlines(keepends=True)
+        lines = path.read_text(encoding="utf-8").splitlines(keepends=True)
     except OSError:
         return None
+
+    kept, skipping = [], False
+    for line in lines:
+        stripped = line.strip()
+        if stripped == START:
+            skipping = True
+        elif stripped == END:
+            skipping = False
+        elif not skipping:
+            kept.append(line)
+    return kept
 
 
 def main() -> int:

@@ -34,8 +34,6 @@ understandable enough that the next action is obvious and verifiable.
   flow walkthrough.
 - Use `domain-modeling-gate` when the cause or fix depends on ambiguous business
   language, state ownership, or an invariant.
-- Use `analyze` when the user wants read-only repository explanation without a
-  report/remediation format.
 - Use `deploy-verified` after a production deployment when the question is
   whether the fix actually reached and works on the live artifact.
 
