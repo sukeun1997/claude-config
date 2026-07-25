@@ -1,6 +1,6 @@
 ---
 name: domain-modeling-gate
-description: Domain modeling gate for Python/Django and Kotlin/Spring backend work involving DDD, Rich Domain, bounded contexts, ubiquitous language, business-rule ownership, state transitions, invariants, sale/EOD/loss/settlement/bond/repayment concepts, repeated spec churn, or senior/CTO-level architecture review.
+description: Produce the domain model sketch before designing backend code, when business terms are ambiguous or an aggregate/state/ownership boundary is about to change. Covers sale, EOD, loss, settlement, bond, repayment and similar state machines, and specs already rewritten several times. Use backend-code-quality-review instead when reviewing existing code.
 ---
 
 # Domain Modeling Gate

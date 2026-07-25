@@ -47,9 +47,9 @@ description: "Python/Django deep review for modified .py files with behavior, OO
 Phase 1·3은 `backend-code-quality-review`의 관점 사다리를 함께 적용한다.
 업무 용어, 불변식, 상태 전이, Rich Domain 배치가 중요하면 완전한 스케치는
 `domain-modeling-gate`에서만 작성하고 이 스킬은 Python/Django 렌즈만 더한다.
-도메인 언어, 책임, 상태, 관계, 애플리케이션 경계가 바뀌면
-`lecture-review-lens`로 현재와 미래의 강의 노트에서 관련 질문을 먼저
-고르고, 저장소 근거가 있을 때만 finding으로 올린다.
+새 업무 개념이 생기거나 기존 용어의 정의, 상태 전이, 카디널리티,
+결정 소유자가 바뀔 때만 `lecture-review-lens`로 관련 질문을 고르고,
+저장소 근거가 있을 때만 finding으로 올린다.
 
 - Django model 한 행을 업무 개념 하나로 자동 간주하지 않고 1:1/1:N을
   schema/query/call site로 확인한다.
@@ -198,7 +198,10 @@ Phase 5: 수정 (사용자 승인 시)
 - 상위 PR 후보 (L개, 별도 PR로 추천): ...
 
 ### Senior / CTO 관점
-- Junior blind spots caught:
+구체적 실패나 변경 비용을 말할 수 있는 항목만 남기고 나머지 줄은 지운다.
+넷 다 없으면 이 섹션을 통째로 생략한다. 빈 슬롯을 채운 문장은 진짜 finding을
+가린다.
+- Junior blind spots caught: (없으면 `없음`)
 - Ownership / domain boundary:
 - Operability / recovery:
 - Compatibility / rollout:
