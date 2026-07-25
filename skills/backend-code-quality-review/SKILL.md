@@ -32,14 +32,21 @@ Activate when the user asks about:
 - "깔끔한 코드", "가독성 좋은 코드", "네이밍 좋은 코드", or "책임이 명확한 코드";
 - comparing current implementation with a cleaner refactor.
 
-Use `$multi-option-feedback` alongside this skill when the user explicitly wants
-multiple implementation approaches before choosing. Use `$ecr` for Kotlin/Spring
-behavior/security/API review, and `$python-deep-review` for Python/Django deep
-review, when those language-specific pipelines are explicitly requested.
-Use `$domain-modeling-gate` for the complete domain sketch when business terms,
+Use `domain-modeling-gate` for the complete domain sketch when business terms,
 invariants, state transitions, aggregate boundaries, or Rich Domain placement
 are material. Other review skills should apply only the relevant lens instead
 of duplicating the full sketch.
+
+<!-- harness-specific:start -->
+Use `/ecr` for Kotlin/Spring behavior/security/API review and
+`python-deep-review` for Python/Django deep review when those language-specific
+pipelines are explicitly requested.
+
+When the change carries domain meaning, use `lecture-review-lens` to select
+relevant current lecture notes and turn them into review questions before
+forming findings. A lecture claim is a hypothesis source, not evidence, and the
+lens must not make a mechanical or infrastructure-only review broader.
+<!-- harness-specific:end -->
 
 ## Perspective Ladder
 

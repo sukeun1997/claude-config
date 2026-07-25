@@ -47,6 +47,9 @@ description: "Python/Django deep review for modified .py files with behavior, OO
 Phase 1·3은 `backend-code-quality-review`의 관점 사다리를 함께 적용한다.
 업무 용어, 불변식, 상태 전이, Rich Domain 배치가 중요하면 완전한 스케치는
 `domain-modeling-gate`에서만 작성하고 이 스킬은 Python/Django 렌즈만 더한다.
+도메인 언어, 책임, 상태, 관계, 애플리케이션 경계가 바뀌면
+`lecture-review-lens`로 현재와 미래의 강의 노트에서 관련 질문을 먼저
+고르고, 저장소 근거가 있을 때만 finding으로 올린다.
 
 - Django model 한 행을 업무 개념 하나로 자동 간주하지 않고 1:1/1:N을
   schema/query/call site로 확인한다.
