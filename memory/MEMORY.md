@@ -79,3 +79,6 @@
 - repayment_process.py create_legal_expense_repayment: remain = charging - legacy - repaid 계산 후 `if remain == 0: continue` — **음수 미방어**. remain<0이면 음수 LegalExpenseRepayment 생성 + `repaid_expense_amount -= 음수`로 금액 부풀어 말미 ValueError. 상환이력 있는 법조치의 charging_amount 0원 처리(PR안)는 이 상태를 양산함 → 리뷰 피드백(상환 존재 시 삭제 차단) 타당
 ### Promoted 2026-07-23
 - repayment_process.py create_legal_expense_repayment: remain = charging - legacy - repaid 계산 후 `if remain == 0: continue` — **음수 미방어**. remain<0이면 음수 LegalExpenseRepayment 생성 + `repaid_expense_amount -= 음수`로 금액 부풀어 말미 ValueError. 상환이력 있는 법조치의 charging_amount 0원 처리(PR안)는 이 상태를 양산함 → 리뷰 피드백(상환 존재 시 삭제 차단) 타당
+
+### Promoted 2026-07-25
+- 하네스 감축은 "규칙 문구 수술"보다 "로드 스위치(claudeMdExcludes)" 우선 — 롤백 비용 0, InstructionsLoaded 훅으로 상시 계측
