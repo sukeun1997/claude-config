@@ -7,6 +7,13 @@ description: Domain modeling gate for Python/Django and Kotlin/Spring backend wo
 
 Force business language and invariants to be explicit before code design.
 
+## When To Use
+
+- Sale, EOD, loss, settlement, bond, repayment, reconciliation, or state-machine work.
+- Any feature where nouns, verbs, and events are ambiguous.
+- Any domain spec that has already been rewritten several times.
+- Before changing aggregate boundaries, event contracts, or workflow state.
+
 ## Required Sketch
 
 ```markdown
@@ -74,27 +81,27 @@ Ambiguous Terms:
 
 ## Rules
 
-- Prefer event-storming vocabulary before class names.
+- Prefer event storming vocabulary before class names.
 - Choose the smallest modeling depth that protects the current business rules:
   transaction script, application service plus explicit policies, or Rich Domain.
   Do not treat Rich Domain as the default maturity level.
 - Keep business conversation, documentation, code names, and test scenarios on
   the same ubiquitous language; record intentional translations at adapters.
-- Separate current operating flow, behavior permitted by code, and DB row units
-  before concluding that one representation is the domain model.
-- Treat code as evidence of the implementation, not proof that terminology or
-  policy is correct.
-- Separate confirmed facts, inference, and unknowns. Route unresolved meaning to
-  the fastest code, data, policy, or domain-expert validation source.
+- Separate the current operating flow, behavior permitted by code, and DB row
+  units before concluding that one representation is the domain model.
+- Treat code as evidence of the current implementation, not proof that the
+  business model or terminology is correct.
+- Separate confirmed facts, inference, and unknowns. Route unresolved business
+  meaning to the fastest code, data, policy, or domain-expert validation source.
 - Treat unclear terms as blockers for broad implementation.
-- Do not introduce an abstraction until it protects a named invariant or
-  boundary.
-- Keep an existing transaction script unless the sketch justifies richer
-  modeling.
+- Do not introduce a new abstraction until it protects a named invariant or boundary.
+- If the existing code uses transaction scripts, keep that style unless the domain sketch justifies richer modeling.
 - Distinguish decision ownership from orchestration. A service may load data,
-  call collaborators, and commit without owning the business judgment.
+  call collaborators, and commit a transaction without owning the business
+  judgment it executes.
 - Check architecture over time: auditability, recovery/replay, backward
-  compatibility, rollout/rollback, cross-service coupling, and team ownership.
+  compatibility, rollout/rollback, cross-service coupling, and the team that
+  will own the next likely change.
 
 ## Stack Mapping
 
@@ -121,7 +128,7 @@ layers.
 - Use an application service/use case for repository coordination, transaction
   boundaries, authorization orchestration, and external adapters.
 - Treat JPA associations as persistence mappings, not automatic aggregate
-  boundaries.
+  boundaries. Verify consistency and loading requirements separately.
 - Translate web/event/client DTOs at adapters. Keep framework annotations and
   transport status codes from becoming domain vocabulary.
 - Publish domain facts and integration events deliberately; align publication,
@@ -138,12 +145,13 @@ Before approving a model, answer:
 4. How will operators detect, recover, replay, or audit a failed transition?
 5. Which likely next change becomes cheaper, and which coupling becomes more
    expensive?
-6. Is the boundary owned by one team, or does it create a distributed
+6. Is the proposed boundary owned by one team, or does it create a distributed
    transaction or coordination burden?
 
 ## Verification
 
-Map each acceptance criterion to at least one domain action, event, state
-transition, or invariant. Cover one failure/recovery scenario for money movement,
-external integration, or async work. Tests must name the business rule they
-prove, and the handoff must state what they do not prove.
+The final plan must map each acceptance criterion to at least one domain action,
+event, state transition, or invariant from the sketch. It must also cover one
+failure/recovery scenario for money movement, external integration, or async
+work. Tests must name the business rule they prove, and the handoff must state
+what they do not prove.

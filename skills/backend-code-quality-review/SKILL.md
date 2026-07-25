@@ -5,24 +5,41 @@ description: "Senior/CTO-level backend code quality and architecture review for 
 
 # Backend Code Quality Review
 
-Use this when the user wants more than "does it work?" Focus on code that is
-easy to change safely in Kotlin/Spring and Python/Django.
+Use this for backend review requests where the user wants more than "does it
+work?" Focus on code that is easy to change safely in the user's main stacks:
+Kotlin/Spring and Python/Django.
 
 ## Purpose
 
-- behavior and production risk first;
-- architecture and responsibility boundaries;
-- SOLID, OOP, DDD, and Rich Domain versus transaction-script fit;
-- readable control flow and names that reveal domain intent;
-- operational recovery, auditability, rollout, and team ownership;
-- clean-code improvements worth the PR cost;
-- verification evidence rather than taste-only comments.
+Review backend code through the user's preferred quality lens:
 
-Use `python-deep-review` for a Python/Django deep pipeline and the configured
-Kotlin/Spring review pipeline for framework-specific behavior/security/API
-checks. Use `domain-modeling-gate` for the complete domain sketch when business
-terms, invariants, state transitions, aggregate boundaries, or Rich Domain
-placement are material. Other reviews should apply only the relevant lens.
+- current behavior and production risk first;
+- architecture and responsibility boundaries;
+- SOLID, OOP, and DDD fit;
+- Rich Domain versus transaction-script fit;
+- readable control flow and small names that reveal domain intent;
+- operational recovery, auditability, rollout, and team ownership;
+- clean-code improvements that are worth the PR cost;
+- verification evidence, not taste-only comments.
+
+## When To Use
+
+Activate when the user asks about:
+
+- SOLID, OOP, DDD, clean code, naming, readability, or responsibility clarity;
+- Spring/Kotlin or Python/Django PRs and local diffs;
+- whether current implementation is architecturally acceptable;
+- "깔끔한 코드", "가독성 좋은 코드", "네이밍 좋은 코드", or "책임이 명확한 코드";
+- comparing current implementation with a cleaner refactor.
+
+Use `$multi-option-feedback` alongside this skill when the user explicitly wants
+multiple implementation approaches before choosing. Use `$ecr` for Kotlin/Spring
+behavior/security/API review, and `$python-deep-review` for Python/Django deep
+review, when those language-specific pipelines are explicitly requested.
+Use `$domain-modeling-gate` for the complete domain sketch when business terms,
+invariants, state transitions, aggregate boundaries, or Rich Domain placement
+are material. Other review skills should apply only the relevant lens instead
+of duplicating the full sketch.
 
 ## Perspective Ladder
 
@@ -34,7 +51,7 @@ supports it.
 2. Change safety
    - readable control flow, responsibility, tests, dependency direction;
 3. Domain integrity
-   - decision ownership, invariants, state transitions, transaction unit;
+   - business decision ownership, invariants, state transitions, transaction unit;
 4. Production operation
    - concurrency, idempotency, observability, retry/recovery, rollout/rollback;
 5. Architecture and organization
@@ -46,34 +63,41 @@ watch or follow-up unless the current change creates a concrete risk.
 ## Review Order
 
 1. Behavior and safety
-   - Does the change preserve behavior except the intended delta?
+   - Does the change preserve user-visible behavior except the intended delta?
    - Are transaction, DB, message, retry, permission, and error boundaries safe?
 2. Responsibility boundary
-   - Does each class/function have one coherent abstraction-level job?
+   - Is each function/class doing one job at its abstraction level?
    - Are validation, lookup, transformation, mutation, logging, and response
      selection mixed in a way that will be hard to change?
 3. Domain model and DDD
-   - Are domain terms consistent across code, data, events, and tests?
-   - Is policy sitting with the right owner: entity/value object, application
+   - Are domain terms used consistently?
+   - Is business policy sitting in the right layer: entity/value object,
      service/use case, repository/query, serializer/controller?
-   - Is the model richer because it protects an invariant, or only because a
-     pattern looks sophisticated?
+   - Are aggregate/state-transition rules explicit enough?
+   - Is the proposed model richer because it protects an invariant, or only
+     because a pattern looks more sophisticated?
 4. SOLID and OOP
-   - Apply SRP/OCP/LSP/ISP/DIP only to concrete local change pressure.
-   - Prefer composition or a small policy when inheritance obscures behavior.
+   - SRP: one reason to change.
+   - OCP: avoid repeated branching when extension is likely.
+   - LSP/ISP/DIP: flag only concrete violations, not textbook trivia.
+   - Prefer composition or small policy helpers when inheritance would obscure
+     behavior.
 5. Naming and readability
-   - Names reveal domain meaning and abstraction level.
-   - Boolean names read as predicates and side effects are not hidden.
-   - Happy and failure paths are easy to scan.
+   - Names should reveal domain meaning and abstraction level.
+   - Boolean names should read as predicates.
+   - Avoid abbreviations unless local domain convention proves them.
+   - Control flow should make the happy path and failure paths easy to scan.
 6. Tests and verification
-   - Tests prove behavior boundaries, not only helpers.
-   - Add integration evidence when risk crosses framework boundaries.
+   - Tests should prove the behavior boundary, not only the helper.
+   - Prefer one integration/API test when the risk crosses framework boundaries.
+   - Report exact commands run and any environment gaps.
 7. Senior / CTO blind spots
    - What happens on duplicate execution, partial failure, retry, or concurrency?
-   - Can operators detect and repair the state without code archaeology?
-   - Are audit/history, compatibility, rollout, and rollback preserved?
+   - Can an operator detect and repair the bad state without code archaeology?
+   - Does the change preserve audit/history requirements and compatibility?
    - Which service/team owns the rule and its next likely change?
-   - Is local convenience creating distributed coordination or migration cost?
+   - Is a local convenience introducing distributed coordination or a broad
+     migration/rollback burden?
 
 ## Rich Domain Decision Bar
 
@@ -84,14 +108,14 @@ Recommend domain-owned behavior when:
 - the behavior can be tested without framework or I/O setup;
 - multiple entry points currently duplicate or bypass the rule.
 
-Keep a transaction script/application service when:
+Keep or prefer a transaction script/application service when:
 
 - the work is mostly orchestration across repositories/external systems;
-- no stable invariant or aggregate boundary is identified;
+- no stable invariant or aggregate boundary has been identified;
 - the rule changes with workflow/policy rather than object state;
 - moving behavior would hide I/O, transaction, or failure semantics.
 
-An anemic object is not automatically wrong, and an entity method is not
+An anemic object is not automatically wrong, and a method on an entity is not
 automatically Rich Domain. Judge ownership, invariant protection, and change
 cost.
 
@@ -100,60 +124,66 @@ cost.
 ### Kotlin/Spring
 
 - Constructor injection with immutable dependencies.
-- `@Transactional` placement, proxy/self-invocation, propagation, read-only,
-  rollback, and event/`afterCommit` timing.
-- Kotlin null safety and platform-type validation.
-- JPA entity equality, lazy loading, N+1, cascade, and flush behavior.
+- `@Transactional` boundary and event publication timing.
+- Proxy/self-invocation, propagation, read-only, and `afterCommit` semantics.
+- Kotlin null-safety: no `!!` outside tightly justified test code.
+- JPA entities: avoid `data class`, unstable equality, and lazy-loading surprises.
 - Treat JPA relationships as persistence mappings, not aggregate proof.
-- DTO/command/result names match their boundary and intent.
-- Sealed types or strategy dispatch only for stable repeated branching.
-- No unstructured coroutines or parallel JPA work hidden inside a transaction.
+- DTO names: `Request`, `Response`, `Command`, `Result` should match use.
+- Sealed types or strategy dispatch when domain branching is stable and repeated.
+- Coroutine usage: no `GlobalScope`; avoid `async` inside JPA transactions.
 
 ### Python/Django
 
-- QuerySet permission/visibility filters are not bypassed later.
-- Review `transaction.atomic`, `on_commit`, signals, Celery enqueue timing, and
+- Queryset boundaries: filters, permissions, and visibility rules must not be
+  bypassed by a later manager call.
+- Check `transaction.atomic`, `on_commit`, signals, Celery enqueue timing, and
   retry/idempotency as one failure model.
-- Views/serializers/admin/tasks translate at boundaries instead of owning policy.
-- Use model/value behavior for object-owned decisions, application services for
-  multi-model/external orchestration, and QuerySets/managers for query policy.
-- Keep tests at the behavior boundary: API/view tests for contracts, focused
-  unit tests for pure policies.
-- Names use domain language instead of leaking ORM implementation details.
+- Views should not hide business policy that belongs in a service/query helper.
+- Serializer choice should not accidentally perform unsafe DB lookups.
+- Keep model methods for object-owned decisions; use application services for
+  multi-model/external orchestration and QuerySets/managers for query policy.
+- Prefer small helpers when they isolate a domain policy or framework workaround.
+- Keep tests close to the behavior boundary: view/API tests for view contracts,
+  unit tests for pure policy helpers.
+- Python naming: functions are verbs, predicates start with `is_`, `has_`, or
+  local equivalents, and variables should not leak ORM implementation details
+  when domain terms are clearer.
 
 ## Option Comparison
 
-For non-trivial feedback, compare:
+For non-trivial code-quality feedback, compare these options before the final
+recommendation:
 
 1. Keep current implementation
-   - when cleanup would be taste-only;
+   - when behavior is correct and cleanup would be mostly taste;
 2. Small cleanup in the current PR
-   - when naming, responsibility, or a boundary repair reduces review risk;
+   - when naming, responsibility, or helper extraction reduces real review risk;
 3. Separate follow-up refactor
-   - when cleaner architecture is valuable but too broad for the current fix.
+   - when a cleaner architecture is valuable but too broad for the current fix.
 
-Do not ask for abstraction merely because a pattern exists. Name the concrete
-future change, bug, or operational failure it prevents.
+Do not ask for abstraction just because a pattern exists. The suggestion must
+name the future change it makes safer.
 
 ## Finding Bar
 
-Report a finding only for:
+Report a finding only when it is one of:
 
 - behavior bug or production risk;
 - unclear responsibility likely to cause future bugs;
-- misleading naming/readability;
-- SOLID/OOP/DDD issue with local evidence;
+- naming/readability issue that can mislead maintainers;
+- SOLID/OOP/DDD issue with concrete local evidence;
 - missing test at the actual behavior boundary.
 
-Low-confidence or subjective suggestions belong under `Non-blocking` or
-`Follow-up`, not as blockers.
+If it is subjective or low confidence, put it under `Non-blocking` or
+`Follow-up`, not as a blocking issue.
 
 Every architecture finding must include:
 
-- concrete bug/change/operational failure prevented;
-- smallest viable boundary repair;
-- migration/rollout cost when non-local;
-- current PR versus separate task placement.
+- the concrete next bug/change or operational failure it prevents;
+- the smallest viable boundary repair;
+- migration/rollout cost when the change is not local;
+- whether it belongs in the current PR or a separate design/refactor task.
 
 ## Output Shape
 
@@ -164,12 +194,25 @@ Verdict:
 현재 동작과 위험:
 
 Junior blind spots caught:
-- <invariant/concurrency/recovery/ownership issue or 없음>
+- <놓치기 쉬운 invariant/concurrency/recovery/ownership issue or 없음>
 
 선택지:
 1. 현재 구현 유지
+   - 장점:
+   - 실패 조건:
+   - 검증:
+
 2. 현재 PR에서 작은 정리
+   - 장점:
+   - 실패 조건:
+   - 검증:
+
 3. 별도 후속 리팩토링
+   - 장점:
+   - 실패 조건:
+   - 검증:
+
+판단 기준:
 
 Findings:
 - [Severity] <issue>
@@ -190,4 +233,10 @@ Senior / CTO architecture watch:
 반박 요청:
 
 검증:
+```
+
+## Comment Template
+
+```md
+Non-blocking: 현재 구현은 동작 관점에서는 괜찮아 보입니다. 다만 <responsibility/naming/test-boundary> 관점에서 <specific evidence> 때문에 다음 수정자가 오해할 수 있습니다. 현재 PR에서 작게 고친다면 <small fix> 정도가 적절하고, 범위가 커지면 별도 후속 PR로 분리하는 편이 안전해 보입니다.
 ```

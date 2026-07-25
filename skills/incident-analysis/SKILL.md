@@ -5,105 +5,121 @@ description: "Incident/RCA report workflow. Use when the user asks for incident 
 
 # Incident Analysis
 
-Turn a symptom, outage, bug, or confusing production behavior into a grounded
-RCA-style report:
+Use this skill to turn a symptom, outage, bug, or confusing production behavior
+into a grounded RCA-style report:
 
 ```text
 흐름 -> 원인 -> 분석 -> 해결방법 -> 검증방법 -> 남은 리스크
 ```
 
-The goal is to make the incident understandable enough that the next action is
-obvious and verifiable.
+The goal is not to win a diagnosis debate. The goal is to make the incident
+understandable enough that the next action is obvious and verifiable.
+
+## When To Apply
+
+- `/incident-analysis <증상>` or typo alias `/incdient-analysis <증상>`
+- `incident-analysis`, `incdient-analysis`, `RCA`, `root cause`, `장애 분석`, `원인 분석`
+- The user asks for `흐름 -> 원인 -> 분석 -> 해결방법`
+- The user wants a Slack-ready or report-ready explanation of what happened
+- The user has logs, stack traces, DB rows, dashboards, Sentry links, or runtime
+  observations and wants them reconciled into one explanation
+- A previous fix missed the real cause and the user wants diagnosis before
+  another change
 
 ## Related Skills
 
 - Use `sentry-flow-rca` first for a read-only end-to-end Sentry RCA. Use
   `sentry-debug` when the user also wants a diagnosis-to-fix workflow.
-- Use `code-trace` when the main missing piece is the code-level business flow,
-  DB row unit, or cross-service path.
+- Use `code-trace` first when the main missing piece is a code-level business
+  flow walkthrough.
 - Use `domain-modeling-gate` when the cause or fix depends on ambiguous business
   language, state ownership, or an invariant.
-- Use `deploy-verified` after deployment when the question is whether the fix
-  reached and works on the live artifact.
+- Use `analyze` when the user wants read-only repository explanation without a
+  report/remediation format.
+- Use `deploy-verified` after a production deployment when the question is
+  whether the fix actually reached and works on the live artifact.
 
 ## Operating Contract
 
 - Default to read-only evidence gathering and report generation.
-- Do not edit code unless the user asks for implementation or a fix.
-- Separate observed facts, inference, and unknowns.
-- Prefer concrete file paths, functions, SQL/table names, timestamps, logs,
-  releases, commit SHAs, request IDs, and exact status/error strings.
-- If code conflicts with runtime evidence, preserve both and treat current
-  runtime evidence as authoritative for the active incident until reconciled.
+- Do not edit code unless the user explicitly asks for implementation or fix.
+- Separate observed facts from inference.
+- Prefer concrete file paths, function names, SQL/table names, timestamps, logs,
+  release identifiers, commit SHAs, request IDs, and exact status/error strings.
+- If repo code conflicts with runtime evidence, show both. Treat current runtime
+  evidence as authoritative for the active incident until reconciled.
 - Do not collapse multi-stage latency or state transitions into one vague cause.
-- Apply the relevant DB, message, security, or deployment safety gate before
-  recommending or executing a risky fix.
+  Split queue time, external dependency time, application processing time, and
+  user-facing timeout window when those stages exist.
+- For DB, migration, Kafka/event, auth, security, or deployment incidents, apply
+  the relevant safety gates before recommending or executing a fix.
 
 ## Workflow
 
-### 1. Frame the Incident
+### 1. Incident Frame
 
-Proceed with best effort when fields are missing and mark them unknown.
+Capture only what is needed to start. If some fields are missing, proceed with
+best effort and mark them as unknown.
 
 - Symptom: what the user/system observed
-- Impact: affected users, workflow, money, data, or availability
-- Time window: first/latest occurrence and release/deploy context
-- Evidence: logs, stack trace, DB rows, dashboard, Sentry, Slack, runtime state
-- Requested output: RCA, Slack summary, fix plan, or handoff
+- Impact: affected users, workflow, money movement, data, or availability
+- Time window: first seen, latest seen, release/deploy/commit if known
+- Evidence inputs: logs, stack trace, DB rows, screenshots, dashboards, Sentry,
+  Slack messages, user-provided runtime observations
+- Requested output: internal RCA, Slack summary, fix plan, or handoff note
 
-### 2. Reconstruct the Flow
+### 2. Flow Reconstruction
 
-Trace the smallest end-to-end path that explains the symptom.
+Reconstruct the smallest end-to-end path that explains the symptom.
 
-- Entry point: request, job, consumer, cron, UI action, or external event
-- Internal path: service/function/task sequence with file references
-- State changes: DB rows/fields, status transitions, cache, messages, offsets
-- External calls: request/response contract and failure meaning
-- Timing model: split queue, dependency, processing, and user timeout windows
-- Failure point: where the bad state or error first enters the flow
+- Entry point: request, job, consumer, cron, task, UI action, or external event
+- Internal path: service/function/task sequence with file references when code
+  is inspected
+- State changes: DB table/field changes, status transitions, cache keys, queue
+  messages, offsets, external calls
+- Timing model: split each stage when time matters
+- Failure point: where the observed bad state/error first appears
 
-Separate:
+### 3. Cause Analysis
 
-- current operating flow;
-- behavior permitted by code;
-- SQL/DB row unit and 1:1 versus 1:N cardinality;
-- runtime state actually observed.
-
-### 3. Analyze Causes
-
-Rank causes instead of flattening them. Form hypotheses from independent lanes:
-runtime/logs, code, DB/data, configuration, external dependency, and change
-history. Refute the leading hypothesis before recommending a fix.
+Rank plausible causes instead of flattening them.
+When evidence is broad or disputed, form hypotheses from disjoint evidence lanes
+first: logs/runtime, code path, DB/data state, configuration, external
+dependency, and recent change history. Then refute the leading hypothesis before
+recommending a fix.
 
 For each cause:
 
-- Claim: mechanism that produced the symptom
-- Evidence for: concrete supporting facts
-- Evidence against: facts that constrain it
+- Claim: the specific mechanism that produced the symptom
+- Evidence for: concrete facts supporting it
+- Evidence against: facts that weaken or constrain it
 - Confidence: High / Medium / Low
-- Blast radius: other affected paths
-- Discriminator: next check that confirms or rejects it
-- Refuter result: strongest contradiction found, or why none was available
+- Blast radius: what else this cause could affect
+- Discriminator: the next check that would confirm or reject it
+- Refuter result: the strongest contradictory evidence found, or why none was
+  available
 
-### 4. Design the Remedy
+### 4. Solution Options
 
-- Immediate mitigation: reduce impact now
-- Root-cause fix: smallest change that removes the mechanism
-- Regression coverage: test/probe/assertion that fails before the fix
-- Operational follow-up: alert, dashboard, runbook, rollback, communication
-- Rejected option: tempting workaround and why it is weaker
+Offer minimal, reversible remedies tied to the cause.
 
-When the fix changes business-rule ownership or state transitions, use
-`domain-modeling-gate`. Keep incident evidence separate from architecture
-preference.
+- Immediate mitigation: what reduces impact now
+- Root-cause fix: smallest code/config/data/process change that removes the
+  mechanism
+- Regression coverage: unit, integration, e2e, SQL probe, synthetic check, or
+  monitoring assertion that would fail before the fix
+- Operational follow-up: alerting, dashboard, runbook, rollback, communication
+- Rejected option: tempting workaround and why it is weaker or risky
 
-### 5. Verify Resolution
+### 5. Verification
 
-- Local proof: reproduction, targeted test, replay, or code-path check
-- Runtime proof: artifact, API response, DB query, queue state, Sentry trend,
-  external response, or successful job
-- Stop condition: exact observation that proves resolution
-- Remaining risk: what is still unproven
+Define proof before claiming resolution.
+
+- Local proof: tests, reproduction, log replay, code path check
+- Runtime proof: deployment artifact, dashboard, DB query, queue depth, Sentry
+  trend, API response, job success, external dependency response
+- Stop condition: exact observation that means the incident is resolved
+- Remaining risk: what still is not proven
 
 ## Senior / CTO Incident Lens
 
@@ -121,12 +137,15 @@ Keep systemic observations separate from the minimum incident fix.
 
 ## Output Contract
 
-Use Korean by default when the user wrote in Korean. Preserve exact technical
-nouns.
+Use Korean by default when the user wrote in Korean. Keep exact technical nouns
+in their original spelling.
 
 ```markdown
 ## 흐름
 - [entrypoint] -> [service/task] -> [DB/external system] -> [failure point]
+- 시간/상태가 중요하면 단계별로 분리:
+  - T1: ...
+  - T2: ...
 
 ## 원인
 1. [원인 후보] - 신뢰도: High/Medium/Low
@@ -136,7 +155,7 @@ nouns.
    - 다음 확인:
 
 ## 분석
-- 왜 이 증상이 나오는지:
+- 왜 이 증상이 이 원인에서 나오는지:
 - 영향 범위:
 - 코드/DB/런타임 증거의 일치 여부:
 - 통제·탐지·복구가 실패한 이유:
@@ -157,13 +176,12 @@ nouns.
 - ...
 ```
 
-For Slack-ready output, compress the same evidence:
+For Slack-ready output, compress the same content:
 
 ```markdown
 [요약]
 - 현상:
 - 원인:
-- 영향:
 - 조치:
 - 검증:
 - 남은 리스크:
@@ -171,11 +189,12 @@ For Slack-ready output, compress the same evidence:
 
 ## Quality Bar
 
-A good response:
+A good incident-analysis response:
 
-- starts with business/user-visible flow, not only stack frames;
-- separates direct evidence, inference, and unknowns;
-- names the exact stage where the failure enters;
-- distinguishes the trigger from the root mechanism and control gap;
-- includes a minimal root-cause fix rather than symptom masking;
-- defines runnable verification and a clear stop condition.
+- starts with the business/user-visible flow, not only code internals
+- distinguishes direct evidence, inference, and unknowns
+- names the exact stage where the failure enters the flow
+- distinguishes the trigger, root mechanism, and control gap
+- includes a minimal root-cause fix, not only symptom masking
+- defines verification that can be run after the fix
+- is concise enough to paste into Slack, but grounded enough to defend
