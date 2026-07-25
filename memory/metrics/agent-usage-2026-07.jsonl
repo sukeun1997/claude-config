@@ -317,3 +317,7 @@
 {"date": "2026-07-23", "time": "16:55", "agent": "Explore", "model": "haiku", "result": "", "description": "Legal expense charging flow trace"}
 {"date": "2026-07-23", "time": "17:54", "agent": "code-reviewer", "model": "sonnet", "result": "SUCCESS", "description": "Re-review PR #950 caching"}
 {"date": "2026-07-23", "time": "18:20", "agent": "general-purpose", "model": "default", "result": "SUCCESS", "description": "Extract KFTC 원리금지급 보고 기한/양수도 검증"}
+{"date": "2026-07-24", "time": "16:32", "agent": "code-reviewer", "model": "opus", "result": "PARTIAL", "description": "code-reviewer PR17481"}
+{"date": "2026-07-24", "time": "16:32", "agent": "quality-reviewer", "model": "opus", "result": "SUCCESS", "description": "quality-reviewer DDD PR17481"}
+{"date": "2026-07-24", "time": "16:33", "agent": "architect", "model": "opus", "result": "SUCCESS", "description": "architect DDD PR17481"}
+{"date": "2026-07-24", "time": "16:33", "agent": "style-reviewer", "model": "haiku", "result": "", "description": "style-reviewer PR17481"}
