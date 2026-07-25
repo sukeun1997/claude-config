@@ -33,7 +33,22 @@
       "mcp__ide__getDiagnostics"
     ]
   },
+  "claudeMdExcludes": [
+    "**/.claude/rules/common/memory.md",
+    "**/.claude/rules/common/runtime-coexistence.md"
+  ],
   "hooks": {
+    "InstructionsLoaded": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"$HOME/.claude/hooks/instructions-loaded-tracker.py\"",
+            "timeout": 3
+          }
+        ]
+      }
+    ],
     "SessionStart": [
       {
         "hooks": [

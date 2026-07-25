@@ -6,7 +6,14 @@ type: reference
 
 # Absorbed Articles
 
-### 2026-05-04: Claude Code Releases v2.1.113 ~ v2.1.126 (4/17 ~ 5/01)
+### 2026-07-25: The new rules of context engineering for Claude 5 generation models
+- **URL**: https://claude.com/blog/the-new-rules-of-context-engineering-for-claude-5-generation-models
+- **유형**: engineering-blog (Thariq Shihipar, Anthropic MTS, 2026-07-24)
+- **적용**: 4건 (guideline 1: agents.md Structured Response 중복 → verification.md 참조 1줄 / hook 1: InstructionsLoaded 실측 훅 `instructions-loaded-tracker.py` — 지침 파일 로드 빈도 jsonl 적재 / setting 1: `claudeMdExcludes`로 memory.md+runtime-coexistence.md 상시 로드 제외 (~154줄, 1단계) / memory 1: 본 기록)
+- **점진적 (다음 사이클)**: 3건 — rules 온디맨드 2단계(verification.md+agents.md 제외, 선행: 4관점 요약 CLAUDE.md 1줄 + review 스킬 인라인) / 규칙 감축 2차(":137 스타일 매치"만 삭제, 수치 가드레일은 python-deep-review로 이관) / rich references(verifier에 rubric 파일 경로 전달)
+- **보류**: 2건 — 자체 4계층 메모리 → 네이티브 auto-memory 통합 (Codex/OMX 계약 파손, 이득 없음) / 인터페이스 설계 원칙 1줄 (§프롬프팅 톤 기커버, ROI 없음)
+- **이미 적용 중**: 규칙→판단 철학(07-20 감축 3분류), progressive disclosure 부분(docs/harness 분리·스킬 references lazy-load), §9 라우팅 단일소스, 테스트 불변성 이중 백스톱(governance.yml+verifier.md)
+- **핵심 인사이트**: Anthropic이 Claude Code 시스템 프롬프트 80%+ 제거해도 성능 저하 없음 — 7/19 슬림 리팩토링 방향의 공식 검증. 발견된 역설: 92줄 QUICKREF(요약)는 온디맨드인데 570줄 상세본(rules/common)이 상시 로드 — 극성 반전이 핵심 액션. `claudeMdExcludes`(v2.1.220)는 파일 이동 없이 로드만 끄는 스위치라 롤백 비용 ≈0 → "규칙 문구 재수술"보다 "로드 스위치"를 먼저. InstructionsLoaded 훅(load_reason+globs)으로 감축을 1회성 수술에서 상시 계측으로 전환 — friction 0 은퇴 판단이 측정 기반이 됨. `/doctor`의 중복 진단(check 3/4)은 checked-in 파일 대상이라 user-level 하네스엔 효용 제한. 미해결: rules 상시 로드가 user-global 때문인지 cwd=~/.claude(project) 때문인지 — 훅 데이터로 확인 예정. v2.1.113 ~ v2.1.126 (4/17 ~ 5/01)
 - **URL**: https://github.com/anthropics/claude-code/releases
 - **유형**: release-notes
 - **적용**: 1건 (.mcp.json 수정 1: `memory-search` 서버에 `alwaysLoad: true` — ToolSearch 왕복 제거)
