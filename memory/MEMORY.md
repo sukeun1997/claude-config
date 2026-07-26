@@ -85,3 +85,7 @@
 
 ### Promoted 2026-07-25
 - banking-report는 이미 corebanking.settlement_completed.v1 구독 중(CashBillForInvestorSettlementConsumer, payload=loanId+repaymentSettleableId) — KFTC 원리금지급 보고는 같은 토픽에 consumer 추가 구조. 전송 코드도 기존(KFTCClientImpl.kt:583 createInvestmentPayment/:597 update, 현재 HTTP 직접호출만·미사용에 가까움)
+
+### Promoted 2026-07-25
+- `scripts/sync-codex-skills.py`는 타깃이 `~/.codex/skills/omc-shared`뿐 — `omc-learned/`에 사는 공유 스킬(backend-code-quality-review, domain-modeling-gate, incident-analysis)은 동기화 사정거리 밖이라 조용히 갈라진다. 실측 175/167/46줄 표류. 대응: `scripts/check-skill-parity.py`(짝 명시 + harness-adapted allowlist), verification.md 민감 경로 등록
+- **고정 슬롯 출력 템플릿 = 체크리스트 연극**. 빈 슬롯은 채우라는 압력을 만들어 "Ownership: 명확함" 5줄이 진짜 finding 1건을 가린다. 렌즈를 추가할 때 질문 목록(사고 유발, 무해)과 고정 출력 슬롯(필러 유발, 유해)을 구분할 것 — 오늘 7곳 중 유해한 건 3곳뿐이었음
