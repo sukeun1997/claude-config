@@ -325,3 +325,5 @@
 {"date": "2026-07-25", "time": "16:51", "agent": "general-purpose", "model": "sonnet", "result": "", "description": "Extract native rules-file spec from binary"}
 {"date": "2026-07-25", "time": "17:21", "agent": "Explore", "model": "haiku", "result": "", "description": "banking-report 보고 인프라 조사"}
 {"date": "2026-07-25", "time": "17:21", "agent": "Explore", "model": "haiku", "result": "", "description": "banking-report KFTC 보고 인프라 광범위 조사"}
+{"date": "2026-07-26", "time": "13:55", "agent": "Explore", "model": "haiku", "result": "", "description": "플랜용 코드 상세 수집"}
+{"date": "2026-07-26", "time": "14:01", "agent": "critic", "model": "default", "result": "", "description": "Step 4 플랜 critic 검증"}
