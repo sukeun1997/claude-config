@@ -89,3 +89,16 @@
 ### Promoted 2026-07-25
 - `scripts/sync-codex-skills.py`는 타깃이 `~/.codex/skills/omc-shared`뿐 — `omc-learned/`에 사는 공유 스킬(backend-code-quality-review, domain-modeling-gate, incident-analysis)은 동기화 사정거리 밖이라 조용히 갈라진다. 실측 175/167/46줄 표류. 대응: `scripts/check-skill-parity.py`(짝 명시 + harness-adapted allowlist), verification.md 민감 경로 등록
 - **고정 슬롯 출력 템플릿 = 체크리스트 연극**. 빈 슬롯은 채우라는 압력을 만들어 "Ownership: 명확함" 5줄이 진짜 finding 1건을 가린다. 렌즈를 추가할 때 질문 목록(사고 유발, 무해)과 고정 출력 슬롯(필러 유발, 유해)을 구분할 것 — 오늘 7곳 중 유해한 건 3곳뿐이었음
+
+### Promoted 2026-07-27
+- runBlocking interrupt 계약: thread interrupt 시 자식 코루틴(다른 dispatcher의 blocking 작업) join 없이 InterruptedException 즉시 rethrow — "완료 대기" 보장은 정상 경로 한정으로 설계할 것
+
+### Promoted 2026-07-28
+- 외부 발송/결제류 API timeout 설계: "접수형 API는 timeout이 중복 실행 위험을 만든다" — 값은 호출측 예산과 정렬하고 실측 P99로 보정
+
+### Promoted 2026-07-28
+- dev 발송 사고는 "어느 호출측이 보냈나"가 아니라 "게이트웨이가 환경 공용인가"부터 본다
+- bulk 발송 설계 패턴: "접수형 bulk API는 (1) per-recipient 결과 매핑 키(grouping key) (2) 서버측 dedup(period) (3) 같은 dedup 키는 같은 chunk co-locate" 3종이 세트다 — 하나라도 빠지면 timeout 재시도가 중복 발송이 된다
+
+### Promoted 2026-07-28
+- 테스트에서 MagicMock으로 없는 속성을 조작해내면 결함이 초록 뒤에 숨는다 — 스키마 있는 DTO는 실제 dataclass로 테스트

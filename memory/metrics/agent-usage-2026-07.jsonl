@@ -327,3 +327,36 @@
 {"date": "2026-07-25", "time": "17:21", "agent": "Explore", "model": "haiku", "result": "", "description": "banking-report KFTC 보고 인프라 광범위 조사"}
 {"date": "2026-07-26", "time": "13:55", "agent": "Explore", "model": "haiku", "result": "", "description": "플랜용 코드 상세 수집"}
 {"date": "2026-07-26", "time": "14:01", "agent": "critic", "model": "default", "result": "", "description": "Step 4 플랜 critic 검증"}
+{"date": "2026-07-27", "time": "10:10", "agent": "code-reviewer", "model": "default", "result": "", "description": "Code review PR 1567"}
+{"date": "2026-07-27", "time": "10:11", "agent": "architect", "model": "default", "result": "", "description": "Architecture/DDD review PR 1567"}
+{"date": "2026-07-27", "time": "10:11", "agent": "api-reviewer", "model": "default", "result": "", "description": "Contract/compat review PR 1567"}
+{"date": "2026-07-27", "time": "10:15", "agent": "critic", "model": "default", "result": "", "description": "Critic cross-verify findings"}
+{"date": "2026-07-27", "time": "10:49", "agent": "code-reviewer", "model": "default", "result": "", "description": "code-reviewer: 도메인+영속 1회차"}
+{"date": "2026-07-27", "time": "10:49", "agent": "quality-reviewer", "model": "default", "result": "", "description": "quality-reviewer: 도메인 모델링 1회차"}
+{"date": "2026-07-27", "time": "10:50", "agent": "api-reviewer", "model": "default", "result": "", "description": "api-reviewer: 마이그레이션/호환성"}
+{"date": "2026-07-27", "time": "11:02", "agent": "critic", "model": "default", "result": "", "description": "critic: HIGH 이슈 교차 검증"}
+{"date": "2026-07-27", "time": "11:12", "agent": "critic", "model": "default", "result": "", "description": "critic2: 두 수정 제안만 반박"}
+{"date": "2026-07-27", "time": "12:55", "agent": "code-reviewer", "model": "default", "result": "SUCCESS", "description": "PR 964 code-reviewer 리뷰"}
+{"date": "2026-07-27", "time": "12:56", "agent": "security-reviewer", "model": "default", "result": "SUCCESS", "description": "PR 964 security-reviewer 리뷰"}
+{"date": "2026-07-27", "time": "12:56", "agent": "api-reviewer", "model": "default", "result": "SUCCESS", "description": "PR 964 api-reviewer 리뷰"}
+{"date": "2026-07-27", "time": "13:02", "agent": "critic", "model": "default", "result": "", "description": "PR 964 이슈 critic 교차검증"}
+{"date": "2026-07-27", "time": "16:02", "agent": "code-reviewer", "model": "default", "result": "PARTIAL", "description": "correctness/회귀 리뷰"}
+{"date": "2026-07-27", "time": "16:03", "agent": "quality-reviewer", "model": "default", "result": "SUCCESS", "description": "품질/OOP/네이밍 리뷰"}
+{"date": "2026-07-27", "time": "16:03", "agent": "security-reviewer", "model": "default", "result": "PARTIAL", "description": "보안/감사 리뷰"}
+{"date": "2026-07-27", "time": "16:03", "agent": "architect", "model": "default", "result": "SUCCESS", "description": "아키텍처/CTO 관점 리뷰"}
+{"date": "2026-07-27", "time": "16:05", "agent": "Explore", "model": "haiku", "result": "", "description": "Scan admin repo GraphQL interpolation"}
+{"date": "2026-07-27", "time": "16:11", "agent": "verifier", "model": "default", "result": "PARTIAL", "description": "fresh verifier 리뷰"}
+{"date": "2026-07-27", "time": "16:12", "agent": "critic", "model": "default", "result": "SUCCESS", "description": "critic 반박 검증"}
+{"date": "2026-07-27", "time": "16:24", "agent": "code-reviewer", "model": "default", "result": "SUCCESS", "description": "PR 964 수정 커밋 델타 리뷰"}
+{"date": "2026-07-27", "time": "16:36", "agent": "verifier", "model": "default", "result": "PARTIAL", "description": "수정 커밋 verifier 점검"}
+{"date": "2026-07-27", "time": "17:18", "agent": "Explore", "model": "haiku", "result": "", "description": "Dove 알림톡 동시성 경로 탐색"}
+{"date": "2026-07-28", "time": "10:29", "agent": "critic", "model": "default", "result": "", "description": "Critic review of hybrid plan"}
+{"date": "2026-07-28", "time": "10:32", "agent": "code-reviewer", "model": "opus", "result": "", "description": "code-reviewer 1차 리뷰"}
+{"date": "2026-07-28", "time": "10:33", "agent": "quality-reviewer", "model": "opus", "result": "", "description": "quality-reviewer OOP/SOLID"}
+{"date": "2026-07-28", "time": "10:33", "agent": "architect", "model": "opus", "result": "", "description": "architect 상위 설계 시각"}
+{"date": "2026-07-28", "time": "10:34", "agent": "style-reviewer", "model": "haiku", "result": "", "description": "style-reviewer 네이밍/PEP8"}
+{"date": "2026-07-28", "time": "10:46", "agent": "verifier", "model": "opus", "result": "", "description": "verifier 독립 재검증"}
+{"date": "2026-07-28", "time": "10:47", "agent": "critic", "model": "opus", "result": "", "description": "critic 제안 반박"}
+{"date": "2026-07-28", "time": "11:31", "agent": "code-reviewer", "model": "default", "result": "", "description": "Code review PR 964 delta"}
+{"date": "2026-07-28", "time": "11:31", "agent": "security-reviewer", "model": "default", "result": "", "description": "Security review PR 964 delta"}
+{"date": "2026-07-28", "time": "11:31", "agent": "api-reviewer", "model": "default", "result": "", "description": "API contract review PR 964"}
