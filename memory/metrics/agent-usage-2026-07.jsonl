@@ -360,3 +360,16 @@
 {"date": "2026-07-28", "time": "11:31", "agent": "code-reviewer", "model": "default", "result": "", "description": "Code review PR 964 delta"}
 {"date": "2026-07-28", "time": "11:31", "agent": "security-reviewer", "model": "default", "result": "", "description": "Security review PR 964 delta"}
 {"date": "2026-07-28", "time": "11:31", "agent": "api-reviewer", "model": "default", "result": "", "description": "API contract review PR 964"}
+{"date": "2026-07-28", "time": "16:17", "agent": "code-reviewer", "model": "default", "result": "", "description": "PR964 code-reviewer 리뷰"}
+{"date": "2026-07-28", "time": "16:17", "agent": "security-reviewer", "model": "default", "result": "", "description": "PR964 security-reviewer 리뷰"}
+{"date": "2026-07-28", "time": "16:17", "agent": "api-reviewer", "model": "default", "result": "", "description": "PR964 api-reviewer 리뷰"}
+{"date": "2026-07-28", "time": "16:17", "agent": "architect", "model": "default", "result": "", "description": "PR964 시니어/CTO 관점 평가"}
+{"date": "2026-07-28", "time": "16:22", "agent": "critic", "model": "default", "result": "", "description": "CRITICAL/HIGH 이슈 critic 검증"}
+{"date": "2026-07-29", "time": "11:01", "agent": "code-reviewer", "model": "default", "result": "PARTIAL", "description": "PR964 code-reviewer 리뷰"}
+{"date": "2026-07-29", "time": "11:01", "agent": "security-reviewer", "model": "default", "result": "SUCCESS", "description": "PR964 security-reviewer 리뷰"}
+{"date": "2026-07-29", "time": "11:01", "agent": "api-reviewer", "model": "default", "result": "PARTIAL", "description": "PR964 api-reviewer 리뷰"}
+{"date": "2026-07-29", "time": "11:10", "agent": "critic", "model": "default", "result": "", "description": "PR964 HIGH 이슈 critic 검증"}
+{"date": "2026-07-29", "time": "11:12", "agent": "general-purpose", "model": "default", "result": "", "description": "Dove period dedup implementation"}
+{"date": "2026-07-29", "time": "11:12", "agent": "general-purpose", "model": "default", "result": "", "description": "Daily notification creation and dup potential"}
+{"date": "2026-07-29", "time": "11:55", "agent": "verifier", "model": "default", "result": "SUCCESS", "description": "PR964 rework verifier 검증"}
+{"date": "2026-07-29", "time": "11:56", "agent": "general-purpose", "model": "default", "result": "", "description": "Verify Dove 4xx timing vs NHN send"}

@@ -378,3 +378,8 @@
 {"date":"2026-07-27","project":"global","duration_min":0,"total_edits":13,"total_reads":4,"unique_files":2,"friction_files":1,"log_lines":0}
 {"date":"2026-07-27","project":"global","duration_min":64,"total_edits":0,"total_reads":0,"unique_files":0,"friction_files":0,"log_lines":11}
 {"date":"2026-07-28","project":"global","duration_min":125,"total_edits":17,"total_reads":27,"unique_files":8,"friction_files":3,"log_lines":28}
+{"date":"2026-07-28","project":"global","duration_min":6,"total_edits":8,"total_reads":14,"unique_files":3,"friction_files":2,"log_lines":28}
+{"date":"2026-07-28","project":"global","duration_min":6,"total_edits":0,"total_reads":12,"unique_files":0,"friction_files":0,"log_lines":35}
+{"date":"2026-07-28","project":"global","duration_min":8,"total_edits":2,"total_reads":25,"unique_files":1,"friction_files":0,"log_lines":35}
+{"date":"2026-07-28","project":"global","duration_min":0,"total_edits":1,"total_reads":1,"unique_files":1,"friction_files":0,"log_lines":42}
+{"date":"2026-07-29","project":"global","duration_min":110,"total_edits":48,"total_reads":89,"unique_files":20,"friction_files":6,"log_lines":5}

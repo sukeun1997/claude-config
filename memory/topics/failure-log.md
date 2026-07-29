@@ -246,6 +246,14 @@ edit-tracker (3회+ 반복 편집 감지)
 - 2026-07-20 / CMS 사고 대응 플랜에서 자금 이관(상환예치→차입자수납)·중도완제 Depositable 재생성 누락, 동료 지적으로 발견 / 문제를 "오늘 밤 방어"로 좁혀 복구 경로 미워크스루 + 검증 에이전트의 착지계좌 결론(오답)을 핵심 라인 재확인 없이 수용 / 방어·복구 이중 검증 규칙 신설 (rules/common/verification.md §운영 개입 플랜 검증)
 | 2026-07-22 | 10 8회 반복 편집 | Prompt (추정·8회) | 접근법 오류 가능성 — 초기화 후 재설계 권장 |
 | 2026-07-27 | 20 11회 반복 편집 | Prompt (추정·11회) | 접근법 오류 가능성 — 초기화 후 재설계 권장 |
-| 2026-07-28 | test_outbound_delivery.py 4회 반복 편집 | Context (추정) | 소스 반복 — 관련 파일/타입 정의 확인 필요 |
-| 2026-07-28 | outbound_delivery.py 3회 반복 편집 | Context (추정) | 소스 반복 — 관련 파일/타입 정의 확인 필요 |
-| 2026-07-28 | producers.py 3회 반복 편집 | Context (추정) | 소스 반복 — 관련 파일/타입 정의 확인 필요 |
+| 2026-07-28 | test_outbound_delivery.py 4회 반복 편집 | Context | 관련 파일/타입 정의 선행 Read 미흡 |
+| 2026-07-28 | outbound_delivery.py 3회 반복 편집 | Context | 관련 파일/타입 정의 선행 Read 미흡 |
+| 2026-07-28 | producers.py 3회 반복 편집 | Context | 관련 파일/타입 정의 선행 Read 미흡 |
+| 2026-07-28 | BorrowerNotificationBulkSender.kt 4회 반복 편집 | Context | 관련 파일/타입 정의 선행 Read 미흡 |
+| 2026-07-28 | BorrowerNotificationServiceTest.kt 3회 반복 편집 | Context | 관련 파일/타입 정의 선행 Read 미흡 |
+| 2026-07-29 | BorrowerNotificationSenderTest.kt 8회 반복 편집 | Prompt (추정·8회) | 접근법 오류 가능성 — 초기화 후 재설계 권장 |
+| 2026-07-29 | BorrowerNotificationBulkSender.kt 4회 반복 편집 | Context (추정) | 소스 반복 — 관련 파일/타입 정의 확인 필요 |
+| 2026-07-29 | pr964-body-new.md 4회 반복 편집 | 미분류 | 다음 세션에서 원인 분석 필요 |
+| 2026-07-29 | BorrowerNotificationSendingTransactionTest.kt 3회 반복 편집 | Context (추정) | 소스 반복 — 관련 파일/타입 정의 확인 필요 |
+| 2026-07-29 | BorrowerNotificationSender.kt 3회 반복 편집 | Context (추정) | 소스 반복 — 관련 파일/타입 정의 확인 필요 |
+| 2026-07-29 | BorrowerNotificationDailyRequestUseCase.kt 3회 반복 편집 | Context (추정) | 소스 반복 — 관련 파일/타입 정의 확인 필요 |
