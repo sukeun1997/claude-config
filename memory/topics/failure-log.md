@@ -252,8 +252,16 @@ edit-tracker (3회+ 반복 편집 감지)
 | 2026-07-28 | BorrowerNotificationBulkSender.kt 4회 반복 편집 | Context | 관련 파일/타입 정의 선행 Read 미흡 |
 | 2026-07-28 | BorrowerNotificationServiceTest.kt 3회 반복 편집 | Context | 관련 파일/타입 정의 선행 Read 미흡 |
 | 2026-07-29 | BorrowerNotificationSenderTest.kt 8회 반복 편집 | Prompt (추정·8회) | 접근법 오류 가능성 — 초기화 후 재설계 권장 |
-| 2026-07-29 | BorrowerNotificationBulkSender.kt 4회 반복 편집 | Context (추정) | 소스 반복 — 관련 파일/타입 정의 확인 필요 |
-| 2026-07-29 | pr964-body-new.md 4회 반복 편집 | 미분류 | 다음 세션에서 원인 분석 필요 |
-| 2026-07-29 | BorrowerNotificationSendingTransactionTest.kt 3회 반복 편집 | Context (추정) | 소스 반복 — 관련 파일/타입 정의 확인 필요 |
-| 2026-07-29 | BorrowerNotificationSender.kt 3회 반복 편집 | Context (추정) | 소스 반복 — 관련 파일/타입 정의 확인 필요 |
-| 2026-07-29 | BorrowerNotificationDailyRequestUseCase.kt 3회 반복 편집 | Context (추정) | 소스 반복 — 관련 파일/타입 정의 확인 필요 |
+| 2026-07-29 | BorrowerNotificationBulkSender.kt 4회 반복 편집 | Context | 관련 파일/타입 정의 선행 Read 미흡 |
+| 2026-07-29 | pr964-body-new.md 4회 반복 편집 | Context | 반복 편집 — 관련 파일/타입 정의 선행 Read 필요 |
+| 2026-07-29 | BorrowerNotificationSendingTransactionTest.kt 3회 반복 편집 | Context | 관련 파일/타입 정의 선행 Read 미흡 |
+| 2026-07-29 | BorrowerNotificationSender.kt 3회 반복 편집 | Context | 관련 파일/타입 정의 선행 Read 미흡 |
+| 2026-07-29 | BorrowerNotificationDailyRequestUseCase.kt 3회 반복 편집 | Context | 관련 파일/타입 정의 선행 Read 미흡 |
+| 2026-07-29 | outbound_delivery.py 4회 반복 편집 | Context | 관련 파일/타입 정의 선행 Read 미흡 |
+| 2026-07-29 | pr-b-body.md 4회 반복 편집 | Context | 반복 편집 — 관련 파일/타입 정의 선행 Read 필요 |
+| 2026-07-29 | pr-a-body.md 4회 반복 편집 | Context | 반복 편집 — 관련 파일/타입 정의 선행 Read 필요 |
+| 2026-07-29 | perf--borrower-notification-send-parallelism.md 3회 반복 편집 | Context | 반복 편집 — 관련 파일/타입 정의 선행 Read 필요 |
+| 2026-07-29 | pr_17501_body.md 3회 반복 편집 | Context | 반복 편집 — 관련 파일/타입 정의 선행 Read 필요 |
+| 2026-07-29 | pr966-body.md 3회 반복 편집 | Context | 반복 편집 — 관련 파일/타입 정의 선행 Read 필요 |
+| 2026-07-29 | pr964-body.md 3회 반복 편집 | Context | 반복 편집 — 관련 파일/타입 정의 선행 Read 필요 |
+| 2026-07-31 | DoveClientTest.kt 7회 반복 편집 | Prompt (추정·7회) | 접근법 오류 가능성 — 초기화 후 재설계 권장 |

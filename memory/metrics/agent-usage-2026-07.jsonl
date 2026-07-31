@@ -373,3 +373,33 @@
 {"date": "2026-07-29", "time": "11:12", "agent": "general-purpose", "model": "default", "result": "", "description": "Daily notification creation and dup potential"}
 {"date": "2026-07-29", "time": "11:55", "agent": "verifier", "model": "default", "result": "SUCCESS", "description": "PR964 rework verifier 검증"}
 {"date": "2026-07-29", "time": "11:56", "agent": "general-purpose", "model": "default", "result": "", "description": "Verify Dove 4xx timing vs NHN send"}
+{"date": "2026-07-29", "time": "13:10", "agent": "code-reviewer", "model": "default", "result": "SUCCESS", "description": "PR 17514 회귀 리스크 교차검증"}
+{"date": "2026-07-29", "time": "13:21", "agent": "Explore", "model": "haiku", "result": "", "description": "Find in_qa_prd util and env helpers"}
+{"date": "2026-07-29", "time": "13:21", "agent": "Explore", "model": "haiku", "result": "", "description": "Find DB-managed flag pattern"}
+{"date": "2026-07-29", "time": "13:21", "agent": "Explore", "model": "haiku", "result": "", "description": "Find moneyflow alert logging util"}
+{"date": "2026-07-29", "time": "13:37", "agent": "code-reviewer", "model": "default", "result": "SUCCESS", "description": "PR964 rework code-reviewer 재리뷰"}
+{"date": "2026-07-29", "time": "13:37", "agent": "security-reviewer", "model": "default", "result": "SUCCESS", "description": "PR964 rework security 재리뷰"}
+{"date": "2026-07-29", "time": "13:39", "agent": "general-purpose", "model": "default", "result": "", "description": "Verify Dove bulk alimtalk contract"}
+{"date": "2026-07-29", "time": "13:47", "agent": "critic", "model": "default", "result": "", "description": "rework HIGH critic 판정"}
+{"date": "2026-07-29", "time": "13:50", "agent": "Explore", "model": "haiku", "result": "", "description": "Survey recovery surfaces"}
+{"date": "2026-07-29", "time": "13:57", "agent": "code-reviewer", "model": "default", "result": "", "description": "Code review of delivery guard changes"}
+{"date": "2026-07-29", "time": "13:57", "agent": "verifier", "model": "default", "result": "SUCCESS", "description": "Verify review comments were addressed"}
+{"date": "2026-07-29", "time": "17:38", "agent": "code-reviewer", "model": "default", "result": "SUCCESS", "description": "PR #965 슬라이스 리뷰"}
+{"date": "2026-07-29", "time": "17:39", "agent": "code-reviewer", "model": "default", "result": "SUCCESS", "description": "PR #966 슬라이스 리뷰"}
+{"date": "2026-07-29", "time": "17:39", "agent": "code-reviewer", "model": "default", "result": "SUCCESS", "description": "PR #964 슬라이스 리뷰"}
+{"date": "2026-07-29", "time": "18:33", "agent": "code-reviewer", "model": "default", "result": "", "description": "2회차 code-reviewer: 귀속·멱등·수렴"}
+{"date": "2026-07-29", "time": "18:33", "agent": "quality-reviewer", "model": "default", "result": "", "description": "2회차 quality: 배선 설계"}
+{"date": "2026-07-29", "time": "18:34", "agent": "test-engineer", "model": "default", "result": "", "description": "2회차 test-engineer: 커버리지 공백"}
+{"date": "2026-07-30", "time": "16:13", "agent": "quality-reviewer", "model": "default", "result": "", "description": "R1: 상태머신 도메인·영속"}
+{"date": "2026-07-30", "time": "16:14", "agent": "code-reviewer", "model": "default", "result": "", "description": "R2: 배선·동시성·dual-write"}
+{"date": "2026-07-30", "time": "16:14", "agent": "test-engineer", "model": "default", "result": "", "description": "R3: 운영·스키마·테스트"}
+{"date": "2026-07-31", "time": "13:36", "agent": "code-reviewer", "model": "default", "result": "", "description": "Review PR 543 Kotlin changes"}
+{"date": "2026-07-31", "time": "13:36", "agent": "security-reviewer", "model": "default", "result": "", "description": "Security review PR 543"}
+{"date": "2026-07-31", "time": "13:44", "agent": "critic", "model": "default", "result": "", "description": "Cross-verify PR 543 HIGH findings"}
+{"date": "2026-07-31", "time": "13:54", "agent": "critic", "model": "default", "result": "", "description": "Verify 3 HIGH findings on PR 543"}
+{"date": "2026-07-31", "time": "14:14", "agent": "code-reviewer", "model": "default", "result": "", "description": "Review banking-loan PR 1607"}
+{"date": "2026-07-31", "time": "14:15", "agent": "code-reviewer", "model": "default", "result": "", "description": "Re-review PF-Cert PR 543 new head"}
+{"date": "2026-07-31", "time": "14:15", "agent": "architect", "model": "default", "result": "", "description": "Operational recovery review across both PRs"}
+{"date": "2026-07-31", "time": "14:16", "agent": "api-reviewer", "model": "default", "result": "", "description": "Cross-repo contract review"}
+{"date": "2026-07-31", "time": "14:16", "agent": "security-reviewer", "model": "default", "result": "", "description": "Security review both PRs"}
+{"date": "2026-07-31", "time": "14:24", "agent": "critic", "model": "default", "result": "", "description": "Adjudicate 2 HIGH findings"}
