@@ -403,3 +403,19 @@
 {"date": "2026-07-31", "time": "14:16", "agent": "api-reviewer", "model": "default", "result": "", "description": "Cross-repo contract review"}
 {"date": "2026-07-31", "time": "14:16", "agent": "security-reviewer", "model": "default", "result": "", "description": "Security review both PRs"}
 {"date": "2026-07-31", "time": "14:24", "agent": "critic", "model": "default", "result": "", "description": "Adjudicate 2 HIGH findings"}
+{"date": "2026-07-31", "time": "17:16", "agent": "code-reviewer", "model": "opus", "result": "PARTIAL", "description": "Phase1 code-reviewer 품질/버그"}
+{"date": "2026-07-31", "time": "17:16", "agent": "quality-reviewer", "model": "opus", "result": "SUCCESS", "description": "Phase1 quality-reviewer OOP/SOLID"}
+{"date": "2026-07-31", "time": "17:16", "agent": "architect", "model": "opus", "result": "SUCCESS", "description": "Phase1 architect 상위 설계"}
+{"date": "2026-07-31", "time": "17:17", "agent": "style-reviewer", "model": "haiku", "result": "", "description": "Phase1 style-reviewer 네이밍/PEP8"}
+{"date": "2026-07-31", "time": "17:22", "agent": "verifier", "model": "opus", "result": "SUCCESS", "description": "Phase3 verifier 독립 재검증"}
+{"date": "2026-07-31", "time": "17:22", "agent": "critic", "model": "opus", "result": "SUCCESS", "description": "Phase3 critic 제안 반박"}
+{"date": "2026-07-31", "time": "17:55", "agent": "deep-executor", "model": "default", "result": "", "description": "PR 17528 종합 리뷰"}
+{"date": "2026-07-31", "time": "17:55", "agent": "verifier", "model": "default", "result": "", "description": "중복이체 가능성 적대적 검증"}
+{"date": "2026-07-31", "time": "17:55", "agent": "code-reviewer", "model": "opus", "result": "", "description": "Code review PR 17528"}
+{"date": "2026-07-31", "time": "17:55", "agent": "quality-reviewer", "model": "opus", "result": "", "description": "Quality review PR 17528"}
+{"date": "2026-07-31", "time": "17:56", "agent": "architect", "model": "opus", "result": "", "description": "Architecture review PR 17528"}
+{"date": "2026-07-31", "time": "17:59", "agent": "code-reviewer", "model": "opus", "result": "", "description": "Phase1 code quality + bugs"}
+{"date": "2026-07-31", "time": "18:00", "agent": "quality-reviewer", "model": "opus", "result": "", "description": "Phase1 OOP/SOLID/추상화"}
+{"date": "2026-07-31", "time": "18:01", "agent": "architect", "model": "opus", "result": "", "description": "Phase1 상위 설계 시각"}
+{"date": "2026-07-31", "time": "18:01", "agent": "style-reviewer", "model": "haiku", "result": "", "description": "Phase1 네이밍+PEP8+가독성"}
+{"date": "2026-07-31", "time": "18:04", "agent": "general-purpose", "model": "sonnet", "result": "", "description": "Phase1 네이밍+PEP8 대체"}
