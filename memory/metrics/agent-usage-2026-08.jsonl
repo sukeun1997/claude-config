@@ -4,3 +4,43 @@
 {"date": "2026-08-03", "time": "10:01", "agent": "style-reviewer", "model": "haiku", "result": "PARTIAL", "description": "style-reviewer: PR28 네이밍·PEP8"}
 {"date": "2026-08-03", "time": "10:07", "agent": "verifier", "model": "default", "result": "PARTIAL", "description": "verifier: PR28 독립 재검증"}
 {"date": "2026-08-03", "time": "10:07", "agent": "critic", "model": "default", "result": "", "description": "critic: PR28 제안 반박"}
+{"date": "2026-08-03", "time": "10:46", "agent": "critic", "model": "default", "result": "", "description": "critic: wiretap plan 검토"}
+{"date": "2026-08-03", "time": "10:47", "agent": "critic", "model": "default", "result": "", "description": "critic: SMS outcome plan 검토"}
+{"date": "2026-08-03", "time": "11:06", "agent": "code-reviewer", "model": "default", "result": "SUCCESS", "description": "② SMS outcome 코드리뷰"}
+{"date": "2026-08-03", "time": "11:06", "agent": "security-reviewer", "model": "default", "result": "SUCCESS", "description": "② SMS outcome 보안 리뷰"}
+{"date": "2026-08-03", "time": "11:06", "agent": "verifier", "model": "default", "result": "SUCCESS", "description": "② SMS outcome verifier"}
+{"date": "2026-08-03", "time": "11:19", "agent": "code-reviewer", "model": "default", "result": "SUCCESS", "description": "① wiretap 코드리뷰"}
+{"date": "2026-08-03", "time": "11:19", "agent": "security-reviewer", "model": "default", "result": "PARTIAL", "description": "① wiretap 보안 리뷰"}
+{"date": "2026-08-03", "time": "11:19", "agent": "verifier", "model": "default", "result": "SUCCESS", "description": "① wiretap verifier"}
+{"date": "2026-08-03", "time": "13:08", "agent": "code-reviewer", "model": "default", "result": "SUCCESS", "description": "PR543 code review"}
+{"date": "2026-08-03", "time": "13:09", "agent": "security-reviewer", "model": "default", "result": "SUCCESS", "description": "PR543 security review"}
+{"date": "2026-08-03", "time": "13:09", "agent": "api-reviewer", "model": "default", "result": "", "description": "PR543 API contract review"}
+{"date": "2026-08-03", "time": "13:10", "agent": "Explore", "model": "haiku", "result": "", "description": "Find PF-Cert ARS API consumers"}
+{"date": "2026-08-03", "time": "13:18", "agent": "critic", "model": "default", "result": "", "description": "PR543 critic cross-check"}
+{"date": "2026-08-03", "time": "13:21", "agent": "Explore", "model": "haiku", "result": "", "description": "Trace EB13 account number handling"}
+{"date": "2026-08-03", "time": "13:56", "agent": "verifier", "model": "default", "result": "SUCCESS", "description": "verifier: PR28 수정 재검증"}
+{"date": "2026-08-03", "time": "13:56", "agent": "architect", "model": "default", "result": "SUCCESS", "description": "architect: Recv·단일소켓 분석"}
+{"date": "2026-08-03", "time": "16:10", "agent": "code-reviewer", "model": "opus", "result": "SUCCESS", "description": "code-reviewer: dove PR 187"}
+{"date": "2026-08-03", "time": "16:10", "agent": "quality-reviewer", "model": "opus", "result": "SUCCESS", "description": "quality-reviewer: dove PR 187"}
+{"date": "2026-08-03", "time": "16:11", "agent": "architect", "model": "opus", "result": "PARTIAL", "description": "architect: dove PR 187"}
+{"date": "2026-08-03", "time": "16:11", "agent": "security-reviewer", "model": "default", "result": "SUCCESS", "description": "security-reviewer: dove PR 187"}
+{"date": "2026-08-03", "time": "16:11", "agent": "style-reviewer", "model": "haiku", "result": "", "description": "style-reviewer: dove PR 187"}
+{"date": "2026-08-03", "time": "16:13", "agent": "code-reviewer", "model": "default", "result": "PARTIAL", "description": "code-reviewer: PR 17543 리뷰"}
+{"date": "2026-08-03", "time": "16:13", "agent": "quality-reviewer", "model": "default", "result": "PARTIAL", "description": "quality-reviewer: OOP/SOLID 리뷰"}
+{"date": "2026-08-03", "time": "16:14", "agent": "architect", "model": "default", "result": "SUCCESS", "description": "architect: 설계 시각 리뷰"}
+{"date": "2026-08-03", "time": "16:14", "agent": "style-reviewer", "model": "haiku", "result": "SUCCESS", "description": "style-reviewer: 네이밍/PEP8 리뷰"}
+{"date": "2026-08-03", "time": "16:15", "agent": "verifier", "model": "opus", "result": "PARTIAL", "description": "verifier: dove PR 187 fresh"}
+{"date": "2026-08-03", "time": "16:15", "agent": "critic", "model": "opus", "result": "", "description": "critic: dove PR 187 제안 반박"}
+{"date": "2026-08-03", "time": "16:16", "agent": "Explore", "model": "haiku", "result": "", "description": "Trace 0원 정산행 생성 상류"}
+{"date": "2026-08-03", "time": "16:20", "agent": "verifier", "model": "default", "result": "PARTIAL", "description": "verifier: fresh 독립 재검증"}
+{"date": "2026-08-03", "time": "16:21", "agent": "critic", "model": "default", "result": "", "description": "critic: 제안 adversarial 반박"}
+{"date": "2026-08-03", "time": "17:25", "agent": "code-reviewer", "model": "default", "result": "SUCCESS", "description": "code-reviewer: PR965 회귀/병렬 리뷰"}
+{"date": "2026-08-03", "time": "17:26", "agent": "security-reviewer", "model": "default", "result": "", "description": "security-reviewer: PR965 보안 리뷰"}
+{"date": "2026-08-03", "time": "17:26", "agent": "code-reviewer", "model": "default", "result": "SUCCESS", "description": "refactor 동작보존 리뷰"}
+{"date": "2026-08-03", "time": "17:26", "agent": "api-reviewer", "model": "default", "result": "PARTIAL", "description": "api-reviewer: PR965 계약/롤아웃 리뷰"}
+{"date": "2026-08-03", "time": "17:26", "agent": "verifier", "model": "default", "result": "SUCCESS", "description": "refactor 독립 verifier"}
+{"date": "2026-08-03", "time": "18:14", "agent": "Explore", "model": "haiku", "result": "SUCCESS", "description": "상수·모델 필드 검증"}
+{"date": "2026-08-03", "time": "18:14", "agent": "Explore", "model": "haiku", "result": "FAILED", "description": "잠금 순서·경합 경로 추적"}
+{"date": "2026-08-03", "time": "18:28", "agent": "quality-reviewer", "model": "default", "result": "SUCCESS", "description": "PR 17549 품질 렌즈 리뷰"}
+{"date": "2026-08-03", "time": "18:41", "agent": "code-reviewer", "model": "default", "result": "SUCCESS", "description": "code-reviewer: PR969 설계 리뷰"}
+{"date": "2026-08-03", "time": "18:42", "agent": "security-reviewer", "model": "default", "result": "SUCCESS", "description": "security-reviewer: PR969 보안 리뷰"}
