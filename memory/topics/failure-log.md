@@ -270,5 +270,5 @@ edit-tracker (3회+ 반복 편집 감지)
 | 2026-08-03 | settlement_mixin.py 3회 반복 편집 | Context | 관련 파일/타입 정의 선행 Read 미흡 |
 | 2026-08-03 | repayment_investor_schedule.py 3회 반복 편집 | Context | 관련 파일/타입 정의 선행 Read 미흡 |
 | 2026-08-04 | sync_lpn_settlement_to_legacy_schedule.py 14회 반복 편집 | Prompt (추정·14회) | 접근법 오류 가능성 — 초기화 후 재설계 권장 |
-| 2026-08-04 | test_sync_lpn_settlement_info.py 4회 반복 편집 | Context (추정) | 소스 반복 — 관련 파일/타입 정의 확인 필요 |
-| 2026-08-04 | repayment_investor_schedule_showcase.py 3회 반복 편집 | Context (추정) | 소스 반복 — 관련 파일/타입 정의 확인 필요 |
+| 2026-08-04 | test_sync_lpn_settlement_info.py 4회 반복 편집 | Context | 관련 파일/타입 정의 선행 Read 미흡 |
+| 2026-08-04 | repayment_investor_schedule_showcase.py 3회 반복 편집 | Context | 관련 파일/타입 정의 선행 Read 미흡 |
