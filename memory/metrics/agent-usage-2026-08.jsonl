@@ -45,3 +45,15 @@
 {"date": "2026-08-03", "time": "18:41", "agent": "code-reviewer", "model": "default", "result": "SUCCESS", "description": "code-reviewer: PR969 설계 리뷰"}
 {"date": "2026-08-03", "time": "18:42", "agent": "security-reviewer", "model": "default", "result": "SUCCESS", "description": "security-reviewer: PR969 보안 리뷰"}
 {"date": "2026-08-04", "time": "10:23", "agent": "Explore", "model": "haiku", "result": "", "description": "639c456 스케줄러 구조 분석"}
+{"date": "2026-08-04", "time": "11:24", "agent": "critic", "model": "default", "result": "", "description": "스펙 adversarial critic 리뷰"}
+{"date": "2026-08-04", "time": "11:24", "agent": "Explore", "model": "haiku", "result": "PARTIAL", "description": "jb-fep 스펙 주장 검증"}
+{"date": "2026-08-04", "time": "11:24", "agent": "Explore", "model": "haiku", "result": "PARTIAL", "description": "inapi 스펙 주장 검증"}
+{"date": "2026-08-04", "time": "11:24", "agent": "general-purpose", "model": "default", "result": "PARTIAL", "description": "Verify InAPI spec claims"}
+{"date": "2026-08-04", "time": "12:53", "agent": "code-reviewer", "model": "default", "result": "", "description": "Review PR1600 post-review commits"}
+{"date": "2026-08-04", "time": "12:54", "agent": "quality-reviewer", "model": "default", "result": "", "description": "Quality/SOLID review PR1600"}
+{"date": "2026-08-04", "time": "13:09", "agent": "critic", "model": "default", "result": "", "description": "Cross-verify HIGH findings"}
+{"date": "2026-08-04", "time": "14:19", "agent": "code-reviewer", "model": "default", "result": "", "description": "PR 543 code review"}
+{"date": "2026-08-04", "time": "14:19", "agent": "security-reviewer", "model": "default", "result": "", "description": "PR 543 security review"}
+{"date": "2026-08-04", "time": "14:19", "agent": "api-reviewer", "model": "default", "result": "", "description": "PR 543 API contract review"}
+{"date": "2026-08-04", "time": "14:30", "agent": "critic", "model": "default", "result": "", "description": "HIGH 이슈 critic 교차검증"}
+{"date": "2026-08-05", "time": "16:22", "agent": "code-reviewer", "model": "default", "result": "", "description": "Verify RISS refactor diff"}
