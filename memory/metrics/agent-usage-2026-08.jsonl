@@ -24,7 +24,7 @@
 {"date": "2026-08-03", "time": "16:10", "agent": "quality-reviewer", "model": "opus", "result": "SUCCESS", "description": "quality-reviewer: dove PR 187"}
 {"date": "2026-08-03", "time": "16:11", "agent": "architect", "model": "opus", "result": "PARTIAL", "description": "architect: dove PR 187"}
 {"date": "2026-08-03", "time": "16:11", "agent": "security-reviewer", "model": "default", "result": "SUCCESS", "description": "security-reviewer: dove PR 187"}
-{"date": "2026-08-03", "time": "16:11", "agent": "style-reviewer", "model": "haiku", "result": "", "description": "style-reviewer: dove PR 187"}
+{"date": "2026-08-03", "time": "16:11", "agent": "style-reviewer", "model": "haiku", "result": "PARTIAL", "description": "style-reviewer: dove PR 187"}
 {"date": "2026-08-03", "time": "16:13", "agent": "code-reviewer", "model": "default", "result": "PARTIAL", "description": "code-reviewer: PR 17543 리뷰"}
 {"date": "2026-08-03", "time": "16:13", "agent": "quality-reviewer", "model": "default", "result": "PARTIAL", "description": "quality-reviewer: OOP/SOLID 리뷰"}
 {"date": "2026-08-03", "time": "16:14", "agent": "architect", "model": "default", "result": "SUCCESS", "description": "architect: 설계 시각 리뷰"}
@@ -57,3 +57,19 @@
 {"date": "2026-08-04", "time": "14:19", "agent": "api-reviewer", "model": "default", "result": "", "description": "PR 543 API contract review"}
 {"date": "2026-08-04", "time": "14:30", "agent": "critic", "model": "default", "result": "", "description": "HIGH 이슈 critic 교차검증"}
 {"date": "2026-08-05", "time": "16:22", "agent": "code-reviewer", "model": "default", "result": "", "description": "Verify RISS refactor diff"}
+{"date": "2026-08-06", "time": "14:02", "agent": "code-reviewer", "model": "opus", "result": "PARTIAL", "description": "code-reviewer: PR 17560 리뷰"}
+{"date": "2026-08-06", "time": "14:03", "agent": "quality-reviewer", "model": "opus", "result": "SUCCESS", "description": "quality-reviewer: OOP/SOLID 리뷰"}
+{"date": "2026-08-06", "time": "14:04", "agent": "architect", "model": "opus", "result": "SUCCESS", "description": "architect: 상위 설계 리뷰"}
+{"date": "2026-08-06", "time": "14:04", "agent": "style-reviewer", "model": "haiku", "result": "PARTIAL", "description": "style-reviewer: 네이밍/PEP8 리뷰"}
+{"date": "2026-08-06", "time": "14:07", "agent": "verifier", "model": "opus", "result": "PARTIAL", "description": "verifier: fresh 독립 재검증"}
+{"date": "2026-08-06", "time": "14:08", "agent": "critic", "model": "opus", "result": "", "description": "critic: 제안 adversarial 반박"}
+{"date": "2026-08-06", "time": "14:13", "agent": "code-reviewer", "model": "default", "result": "", "description": "Code review PR 1631"}
+{"date": "2026-08-06", "time": "14:13", "agent": "security-reviewer", "model": "default", "result": "", "description": "Security review PR 1631"}
+{"date": "2026-08-06", "time": "14:14", "agent": "api-reviewer", "model": "default", "result": "", "description": "API contract review PR 1631"}
+{"date": "2026-08-06", "time": "14:15", "agent": "explore", "model": "haiku", "result": "", "description": "Survey repo API conventions for pagination/errors"}
+{"date": "2026-08-06", "time": "14:15", "agent": "explore", "model": "haiku", "result": "", "description": "Investigate sort/page validation behavior"}
+{"date": "2026-08-06", "time": "14:23", "agent": "critic", "model": "default", "result": "", "description": "Cross-verify CRITICAL/HIGH findings"}
+{"date": "2026-08-06", "time": "14:28", "agent": "code-reviewer", "model": "opus", "result": "", "description": "Phase1 code-reviewer 리뷰"}
+{"date": "2026-08-06", "time": "14:28", "agent": "quality-reviewer", "model": "opus", "result": "", "description": "Phase1 quality-reviewer 리뷰"}
+{"date": "2026-08-06", "time": "14:29", "agent": "architect", "model": "opus", "result": "", "description": "Phase1 architect 상위 설계 리뷰"}
+{"date": "2026-08-06", "time": "14:29", "agent": "style-reviewer", "model": "haiku", "result": "", "description": "Phase1 style-reviewer 리뷰"}
