@@ -73,3 +73,30 @@
 {"date": "2026-08-06", "time": "14:28", "agent": "quality-reviewer", "model": "opus", "result": "", "description": "Phase1 quality-reviewer 리뷰"}
 {"date": "2026-08-06", "time": "14:29", "agent": "architect", "model": "opus", "result": "", "description": "Phase1 architect 상위 설계 리뷰"}
 {"date": "2026-08-06", "time": "14:29", "agent": "style-reviewer", "model": "haiku", "result": "", "description": "Phase1 style-reviewer 리뷰"}
+{"date": "2026-08-06", "time": "15:21", "agent": "Explore", "model": "haiku", "result": "SUCCESS", "description": "006000 테스트/필드 조사"}
+{"date": "2026-08-06", "time": "16:11", "agent": "code-reviewer", "model": "opus", "result": "", "description": "Phase1 v2 code-reviewer 리뷰"}
+{"date": "2026-08-06", "time": "16:12", "agent": "quality-reviewer", "model": "opus", "result": "", "description": "Phase1 v2 quality-reviewer 리뷰"}
+{"date": "2026-08-06", "time": "16:12", "agent": "style-reviewer", "model": "haiku", "result": "", "description": "Phase1 v2 style-reviewer 리뷰"}
+{"date": "2026-08-06", "time": "16:12", "agent": "architect", "model": "opus", "result": "", "description": "Phase1 v2 architect 설계 리뷰"}
+{"date": "2026-08-06", "time": "16:19", "agent": "verifier", "model": "opus", "result": "", "description": "Phase3 verifier 독립 재검증"}
+{"date": "2026-08-06", "time": "16:19", "agent": "critic", "model": "opus", "result": "", "description": "Phase3 critic 제안 반박"}
+{"date": "2026-08-06", "time": "16:29", "agent": "code-reviewer", "model": "opus", "result": "PARTIAL", "description": "PR30 code-reviewer 리뷰"}
+{"date": "2026-08-06", "time": "16:30", "agent": "quality-reviewer", "model": "opus", "result": "PARTIAL", "description": "PR30 quality-reviewer 리뷰"}
+{"date": "2026-08-06", "time": "16:30", "agent": "architect", "model": "opus", "result": "SUCCESS", "description": "PR30 architect 리뷰"}
+{"date": "2026-08-06", "time": "16:30", "agent": "style-reviewer", "model": "haiku", "result": "SUCCESS", "description": "PR30 style-reviewer 리뷰"}
+{"date": "2026-08-06", "time": "16:36", "agent": "verifier", "model": "opus", "result": "FAILED", "description": "PR30 verifier 독립 검증"}
+{"date": "2026-08-06", "time": "16:36", "agent": "critic", "model": "opus", "result": "SUCCESS", "description": "PR30 critic 반박 검증"}
+{"date": "2026-08-06", "time": "17:55", "agent": "code-reviewer", "model": "opus", "result": "", "description": "Phase1 v3 code-reviewer 리뷰"}
+{"date": "2026-08-06", "time": "17:55", "agent": "quality-reviewer", "model": "opus", "result": "", "description": "Phase1 v3 quality-reviewer 리뷰"}
+{"date": "2026-08-06", "time": "17:56", "agent": "style-reviewer", "model": "haiku", "result": "", "description": "Phase1 v3 style-reviewer 리뷰"}
+{"date": "2026-08-06", "time": "17:56", "agent": "architect", "model": "opus", "result": "", "description": "Phase1 v3 architect 설계 리뷰"}
+{"date": "2026-08-06", "time": "18:03", "agent": "verifier", "model": "opus", "result": "", "description": "Phase3 v3 verifier 재검증"}
+{"date": "2026-08-06", "time": "18:03", "agent": "critic", "model": "opus", "result": "", "description": "Phase3 v3 critic 반박"}
+{"date": "2026-08-07", "time": "13:09", "agent": "code-reviewer", "model": "opus", "result": "", "description": "Phase1 code-reviewer"}
+{"date": "2026-08-07", "time": "13:10", "agent": "quality-reviewer", "model": "opus", "result": "", "description": "Phase1 quality-reviewer"}
+{"date": "2026-08-07", "time": "13:10", "agent": "architect", "model": "opus", "result": "", "description": "Phase1 architect"}
+{"date": "2026-08-07", "time": "13:11", "agent": "style-reviewer", "model": "haiku", "result": "", "description": "Phase1 style-reviewer"}
+{"date": "2026-08-07", "time": "13:17", "agent": "verifier", "model": "opus", "result": "", "description": "Phase3 fresh verifier"}
+{"date": "2026-08-07", "time": "13:18", "agent": "critic", "model": "opus", "result": "", "description": "Phase3 adversarial critic"}
+{"date": "2026-08-07", "time": "14:06", "agent": "verifier", "model": "opus", "result": "", "description": "Verify fix commit"}
+{"date": "2026-08-07", "time": "14:06", "agent": "code-reviewer", "model": "opus", "result": "", "description": "Review fix commit"}
