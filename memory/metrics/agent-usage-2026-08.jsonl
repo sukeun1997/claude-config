@@ -113,3 +113,31 @@
 {"date": "2026-08-07", "time": "17:05", "agent": "Explore", "model": "haiku", "result": "", "description": "Trace deposit allocation in banking-loan"}
 {"date": "2026-08-07", "time": "17:11", "agent": "verifier", "model": "opus", "result": "", "description": "Phase3 fresh verifier"}
 {"date": "2026-08-07", "time": "17:11", "agent": "critic", "model": "opus", "result": "", "description": "Phase3 adversarial critic"}
+{"date": "2026-08-10", "time": "10:58", "agent": "deep-executor", "model": "default", "result": "", "description": "PR #27 종합 리뷰 aggregator"}
+{"date": "2026-08-10", "time": "10:59", "agent": "code-reviewer", "model": "sonnet", "result": "", "description": "Code review PR 27"}
+{"date": "2026-08-10", "time": "10:59", "agent": "security-reviewer", "model": "sonnet", "result": "", "description": "Security and deploy config review"}
+{"date": "2026-08-10", "time": "10:59", "agent": "quality-reviewer", "model": "sonnet", "result": "", "description": "Quality and test review"}
+{"date": "2026-08-10", "time": "10:59", "agent": "architect", "model": "default", "result": "", "description": "Architecture review PR 27"}
+{"date": "2026-08-10", "time": "11:01", "agent": "fork", "model": "default", "result": "", "description": "Verify ACCOUNT_LENGTH constant against messagerule field lengths"}
+{"date": "2026-08-10", "time": "15:55", "agent": "code-reviewer", "model": "opus", "result": "PARTIAL", "description": "code-reviewer: 품질·버그·경계조건"}
+{"date": "2026-08-10", "time": "15:55", "agent": "quality-reviewer", "model": "opus", "result": "PARTIAL", "description": "quality-reviewer: OOP/SOLID/응집도"}
+{"date": "2026-08-10", "time": "15:56", "agent": "architect", "model": "opus", "result": "SUCCESS", "description": "architect: 상위 설계 시각"}
+{"date": "2026-08-10", "time": "15:56", "agent": "style-reviewer", "model": "haiku", "result": "SUCCESS", "description": "style-reviewer: 네이밍·PEP8"}
+{"date": "2026-08-10", "time": "16:03", "agent": "verifier", "model": "opus", "result": "SUCCESS", "description": "verifier: fresh 독립 재검증"}
+{"date": "2026-08-10", "time": "16:03", "agent": "critic", "model": "opus", "result": "", "description": "critic: 제안 adversarial 반박"}
+{"date": "2026-08-10", "time": "16:05", "agent": "general-purpose", "model": "default", "result": "", "description": "Trace status writers for bank register"}
+{"date": "2026-08-10", "time": "16:05", "agent": "general-purpose", "model": "default", "result": "", "description": "Map 고객신규구분코드 value domain"}
+{"date": "2026-08-10", "time": "16:05", "agent": "general-purpose", "model": "default", "result": "", "description": "Find wait_for_bank_result callers"}
+{"date": "2026-08-10", "time": "16:06", "agent": "Explore", "model": "haiku", "result": "", "description": "Find sibling bank-wait implementations"}
+{"date": "2026-08-10", "time": "17:46", "agent": "verifier", "model": "opus", "result": "PARTIAL", "description": "verifier: 증분 diff 재검증"}
+{"date": "2026-08-11", "time": "16:12", "agent": "critic", "model": "default", "result": "SUCCESS", "description": "설계안 adversarial 검증"}
+{"date": "2026-08-11", "time": "16:12", "agent": "explore", "model": "haiku", "result": "SUCCESS", "description": "현 상태머신 사실 수집"}
+{"date": "2026-08-11", "time": "17:33", "agent": "deep-executor", "model": "opus", "result": "", "description": "PR #31 종합 리뷰 aggregator"}
+{"date": "2026-08-11", "time": "17:34", "agent": "code-reviewer", "model": "sonnet", "result": "PARTIAL", "description": "Code review of PR 31 diff"}
+{"date": "2026-08-11", "time": "17:35", "agent": "security-reviewer", "model": "sonnet", "result": "SUCCESS", "description": "Security review of PR 31 diff"}
+{"date": "2026-08-11", "time": "17:35", "agent": "quality-reviewer", "model": "sonnet", "result": "PARTIAL", "description": "Quality review of PR 31 diff"}
+{"date": "2026-08-11", "time": "17:35", "agent": "architect", "model": "opus", "result": "SUCCESS", "description": "Architecture and ops safety review"}
+{"date": "2026-08-11", "time": "17:50", "agent": "code-reviewer", "model": "default", "result": "PARTIAL", "description": "banking-report #970 리뷰 준비성 점검"}
+{"date": "2026-08-11", "time": "17:50", "agent": "code-reviewer", "model": "default", "result": "SUCCESS", "description": "dove #187 리뷰 준비성 점검"}
+{"date": "2026-08-12", "time": "13:26", "agent": "code-reviewer", "model": "default", "result": "PARTIAL", "description": "PR 17604 정합성 리뷰"}
+{"date": "2026-08-12", "time": "13:26", "agent": "verifier", "model": "default", "result": "", "description": "금액 불변 주장 반증 시도"}
