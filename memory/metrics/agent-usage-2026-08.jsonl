@@ -127,7 +127,7 @@
 {"date": "2026-08-10", "time": "16:03", "agent": "critic", "model": "opus", "result": "", "description": "critic: 제안 adversarial 반박"}
 {"date": "2026-08-10", "time": "16:05", "agent": "general-purpose", "model": "default", "result": "", "description": "Trace status writers for bank register"}
 {"date": "2026-08-10", "time": "16:05", "agent": "general-purpose", "model": "default", "result": "", "description": "Map 고객신규구분코드 value domain"}
-{"date": "2026-08-10", "time": "16:05", "agent": "general-purpose", "model": "default", "result": "", "description": "Find wait_for_bank_result callers"}
+{"date": "2026-08-10", "time": "16:05", "agent": "general-purpose", "model": "default", "result": "SUCCESS", "description": "Find wait_for_bank_result callers"}
 {"date": "2026-08-10", "time": "16:06", "agent": "Explore", "model": "haiku", "result": "", "description": "Find sibling bank-wait implementations"}
 {"date": "2026-08-10", "time": "17:46", "agent": "verifier", "model": "opus", "result": "PARTIAL", "description": "verifier: 증분 diff 재검증"}
 {"date": "2026-08-11", "time": "16:12", "agent": "critic", "model": "default", "result": "SUCCESS", "description": "설계안 adversarial 검증"}
@@ -152,3 +152,21 @@
 {"date": "2026-08-14", "time": "14:40", "agent": "quality-reviewer", "model": "default", "result": "", "description": "PR 1675 품질/구조 리뷰"}
 {"date": "2026-08-14", "time": "14:40", "agent": "architect", "model": "default", "result": "", "description": "PR 1675 아키텍처 대안 검토"}
 {"date": "2026-08-14", "time": "14:50", "agent": "verifier", "model": "default", "result": "SUCCESS", "description": "반영 커밋 검증"}
+{"date": "2026-08-16", "time": "19:56", "agent": "Explore", "model": "haiku", "result": "", "description": "in-api 레거시 모델 주장 검증"}
+{"date": "2026-08-16", "time": "19:56", "agent": "Explore", "model": "haiku", "result": "", "description": "banking-loan 현재 모델 주장 검증"}
+{"date": "2026-08-16", "time": "19:58", "agent": "explore", "model": "haiku", "result": "", "description": "8개 주장 매우 철저히 검증"}
+{"date": "2026-08-16", "time": "19:59", "agent": "Explore", "model": "haiku", "result": "", "description": "Django 모델 파일 위치 파악"}
+{"date": "2026-08-16", "time": "20:00", "agent": "general-purpose", "model": "default", "result": "", "description": "모델 구조 검증 - 광범위 탐색"}
+{"date": "2026-08-18", "time": "18:53", "agent": "code-reviewer", "model": "default", "result": "SUCCESS", "description": "PR #6353 diff 독립 리뷰"}
+{"date": "2026-08-19", "time": "11:57", "agent": "critic", "model": "default", "result": "SUCCESS", "description": "플랜 adversarial critic 검증"}
+{"date": "2026-08-19", "time": "11:57", "agent": "architect", "model": "default", "result": "", "description": "플랜 architect 설계 검토"}
+{"date": "2026-08-19", "time": "11:57", "agent": "Explore", "model": "haiku", "result": "PARTIAL", "description": "inner_transfer 큐/6100 제약 사실 수집"}
+{"date": "2026-08-19", "time": "16:05", "agent": "quality-reviewer", "model": "default", "result": "PARTIAL", "description": "PR #6353 구조 리뷰"}
+{"date": "2026-08-19", "time": "16:26", "agent": "architect", "model": "default", "result": "PARTIAL", "description": "스펙-코드 정합 architect 검증"}
+{"date": "2026-08-19", "time": "16:27", "agent": "general-purpose", "model": "default", "result": "", "description": "Survey jb-fep 006100 lane state"}
+{"date": "2026-08-19", "time": "16:27", "agent": "general-purpose", "model": "default", "result": "", "description": "Survey inapi 6000/6100 ops tooling"}
+{"date": "2026-08-20", "time": "10:01", "agent": "code-reviewer", "model": "opus", "result": "", "description": "Phase1 code-reviewer 실행"}
+{"date": "2026-08-20", "time": "10:01", "agent": "quality-reviewer", "model": "opus", "result": "", "description": "Phase1 quality-reviewer 실행"}
+{"date": "2026-08-20", "time": "10:01", "agent": "architect", "model": "opus", "result": "", "description": "Phase1 architect 실행"}
+{"date": "2026-08-20", "time": "10:02", "agent": "verifier", "model": "opus", "result": "", "description": "Phase3 verifier 병렬 선실행"}
+{"date": "2026-08-20", "time": "10:02", "agent": "style-reviewer", "model": "haiku", "result": "", "description": "Phase1 style-reviewer 재실행"}
