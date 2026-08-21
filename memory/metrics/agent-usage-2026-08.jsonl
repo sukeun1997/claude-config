@@ -140,7 +140,7 @@
 {"date": "2026-08-11", "time": "17:50", "agent": "code-reviewer", "model": "default", "result": "PARTIAL", "description": "banking-report #970 리뷰 준비성 점검"}
 {"date": "2026-08-11", "time": "17:50", "agent": "code-reviewer", "model": "default", "result": "SUCCESS", "description": "dove #187 리뷰 준비성 점검"}
 {"date": "2026-08-12", "time": "13:26", "agent": "code-reviewer", "model": "default", "result": "PARTIAL", "description": "PR 17604 정합성 리뷰"}
-{"date": "2026-08-12", "time": "13:26", "agent": "verifier", "model": "default", "result": "", "description": "금액 불변 주장 반증 시도"}
+{"date": "2026-08-12", "time": "13:26", "agent": "verifier", "model": "default", "result": "PARTIAL", "description": "금액 불변 주장 반증 시도"}
 {"date": "2026-08-13", "time": "10:57", "agent": "code-reviewer", "model": "default", "result": "", "description": "code-reviewer PR989 리뷰"}
 {"date": "2026-08-13", "time": "10:57", "agent": "security-reviewer", "model": "default", "result": "SUCCESS", "description": "security-reviewer PR989 리뷰"}
 {"date": "2026-08-13", "time": "10:57", "agent": "api-reviewer", "model": "default", "result": "SUCCESS", "description": "api-reviewer PR989 리뷰"}
@@ -165,8 +165,47 @@
 {"date": "2026-08-19", "time": "16:26", "agent": "architect", "model": "default", "result": "PARTIAL", "description": "스펙-코드 정합 architect 검증"}
 {"date": "2026-08-19", "time": "16:27", "agent": "general-purpose", "model": "default", "result": "", "description": "Survey jb-fep 006100 lane state"}
 {"date": "2026-08-19", "time": "16:27", "agent": "general-purpose", "model": "default", "result": "", "description": "Survey inapi 6000/6100 ops tooling"}
-{"date": "2026-08-20", "time": "10:01", "agent": "code-reviewer", "model": "opus", "result": "", "description": "Phase1 code-reviewer 실행"}
-{"date": "2026-08-20", "time": "10:01", "agent": "quality-reviewer", "model": "opus", "result": "", "description": "Phase1 quality-reviewer 실행"}
-{"date": "2026-08-20", "time": "10:01", "agent": "architect", "model": "opus", "result": "", "description": "Phase1 architect 실행"}
-{"date": "2026-08-20", "time": "10:02", "agent": "verifier", "model": "opus", "result": "", "description": "Phase3 verifier 병렬 선실행"}
-{"date": "2026-08-20", "time": "10:02", "agent": "style-reviewer", "model": "haiku", "result": "", "description": "Phase1 style-reviewer 재실행"}
+{"date": "2026-08-20", "time": "10:01", "agent": "code-reviewer", "model": "opus", "result": "PARTIAL", "description": "Phase1 code-reviewer 실행"}
+{"date": "2026-08-20", "time": "10:01", "agent": "quality-reviewer", "model": "opus", "result": "PARTIAL", "description": "Phase1 quality-reviewer 실행"}
+{"date": "2026-08-20", "time": "10:01", "agent": "architect", "model": "opus", "result": "PARTIAL", "description": "Phase1 architect 실행"}
+{"date": "2026-08-20", "time": "10:02", "agent": "verifier", "model": "opus", "result": "PARTIAL", "description": "Phase3 verifier 병렬 선실행"}
+{"date": "2026-08-20", "time": "10:02", "agent": "style-reviewer", "model": "haiku", "result": "PARTIAL", "description": "Phase1 style-reviewer 재실행"}
+{"date": "2026-08-20", "time": "10:08", "agent": "code-reviewer", "model": "default", "result": "PARTIAL", "description": "PR 6353 품질 정밀 리뷰"}
+{"date": "2026-08-20", "time": "10:09", "agent": "critic", "model": "opus", "result": "", "description": "Phase3 critic 반박 실행"}
+{"date": "2026-08-20", "time": "10:27", "agent": "verifier", "model": "default", "result": "SUCCESS", "description": "수정 커밋 검증"}
+{"date": "2026-08-20", "time": "10:36", "agent": "critic", "model": "default", "result": "SUCCESS", "description": "Spec adversarial critique"}
+{"date": "2026-08-20", "time": "10:37", "agent": "verifier", "model": "default", "result": "PARTIAL", "description": "banking 코드 사실 검증"}
+{"date": "2026-08-20", "time": "10:37", "agent": "verifier", "model": "default", "result": "SUCCESS", "description": "PF-Cert 측 주장 검증"}
+{"date": "2026-08-20", "time": "10:37", "agent": "vision", "model": "default", "result": "SUCCESS", "description": "금결원 PDF 원문 대조"}
+{"date": "2026-08-20", "time": "10:37", "agent": "vision", "model": "default", "result": "", "description": "CMS 계좌번호 체계 PDF 정책 검증"}
+{"date": "2026-08-20", "time": "10:54", "agent": "verifier", "model": "opus", "result": "PARTIAL", "description": "수정분 fresh verifier 검증"}
+{"date": "2026-08-20", "time": "11:06", "agent": "code-reviewer", "model": "default", "result": "", "description": "재리뷰 요청 전 최종 게이트 검증"}
+{"date": "2026-08-20", "time": "12:49", "agent": "vision", "model": "default", "result": "PARTIAL", "description": "CMS 계좌번호 spec 정책표 행별 엄격 대조"}
+{"date": "2026-08-20", "time": "12:49", "agent": "verifier", "model": "default", "result": "PARTIAL", "description": "plan 인용 코드 사실 검증"}
+{"date": "2026-08-20", "time": "12:50", "agent": "code-reviewer", "model": "opus", "result": "PARTIAL", "description": "code-reviewer: PR 6377 리뷰"}
+{"date": "2026-08-20", "time": "12:51", "agent": "quality-reviewer", "model": "opus", "result": "PARTIAL", "description": "quality-reviewer: OOP/SOLID 리뷰"}
+{"date": "2026-08-20", "time": "12:51", "agent": "architect", "model": "opus", "result": "SUCCESS", "description": "architect: 상위 설계 리뷰"}
+{"date": "2026-08-20", "time": "12:51", "agent": "Explore", "model": "haiku", "result": "", "description": "Inspect other settlement callers"}
+{"date": "2026-08-20", "time": "12:51", "agent": "style-reviewer", "model": "haiku", "result": "SUCCESS", "description": "style-reviewer: 네이밍/PEP8 리뷰"}
+{"date": "2026-08-20", "time": "12:52", "agent": "verifier", "model": "opus", "result": "PARTIAL", "description": "verifier: 독립 재검증"}
+{"date": "2026-08-20", "time": "12:55", "agent": "critic", "model": "opus", "result": "", "description": "critic: 리뷰 제안 반박"}
+{"date": "2026-08-20", "time": "12:59", "agent": "verifier", "model": "default", "result": "PARTIAL", "description": "리뷰어 의도 반영 대조 검증"}
+{"date": "2026-08-20", "time": "12:59", "agent": "code-reviewer", "model": "default", "result": "PARTIAL", "description": "기존 동작 회귀·리스크 검증"}
+{"date": "2026-08-20", "time": "13:34", "agent": "verifier", "model": "default", "result": "PARTIAL", "description": "3차 신규 코드 주장 검증"}
+{"date": "2026-08-20", "time": "14:16", "agent": "verifier", "model": "default", "result": "PARTIAL", "description": "PR 17747 동작/계약 검증"}
+{"date": "2026-08-20", "time": "14:16", "agent": "quality-reviewer", "model": "default", "result": "SUCCESS", "description": "PR 17747 리스크 리뷰"}
+{"date": "2026-08-20", "time": "16:35", "agent": "code-reviewer", "model": "default", "result": "", "description": "PF-Cert #546 code-review"}
+{"date": "2026-08-20", "time": "16:36", "agent": "architect", "model": "default", "result": "", "description": "PF-Cert #546 아키텍처 리뷰"}
+{"date": "2026-08-20", "time": "16:36", "agent": "code-reviewer", "model": "default", "result": "", "description": "banking-loan #1701 code-review"}
+{"date": "2026-08-20", "time": "16:36", "agent": "architect", "model": "default", "result": "", "description": "banking-loan #1701 아키텍처 리뷰"}
+{"date": "2026-08-20", "time": "16:50", "agent": "critic", "model": "default", "result": "", "description": "CRITICAL/HIGH 이슈 critic 교차검증"}
+{"date": "2026-08-20", "time": "17:49", "agent": "code-reviewer", "model": "default", "result": "PARTIAL", "description": "PR 991/992 code review"}
+{"date": "2026-08-20", "time": "17:49", "agent": "security-reviewer", "model": "default", "result": "SUCCESS", "description": "PR 991/992 security review"}
+{"date": "2026-08-20", "time": "17:49", "agent": "api-reviewer", "model": "default", "result": "PARTIAL", "description": "PR 991/992 contract review"}
+{"date": "2026-08-20", "time": "17:58", "agent": "critic", "model": "default", "result": "", "description": "HIGH 이슈 critic 교차검증"}
+{"date": "2026-08-20", "time": "18:00", "agent": "Explore", "model": "haiku", "result": "", "description": "Search for dashboards and alerts"}
+{"date": "2026-08-21", "time": "10:12", "agent": "code-reviewer", "model": "default", "result": "", "description": "code-reviewer: PR547 종합 리뷰"}
+{"date": "2026-08-21", "time": "10:13", "agent": "security-reviewer", "model": "default", "result": "", "description": "security-reviewer: PR547 보안 리뷰"}
+{"date": "2026-08-21", "time": "10:13", "agent": "api-reviewer", "model": "default", "result": "", "description": "api-reviewer: PR547 계약 호환성"}
+{"date": "2026-08-21", "time": "10:13", "agent": "architect", "model": "default", "result": "", "description": "architect: PR547 설계/근본원인 검증"}
+{"date": "2026-08-21", "time": "10:25", "agent": "critic", "model": "default", "result": "", "description": "critic: CRITICAL/HIGH 교차 검증"}

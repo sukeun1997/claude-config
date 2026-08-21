@@ -126,3 +126,6 @@
 ### Promoted 2026-08-02
 - CSS `font` 단축 속성에 `inherit`를 family 자리에 쓰면 **선언 전체가 무효**. `font: 700 44px/1 inherit` → 폰트 크기 전부 무시됨. 개별 속성(`font-size`)에서는 `inherit`가 정상이라 눈치채기 어려움. 목업 3파일에서 21건 발견
 - CSP `style-src 'self'`는 **인라인 style 속성도 차단**한다. 좌석 좌표를 `style="--x:..."`로 넣었더니 전부 좌상단에 겹침. CSP 완화 대신 `element.style.setProperty()` (CSSOM)로 주입 — CSSOM은 CSP 대상이 아님
+
+### Promoted 2026-08-21
+- 교훈: "기존 코드 미변경 = 안전" 가정 금지 — PR이 기존 죽은 경로(캐시 read)를 필수 경로로 승격시키면 그 경로의 잠복 버그가 전면 장애로 승격됨. 직렬화 라운드트립은 fake 말고 실제 serializer로 검증
