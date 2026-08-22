@@ -209,3 +209,7 @@
 {"date": "2026-08-21", "time": "10:13", "agent": "api-reviewer", "model": "default", "result": "", "description": "api-reviewer: PR547 계약 호환성"}
 {"date": "2026-08-21", "time": "10:13", "agent": "architect", "model": "default", "result": "", "description": "architect: PR547 설계/근본원인 검증"}
 {"date": "2026-08-21", "time": "10:25", "agent": "critic", "model": "default", "result": "", "description": "critic: CRITICAL/HIGH 교차 검증"}
+{"date": "2026-08-21", "time": "11:34", "agent": "verifier", "model": "default", "result": "", "description": "PR 피드백 반영 diff 검증"}
+{"date": "2026-08-21", "time": "12:04", "agent": "verifier", "model": "default", "result": "PARTIAL", "description": "diff 2차 점검 (재시도)"}
+{"date": "2026-08-21", "time": "13:25", "agent": "verifier", "model": "default", "result": "SUCCESS", "description": "PR 17755 동등성 교차검증"}
+{"date": "2026-08-21", "time": "14:29", "agent": "quality-reviewer", "model": "default", "result": "PARTIAL", "description": "레포 룰 준수 점검"}
