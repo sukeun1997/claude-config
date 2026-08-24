@@ -213,3 +213,10 @@
 {"date": "2026-08-21", "time": "12:04", "agent": "verifier", "model": "default", "result": "PARTIAL", "description": "diff 2차 점검 (재시도)"}
 {"date": "2026-08-21", "time": "13:25", "agent": "verifier", "model": "default", "result": "SUCCESS", "description": "PR 17755 동등성 교차검증"}
 {"date": "2026-08-21", "time": "14:29", "agent": "quality-reviewer", "model": "default", "result": "PARTIAL", "description": "레포 룰 준수 점검"}
+{"date": "2026-08-24", "time": "10:15", "agent": "code-reviewer", "model": "opus", "result": "PARTIAL", "description": "code-reviewer: 버그·경계조건"}
+{"date": "2026-08-24", "time": "10:16", "agent": "quality-reviewer", "model": "opus", "result": "PARTIAL", "description": "quality-reviewer: OOP/SOLID"}
+{"date": "2026-08-24", "time": "10:16", "agent": "architect", "model": "opus", "result": "SUCCESS", "description": "architect: 설계 시각"}
+{"date": "2026-08-24", "time": "10:16", "agent": "style-reviewer", "model": "haiku", "result": "PARTIAL", "description": "style-reviewer: 네이밍·PEP8"}
+{"date": "2026-08-24", "time": "10:20", "agent": "verifier", "model": "opus", "result": "SUCCESS", "description": "verifier: fresh 재검증"}
+{"date": "2026-08-24", "time": "10:20", "agent": "critic", "model": "opus", "result": "", "description": "critic: 제안 반박"}
+{"date": "2026-08-24", "time": "14:23", "agent": "verifier", "model": "default", "result": "PARTIAL", "description": "Fresh gap-hunt on PR17742 diff"}
