@@ -220,3 +220,41 @@
 {"date": "2026-08-24", "time": "10:20", "agent": "verifier", "model": "opus", "result": "SUCCESS", "description": "verifier: fresh 재검증"}
 {"date": "2026-08-24", "time": "10:20", "agent": "critic", "model": "opus", "result": "", "description": "critic: 제안 반박"}
 {"date": "2026-08-24", "time": "14:23", "agent": "verifier", "model": "default", "result": "PARTIAL", "description": "Fresh gap-hunt on PR17742 diff"}
+{"date": "2026-08-25", "time": "11:01", "agent": "quality-reviewer", "model": "default", "result": "", "description": "banking-loan #1701 심층 리뷰"}
+{"date": "2026-08-25", "time": "11:01", "agent": "quality-reviewer", "model": "default", "result": "", "description": "PF-Cert #546 심층 리뷰"}
+{"date": "2026-08-25", "time": "11:01", "agent": "architect", "model": "default", "result": "", "description": "크로스 저장소 아키텍처 검토"}
+{"date": "2026-08-25", "time": "11:08", "agent": "critic", "model": "default", "result": "", "description": "리뷰 지적 adversarial 반박"}
+{"date": "2026-08-25", "time": "12:49", "agent": "code-reviewer", "model": "default", "result": "", "description": "PR 556 architecture review"}
+{"date": "2026-08-25", "time": "12:50", "agent": "quality-reviewer", "model": "default", "result": "", "description": "PR 556 YAGNI/SOLID review"}
+{"date": "2026-08-25", "time": "12:50", "agent": "api-reviewer", "model": "default", "result": "", "description": "PR 556 contract review"}
+{"date": "2026-08-25", "time": "12:51", "agent": "security-reviewer", "model": "default", "result": "", "description": "PR 556 security review"}
+{"date": "2026-08-25", "time": "12:54", "agent": "Explore", "model": "haiku", "result": "SUCCESS", "description": "Verify inapi CMS transfer code facts"}
+{"date": "2026-08-25", "time": "13:00", "agent": "critic", "model": "default", "result": "", "description": "Cross-verify HIGH findings PR 556"}
+{"date": "2026-08-25", "time": "13:24", "agent": "verifier", "model": "default", "result": "", "description": "Verify PR 556 fixes"}
+{"date": "2026-08-25", "time": "15:04", "agent": "code-reviewer", "model": "opus", "result": "PARTIAL", "description": "Phase1 code-reviewer CMS claim"}
+{"date": "2026-08-25", "time": "15:04", "agent": "quality-reviewer", "model": "opus", "result": "PARTIAL", "description": "Phase1 quality-reviewer CMS claim"}
+{"date": "2026-08-25", "time": "15:05", "agent": "architect", "model": "opus", "result": "", "description": "Phase1 architect CMS claim"}
+{"date": "2026-08-25", "time": "15:05", "agent": "style-reviewer", "model": "haiku", "result": "SUCCESS", "description": "Phase1 style-reviewer CMS claim"}
+{"date": "2026-08-25", "time": "15:11", "agent": "verifier", "model": "opus", "result": "PARTIAL", "description": "Phase3 verifier fresh CMS claim"}
+{"date": "2026-08-25", "time": "15:12", "agent": "critic", "model": "opus", "result": "SUCCESS", "description": "Phase3 critic adversarial CMS"}
+{"date": "2026-08-25", "time": "16:20", "agent": "code-reviewer", "model": "default", "result": "", "description": "PR 17750 code/bug review"}
+{"date": "2026-08-25", "time": "16:20", "agent": "quality-reviewer", "model": "default", "result": "", "description": "PR 17750 OOP/SOLID review"}
+{"date": "2026-08-25", "time": "16:21", "agent": "architect", "model": "default", "result": "", "description": "PR 17750 architecture review"}
+{"date": "2026-08-25", "time": "16:21", "agent": "style-reviewer", "model": "haiku", "result": "", "description": "PR 17750 naming/PEP8 review"}
+{"date": "2026-08-25", "time": "16:30", "agent": "verifier", "model": "default", "result": "", "description": "Fresh independent verification PR 17750"}
+{"date": "2026-08-25", "time": "16:31", "agent": "critic", "model": "default", "result": "", "description": "Adversarial critique of review proposals"}
+{"date": "2026-08-25", "time": "17:13", "agent": "verifier", "model": "default", "result": "", "description": "Verify PR 17750 v2 fixes"}
+{"date": "2026-08-25", "time": "18:40", "agent": "code-reviewer", "model": "default", "result": "", "description": "code-reviewer PR #1004"}
+{"date": "2026-08-25", "time": "18:40", "agent": "api-reviewer", "model": "default", "result": "", "description": "schema/contract reviewer PR #1004"}
+{"date": "2026-08-25", "time": "18:41", "agent": "architect", "model": "default", "result": "", "description": "architect design review PR #1004"}
+{"date": "2026-08-25", "time": "18:41", "agent": "security-reviewer", "model": "default", "result": "", "description": "security-reviewer PR #1004"}
+{"date": "2026-08-25", "time": "18:51", "agent": "critic", "model": "default", "result": "", "description": "critic cross-verify HIGH issues"}
+{"date": "2026-08-26", "time": "11:00", "agent": "code-reviewer", "model": "default", "result": "", "description": "PR#1676 behavioral risk review"}
+{"date": "2026-08-26", "time": "11:01", "agent": "quality-reviewer", "model": "default", "result": "", "description": "PR#1676 SOLID/DDD/naming review"}
+{"date": "2026-08-26", "time": "11:01", "agent": "architect", "model": "default", "result": "", "description": "PR#1676 architecture/ops review"}
+{"date": "2026-08-26", "time": "11:10", "agent": "critic", "model": "default", "result": "", "description": "Cross-verify HIGH findings PR#1676"}
+{"date": "2026-08-26", "time": "11:10", "agent": "verifier", "model": "default", "result": "", "description": "Fresh diff-only verification PR#1676"}
+{"date": "2026-08-26", "time": "16:46", "agent": "code-reviewer", "model": "default", "result": "", "description": "code-reviewer PR#1676 v2"}
+{"date": "2026-08-26", "time": "16:46", "agent": "architect", "model": "default", "result": "", "description": "architect review PR#1676 refactor"}
+{"date": "2026-08-26", "time": "16:47", "agent": "quality-reviewer", "model": "default", "result": "", "description": "quality+test review PR#1676"}
+{"date": "2026-08-26", "time": "16:55", "agent": "critic", "model": "default", "result": "", "description": "critic cross-check HIGH findings"}
