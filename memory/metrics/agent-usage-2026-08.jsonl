@@ -258,3 +258,11 @@
 {"date": "2026-08-26", "time": "16:46", "agent": "architect", "model": "default", "result": "", "description": "architect review PR#1676 refactor"}
 {"date": "2026-08-26", "time": "16:47", "agent": "quality-reviewer", "model": "default", "result": "", "description": "quality+test review PR#1676"}
 {"date": "2026-08-26", "time": "16:55", "agent": "critic", "model": "default", "result": "", "description": "critic cross-check HIGH findings"}
+{"date": "2026-08-27", "time": "17:34", "agent": "code-reviewer", "model": "default", "result": "", "description": "Review PR #33 diff correctness"}
+{"date": "2026-08-27", "time": "17:34", "agent": "quality-reviewer", "model": "default", "result": "", "description": "Review PR #33 design/maintainability"}
+{"date": "2026-08-28", "time": "10:26", "agent": "code-reviewer", "model": "default", "result": "", "description": "Code review PR #547 behavior"}
+{"date": "2026-08-28", "time": "10:26", "agent": "security-reviewer", "model": "default", "result": "", "description": "Security review PR #547"}
+{"date": "2026-08-28", "time": "10:27", "agent": "api-reviewer", "model": "default", "result": "", "description": "API/compat review PR #547"}
+{"date": "2026-08-28", "time": "10:27", "agent": "verifier", "model": "default", "result": "", "description": "Build/test verify PR #547"}
+{"date": "2026-08-28", "time": "10:38", "agent": "critic", "model": "default", "result": "", "description": "Cross-verify HIGH findings PR #547"}
+{"date": "2026-08-28", "time": "13:49", "agent": "code-reviewer", "model": "default", "result": "", "description": "Review follow-up commit a8a926c8"}
