@@ -266,3 +266,6 @@
 {"date": "2026-08-28", "time": "10:27", "agent": "verifier", "model": "default", "result": "", "description": "Build/test verify PR #547"}
 {"date": "2026-08-28", "time": "10:38", "agent": "critic", "model": "default", "result": "", "description": "Cross-verify HIGH findings PR #547"}
 {"date": "2026-08-28", "time": "13:49", "agent": "code-reviewer", "model": "default", "result": "", "description": "Review follow-up commit a8a926c8"}
+{"date": "2026-08-28", "time": "16:34", "agent": "verifier", "model": "default", "result": "PARTIAL", "description": "Verify PR #547 intent vs Sentry"}
+{"date": "2026-08-28", "time": "16:39", "agent": "code-reviewer", "model": "default", "result": "PARTIAL", "description": "PR 17786 동작 동등성 검증"}
+{"date": "2026-08-28", "time": "17:21", "agent": "code-reviewer", "model": "default", "result": "PARTIAL", "description": "PR 17786 2차 커밋 동등성 검증"}
