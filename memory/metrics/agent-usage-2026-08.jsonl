@@ -281,3 +281,7 @@
 {"date": "2026-08-30", "time": "18:34", "agent": "code-reviewer", "model": "sonnet", "result": "", "description": "Correctness/regression review PR17751"}
 {"date": "2026-08-30", "time": "18:40", "agent": "critic", "model": "default", "result": "", "description": "Independent evaluation of review findings"}
 {"date": "2026-08-31", "time": "17:26", "agent": "quality-reviewer", "model": "default", "result": "SUCCESS", "description": "PR 17622 품질 리뷰 (vault 원칙 기준)"}
+{"date": "2026-08-31", "time": "18:22", "agent": "quality-reviewer", "model": "default", "result": "", "description": "Vault 원칙 준수 리뷰"}
+{"date": "2026-08-31", "time": "18:22", "agent": "code-reviewer", "model": "default", "result": "", "description": "배포 안전성 리뷰"}
+{"date": "2026-08-31", "time": "18:23", "agent": "verifier", "model": "default", "result": "", "description": "PR 테스트 실제 실행"}
+{"date": "2026-08-31", "time": "18:45", "agent": "code-reviewer", "model": "default", "result": "", "description": "Delta 커밋 2건 검증"}

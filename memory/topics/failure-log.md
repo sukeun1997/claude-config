@@ -280,5 +280,7 @@ edit-tracker (3회+ 반복 편집 감지)
 | 2026-08-20 | test_transfer_jb.py 3회 반복 편집 | Context | 관련 파일/타입 정의 선행 Read 미흡 |
 | 2026-08-21 | purchase_preview_amount_service.py 3회 반복 편집 | Context | 관련 파일/타입 정의 선행 Read 미흡 |
 | 2026-08-31 | cms_repayment_transfer_tasks.py 5회 반복 편집 | Context (추정·강) | 소스 5회+ — 파일 전체 Read 후 재접근 권장 |
-| 2026-08-31 | test_cms_repayment_transfer.py 4회 반복 편집 | Context (추정) | 소스 반복 — 관련 파일/타입 정의 확인 필요 |
-| 2026-08-31 | cms_repayment_transfer_process.py 3회 반복 편집 | Context (추정) | 소스 반복 — 관련 파일/타입 정의 확인 필요 |
+| 2026-08-31 | test_cms_repayment_transfer.py 4회 반복 편집 | Context | 관련 파일/타입 정의 선행 Read 미흡 |
+| 2026-08-31 | cms_repayment_transfer_process.py 3회 반복 편집 | Context | 관련 파일/타입 정의 선행 Read 미흡 |
+| 2026-08-31 | test_settlement_transfer_lock.py 11회 반복 편집 | Prompt (추정·11회) | 접근법 오류 가능성 — 초기화 후 재설계 권장 |
+| 2026-08-31 | settlement.py 6회 반복 편집 | Context (추정·강) | 소스 6회+ — 파일 전체 Read 후 재접근 권장 |
