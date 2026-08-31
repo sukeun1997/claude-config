@@ -269,3 +269,15 @@
 {"date": "2026-08-28", "time": "16:34", "agent": "verifier", "model": "default", "result": "PARTIAL", "description": "Verify PR #547 intent vs Sentry"}
 {"date": "2026-08-28", "time": "16:39", "agent": "code-reviewer", "model": "default", "result": "PARTIAL", "description": "PR 17786 동작 동등성 검증"}
 {"date": "2026-08-28", "time": "17:21", "agent": "code-reviewer", "model": "default", "result": "PARTIAL", "description": "PR 17786 2차 커밋 동등성 검증"}
+{"date": "2026-08-30", "time": "11:20", "agent": "code-reviewer", "model": "default", "result": "", "description": "Review jb-fep PR #33 deploy risk"}
+{"date": "2026-08-30", "time": "11:20", "agent": "code-reviewer", "model": "default", "result": "", "description": "Review inapi PR #17750 deploy risk"}
+{"date": "2026-08-30", "time": "11:21", "agent": "verifier", "model": "default", "result": "", "description": "Cross-repo contract verification"}
+{"date": "2026-08-30", "time": "18:26", "agent": "deep-executor", "model": "default", "result": "", "description": "Aggregated review of inapi PR 17751"}
+{"date": "2026-08-30", "time": "18:27", "agent": "verifier", "model": "default", "result": "", "description": "Run settlement tests for PR 17751"}
+{"date": "2026-08-30", "time": "18:27", "agent": "Explore", "model": "haiku", "result": "", "description": "Trace settlement task call chain"}
+{"date": "2026-08-30", "time": "18:32", "agent": "architect", "model": "opus", "result": "", "description": "Architecture review PR17751"}
+{"date": "2026-08-30", "time": "18:32", "agent": "security-reviewer", "model": "sonnet", "result": "", "description": "Security review PR17751"}
+{"date": "2026-08-30", "time": "18:32", "agent": "quality-reviewer", "model": "sonnet", "result": "", "description": "Quality review PR17751"}
+{"date": "2026-08-30", "time": "18:34", "agent": "code-reviewer", "model": "sonnet", "result": "", "description": "Correctness/regression review PR17751"}
+{"date": "2026-08-30", "time": "18:40", "agent": "critic", "model": "default", "result": "", "description": "Independent evaluation of review findings"}
+{"date": "2026-08-31", "time": "17:26", "agent": "quality-reviewer", "model": "default", "result": "SUCCESS", "description": "PR 17622 품질 리뷰 (vault 원칙 기준)"}
