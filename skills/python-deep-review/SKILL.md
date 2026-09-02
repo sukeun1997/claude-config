@@ -45,6 +45,8 @@ description: "Python/Django deep review for modified .py files with behavior, OO
 ## 공통 Senior / CTO 게이트
 
 Phase 1·3은 `backend-code-quality-review`의 관점 사다리를 함께 적용한다.
+Phase 1의 quality-reviewer에는 `code-principles-review` 스킬을 직접 로드시켜
+vault 정본 기준 판정표(원칙 8가지 + 체크리스트 4축)를 받는다.
 업무 용어, 불변식, 상태 전이, Rich Domain 배치가 중요하면 완전한 스케치는
 `domain-modeling-gate`에서만 작성하고 이 스킬은 Python/Django 렌즈만 더한다.
 새 업무 개념이 생기거나 기존 용어의 정의, 상태 전이, 카디널리티,

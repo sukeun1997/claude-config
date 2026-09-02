@@ -4,6 +4,8 @@ Kotlin + Spring Boot 프로젝트에 특화된 종합 코드 리뷰 오케스트
 기존 에이전트(`code-reviewer`, `security-reviewer`, `api-reviewer`, `verifier`)를 활용하여 병렬 리뷰를 수행한다.
 
 리뷰 전에 `kotlin-patterns`와 `backend-code-quality-review`를 읽는다.
+품질 판정은 `code-principles-review` 스킬을 리뷰 에이전트 중 1개(quality 담당)에
+직접 로드시켜 vault 정본 기준 판정표(원칙 8가지 + 체크리스트 4축)를 받는다.
 업무 용어, 불변식, 상태 전이, Rich Domain 배치가 중요하면 완전한 모델
 스케치는 `domain-modeling-gate`에서만 작성한다.
 도메인 의미가 바뀌는 리뷰는 `lecture-review-lens`로 현재 강의 노트에서
