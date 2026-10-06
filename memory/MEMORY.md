@@ -135,3 +135,6 @@
 
 ### Promoted 2026-09-01
 - 후보: "중복방지 로직 리뷰 시 반드시 확인 3종 — lock 실패 방향(fail-open/closed), 조회 경로가 실제 소비자(어드민/API)와 일치하는지, soft delete 도입 시 dedup 쿼리 연동"
+
+### Promoted 2026-10-06
+- codex: bypass 플래그 제거 시 approval_policy=never가 MCP 도구까지 차단("MCP tool call requires approval"). `mcp_servers.<id>.default_tools_approval_mode="approve"` 필요. 승인 키만 -c로 넘기면 서버 정의 없는 환경에서 "invalid transport"로 기동 실패 → command/args까지 같이 넘김. `exec resume`은 -s 미지원(0.135) → -c sandbox_mode 사용
